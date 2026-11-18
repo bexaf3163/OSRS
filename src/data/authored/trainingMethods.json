@@ -1759,6 +1759,7 @@
       "cost": "cost",
       "risk": "low",
       "where": "Stronghold of Security, second level: Flesh Crawlers",
+      "place": "Stronghold of Security",
       "note": "Requires Defence 40 in this recommendation. Check your ranged armour and food before entering; do not assume a ten-minute unattended window is safe. Bank when food or ammunition is low. No verified method tile is available, so follow the written location rather than an old arrow.",
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_Ranged_training",
       "suggestedFrom": 40,
@@ -1816,6 +1817,7 @@
       "cost": "cost",
       "risk": "low",
       "where": "Varrock Sewers, the far end (or the south side of Crandor): Moss giants from a safespot",
+      "place": "Varrock Sewers",
       "note": "The wiki's best free Ranged XP after Brutus. A knife or slash weapon cuts the web in the sewers; stand where they cannot reach you and pick up your arrows between kills. Big bones on every kill. Bank when food or ammunition is low.",
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_Ranged_training",
       "kit": "f2p-bow",
@@ -2043,6 +2045,7 @@
       "cost": "profit",
       "risk": "low",
       "where": "Varrock Sewers (or Crandor): Moss giants",
+      "place": "Varrock Sewers",
       "note": "Big bones, runes and items to alch. Bring a slash weapon for the webs in the sewers and food: they hit hard on low Defence, and the bank is far.",
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_melee_training",
       "npcNames": [
@@ -2066,6 +2069,7 @@
       "cost": "profit",
       "risk": "high",
       "where": "Karamja Volcano dungeon (or Crandor): Lesser demons",
+      "place": "Karamja Volcano",
       "note": "They hit up to 8; bring swordfish or better. Fire runes and vile ashes drop.",
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_melee_training",
       "npcNames": [
@@ -2097,6 +2101,7 @@
       "cost": "free",
       "risk": "none",
       "where": "Tlati Rainforest",
+      "place": "Tlati Rainforest",
       "note": "No food is needed: the crab has \"endless\" health.",
       "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Melee_training"
     },

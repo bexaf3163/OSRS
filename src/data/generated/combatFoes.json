@@ -2068,6 +2068,109 @@
       "aggressive": false
     },
     {
+      "name": "Skeleton fremennik",
+      "version": "Level 40",
+      "combat": 40,
+      "members": true,
+      "hitpoints": 25,
+      "attackLevel": 53,
+      "strengthLevel": 30,
+      "defenceLevel": 30,
+      "magicLevel": 1,
+      "attackBonus": 8,
+      "defence": {
+        "stab": 14,
+        "slash": 18,
+        "crush": 15,
+        "magic": -4,
+        "ranged": 15
+      },
+      "attackStyle": "slash",
+      "maxHit": 5,
+      "speedTicks": 6,
+      "aggressive": false,
+      "weakness": {
+        "element": "earth",
+        "percent": 35
+      }
+    },
+    {
+      "name": "Skeleton fremennik",
+      "version": "Level 50",
+      "combat": 50,
+      "members": true,
+      "hitpoints": 35,
+      "attackLevel": 60,
+      "strengthLevel": 43,
+      "defenceLevel": 35,
+      "magicLevel": 1,
+      "attackBonus": 8,
+      "defence": {
+        "stab": 14,
+        "slash": 18,
+        "crush": 15,
+        "magic": -4,
+        "ranged": 15
+      },
+      "attackStyle": "slash",
+      "maxHit": 6,
+      "speedTicks": 6,
+      "aggressive": false,
+      "weakness": {
+        "element": "earth",
+        "percent": 35
+      }
+    },
+    {
+      "name": "Skeleton fremennik",
+      "version": "Level 60",
+      "combat": 60,
+      "members": true,
+      "hitpoints": 40,
+      "attackLevel": 72,
+      "strengthLevel": 54,
+      "defenceLevel": 40,
+      "magicLevel": 1,
+      "attackBonus": 8,
+      "defence": {
+        "stab": 14,
+        "slash": 18,
+        "crush": 15,
+        "magic": -4,
+        "ranged": 15
+      },
+      "attackStyle": "slash",
+      "maxHit": 8,
+      "speedTicks": 6,
+      "aggressive": false,
+      "weakness": {
+        "element": "earth",
+        "percent": 35
+      }
+    },
+    {
+      "name": "Ulfric",
+      "combat": 100,
+      "members": true,
+      "hitpoints": 60,
+      "attackLevel": 100,
+      "strengthLevel": 100,
+      "defenceLevel": 82,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "slash",
+      "maxHit": 11,
+      "speedTicks": 4,
+      "aggressive": true
+    },
+    {
       "name": "Cow",
       "version": "1",
       "combat": 2,

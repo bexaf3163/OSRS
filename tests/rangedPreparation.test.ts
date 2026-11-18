@@ -125,7 +125,7 @@ describe('S6-04 actual ranged preparation', () => {
     expect(viewMethod(m, scenario(40, [], {}, 39).state).status).toBe('LOCKED');
     const chosen = withTrainingMethod(base, { methodId: m.id, needs: methodNeeds(m, s.state) });
     expect(chosen.requirements).toContainEqual({ type: 'skill', skill: 'defence', min: 40 });
-    expect(toInGameTarget(chosen)?.worldPoint).toBeUndefined();
+    expect(toInGameTarget(chosen)?.worldPoint).toMatchObject({ x: 3081, y: 3421, plane: 0 });
     expect(toInGameTarget(chosen)?.npcNames).toEqual(['Flesh Crawler']);
     const unknown = scenario(40, [], {}, null);
     expect(unknown.pick).not.toMatchObject({ methodId: 'ra-crawler' });

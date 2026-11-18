@@ -109,6 +109,7 @@
 ["everything present","S9-53","READY",["item:Bowl:OK","item:Chaos rune ×15:OK","item:Chaos talisman:OK","item:Trout ×2 (or Salmon):OK"]],
 ["everything present","S9-54","READY",["item:Staff of fire:OK","item:Chaos rune ×60:OK","item:Air rune ×180:OK","item:Trout ×3 (or Salmon):OK"]],
 ["everything present","S9-55","READY",["item:Tinderbox:OK","item:Raw shark (or Raw manta ray, Raw sea turtle):OK","item:Lobster ×20 (or Swordfish, Monkfish):OK","coins:5,252 gp:OK"]],
+["everything present","S9-56","READY",["item:Bronze axe:OK","item:Tinderbox:OK","item:Spade:OK","item:Staff of fire:OK","item:Chaos rune ×20:OK","item:Air rune ×60:OK","item:Trout ×3 (or Salmon):OK"]],
 ["in the bank","S1-03","READY",[]],
 ["in the bank","S1-04","READY",[]],
 ["in the bank","S1-05","MINOR_PREP",["item:Spade:BANK"]],
@@ -219,6 +220,7 @@
 ["in the bank","S9-53","MINOR_PREP",["item:Bowl:BANK","item:Chaos rune ×15:BANK","item:Chaos talisman:BANK","item:Trout ×2 (or Salmon):BANK"]],
 ["in the bank","S9-54","MINOR_PREP",["item:Staff of fire:BANK","item:Chaos rune ×60:BANK","item:Air rune ×180:BANK","item:Trout ×3 (or Salmon):BANK"]],
 ["in the bank","S9-55","MINOR_PREP",["item:Tinderbox:BANK","item:Raw shark (or Raw manta ray, Raw sea turtle):BANK","item:Lobster ×20 (or Swordfish, Monkfish):BANK","coins:5,252 gp:BANK"]],
+["in the bank","S9-56","MINOR_PREP",["item:Bronze axe:BANK","item:Tinderbox:BANK","item:Spade:BANK","item:Staff of fire:BANK","item:Chaos rune ×20:BANK","item:Air rune ×60:BANK","item:Trout ×3 (or Salmon):BANK"]],
 ["part","S1-03","READY",[]],
 ["part","S1-04","READY",[]],
 ["part","S1-05","MISSING_ITEM",["item:Spade:MISSING"]],
@@ -329,6 +331,7 @@
 ["part","S9-53","MISSING_ITEM",["item:Bowl:MISSING","item:Chaos talisman:MISSING","item:Chaos rune ×15:PARTIAL","item:Trout ×2 (or Salmon):UNKNOWN"]],
 ["part","S9-54","MISSING_ITEM",["item:Staff of fire:MISSING","item:Chaos rune ×60:PARTIAL","item:Air rune ×180:PARTIAL","item:Trout ×3 (or Salmon):UNKNOWN"]],
 ["part","S9-55","MISSING_ITEM",["item:Tinderbox:MISSING","coins:5,252 gp:MISSING","item:Raw shark (or Raw manta ray, Raw sea turtle):UNKNOWN","item:Lobster ×20 (or Swordfish, Monkfish):UNKNOWN"]],
+["part","S9-56","MISSING_ITEM",["item:Bronze axe:MISSING","item:Tinderbox:MISSING","item:Spade:MISSING","item:Staff of fire:MISSING","item:Chaos rune ×20:PARTIAL","item:Air rune ×60:PARTIAL","item:Trout ×3 (or Salmon):UNKNOWN"]],
 ["nothing","S1-03","READY",[]],
 ["nothing","S1-04","READY",[]],
 ["nothing","S1-05","MISSING_ITEM",["item:Spade:MISSING"]],
@@ -439,6 +442,7 @@
 ["nothing","S9-53","MISSING_ITEM",["item:Bowl:MISSING","item:Chaos rune ×15:MISSING","item:Chaos talisman:MISSING","item:Trout ×2 (or Salmon):UNKNOWN"]],
 ["nothing","S9-54","MISSING_ITEM",["item:Staff of fire:MISSING","item:Chaos rune ×60:MISSING","item:Air rune ×180:MISSING","item:Trout ×3 (or Salmon):UNKNOWN"]],
 ["nothing","S9-55","MISSING_ITEM",["item:Tinderbox:MISSING","coins:5,252 gp:MISSING","item:Raw shark (or Raw manta ray, Raw sea turtle):UNKNOWN","item:Lobster ×20 (or Swordfish, Monkfish):UNKNOWN"]],
+["nothing","S9-56","MISSING_ITEM",["item:Bronze axe:MISSING","item:Tinderbox:MISSING","item:Spade:MISSING","item:Staff of fire:MISSING","item:Chaos rune ×20:MISSING","item:Air rune ×60:MISSING","item:Trout ×3 (or Salmon):UNKNOWN"]],
 ["bank not open","S1-03","READY",[]],
 ["bank not open","S1-04","READY",[]],
 ["bank not open","S1-05","UNKNOWN",["item:Spade:UNKNOWN"]],
@@ -549,6 +553,7 @@
 ["bank not open","S9-53","UNKNOWN",["item:Bowl:UNKNOWN","item:Chaos rune ×15:UNKNOWN","item:Chaos talisman:UNKNOWN","item:Trout ×2 (or Salmon):UNKNOWN"]],
 ["bank not open","S9-54","UNKNOWN",["item:Staff of fire:UNKNOWN","item:Chaos rune ×60:UNKNOWN","item:Air rune ×180:UNKNOWN","item:Trout ×3 (or Salmon):UNKNOWN"]],
 ["bank not open","S9-55","UNKNOWN",["item:Tinderbox:UNKNOWN","item:Raw shark (or Raw manta ray, Raw sea turtle):UNKNOWN","item:Lobster ×20 (or Swordfish, Monkfish):UNKNOWN","coins:5,252 gp:UNKNOWN"]],
+["bank not open","S9-56","UNKNOWN",["item:Bronze axe:UNKNOWN","item:Tinderbox:UNKNOWN","item:Spade:UNKNOWN","item:Staff of fire:UNKNOWN","item:Chaos rune ×20:UNKNOWN","item:Air rune ×60:UNKNOWN","item:Trout ×3 (or Salmon):UNKNOWN"]],
 ["no connection","S1-03","READY",[]],
 ["no connection","S1-04","READY",[]],
 ["no connection","S1-05","UNKNOWN",["item:Spade:UNKNOWN"]],
@@ -658,5 +663,6 @@
 ["no connection","S9-52","UNKNOWN",["item:Box trap:UNKNOWN"]],
 ["no connection","S9-53","UNKNOWN",["item:Bowl:UNKNOWN","item:Chaos rune ×15:UNKNOWN","item:Chaos talisman:UNKNOWN","item:Trout ×2 (or Salmon):UNKNOWN"]],
 ["no connection","S9-54","UNKNOWN",["item:Staff of fire:UNKNOWN","item:Chaos rune ×60:UNKNOWN","item:Air rune ×180:UNKNOWN","item:Trout ×3 (or Salmon):UNKNOWN"]],
-["no connection","S9-55","UNKNOWN",["item:Tinderbox:UNKNOWN","item:Raw shark (or Raw manta ray, Raw sea turtle):UNKNOWN","item:Lobster ×20 (or Swordfish, Monkfish):UNKNOWN","coins:5,252 gp:UNKNOWN"]]
+["no connection","S9-55","UNKNOWN",["item:Tinderbox:UNKNOWN","item:Raw shark (or Raw manta ray, Raw sea turtle):UNKNOWN","item:Lobster ×20 (or Swordfish, Monkfish):UNKNOWN","coins:5,252 gp:UNKNOWN"]],
+["no connection","S9-56","UNKNOWN",["item:Bronze axe:UNKNOWN","item:Tinderbox:UNKNOWN","item:Spade:UNKNOWN","item:Staff of fire:UNKNOWN","item:Chaos rune ×20:UNKNOWN","item:Air rune ×60:UNKNOWN","item:Trout ×3 (or Salmon):UNKNOWN"]]
 ]

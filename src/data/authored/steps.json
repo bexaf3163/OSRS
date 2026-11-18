@@ -11202,5 +11202,106 @@
         "questName": "The Fremennik Trials"
       }
     }
+  },
+  {
+    "id": "S9-56",
+    "stage": 9,
+    "type": "quest",
+    "title": "Olaf's Quest",
+    "qp": 1,
+    "requires": [
+      "S9-55"
+    ],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Olaf's_Quest",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Olaf's_Quest/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2724,3729,0",
+    "mapLocation": {
+      "x": 2724,
+      "y": 3729,
+      "plane": 0,
+      "label": "Olaf Hradson"
+    },
+    "npc": {
+      "nameEn": "Olaf Hradson",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Olaf_Hradson"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Bronze axe",
+        "amount": 1,
+        "howToGet": "Any axe chops the Windswept Tree (Woodcutting 50). Buy on the Grand Exchange.",
+        "wikiItemId": 1351,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_axe.png"
+      },
+      {
+        "nameEn": "Tinderbox",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from a general store for 1 gp.",
+        "wikiItemId": 590,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Tinderbox.png"
+      },
+      {
+        "nameEn": "Spade",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from a general store for 3 gp.",
+        "wikiItemId": 952,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Spade.png"
+      },
+      {
+        "nameEn": "Staff of fire",
+        "amount": 1,
+        "howToGet": "Pays the fire runes of Fire Bolt on Ulfric from the safespot. Buy on the Grand Exchange or from Zaff in Varrock.",
+        "wikiItemId": 1387,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Staff_of_fire.png"
+      },
+      {
+        "nameEn": "Chaos rune",
+        "amount": 20,
+        "howToGet": "Twenty Fire Bolts on Ulfric from the safespot. Buy on the Grand Exchange or at a rune shop.",
+        "wikiItemId": 562,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Chaos_rune.png"
+      },
+      {
+        "nameEn": "Air rune",
+        "amount": 60,
+        "howToGet": "Twenty Fire Bolts on Ulfric from the safespot. Buy on the Grand Exchange or at a rune shop.",
+        "wikiItemId": 556,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Air_rune.png"
+      },
+      {
+        "nameEn": "Trout",
+        "amount": 3,
+        "howToGet": "Buy on the Grand Exchange. The skeleton fremennik (level 40) is fought up close for the key.",
+        "wikiItemId": 333,
+        "heals": 7,
+        "anyOf": [
+          "Salmon"
+        ],
+        "iconUrl": "https://oldschool.runescape.wiki/images/Trout.png"
+      }
+    ],
+    "foes": [
+      "Skeleton fremennik",
+      "Ulfric"
+    ],
+    "reward": "1 QP, 12,000 Defence XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Olaf Hradson"
+      ],
+      "dialogChoices": [],
+      "highlightItems": [
+        "Bronze axe",
+        "Tinderbox",
+        "Spade"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Olaf's Quest"
+      }
+    }
   }
 ]

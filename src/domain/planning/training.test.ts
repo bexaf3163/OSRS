@@ -83,4 +83,13 @@ describe('existing training engine as a prerequisite estimator', () => {
     expect(conservative.typical).toBeGreaterThan(0);
     expect(conservative.source).toContain('overshoot unknown');
   });
+  it('counts a fight against an unnamed monster (the Gemstone Crab) as combat XP with a place to go', () => {
+    const stats = { attack: 30, strength: 30, defence: 30, hitpoints: 30 } as never;
+    const members: PlanningSnapshot = { ...snapshot(), scope: { ...snapshot().scope, mode: 'members' },
+      player: buildPlayerState({ mode: 'members', progress: { levels: {} }, stats, gear: null, owned: null, questsDone: ['Children of the Sun'] } as never) };
+    const crab = prerequisiteTraining({ snapshot: members, goalId: 'quest', skill: 'attack', target: 40 })!;
+    expect(crab.action.title).toContain('Gemstone Crab');
+    expect(crab.combatXp).toBe(true);
+    expect(crab.step?.mapLocation).toBeTruthy();
+  });
 });

@@ -1,6 +1,6 @@
 {
   "source": "OSRS Wiki, the {{Map}} template in the article",
-  "updated": "2026-11-14",
+  "updated": "2026-11-18",
   "locations": {
     "Lumbridge": {
       "x": 3188,
@@ -581,6 +581,22 @@
       "label": "Edgeville Dungeon",
       "kind": "dungeon",
       "page": "Edgeville Dungeon"
+    },
+    "Karamja Volcano": {
+      "x": 2845,
+      "y": 3174,
+      "plane": 0,
+      "label": "Karamja Volcano",
+      "kind": "dungeon",
+      "page": "Karamja Volcano"
+    },
+    "Tlati Rainforest": {
+      "x": 1327,
+      "y": 3090,
+      "plane": 0,
+      "label": "Tlati Rainforest",
+      "kind": "landmark",
+      "page": "Tlati Rainforest"
     },
     "Asgarnian Ice Dungeon": {
       "x": 3008,
@@ -1256,6 +1272,22 @@
         "Lumbridge Castle bank"
       ],
       "page": "Lumbridge"
+    },
+    "Varrock Sewers": {
+      "x": 3237,
+      "y": 3458,
+      "plane": 0,
+      "label": "Varrock Sewers (manhole east of Varrock Palace)",
+      "kind": "dungeon",
+      "page": "Varrock Sewers"
+    },
+    "Stronghold of Security": {
+      "x": 3081,
+      "y": 3421,
+      "plane": 0,
+      "label": "Stronghold of Security (Barbarian Village entrance)",
+      "kind": "dungeon",
+      "page": "Stronghold of Security"
     }
   }
 }

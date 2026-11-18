@@ -4,7 +4,7 @@ Written by `tests/combatAudit.test.ts` from `src/data/authored/combatAudit.json`
 
 Every stage of the route where the player fights or can be attacked, checked against the route text, the quest stage lines (Quest Helper), the OSRS Wiki infoboxes in combatFoes.json and the danger zones. The rule for a fight the quest cannot go on without: its food is a required item (readiness and the game check it before leaving), the app estimates it with the player's kit where it has the opponent's numbers, and an unread kit or bag is reported as not checked, never as ready.
 
-64 stages: 36 retained, 27 revised, 0 with a branch, 1 deferred.
+65 stages: 37 retained, 27 revised, 0 with a branch, 1 deferred.
 
 | Step | Kind | Mandatory | Opponents | Method | Estimate | Food in the item list | Decision |
 |---|---|---|---|---|---|---|---|
@@ -72,6 +72,7 @@ Every stage of the route where the player fights or can be attacked, checked aga
 | S9-53 What Lies Below | quest-fight | yes | Outlaw (32), King Roald (47) | melee | Outlaw, King Roald | Trout 2 | Retain |
 | S9-54 Scrambled! | quest-fight | yes | Large chicken (16), Black jaguar (Scrambled!) (88), Red dragon (Scrambled!) (106) | safespot | Large chicken, Black jaguar (Scrambled!), Red dragon (Scrambled!) | Trout 3 | Retain |
 | S9-55 The Fremennik Trials | quest-fight | yes | Draugen (69), Lanzig (48) | melee | Draugen, Lanzig | Lobster 20 | Retain |
+| S9-56 Olaf's Quest | quest-fight | yes | Skeleton fremennik (40), Ulfric (100) | safespot | Skeleton fremennik, Ulfric | Trout 3 | Retain |
 
 ## S1-06 The Restless Ghost
 
@@ -1516,4 +1517,26 @@ Changed:
 Evidence:
 
 - OSRS Wiki Draugen: level 69, 60 hitpoints, max hit 7; Lanzig: level 48, 50 hitpoints, lyre 30/512; read 2026-11-18.
+
+## S9-56 Olaf's Quest
+
+**Retain.** Olaf's Quest: kill a skeleton fremennik (level 40, 25 hitpoints, hits up to 5) up close for the key, then Ulfric (level 100, 60 hitpoints, hits up to 11) with Fire Bolt from a safespot; the brine rat is an optional diary kill.
+
+Quest stage lines: 2.2, 2.3, 3.0.
+
+Assumptions:
+
+- Twenty Fire Bolts cover Ulfric from the safespot; three trout cover the skeleton.
+
+Alternatives:
+
+- Ranged from the same safespot works too (wiki).
+
+Changed:
+
+- 2.146.0: new quest; the skeleton and Ulfric are in combatFoes.json and the safespot in fightMechanics.json.
+
+Evidence:
+
+- OSRS Wiki Olaf's Quest: kills field, Ulfric safespottable, read 2026-11-18.
 

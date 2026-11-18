@@ -69,7 +69,8 @@ export function prerequisiteTraining(input: TrainingOptions & {
     : null;
   return { step: training.step, target: training.target, remaining, consumption,
     combatXp: ['attack', 'strength', 'defence', 'ranged'].includes(skill) && advice.path.length > 0
-      && advice.path.every(leg => leg.method.kind !== 'quest' && !!leg.method.npcNames?.length), action: {
+      // A fight earns Hitpoints XP even against a monster the data does not name (the Gemstone Crab).
+      && advice.path.every(leg => leg.method.kind !== 'quest' && (!!leg.method.npcNames?.length || leg.method.skills.some(s => ['attack', 'strength', 'defence', 'ranged'].includes(s)))), action: {
     id: `${goalId}:TRAIN:${skill}:${phase}:${advice.best.method.id}`, goalId, kind: 'TRAIN',
     title: `${advice.best.method.name}: ${skill} to ${phase}`, stepId: training.step.id,
     // The tactical resolver must first verify the generated step's actual kit/skill/access/safety requirements.

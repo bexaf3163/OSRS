@@ -85,6 +85,8 @@ const PLACES: [string, Kind, string[], string?][] = [
   // Dungeons
   ['Dwarven Mine', 'dungeon', ['Dwarven Mines']],
   ['Edgeville Dungeon', 'dungeon', []],
+  ['Karamja Volcano', 'dungeon', []],
+  ['Tlati Rainforest', 'landmark', []],
   ['Asgarnian Ice Dungeon', 'dungeon', []],
   // Banks
   ['Varrock West Bank', 'bank', []],
@@ -211,6 +213,9 @@ try {
 for (const name of failed.map((f) => f.replace(/ \(.*\)$/, ''))) if (previous[name]) out[name] = previous[name];
 // The castle bank is on the top floor (plane 2), which no article map gives; placed in 2.53.0 from the game.
 out['Lumbridge Bank'] = { x: 3208, y: 3220, plane: 2, label: 'Lumbridge Bank (castle top floor)', kind: 'bank', aliases: ['Lumbridge Castle bank'], page: 'Lumbridge' };
+// The Varrock Sewers and the Stronghold of Security articles have no map: their surface entrances (manhole east of the palace, Barbarian Village hole).
+out['Varrock Sewers'] = { x: 3237, y: 3458, plane: 0, label: 'Varrock Sewers (manhole east of Varrock Palace)', kind: 'dungeon', page: 'Varrock Sewers' };
+out['Stronghold of Security'] = { x: 3081, y: 3421, plane: 0, label: 'Stronghold of Security (Barbarian Village entrance)', kind: 'dungeon', page: 'Stronghold of Security' };
 
 const date = new Date().toISOString().slice(0, 10);
 writeFileSync(OUT, JSON.stringify({ source: 'OSRS Wiki, the {{Map}} template in the article', updated: date, locations: out }, null, 2) + '\n');
