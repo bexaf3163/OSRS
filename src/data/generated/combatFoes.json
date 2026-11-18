@@ -1877,6 +1877,28 @@
       }
     },
     {
+      "name": "Cuthbert, Lord of Dread",
+      "combat": 1,
+      "members": true,
+      "hitpoints": 1,
+      "attackLevel": 1,
+      "strengthLevel": 1,
+      "defenceLevel": 1,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "crush",
+      "maxHit": 1,
+      "speedTicks": 4,
+      "aggressive": true
+    },
+    {
       "name": "Cow",
       "version": "1",
       "combat": 2,

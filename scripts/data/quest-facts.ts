@@ -378,6 +378,17 @@ const REVIEWED_FLOWS: Record<string, { revision: number; flow: NonNullable<Quest
     uncertainReceipts: ['Lobster'],
     partialDelivery: false, fromStartOnly: true,
   } },
+  // Planks, cloth and nails become furniture; the hammer, saw and waxwood are free quest items.
+  "Daddy's Home": { revision: 15401680, flow: {
+    consumes: [{ name: 'Plank', count: 10 }, { name: 'Bolt of cloth', count: 5 }, { name: 'Steel nails', count: 100 }], receives: [],
+    unknownItems: ['Hammer', 'Saw', 'Waxwood log', 'Waxwood plank'],
+    uncertainReceipts: [], partialDelivery: false, fromStartOnly: false,
+  } },
+  // The axe lies next to Marcellus and the plushy is a quest item; nothing is bought or kept.
+  'The Ribbiting Tale of a Lily Pad Labour Dispute': { revision: 15270097, flow: {
+    consumes: [], receives: [], unknownItems: ['Bronze axe', 'Frog plushy'],
+    uncertainReceipts: [], partialDelivery: false, fromStartOnly: false,
+  } },
   'Ernest the Chicken': { revision: 15390916, flow: {
     // All puzzle parts are obtained within the manor; a spade is reused, not handed in.
     consumes: [], receives: [], unknownItems: ['Fish food', 'Poison', 'Poisoned fish food', 'Pressure gauge', 'Rubber tube', 'Oil can', 'Key'],

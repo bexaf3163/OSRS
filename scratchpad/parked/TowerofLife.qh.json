@@ -1,0 +1,1337 @@
+{
+ "title": "Tower of Life",
+ "cls": "TowerOfLife",
+ "var": [
+  "varbit",
+  3337
+ ],
+ "members": true,
+ "revision": "b9b93706618a7b7fe7e5ea30e9a9ef35ba09673e",
+ "machine": {
+  "stages": {
+   "0": {
+    "s": "talkToEffigy"
+   },
+   "2": {
+    "s": "talkToBonafido"
+   },
+   "4": "n1",
+   "6": {
+    "s": "enterTower"
+   },
+   "8": "n4",
+   "10": "n8",
+   "11": "n9",
+   "12": "n10",
+   "14": "n10",
+   "16": "n11",
+   "17": "n12"
+  },
+  "nodes": {
+   "n1": {
+    "n": "getBuildersOutfit",
+    "c": [
+     [
+      {
+       "o": "and",
+       "a": [
+        "r1",
+        "r2",
+        "r3",
+        {
+         "o": "item",
+         "nm": "Builder's Trousers",
+         "ids": [
+          10864
+         ]
+        }
+       ]
+      },
+      {
+       "s": "talkToBonafidoWithOutfit"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r1",
+        "r2",
+        "r3"
+       ]
+      },
+      {
+       "s": "getTrousers"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r1",
+        "r2"
+       ]
+      },
+      "n2"
+     ],
+     [
+      "r1",
+      "n3"
+     ]
+    ],
+    "d": {
+     "s": "talkToBlackeye"
+    }
+   },
+   "n2": {
+    "n": "getShirt",
+    "c": [
+     [
+      {
+       "o": "item",
+       "nm": "Beer",
+       "ids": [
+        1917
+       ]
+      },
+      {
+       "s": "talkToGuns"
+      }
+     ]
+    ],
+    "d": {
+     "s": "getBeerForGuns"
+    }
+   },
+   "n3": {
+    "n": "getBoots",
+    "c": [
+     [
+      {
+       "o": "vb",
+       "id": 3376,
+       "v": 1
+      },
+      {
+       "s": "pickpocketNoFingers"
+      }
+     ]
+    ],
+    "d": {
+     "s": "talkToNoFingers"
+    }
+   },
+   "n4": {
+    "n": "fixTheTower",
+    "c": [
+     [
+      {
+       "o": "and",
+       "a": [
+        "r4",
+        "r5"
+       ]
+      },
+      {
+       "s": "climbBackDownToGround"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r4",
+        "r6"
+       ]
+      },
+      {
+       "s": "climbBackDownToFloor1"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r4",
+        "r7"
+       ]
+      },
+      {
+       "s": "climbBackDownToFloor2"
+      }
+     ],
+     [
+      "r4",
+      {
+       "s": "talkToEffigyAgain"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r8",
+        "r9",
+        {
+         "o": "vb",
+         "id": 3339,
+         "v": 2
+        }
+       ]
+      },
+      "n5"
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r8",
+        "r9"
+       ]
+      },
+      "n6"
+     ],
+     [
+      "r8",
+      "n7"
+     ]
+    ],
+    "d": {
+     "s": "enterTower"
+    }
+   },
+   "n5": {
+    "n": "fixCage",
+    "c": [
+     [
+      {
+       "o": "vb",
+       "id": 3340,
+       "v": 1
+      },
+      {
+       "s": "solveCagePuzzle"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r10",
+        "r7"
+       ]
+      },
+      {
+       "s": "buildCage"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r10",
+        "r6"
+       ]
+      },
+      {
+       "s": "climbUpToFloor3"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r10",
+        "r5"
+       ]
+      },
+      {
+       "s": "climbUpToFloor2"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r10",
+        "r12"
+       ]
+      },
+      {
+       "s": "climbUpToFloor1"
+      }
+     ],
+     [
+      "r5",
+      {
+       "s": "climbDownToGround"
+      }
+     ],
+     [
+      "r6",
+      {
+       "s": "climbDownToFloor1"
+      }
+     ],
+     [
+      "r7",
+      {
+       "s": "climbDownToFloor2"
+      }
+     ],
+     [
+      "r11",
+      {
+       "s": "fixCageGetFluid"
+      }
+     ]
+    ],
+    "d": {
+     "s": "fixCageGetBars"
+    }
+   },
+   "n6": {
+    "n": "fixPipeMachine",
+    "c": [
+     [
+      {
+       "o": "vb",
+       "id": 3339,
+       "v": 1
+      },
+      {
+       "s": "solvePipeMachinePuzzle"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r13",
+        "r6"
+       ]
+      },
+      {
+       "s": "buildPipeMachine"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r13",
+        "r7"
+       ]
+      },
+      {
+       "s": "climbDownToFloor2"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r13",
+        "r5"
+       ]
+      },
+      {
+       "s": "climbUpToFloor2"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r13",
+        "r12"
+       ]
+      },
+      {
+       "s": "climbUpToFloor1"
+      }
+     ],
+     [
+      "r5",
+      {
+       "s": "climbDownToGround"
+      }
+     ],
+     [
+      "r6",
+      {
+       "s": "climbDownToFloor1"
+      }
+     ],
+     [
+      "r7",
+      {
+       "s": "climbDownToFloor2"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r14",
+        "r15"
+       ]
+      },
+      {
+       "s": "fixPipeMachineGetRivets"
+      }
+     ],
+     [
+      "r14",
+      {
+       "s": "fixPipeMachineGetRings"
+      }
+     ]
+    ],
+    "d": {
+     "s": "fixPipeMachineGetPipes"
+    }
+   },
+   "n7": {
+    "n": "fixPressureMachine",
+    "c": [
+     [
+      {
+       "o": "vb",
+       "id": 3338,
+       "v": 1
+      },
+      {
+       "s": "solvePressureMachinePuzzle"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r16",
+        "r5"
+       ]
+      },
+      {
+       "s": "buildPressureMachine"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r16",
+        "r6"
+       ]
+      },
+      {
+       "s": "climbDownToFloor1"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r16",
+        "r7"
+       ]
+      },
+      {
+       "s": "climbDownToFloor2"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r16",
+        "r12"
+       ]
+      },
+      {
+       "s": "climbUpToFloor1"
+      }
+     ],
+     [
+      "r5",
+      {
+       "s": "climbDownToGround"
+      }
+     ],
+     [
+      "r6",
+      {
+       "s": "climbDownToFloor1"
+      }
+     ],
+     [
+      "r7",
+      {
+       "s": "climbDownToFloor2"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r17",
+        "r18"
+       ]
+      },
+      {
+       "s": "fixPressureMachineGetWheels"
+      }
+     ],
+     [
+      "r17",
+      {
+       "s": "fixPressureMachineGetBalls"
+      }
+     ]
+    ],
+    "d": {
+     "s": "fixPressureMachineGetSheets"
+    }
+   },
+   "n8": {
+    "n": "followTheAlchemists",
+    "c": [
+     [
+      "r12",
+      {
+       "s": "climbBackUpToFloor1"
+      }
+     ],
+     [
+      "r5",
+      {
+       "s": "climbBackUpToFloor2"
+      }
+     ],
+     [
+      "r6",
+      {
+       "s": "climbBackUpToFloor3"
+      }
+     ]
+    ],
+    "d": {
+     "s": "enterTowerAgain"
+    }
+   },
+   "n9": {
+    "n": "confrontEffigy",
+    "c": [
+     [
+      "r7",
+      {
+       "s": "climbBackDownToFloor2"
+      }
+     ],
+     [
+      "r6",
+      {
+       "s": "climbBackDownToFloor1"
+      }
+     ],
+     [
+      "r5",
+      {
+       "s": "climbBackDownToGround"
+      }
+     ]
+    ],
+    "d": {
+     "s": "talkToEffigyAgain"
+    }
+   },
+   "n10": {
+    "n": "confrontTheHomunculus",
+    "c": [
+     [
+      "r12",
+      {
+       "s": "climbBackUpToFloor1"
+      }
+     ],
+     [
+      "r5",
+      {
+       "s": "climbBackUpToFloor2"
+      }
+     ],
+     [
+      "r6",
+      {
+       "s": "climbBackUpToFloor3"
+      }
+     ],
+     [
+      "r7",
+      {
+       "s": "talkToHomunculusTopOfTower"
+      }
+     ]
+    ],
+    "d": {
+     "s": "enterTowerAgain"
+    }
+   },
+   "n11": {
+    "n": "scareTheAlchemists",
+    "c": [
+     [
+      "r7",
+      {
+       "s": "climbBackDownToFloor2"
+      }
+     ],
+     [
+      "r6",
+      {
+       "s": "climbBackDownToFloor1"
+      }
+     ],
+     [
+      "r5",
+      {
+       "s": "climbBackDownToGround"
+      }
+     ]
+    ],
+    "d": {
+     "s": "talkToEffigyAgain"
+    }
+   },
+   "n12": {
+    "n": "talkToHomunculusInDungeon",
+    "c": [
+     [
+      {
+       "o": "zone",
+       "z": [
+        [
+         3010,
+         4354,
+         3068,
+         4412,
+         0,
+         0
+        ]
+       ]
+      },
+      {
+       "s": "talkToHomunculusBasement"
+      }
+     ],
+     [
+      "r12",
+      {
+       "s": "climbDownToBasement"
+      }
+     ]
+    ],
+    "d": {
+     "s": "enterTower"
+    }
+   }
+  },
+  "reqs": {
+   "r1": {
+    "o": "item",
+    "nm": "Hard Hat",
+    "ids": [
+     10862
+    ]
+   },
+   "r2": {
+    "o": "item",
+    "nm": "Builder's Boots",
+    "ids": [
+     10865
+    ]
+   },
+   "r3": {
+    "o": "item",
+    "nm": "Builder's Shirt",
+    "ids": [
+     10863
+    ]
+   },
+   "r4": {
+    "o": "vb",
+    "id": 3354,
+    "v": 1
+   },
+   "r5": {
+    "o": "?",
+    "d": "zone"
+   },
+   "r6": {
+    "o": "?",
+    "d": "zone"
+   },
+   "r7": {
+    "o": "?",
+    "d": "zone"
+   },
+   "r8": {
+    "o": "?",
+    "d": "zone"
+   },
+   "r9": {
+    "o": "vb",
+    "id": 3338,
+    "v": 2
+   },
+   "r10": {
+    "o": "and",
+    "a": [
+     "r11",
+     {
+      "o": "item",
+      "nm": "Binding fluid",
+      "ids": [
+       10870
+      ],
+      "q": 4
+     }
+    ]
+   },
+   "r11": {
+    "o": "item",
+    "nm": "Metal bars",
+    "ids": [
+     10876
+    ],
+    "q": 5
+   },
+   "r12": {
+    "o": "zone",
+    "z": [
+     [
+      2646,
+      3212,
+      2652,
+      3224,
+      0,
+      0
+     ],
+     [
+      2645,
+      3213,
+      2653,
+      3223,
+      0,
+      0
+     ],
+     [
+      2644,
+      3214,
+      2654,
+      3222,
+      0,
+      0
+     ],
+     [
+      2643,
+      3215,
+      2655,
+      3221,
+      0,
+      0
+     ]
+    ]
+   },
+   "r13": {
+    "o": "and",
+    "a": [
+     "r14",
+     "r15",
+     {
+      "o": "item",
+      "nm": "Rivets",
+      "ids": [
+       10866
+      ],
+      "q": 6
+     }
+    ]
+   },
+   "r14": {
+    "o": "item",
+    "nm": "Pipes",
+    "ids": [
+     10871
+    ],
+    "q": 4
+   },
+   "r15": {
+    "o": "item",
+    "nm": "Pipe rings",
+    "ids": [
+     10872
+    ],
+    "q": 5
+   },
+   "r16": {
+    "o": "and",
+    "a": [
+     "r17",
+     "r18",
+     {
+      "o": "item",
+      "nm": "Valve wheels",
+      "ids": [
+       10875
+      ],
+      "q": 4
+     }
+    ]
+   },
+   "r17": {
+    "o": "item",
+    "nm": "Metal sheets",
+    "ids": [
+     10873
+    ],
+    "q": 3
+   },
+   "r18": {
+    "o": "item",
+    "nm": "Coloured balls",
+    "ids": [
+     10874
+    ],
+    "q": 4
+   }
+  },
+  "alias": {
+   "climbBackDownToGround": [
+    "talkToEffigyAgain"
+   ],
+   "climbBackDownToFloor1": [
+    "talkToEffigyAgain"
+   ],
+   "climbBackDownToFloor2": [
+    "talkToEffigyAgain"
+   ],
+   "fixCageGetBars": [
+    "buildCage"
+   ],
+   "fixCageGetFluid": [
+    "buildCage"
+   ],
+   "climbUpToFloor1": [
+    "buildCage",
+    "buildPipeMachine",
+    "buildPressureMachine"
+   ],
+   "climbUpToFloor2": [
+    "buildCage",
+    "buildPipeMachine",
+    "buildPressureMachine"
+   ],
+   "climbUpToFloor3": [
+    "buildCage",
+    "buildPipeMachine",
+    "buildPressureMachine"
+   ],
+   "climbDownToGround": [
+    "buildCage",
+    "buildPipeMachine",
+    "buildPressureMachine"
+   ],
+   "climbDownToFloor1": [
+    "buildCage",
+    "buildPipeMachine",
+    "buildPressureMachine"
+   ],
+   "climbDownToFloor2": [
+    "buildCage",
+    "buildPipeMachine",
+    "buildPressureMachine"
+   ],
+   "fixPipeMachineGetPipes": [
+    "buildPipeMachine"
+   ],
+   "fixPipeMachineGetRings": [
+    "buildPipeMachine"
+   ],
+   "fixPipeMachineGetRivets": [
+    "buildPipeMachine"
+   ],
+   "fixPressureMachineGetSheets": [
+    "buildPressureMachine"
+   ],
+   "fixPressureMachineGetBalls": [
+    "buildPressureMachine"
+   ],
+   "fixPressureMachineGetWheels": [
+    "buildPressureMachine"
+   ]
+  }
+ },
+ "unknown": {
+  "zone": 4
+ },
+ "steps": {
+  "talkToEffigy": {
+   "typ": "NpcStep",
+   "wp": [
+    2637,
+    3218,
+    0
+   ],
+   "ids": [
+    3585
+   ],
+   "text": "Talk to Effigy outside the Tower of Life."
+  },
+  "talkToBonafido": {
+   "typ": "NpcStep",
+   "wp": [
+    2651,
+    3228,
+    0
+   ],
+   "ids": [
+    3587
+   ],
+   "text": "Talk to Bonafido."
+  },
+  "talkToBlackeye": {
+   "typ": "NpcStep",
+   "wp": null,
+   "ids": [
+    3596
+   ],
+   "text": "Get the Hard Hat from 'Black-eye'."
+  },
+  "talkToBonafidoWithOutfit": {
+   "typ": "NpcStep",
+   "wp": null,
+   "ids": [
+    3587
+   ],
+   "text": "Speak to Bonafido wearing the Builder's outfit."
+  },
+  "getTrousers": {
+   "typ": "ObjectStep",
+   "wp": null,
+   "ids": [
+    21924
+   ],
+   "text": "Search the bushes to the south for some Builder's Trousers."
+  },
+  "getBeerForGuns": {
+   "typ": "ItemStep",
+   "wp": null,
+   "ids": [],
+   "text": "Get a Beer for 'The Guns'."
+  },
+  "talkToGuns": {
+   "typ": "NpcStep",
+   "wp": [
+    2643,
+    3226,
+    0
+   ],
+   "ids": [
+    3599
+   ],
+   "text": "Talk to 'The Guns'."
+  },
+  "talkToNoFingers": {
+   "typ": "NpcStep",
+   "wp": [
+    2645,
+    3224,
+    0
+   ],
+   "ids": [
+    3597
+   ],
+   "text": "Talk to 'No fingers'."
+  },
+  "pickpocketNoFingers": {
+   "typ": "NpcStep",
+   "wp": [
+    2645,
+    3224,
+    0
+   ],
+   "ids": [
+    3597
+   ],
+   "text": "Pickpocket 'No fingers'."
+  },
+  "enterTower": {
+   "typ": "ObjectStep",
+   "wp": [
+    2649,
+    3225,
+    0
+   ],
+   "ids": [
+    21814
+   ],
+   "text": "Enter the tower."
+  },
+  "climbBackDownToGround": {
+   "typ": "ObjectStep",
+   "wp": [
+    2645,
+    3220,
+    1
+   ],
+   "ids": [
+    21872
+   ],
+   "text": "Go back downstairs."
+  },
+  "climbBackDownToFloor1": {
+   "typ": "ObjectStep",
+   "wp": [
+    2653,
+    3220,
+    2
+   ],
+   "ids": [
+    21872
+   ],
+   "text": "Go back downstairs."
+  },
+  "climbBackDownToFloor2": {
+   "typ": "ObjectStep",
+   "wp": [
+    2647,
+    3221,
+    3
+   ],
+   "ids": [
+    17975
+   ],
+   "text": "Go back downstairs."
+  },
+  "talkToEffigyAgain": {
+   "typ": "NpcStep",
+   "wp": [
+    2637,
+    3218,
+    0
+   ],
+   "ids": [
+    3585
+   ],
+   "text": "Go back and talk to Effigy."
+  },
+  "fixCageGetBars": {
+   "typ": "ObjectStep",
+   "wp": [
+    2650,
+    3212,
+    0
+   ],
+   "ids": [
+    21917
+   ],
+   "text": "Get 5 Metal bars."
+  },
+  "solveCagePuzzle": {
+   "typ": "PuzzleWrapperStep",
+   "wp": null,
+   "ids": [],
+   "text": null
+  },
+  "buildCage": {
+   "typ": "ObjectStep",
+   "wp": [
+    2649,
+    3218,
+    3
+   ],
+   "ids": [
+    21941
+   ],
+   "text": "Build the cage."
+  },
+  "fixCageGetFluid": {
+   "typ": "ObjectStep",
+   "wp": [
+    2651,
+    3213,
+    0
+   ],
+   "ids": [
+    21915
+   ],
+   "text": "Get 4 Binding fluid."
+  },
+  "climbUpToFloor1": {
+   "typ": "ObjectStep",
+   "wp": [
+    2645,
+    3220,
+    0
+   ],
+   "ids": [
+    21871
+   ],
+   "text": "Go upstairs."
+  },
+  "climbUpToFloor2": {
+   "typ": "ObjectStep",
+   "wp": [
+    2653,
+    3220,
+    1
+   ],
+   "ids": [
+    21871
+   ],
+   "text": "Go upstairs."
+  },
+  "climbUpToFloor3": {
+   "typ": "ObjectStep",
+   "wp": [
+    2647,
+    3221,
+    2
+   ],
+   "ids": [
+    17974
+   ],
+   "text": "Go upstairs."
+  },
+  "climbDownToGround": {
+   "typ": "ObjectStep",
+   "wp": [
+    2645,
+    3220,
+    1
+   ],
+   "ids": [
+    21872
+   ],
+   "text": "Go downstairs."
+  },
+  "climbDownToFloor1": {
+   "typ": "ObjectStep",
+   "wp": [
+    2653,
+    3220,
+    2
+   ],
+   "ids": [
+    21872
+   ],
+   "text": "Go downstairs."
+  },
+  "climbDownToFloor2": {
+   "typ": "ObjectStep",
+   "wp": [
+    2647,
+    3221,
+    3
+   ],
+   "ids": [
+    17975
+   ],
+   "text": "Go downstairs."
+  },
+  "fixPipeMachineGetPipes": {
+   "typ": "ObjectStep",
+   "wp": [
+    2648,
+    3222,
+    0
+   ],
+   "ids": [
+    21909
+   ],
+   "text": "Get 4 Pipes."
+  },
+  "solvePipeMachinePuzzle": {
+   "typ": "PuzzleWrapperStep",
+   "wp": null,
+   "ids": [],
+   "text": null
+  },
+  "buildPipeMachine": {
+   "typ": "ObjectStep",
+   "wp": [
+    2650,
+    3214,
+    2
+   ],
+   "ids": [
+    21943
+   ],
+   "text": "Build the Pipe Machine."
+  },
+  "fixPipeMachineGetRings": {
+   "typ": "ObjectStep",
+   "wp": [
+    2652,
+    3222,
+    0
+   ],
+   "ids": [
+    21910
+   ],
+   "text": "Get 5 Pipe rings."
+  },
+  "fixPipeMachineGetRivets": {
+   "typ": "ObjectStep",
+   "wp": [
+    2654,
+    3220,
+    0
+   ],
+   "ids": [
+    21911
+   ],
+   "text": "Get 6 Rivets."
+  },
+  "fixPressureMachineGetSheets": {
+   "typ": "ObjectStep",
+   "wp": [
+    2643,
+    3219,
+    0
+   ],
+   "ids": [
+    21913
+   ],
+   "text": "Get 3 Metal sheets."
+  },
+  "solvePressureMachinePuzzle": {
+   "typ": "PuzzleWrapperStep",
+   "wp": null,
+   "ids": [],
+   "text": null
+  },
+  "buildPressureMachine": {
+   "typ": "ObjectStep",
+   "wp": [
+    2649,
+    3223,
+    1
+   ],
+   "ids": [
+    21873
+   ],
+   "text": "Build the Pressure Machine."
+  },
+  "fixPressureMachineGetBalls": {
+   "typ": "ObjectStep",
+   "wp": [
+    2644,
+    3216,
+    0
+   ],
+   "ids": [
+    21914
+   ],
+   "text": "Get 4 Coloured balls."
+  },
+  "fixPressureMachineGetWheels": {
+   "typ": "ObjectStep",
+   "wp": [
+    2655,
+    3217,
+    0
+   ],
+   "ids": [
+    21912
+   ],
+   "text": "Get 4 Valve wheels."
+  },
+  "enterTowerAgain": {
+   "typ": "ObjectStep",
+   "wp": [
+    2649,
+    3225,
+    0
+   ],
+   "ids": [
+    21814
+   ],
+   "text": "Go back into the tower."
+  },
+  "climbBackUpToFloor1": {
+   "typ": "ObjectStep",
+   "wp": [
+    2645,
+    3220,
+    0
+   ],
+   "ids": [
+    21871
+   ],
+   "text": "Go back upstairs."
+  },
+  "climbBackUpToFloor2": {
+   "typ": "ObjectStep",
+   "wp": [
+    2653,
+    3220,
+    1
+   ],
+   "ids": [
+    21871
+   ],
+   "text": "Go back upstairs."
+  },
+  "climbBackUpToFloor3": {
+   "typ": "ObjectStep",
+   "wp": [
+    2647,
+    3221,
+    2
+   ],
+   "ids": [
+    17974
+   ],
+   "text": "Go back upstairs."
+  },
+  "talkToHomunculusTopOfTower": {
+   "typ": "NpcStep",
+   "wp": [
+    2649,
+    3218,
+    3
+   ],
+   "ids": [
+    3590
+   ],
+   "text": "Talk to the homunculus."
+  },
+  "talkToHomunculusBasement": {
+   "typ": "NpcStep",
+   "wp": [
+    3040,
+    4400,
+    0
+   ],
+   "ids": [
+    3588
+   ],
+   "text": "Talk to the homunculus."
+  },
+  "climbDownToBasement": {
+   "typ": "ObjectStep",
+   "wp": [
+    2648,
+    3212,
+    0
+   ],
+   "ids": [
+    21944
+   ],
+   "text": "Go downstairs."
+  }
+ }
+}

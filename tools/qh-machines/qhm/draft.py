@@ -25,7 +25,7 @@ ENUM = os.path.join(REPO, 'src', 'main', 'java', 'com', 'questhelper', 'questinf
 
 def registered(title):
     """(class, variable kind, variable id, members) from Quest Helper's own quest table."""
-    name = re.sub(r'[^A-Z0-9]+', '_', title.upper().replace("'", '')).strip('_')
+    name = re.sub(r'[^A-Z0-9]+', '_', title.upper().replace("'", '').replace('.', '')).strip('_')
     line = re.search(r'^\s*%s\(new (\w+)\(\), [^,]+, (QuestVarPlayer|QuestVarbits)\.(\w+), QuestDetails\.Type\.(\w+),' % name,
                      open(ENUM, encoding='utf-8').read(), re.M)
     if not line:
@@ -36,7 +36,7 @@ def registered(title):
         vid = re.search(r'^%s (\d+)$' % vid.group(3), open(os.path.join(WORK, 'consts', 'gv_%s.txt' % vid.group(2)), encoding='utf-8').read(), re.M)
     if not vid:
         sys.exit('%s: no id for %s.%s' % (title, table, var))
-    return cls, 'varp' if table == 'QuestVarPlayer' else 'varbit', int(vid.group(1)), kind == 'P2P'
+    return cls, 'varp' if table == 'QuestVarPlayer' else 'varbit', int(vid.group(1)), kind != 'F2P'
 
 
 def lay_out(cls):

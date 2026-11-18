@@ -10600,5 +10600,189 @@
         "questName": "Haunted Mine"
       }
     }
+  },
+  {
+    "id": "S9-47",
+    "stage": 9,
+    "type": "quest",
+    "title": "Daddy's Home",
+    "qp": 1,
+    "requires": [],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Daddy's_Home",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Daddy's_Home/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3240,3474,0",
+    "mapLocation": {
+      "x": 3240,
+      "y": 3474,
+      "plane": 0,
+      "label": "The Estate Agent's house in north-east Varrock"
+    },
+    "npc": {
+      "nameEn": "Marlo",
+      "location": "The Estate Agent's house in north-east Varrock",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Marlo"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Plank",
+        "amount": 10,
+        "howToGet": "Buy on the Grand Exchange. Oak, teak and mahogany planks do not work.",
+        "wikiItemId": 960,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Plank.png"
+      },
+      {
+        "nameEn": "Bolt of cloth",
+        "amount": 5,
+        "howToGet": "Buy on the Grand Exchange, or from the Sawmill operator north-east of Varrock for 650 coins each.",
+        "wikiItemId": 8790,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bolt_of_cloth.png"
+      },
+      {
+        "nameEn": "Steel nails",
+        "amount": 100,
+        "howToGet": "Buy on the Grand Exchange. Nails bend often at low Construction, so 100 covers level 1.",
+        "wikiItemId": 1539,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Steel_nails.png"
+      }
+    ],
+    "reward": "1 QP, 400 Construction XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Marlo"
+      ],
+      "dialogChoices": [
+        "What kind of favour do you want me to do?",
+        "Tell me more about the job.",
+        "Tell me where he lives, and I'll do the job.",
+        "Skip Yarlo's lecture. He'll offer it later if you like.",
+        "I need some waxwood planks for Old Man Yarlo.",
+        "Yeah, what have you got for me?"
+      ],
+      "highlightItems": [
+        "Plank",
+        "Bolt of cloth",
+        "Steel nails"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Daddy's Home"
+      }
+    }
+  },
+  {
+    "id": "S9-48",
+    "stage": 9,
+    "type": "quest",
+    "title": "Tower of Life",
+    "qp": 2,
+    "requires": [],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Tower_of_Life",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Tower_of_Life/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2639,3218,0",
+    "mapLocation": {
+      "x": 2639,
+      "y": 3218,
+      "plane": 0,
+      "label": "The Tower of Life just east of the Ardougne Monastery"
+    },
+    "npc": {
+      "nameEn": "Effigy",
+      "location": "The Tower of Life just east of the Ardougne Monastery",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Effigy"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Hammer",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from a general store for 1 gp.",
+        "wikiItemId": 2347,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Hammer.png"
+      },
+      {
+        "nameEn": "Saw",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from the Sawmill operator's shop for 13 gp.",
+        "wikiItemId": 8794,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Saw.png"
+      },
+      {
+        "nameEn": "Beer",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from a pub for 2 gp. 'The Guns' wants one.",
+        "wikiItemId": 1917,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Beer.png"
+      }
+    ],
+    "reward": "2 QP, 1,000 Construction XP, 500 Crafting XP, 500 Thieving XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Effigy"
+      ],
+      "dialogChoices": [
+        "Sure, why not.",
+        "Tea",
+        "Whistle for attention",
+        "Your legs are getting a bit cold",
+        "Carry on, it'll fix itself"
+      ],
+      "highlightItems": [
+        "Hammer",
+        "Saw",
+        "Beer"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Tower of Life"
+      }
+    }
+  },
+  {
+    "id": "S9-49",
+    "stage": 9,
+    "type": "quest",
+    "title": "The Ribbiting Tale of a Lily Pad Labour Dispute",
+    "qp": 1,
+    "requires": [
+      "S9-18"
+    ],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/The_Ribbiting_Tale_of_a_Lily_Pad_Labour_Dispute",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/The_Ribbiting_Tale_of_a_Lily_Pad_Labour_Dispute/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=1684,2973,0",
+    "mapLocation": {
+      "x": 1684,
+      "y": 2973,
+      "plane": 0,
+      "label": "The Locus Oasis"
+    },
+    "npc": {
+      "nameEn": "Marcellus",
+      "location": "The Locus Oasis",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Marcellus"
+    },
+    "itemsRequired": [],
+    "foes": [
+      "Cuthbert, Lord of Dread"
+    ],
+    "reward": "1 QP, 2,000 Woodcutting XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Marcellus"
+      ],
+      "dialogChoices": [],
+      "highlightItems": [],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "The Ribbiting Tale of a Lily Pad Labour Dispute"
+      }
+    }
   }
 ]

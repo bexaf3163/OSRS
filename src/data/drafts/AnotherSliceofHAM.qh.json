@@ -1,0 +1,1189 @@
+{
+ "title": "Another Slice of H.A.M.",
+ "cls": "AnotherSliceOfHam",
+ "var": [
+  "varbit",
+  3550
+ ],
+ "members": true,
+ "revision": "b9b93706618a7b7fe7e5ea30e9a9ef35ba09673e",
+ "machine": {
+  "stages": {
+   "0": "n1",
+   "1": "n4",
+   "2": "n5",
+   "3": "n6",
+   "4": "n7",
+   "5": {
+    "s": "talkToGenerals"
+   },
+   "6": "n8",
+   "7": {
+    "s": "talkToGeneralsAgain"
+   },
+   "8": {
+    "s": "talkToSergeant"
+   },
+   "9": "n9",
+   "10": "n10"
+  },
+  "nodes": {
+   "n1": {
+    "n": "goTalkToUrtag",
+    "c": [
+     [
+      "r1",
+      {
+       "s": "talkToUrtag"
+      }
+     ]
+    ],
+    "d": "n2"
+   },
+   "n2": {
+    "n": "goToCityF1",
+    "c": [
+     [
+      "r2",
+      {
+       "s": "climbToF1City"
+      }
+     ]
+    ],
+    "d": "n3"
+   },
+   "n3": {
+    "n": "goToCityF0",
+    "c": [
+     [
+      {
+       "o": "zone",
+       "z": [
+        [
+         3309,
+         9600,
+         3327,
+         9655,
+         0,
+         0
+        ]
+       ]
+      },
+      {
+       "s": "enterCity"
+      }
+     ],
+     [
+      {
+       "o": "zone",
+       "z": [
+        [
+         3221,
+         9602,
+         3308,
+         9661,
+         0,
+         0
+        ]
+       ]
+      },
+      {
+       "s": "talkToKazgar"
+      }
+     ],
+     [
+      {
+       "o": "zone",
+       "z": [
+        [
+         3208,
+         9614,
+         3219,
+         9625,
+         0,
+         0
+        ]
+       ]
+      },
+      {
+       "s": "climbThroughHole"
+      }
+     ]
+    ],
+    "d": {
+     "s": "goDownIntoBasement"
+    }
+   },
+   "n4": {
+    "n": "goTalkToTegdak",
+    "c": [
+     [
+      "r3",
+      {
+       "s": "talkToTegdak"
+      }
+     ],
+     [
+      "r1",
+      {
+       "s": "enterRailway"
+      }
+     ]
+    ],
+    "d": "n2"
+   },
+   "n5": {
+    "n": "goGetArtefacts",
+    "c": [
+     [
+      {
+       "o": "and",
+       "a": [
+        "r3",
+        {
+         "o": "and",
+         "a": [
+          {
+           "o": "or",
+           "a": [
+            {
+             "o": "vb",
+             "id": 3551,
+             "v": 2
+            },
+            {
+             "o": "item",
+             "nm": "Armour shard",
+             "ids": [
+              11048
+             ]
+            }
+           ]
+          },
+          {
+           "o": "or",
+           "a": [
+            {
+             "o": "vb",
+             "id": 3552,
+             "v": 2
+            },
+            {
+             "o": "item",
+             "nm": "Shield fragment",
+             "ids": [
+              11054
+             ]
+            }
+           ]
+          },
+          {
+           "o": "or",
+           "a": [
+            {
+             "o": "vb",
+             "id": 3553,
+             "v": 2
+            },
+            {
+             "o": "item",
+             "nm": "Helmet fragment",
+             "ids": [
+              11052
+             ]
+            }
+           ]
+          },
+          {
+           "o": "or",
+           "a": [
+            {
+             "o": "vb",
+             "id": 3554,
+             "v": 2
+            },
+            {
+             "o": "item",
+             "nm": "Sword fragment",
+             "ids": [
+              11056
+             ]
+            }
+           ]
+          },
+          {
+           "o": "or",
+           "a": [
+            {
+             "o": "vb",
+             "id": 3555,
+             "v": 2
+            },
+            {
+             "o": "item",
+             "nm": "Axe head",
+             "ids": [
+              11050
+             ]
+            }
+           ]
+          },
+          {
+           "o": "or",
+           "a": [
+            {
+             "o": "vb",
+             "id": 3556,
+             "v": 2
+            },
+            {
+             "o": "item",
+             "nm": "Mace",
+             "ids": [
+              11058
+             ]
+            }
+           ]
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "s": "showTegdakArtefacts"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r3",
+        "r4",
+        "r5",
+        "r6",
+        "r7",
+        "r8",
+        {
+         "o": "vb",
+         "id": 3556,
+         "op": ">=",
+         "v": 1
+        }
+       ]
+      },
+      {
+       "s": "cleanArtefacts"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r3",
+        "r4",
+        "r5",
+        "r6",
+        "r7",
+        "r8"
+       ]
+      },
+      {
+       "s": "dig6"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r3",
+        "r4",
+        "r5",
+        "r6",
+        "r7"
+       ]
+      },
+      {
+       "s": "dig5"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r3",
+        "r4",
+        "r5",
+        "r6"
+       ]
+      },
+      {
+       "s": "dig4"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r3",
+        "r4",
+        "r5"
+       ]
+      },
+      {
+       "s": "dig3"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r3",
+        "r4"
+       ]
+      },
+      {
+       "s": "dig2"
+      }
+     ],
+     [
+      "r3",
+      {
+       "s": "dig1"
+      }
+     ],
+     [
+      "r1",
+      {
+       "s": "enterRailway"
+      }
+     ]
+    ],
+    "d": "n2"
+   },
+   "n6": {
+    "n": "goTalkToScribe",
+    "c": [
+     [
+      {
+       "o": "and",
+       "a": [
+        "r1",
+        "r9"
+       ]
+      },
+      {
+       "s": "talkToScribe"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r3",
+        "r9"
+       ]
+      },
+      {
+       "s": "leaveRailway"
+      }
+     ],
+     [
+      "r3",
+      {
+       "s": "talkToZanikRailway"
+      }
+     ],
+     [
+      "r1",
+      {
+       "s": "enterRailway"
+      }
+     ]
+    ],
+    "d": "n2"
+   },
+   "n7": {
+    "n": "goTalkToOldak",
+    "c": [
+     [
+      {
+       "o": "and",
+       "a": [
+        "r2",
+        "r9"
+       ]
+      },
+      {
+       "s": "talkToOldak"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r1",
+        "r9"
+       ]
+      },
+      {
+       "s": "goDownToF0City"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r3",
+        "r9"
+       ]
+      },
+      {
+       "s": "leaveRailway"
+      }
+     ],
+     [
+      "r3",
+      {
+       "s": "talkToZanikRailway"
+      }
+     ],
+     [
+      "r1",
+      {
+       "s": "enterRailway"
+      }
+     ]
+    ],
+    "d": "n3"
+   },
+   "n8": {
+    "n": "goKillHamRangers",
+    "c": [
+     [
+      {
+       "o": "zone",
+       "z": [
+        [
+         2440,
+         5416,
+         2447,
+         5418,
+         2,
+         2
+        ]
+       ]
+      },
+      {
+       "s": "killHamMageAndArcher"
+      }
+     ],
+     [
+      {
+       "o": "zone",
+       "z": [
+        [
+         2434,
+         5409,
+         2459,
+         5438,
+         0,
+         0
+        ]
+       ]
+      },
+      {
+       "s": "goUpLadder"
+      }
+     ]
+    ],
+    "d": {
+     "s": "goToGoblinVillage"
+    }
+   },
+   "n9": {
+    "n": "goInfiltrateBase",
+    "c": [
+     [
+      {
+       "o": "npc",
+       "id": 5146
+      },
+      {
+       "s": "defeatSigmund"
+      }
+     ],
+     [
+      "r10",
+      {
+       "s": "useSpecial"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r11",
+        {
+         "o": "or",
+         "a": [
+          {
+           "o": "?",
+           "d": "new NpcInteractingWithNpcRequirement"
+          },
+          {
+           "o": "?",
+           "d": "new NpcInteractingWithNpcRequirement"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "s": "enterFinalFight"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r11",
+        {
+         "o": "npc",
+         "id": 5141,
+         "z": [
+          2397,
+          5551,
+          2397,
+          5551,
+          0,
+          0
+         ]
+        }
+       ]
+      },
+      {
+       "s": "lureHamMember"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r11",
+        {
+         "o": "vb",
+         "id": 3558,
+         "v": 1
+        }
+       ]
+      },
+      {
+       "s": "waitAtCrate"
+      }
+     ],
+     [
+      "r11",
+      {
+       "s": "goToCrate"
+      }
+     ],
+     [
+      "r12",
+      {
+       "s": "climbEnterHamBase"
+      }
+     ]
+    ],
+    "d": {
+     "s": "enterSwamp"
+    }
+   },
+   "n10": {
+    "n": "goFinish",
+    "c": [
+     [
+      "r10",
+      {
+       "s": "untieZanik"
+      }
+     ],
+     [
+      "r11",
+      {
+       "s": "enterFinalFight"
+      }
+     ],
+     [
+      "r12",
+      {
+       "s": "climbEnterHamBase"
+      }
+     ]
+    ],
+    "d": {
+     "s": "enterSwamp"
+    }
+   }
+  },
+  "reqs": {
+   "r1": {
+    "o": "zone",
+    "z": [
+     [
+      2688,
+      5248,
+      2750,
+      5375,
+      1,
+      1
+     ]
+    ]
+   },
+   "r2": {
+    "o": "zone",
+    "z": [
+     [
+      2688,
+      5248,
+      2750,
+      5375,
+      0,
+      0
+     ]
+    ]
+   },
+   "r3": {
+    "o": "zone",
+    "z": [
+     [
+      2505,
+      5527,
+      2523,
+      5630,
+      0,
+      0
+     ]
+    ]
+   },
+   "r4": {
+    "o": "vb",
+    "id": 3551,
+    "op": ">=",
+    "v": 1
+   },
+   "r5": {
+    "o": "vb",
+    "id": 3552,
+    "op": ">=",
+    "v": 1
+   },
+   "r6": {
+    "o": "vb",
+    "id": 3553,
+    "op": ">=",
+    "v": 1
+   },
+   "r7": {
+    "o": "vb",
+    "id": 3554,
+    "op": ">=",
+    "v": 1
+   },
+   "r8": {
+    "o": "vb",
+    "id": 3555,
+    "op": ">=",
+    "v": 1
+   },
+   "r9": {
+    "o": "or",
+    "a": [
+     {
+      "o": "vb",
+      "id": 3557,
+      "v": 0
+     },
+     {
+      "o": "?",
+      "d": "NpcInteractingRequirement"
+     }
+    ]
+   },
+   "r10": {
+    "o": "zone",
+    "z": [
+     [
+      2532,
+      5509,
+      2553,
+      5520,
+      0,
+      0
+     ]
+    ]
+   },
+   "r11": {
+    "o": "zone",
+    "z": [
+     [
+      2393,
+      5525,
+      2414,
+      5560,
+      0,
+      0
+     ]
+    ]
+   },
+   "r12": {
+    "o": "zone",
+    "z": [
+     [
+      3138,
+      9536,
+      3261,
+      9601,
+      0,
+      0
+     ]
+    ]
+   }
+  },
+  "alias": {
+   "defeatSigmund": [
+    "useSpecial"
+   ],
+   "waitAtCrate": [
+    "goToCrate"
+   ]
+  }
+ },
+ "unknown": {
+  "NpcInteractingRequirement": 1,
+  "new NpcInteractingWithNpcRequirement": 2
+ },
+ "steps": {
+  "goDownIntoBasement": {
+   "typ": "ObjectStep",
+   "wp": [
+    3209,
+    3216,
+    0
+   ],
+   "ids": [
+    14880
+   ],
+   "text": "Enter the Lumbridge Castle basement."
+  },
+  "enterCity": {
+   "typ": "ObjectStep",
+   "wp": [
+    3317,
+    9601,
+    0
+   ],
+   "ids": [
+    6919
+   ],
+   "text": "Enter Dorgesh-Kaan."
+  },
+  "talkToKazgar": {
+   "typ": "NpcStep",
+   "wp": [
+    3230,
+    9610,
+    0
+   ],
+   "ids": [
+    7300
+   ],
+   "text": "Travel with Kazgar to shortcut to Mistag."
+  },
+  "climbThroughHole": {
+   "typ": "ObjectStep",
+   "wp": [
+    3219,
+    9618,
+    0
+   ],
+   "ids": [
+    6898
+   ],
+   "text": ""
+  },
+  "climbToF1City": {
+   "typ": "ObjectStep",
+   "wp": [
+    2721,
+    5360,
+    0
+   ],
+   "ids": [
+    22939
+   ],
+   "text": "Climb up to the next floor."
+  },
+  "talkToUrtag": {
+   "typ": "NpcStep",
+   "wp": [
+    2733,
+    5366,
+    1
+   ],
+   "ids": [
+    2315
+   ],
+   "text": "Talk to Ur-tag in the north east building."
+  },
+  "talkToTegdak": {
+   "typ": "NpcStep",
+   "wp": [
+    2512,
+    5564,
+    0
+   ],
+   "ids": [
+    5182
+   ],
+   "text": ""
+  },
+  "enterRailway": {
+   "typ": "ObjectStep",
+   "wp": [
+    2695,
+    5277,
+    1
+   ],
+   "ids": [
+    23052
+   ],
+   "text": "Enter the railway entrance in the south west of Dorgesh-Kaan."
+  },
+  "showTegdakArtefacts": {
+   "typ": "NpcStep",
+   "wp": [
+    2512,
+    5564,
+    0
+   ],
+   "ids": [
+    5182
+   ],
+   "text": "Show Tegdak the artefacts."
+  },
+  "cleanArtefacts": {
+   "typ": "ObjectStep",
+   "wp": [
+    2513,
+    5559,
+    0
+   ],
+   "ids": [
+    23305
+   ],
+   "text": "Clean the artefacts on the specimen table."
+  },
+  "dig6": {
+   "typ": "ObjectStep",
+   "wp": [
+    2513,
+    5539,
+    0
+   ],
+   "ids": [
+    23304
+   ],
+   "text": ""
+  },
+  "dig5": {
+   "typ": "ObjectStep",
+   "wp": [
+    2512,
+    5544,
+    0
+   ],
+   "ids": [
+    23301
+   ],
+   "text": ""
+  },
+  "dig4": {
+   "typ": "ObjectStep",
+   "wp": [
+    2511,
+    5547,
+    0
+   ],
+   "ids": [
+    23534
+   ],
+   "text": ""
+  },
+  "dig3": {
+   "typ": "ObjectStep",
+   "wp": [
+    2513,
+    5550,
+    0
+   ],
+   "ids": [
+    23296
+   ],
+   "text": ""
+  },
+  "dig2": {
+   "typ": "ObjectStep",
+   "wp": [
+    2511,
+    5561,
+    0
+   ],
+   "ids": [
+    23293
+   ],
+   "text": ""
+  },
+  "dig1": {
+   "typ": "ObjectStep",
+   "wp": [
+    2513,
+    5563,
+    0
+   ],
+   "ids": [
+    23290
+   ],
+   "text": ""
+  },
+  "talkToScribe": {
+   "typ": "NpcStep",
+   "wp": [
+    2716,
+    5369,
+    1
+   ],
+   "ids": [
+    2302
+   ],
+   "text": ""
+  },
+  "leaveRailway": {
+   "typ": "ObjectStep",
+   "wp": [
+    2521,
+    5607,
+    0
+   ],
+   "ids": [
+    23285
+   ],
+   "text": "Leave the railway."
+  },
+  "talkToZanikRailway": {
+   "typ": "NpcStep",
+   "wp": [
+    2512,
+    5564,
+    0
+   ],
+   "ids": [
+    5184
+   ],
+   "text": "Talk to Zanik."
+  },
+  "talkToOldak": {
+   "typ": "NpcStep",
+   "wp": [
+    2704,
+    5365,
+    0
+   ],
+   "ids": [
+    11265
+   ],
+   "text": ""
+  },
+  "goDownToF0City": {
+   "typ": "ObjectStep",
+   "wp": [
+    2721,
+    5360,
+    1
+   ],
+   "ids": [
+    22940
+   ],
+   "text": "Go downstairs."
+  },
+  "talkToGenerals": {
+   "typ": "NpcStep",
+   "wp": [
+    2957,
+    3512,
+    0
+   ],
+   "ids": [
+    670
+   ],
+   "text": "Talk to General Wartface and General Bentnoze in Goblin Village."
+  },
+  "goToGoblinVillage": {
+   "typ": "DetailedQuestStep",
+   "wp": [
+    2955,
+    3501,
+    0
+   ],
+   "ids": [],
+   "text": "Go to Goblin Village, ready to fight."
+  },
+  "killHamMageAndArcher": {
+   "typ": "NpcStep",
+   "wp": [
+    2447,
+    5417,
+    2
+   ],
+   "ids": [
+    5158
+   ],
+   "text": "Kill the H.A.M. Mage and H.A.M. Archer with a ranged/magic weapon."
+  },
+  "goUpLadder": {
+   "typ": "ObjectStep",
+   "wp": [
+    2442,
+    5417,
+    0
+   ],
+   "ids": [
+    23531
+   ],
+   "text": "Make your way to the tower to the south, using the buildings as cover, and climb up the ladder."
+  },
+  "talkToGeneralsAgain": {
+   "typ": "NpcStep",
+   "wp": [
+    2957,
+    3512,
+    0
+   ],
+   "ids": [
+    670
+   ],
+   "text": "Talk to General Wartface and General Bentnoze in Goblin Village again."
+  },
+  "talkToSergeant": {
+   "typ": "NpcStep",
+   "wp": [
+    3170,
+    3170,
+    0
+   ],
+   "ids": [
+    5162
+   ],
+   "text": "Talk to the Sergeants in Lumbridge Swamp."
+  },
+  "enterSwamp": {
+   "typ": "ObjectStep",
+   "wp": [
+    3169,
+    3172,
+    0
+   ],
+   "ids": [
+    5947
+   ],
+   "text": "Enter the Lumbridge Swamp Caves."
+  },
+  "defeatSigmund": {
+   "typ": "NpcStep",
+   "wp": [
+    2543,
+    5511,
+    0
+   ],
+   "ids": [
+    5146
+   ],
+   "text": "Defeat Sigmund."
+  },
+  "useSpecial": {
+   "typ": "NpcStep",
+   "wp": [
+    2543,
+    5511,
+    0
+   ],
+   "ids": [
+    5142
+   ],
+   "text": "When Sigmund starts using protection prayers, use the ancient mace's special attack on Sigmund to remove them and then defeat him."
+  },
+  "enterFinalFight": {
+   "typ": "ObjectStep",
+   "wp": [
+    2413,
+    5526,
+    0
+   ],
+   "ids": [
+    23376
+   ],
+   "text": "Climb down the ladder."
+  },
+  "lureHamMember": {
+   "typ": "PuzzleWrapperStep",
+   "wp": [
+    2412,
+    5537,
+    0
+   ],
+   "ids": [],
+   "text": "Run out in front of the final guard, and wait for one of the sergeants to attack them."
+  },
+  "waitAtCrate": {
+   "typ": "PuzzleWrapperStep",
+   "wp": null,
+   "ids": [],
+   "text": "Work out how to avoid all the H.A.M guards."
+  },
+  "goToCrate": {
+   "typ": "PuzzleWrapperStep",
+   "wp": [
+    2408,
+    5538,
+    0
+   ],
+   "ids": [
+    23283
+   ],
+   "text": "Hide behind the marked crate, and wait for the guards to walk past and around the corner."
+  },
+  "climbEnterHamBase": {
+   "typ": "ObjectStep",
+   "wp": [
+    3171,
+    9568,
+    0
+   ],
+   "ids": [
+    23282
+   ],
+   "text": "Climb down the ladder to the secret H.A.M. base."
+  },
+  "untieZanik": {
+   "typ": "ObjectStep",
+   "wp": [
+    2542,
+    5513,
+    0
+   ],
+   "ids": [
+    23284
+   ],
+   "text": "Untie Zanik."
+  }
+ }
+}

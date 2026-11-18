@@ -906,6 +906,10 @@ def collect_classes(cls_name, qdir):
             if fn.endswith('.java') and fn[:-5] != cls_name:
                 src = open(os.path.join(d, fn), encoding='utf-8').read()
                 if src.strip():
-                    c = parse_class(src)
+                    try:
+                        c = parse_class(src)
+                    except SyntaxError as e:  # a helper the parser cannot read (a puzzle solver) holds no steps
+                        print('skipped %s: %s' % (fn, e), file=sys.stderr)
+                        continue
                     classes[c['name'] or fn[:-5]] = c
     return classes

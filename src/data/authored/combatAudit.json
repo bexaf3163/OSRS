@@ -1962,7 +1962,9 @@
         }
       ],
       "lines": [
-        "3.0", "3.8", "3.9"
+        "3.0",
+        "3.8",
+        "3.9"
       ],
       "assumptions": [
         "The dolmen safespot holds for all three forms; sixty Fire Bolts cover them.",
@@ -2044,6 +2046,59 @@
       ],
       "evidence": [
         "OSRS Wiki Treus Dayth: level 95, 100 hitpoints, max hit 15, read 2026-11-18."
+      ]
+    },
+    {
+      "stepId": "S9-48",
+      "kind": "not-combat",
+      "mandatory": false,
+      "method": "none",
+      "objective": "Tower of Life: the swordchick is an optional Ardougne Diary kill after the quest; the route does not make one.",
+      "enemies": [],
+      "lines": [
+        "4.6"
+      ],
+      "assumptions": [
+        "The quest completes before the optional diary task."
+      ],
+      "problems": [],
+      "alternatives": [],
+      "decision": "retain",
+      "changed": [
+        "2.142.0: new quest; no fight on the route."
+      ],
+      "evidence": [
+        "OSRS Wiki Tower of Life: no required kills, read 2026-11-18."
+      ]
+    },
+    {
+      "stepId": "S9-49",
+      "kind": "incidental",
+      "mandatory": true,
+      "method": "melee",
+      "objective": "The Ribbiting Tale: defeat Cuthbert, Lord of Dread (level 1, 1 hitpoint) at the Locus Oasis.",
+      "enemies": [
+        {
+          "name": "Cuthbert, Lord of Dread",
+          "level": 1,
+          "maxHit": 1,
+          "table": true
+        }
+      ],
+      "lines": [
+        "0.12"
+      ],
+      "assumptions": [
+        "Level 1 with 1 hitpoint is no danger at this point of the route."
+      ],
+      "problems": [],
+      "alternatives": [],
+      "decision": "retain",
+      "changed": [
+        "2.142.0: new quest; Cuthbert is in combatFoes.json."
+      ],
+      "evidence": [
+        "OSRS Wiki Cuthbert, Lord of Dread: level 1, 1 hitpoint, read 2026-11-18."
       ]
     }
   ]

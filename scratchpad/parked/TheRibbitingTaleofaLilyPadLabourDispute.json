@@ -1,0 +1,427 @@
+{
+  "quest": "The Ribbiting Tale of a Lily Pad Labour Dispute",
+  "status": "draft",
+  "sources": {
+    "questHelper": "b9b93706618a7b7fe7e5ea30e9a9ef35ba09673e",
+    "wiki": {
+      "title": "The Ribbiting Tale of a Lily Pad Labour Dispute",
+      "revision": 15270097
+    },
+    "quickGuide": {
+      "title": "The Ribbiting Tale of a Lily Pad Labour Dispute/Quick guide",
+      "revision": 15303668
+    }
+  },
+  "step": {
+    "title": "The Ribbiting Tale of a Lily Pad Labour Dispute",
+    "type": "quest",
+    "qp": 1,
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/The_Ribbiting_Tale_of_a_Lily_Pad_Labour_Dispute",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/The_Ribbiting_Tale_of_a_Lily_Pad_Labour_Dispute/Quick_guide",
+    "mapLocation": {
+      "x": 1684,
+      "y": 2973,
+      "plane": 0,
+      "label": "Talk to Marcellus at the Locus Oasis."
+    },
+    "npc": {
+      "nameEn": "Marcellus"
+    },
+    "itemsRequired": [],
+    "foes": [
+      "Cuthbert, Lord of Dread"
+    ]
+  },
+  "stages": {
+    "var": [
+      "varbit",
+      9844
+    ],
+    "route": [
+      {
+        "title": "Walkthrough",
+        "steps": [
+          "Speak to Marcellus at the Locus Oasis.",
+          "Speak to the blue frogs on the north-east side of the pond.",
+          "Return to Marcellus. If you do not have an axe, take the bronze axe from the logs next to him.",
+          "Speak to either Gary or Sue again to arrange an election.",
+          "Go south and speak to either Jane or Dave, the yellow frogs.",
+          "Chop down the orange tree near them to distract them.",
+          "While they are distracted, sabotage the lily pad in the pond near them.",
+          "Return to Gary or Sue to start the election.",
+          "Return to Marcellus.",
+          "Return to Gary or Sue to discuss framing the flies.",
+          "Enter Marcellus' house and open the chest using the combination NALIA to obtain the plushy.",
+          "Plant the plushy in the capybara dung east of Marcellus and south of the orange tree.",
+          "Defeat Cuthbert (1 Hitpoint).",
+          "Tell Marcellus about the plushy.",
+          "Return to Gary or Sue to resolve the dispute.",
+          "Congratulations, quest complete!"
+        ]
+      }
+    ],
+    "stages": [
+      {
+        "at": 0,
+        "do": [
+          {
+            "t": "Talk to Marcellus near the Locus Oasis south of Civitas illa Fortis. AJP Fairy ring is fastest.",
+            "s": "Talk to Marcellus at the Locus Oasis (fairy ring AJP).",
+            "k": "talkToMarcellus",
+            "at": [
+              1683,
+              2973,
+              0
+            ],
+            "hl": {
+              "npc": [
+                12935
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 2,
+        "do": [
+          {
+            "t": "Talk to the blue frogs in the north-east of the oasis.",
+            "s": "Talk to the blue frogs in the north-east of the oasis.",
+            "k": "talkToBlueFrogs",
+            "at": [
+              1694,
+              2996,
+              0
+            ],
+            "hl": {
+              "npc": [
+                12938
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 4,
+        "do": [
+          {
+            "t": "Return to Marcellus.",
+            "s": "Return to Marcellus.",
+            "k": "talkToMarcellus2",
+            "at": [
+              1683,
+              2973,
+              0
+            ],
+            "hl": {
+              "npc": [
+                12935
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 6,
+        "do": [
+          {
+            "t": "Return to the blue frogs Sue and Gary in the north-east of the oasis.",
+            "s": "Return to the blue frogs Sue and Gary in the north-east of the oasis.",
+            "k": "talkToGary",
+            "at": [
+              1694,
+              2996,
+              0
+            ]
+          }
+        ]
+      },
+      {
+        "at": 8,
+        "do": [
+          {
+            "t": "Talk to the yellow frogs Jane and Dave to the south of Gary.",
+            "s": "Talk to the yellow frogs Jane and Dave to the south of Gary.",
+            "k": "talkToYellowFrogs",
+            "at": [
+              1696,
+              2982,
+              0
+            ]
+          }
+        ]
+      },
+      {
+        "at": 10,
+        "do": [
+          {
+            "t": "Take the axe from the logs next to Marcellus.",
+            "s": "Take the axe from the logs next to Marcellus.",
+            "k": "pickUpAxe",
+            "at": [
+              1683,
+              2975,
+              0
+            ],
+            "hl": {
+              "obj": [
+                5581
+              ]
+            }
+          },
+          {
+            "t": "Chop down the orange tree next to the yellow frog.",
+            "s": "Chop down the orange tree next to the yellow frog.",
+            "k": "chopOrangeTree",
+            "at": [
+              1695,
+              2980,
+              0
+            ],
+            "hl": {
+              "obj": [
+                52977
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 12,
+        "do": [
+          {
+            "t": "Sabotage the lily pad near to the yellow frogs.",
+            "s": "Sabotage the lily pad near to the yellow frogs.",
+            "k": "sabotageLilyPad",
+            "at": [
+              1692,
+              2983,
+              0
+            ],
+            "hl": {
+              "obj": [
+                50891
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 14,
+        "do": [
+          {
+            "t": "Return to Sue and Gary in the north-east of the oasis.",
+            "s": "Return to Sue and Gary in the north-east of the oasis.",
+            "k": "talkToGary2",
+            "at": [
+              1694,
+              2996,
+              0
+            ]
+          }
+        ]
+      },
+      {
+        "at": 16,
+        "do": [
+          {
+            "t": "Return to Sue and Gary in the north-east of the oasis.",
+            "s": "Return to Sue and Gary in the north-east of the oasis.",
+            "k": "talkToGary2",
+            "at": [
+              1694,
+              2996,
+              0
+            ]
+          }
+        ]
+      },
+      {
+        "at": 18,
+        "do": [
+          {
+            "t": "Return to Marcellus.",
+            "s": "Return to Marcellus.",
+            "k": "talkToMarcellus3",
+            "at": [
+              1683,
+              2973,
+              0
+            ],
+            "hl": {
+              "npc": [
+                12935
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 20,
+        "do": [
+          {
+            "t": "Go talk to Sue and Gary to discuss framing the flies.",
+            "s": "Go talk to Sue and Gary to discuss framing the flies.",
+            "k": "talkToGaryToBlame",
+            "at": [
+              1694,
+              2996,
+              0
+            ]
+          }
+        ]
+      },
+      {
+        "at": 22,
+        "do": [
+          {
+            "t": "Search the chest in the building next to Marcellus. The code is 'NALIA'.",
+            "s": "Search the chest next to Marcellus. The code is NALIA.",
+            "k": "openChest",
+            "at": [
+              1676,
+              2974,
+              0
+            ]
+          },
+          {
+            "t": "Open the chest in Marcellus' house with the code NALIA.",
+            "s": "Open the chest in Marcellus' house with the code NALIA.",
+            "k": "enterCode"
+          }
+        ]
+      },
+      {
+        "at": 24,
+        "do": [
+          {
+            "t": "Plant the plushy in the capybara dung east of Marcellus, south of the orange tree.",
+            "s": "Plant the plushy in the capybara dung east of Marcellus.",
+            "k": "plantPlushy",
+            "at": [
+              1694,
+              2976,
+              0
+            ],
+            "hl": {
+              "obj": [
+                52979
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 26,
+        "do": [
+          {
+            "t": "Inspect the dung east of Marcellus, south of the orange tree.",
+            "s": "Inspect the dung east of Marcellus, south of the orange tree.",
+            "k": "inspectDung",
+            "at": [
+              1694,
+              2976,
+              0
+            ],
+            "hl": {
+              "obj": [
+                52979
+              ]
+            }
+          },
+          {
+            "t": "Defeat Cuthbert, Lord of Dread.",
+            "s": "Defeat Cuthbert, Lord of Dread.",
+            "k": "defeatCuthbert",
+            "at": [
+              1688,
+              2977,
+              0
+            ],
+            "hl": {
+              "npc": [
+                12957
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 28,
+        "do": [
+          {
+            "t": "Tell Marcellus about the plushy.",
+            "s": "Tell Marcellus about the plushy.",
+            "k": "talkToMarcellusEnd",
+            "at": [
+              1683,
+              2973,
+              0
+            ],
+            "hl": {
+              "npc": [
+                12935
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 30,
+        "do": [
+          {
+            "t": "Talk to Sue and Gary to resolve the dispute!",
+            "s": "Talk to Sue and Gary to resolve the dispute!",
+            "k": "talkToGaryEnd",
+            "at": [
+              1694,
+              2996,
+              0
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "facts": {
+    "id": "The Ribbiting Tale of a Lily Pad Labour Dispute",
+    "stepIds": [
+      "DRAFT"
+    ],
+    "members": false,
+    "requirements": {
+      "skills": {
+        "woodcutting": 15
+      },
+      "questPoints": 0,
+      "quests": [
+        "Children of the Sun"
+      ],
+      "manual": [],
+      "capabilities": [],
+      "unparsed": null,
+      "text": "* {{SCP|Woodcutting|15|link=yes}} {{Boostable|no}} {{Questreqstart|yes}}\n* Completion of the following quests:\n** [[Children of the Sun]]"
+    },
+    "rewards": {
+      "questPoints": 1,
+      "xp": {
+        "woodcutting": 2000
+      },
+      "coins": 0
+    },
+    "resourceFlow": null,
+    "length": "Very Short",
+    "source": {
+      "url": "https://oldschool.runescape.wiki/w/Special:Redirect/revision/15270097",
+      "title": "The Ribbiting Tale of a Lily Pad Labour Dispute",
+      "revision": 15270097,
+      "retrievedAt": "2026-11-18T05:10:42.068Z"
+    }
+  },
+  "unknown": [
+    "fight \"Cuthbert, Lord of Dread\": no combat data",
+    "Quest Helper condition \"NpcRequirement\" is not understood (1)",
+    "what the quest uses up and hands out is not reviewed"
+  ]
+}

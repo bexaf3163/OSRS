@@ -1,0 +1,582 @@
+{
+ "title": "A Soul's Bane",
+ "cls": "ASoulsBane",
+ "var": [
+  "varbit",
+  2011
+ ],
+ "members": true,
+ "revision": "b9b93706618a7b7fe7e5ea30e9a9ef35ba09673e",
+ "machine": {
+  "stages": {
+   "0": {
+    "s": "talkToLauna"
+   },
+   "1": "n1",
+   "2": "n1",
+   "3": "n2",
+   "4": "n2",
+   "5": "n3",
+   "6": "n3",
+   "7": "n4",
+   "8": "n4",
+   "9": "n5",
+   "10": "n5",
+   "11": "n6",
+   "12": {
+    "s": "talkToTolnaAgain"
+   }
+  },
+  "nodes": {
+   "n1": {
+    "n": "firstRoomSteps",
+    "c": [
+     [
+      {
+       "o": "vb",
+       "id": 2029,
+       "v": 2
+      },
+      {
+       "s": "killBears"
+      }
+     ],
+     [
+      {
+       "o": "vb",
+       "id": 2029,
+       "v": 4
+      },
+      {
+       "s": "killGoblins"
+      }
+     ],
+     [
+      {
+       "o": "vb",
+       "id": 2029,
+       "v": 1
+      },
+      {
+       "s": "killUnicorn"
+      }
+     ],
+     [
+      {
+       "o": "vb",
+       "id": 2029,
+       "v": 3
+      },
+      {
+       "s": "killRats"
+      }
+     ],
+     [
+      {
+       "o": "or",
+       "a": [
+        {
+         "o": "item",
+         "nm": "Anger battleaxe",
+         "ids": [
+          7807
+         ]
+        },
+        {
+         "o": "item",
+         "nm": "Anger mace",
+         "ids": [
+          7808
+         ]
+        },
+        {
+         "o": "item",
+         "nm": "Anger spear",
+         "ids": [
+          7809
+         ]
+        },
+        {
+         "o": "item",
+         "nm": "Anger sword",
+         "ids": [
+          7806
+         ]
+        }
+       ]
+      },
+      {
+       "s": "killAnimals"
+      }
+     ],
+     [
+      "r1",
+      {
+       "s": "takeWeapon"
+      }
+     ],
+     [
+      {
+       "o": "vb",
+       "id": 2032,
+       "v": 1
+      },
+      {
+       "s": "enterRift"
+      }
+     ]
+    ],
+    "d": {
+     "s": "useRopeOnRift"
+    }
+   },
+   "n2": {
+    "n": "secondRoomSteps",
+    "c": [
+     [
+      {
+       "o": "and",
+       "a": [
+        "r2",
+        {
+         "o": "vb",
+         "id": 2035,
+         "v": 1
+        }
+       ]
+      },
+      {
+       "s": "killReaper"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r2"
+       ]
+      },
+      {
+       "s": "lookInsideHoles"
+      }
+     ],
+     [
+      "r1",
+      {
+       "s": "leaveAngerRoom"
+      }
+     ]
+    ],
+    "d": {
+     "s": "enterRift"
+    }
+   },
+   "n3": {
+    "n": "thirdRoomSteps",
+    "c": [
+     [
+      "r3",
+      {
+       "s": "killRealConfusionBeast"
+      }
+     ],
+     [
+      "r2",
+      {
+       "s": "leaveFearRoom"
+      }
+     ]
+    ],
+    "d": {
+     "s": "enterRift"
+    }
+   },
+   "n4": {
+    "n": "fourthRoomSteps",
+    "c": [
+     [
+      {
+       "o": "zone",
+       "z": [
+        [
+         3074,
+         5186,
+         3102,
+         5214,
+         0,
+         0
+        ]
+       ]
+      },
+      {
+       "s": "killHopelessCreatures"
+      }
+     ],
+     [
+      "r3",
+      {
+       "s": "leaveConfusionRoom"
+      }
+     ]
+    ],
+    "d": {
+     "s": "enterRift"
+    }
+   },
+   "n5": {
+    "n": "tolnaRoomSteps",
+    "c": [
+     [
+      "r4",
+      {
+       "s": "killHeads"
+      }
+     ],
+     [
+      {
+       "o": "zone",
+       "z": [
+        [
+         3010,
+         5185,
+         3038,
+         5214,
+         0,
+         0
+        ]
+       ]
+      },
+      {
+       "s": "leaveHopelessRoom"
+      }
+     ]
+    ],
+    "d": {
+     "s": "enterRift"
+    }
+   },
+   "n6": {
+    "n": "tolnaSaveSteps",
+    "c": [
+     [
+      "r4",
+      {
+       "s": "talkToTolna"
+      }
+     ]
+    ],
+    "d": {
+     "s": "enterRift"
+    }
+   }
+  },
+  "reqs": {
+   "r1": {
+    "o": "zone",
+    "z": [
+     [
+      3010,
+      5217,
+      3038,
+      5246,
+      0,
+      0
+     ]
+    ]
+   },
+   "r2": {
+    "o": "zone",
+    "z": [
+     [
+      3044,
+      5218,
+      3071,
+      5247,
+      0,
+      0
+     ]
+    ]
+   },
+   "r3": {
+    "o": "zone",
+    "z": [
+     [
+      3043,
+      5185,
+      3071,
+      5213,
+      0,
+      0
+     ]
+    ]
+   },
+   "r4": {
+    "o": "zone",
+    "z": [
+     [
+      2967,
+      5201,
+      2993,
+      5225,
+      1,
+      1
+     ]
+    ]
+   }
+  },
+  "alias": {
+   "killBears": [
+    "killAnimals"
+   ],
+   "killGoblins": [
+    "killAnimals"
+   ],
+   "killRats": [
+    "killAnimals"
+   ],
+   "killUnicorn": [
+    "killAnimals"
+   ],
+   "killReaper": [
+    "lookInsideHoles"
+   ]
+  }
+ },
+ "unknown": {},
+ "steps": {
+  "talkToLauna": {
+   "typ": "NpcStep",
+   "wp": [
+    3307,
+    3454,
+    0
+   ],
+   "ids": [
+    1054
+   ],
+   "text": "Talk to Launa east of Varrock."
+  },
+  "useRopeOnRift": {
+   "typ": "ObjectStep",
+   "wp": [
+    3310,
+    3452,
+    0
+   ],
+   "ids": [
+    13968
+   ],
+   "text": "Use a rope on the rift."
+  },
+  "killBears": {
+   "typ": "NpcStep",
+   "wp": [
+    3027,
+    5232,
+    0
+   ],
+   "ids": [
+    1060
+   ],
+   "text": ""
+  },
+  "killGoblins": {
+   "typ": "NpcStep",
+   "wp": [
+    3027,
+    5232,
+    0
+   ],
+   "ids": [
+    1065
+   ],
+   "text": ""
+  },
+  "killUnicorn": {
+   "typ": "NpcStep",
+   "wp": [
+    3027,
+    5232,
+    0
+   ],
+   "ids": [
+    1061
+   ],
+   "text": ""
+  },
+  "killRats": {
+   "typ": "NpcStep",
+   "wp": [
+    3027,
+    5232,
+    0
+   ],
+   "ids": [
+    1062
+   ],
+   "text": ""
+  },
+  "killAnimals": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": ""
+  },
+  "takeWeapon": {
+   "typ": "ObjectStep",
+   "wp": [
+    3012,
+    5244,
+    0
+   ],
+   "ids": [
+    13993
+   ],
+   "text": "Take a weapon from the weapon rack. Kill the angry monsters with the appropriate weapon:"
+  },
+  "enterRift": {
+   "typ": "ObjectStep",
+   "wp": [
+    3310,
+    3452,
+    0
+   ],
+   "ids": [
+    13968
+   ],
+   "text": "Enter the rift."
+  },
+  "killReaper": {
+   "typ": "NpcStep",
+   "wp": [
+    3058,
+    5230,
+    0
+   ],
+   "ids": [
+    1066
+   ],
+   "text": "Kill the Fear Reaper."
+  },
+  "lookInsideHoles": {
+   "typ": "ObjectStep",
+   "wp": [
+    3046,
+    5240,
+    0
+   ],
+   "ids": [
+    13896
+   ],
+   "text": "Look inside the Dark Holes to cause fear reapers to appear. Kill 5 of them. You cannot search the same hole over and over again."
+  },
+  "leaveAngerRoom": {
+   "typ": "ObjectStep",
+   "wp": [
+    3038,
+    5229,
+    0
+   ],
+   "ids": [
+    13882
+   ],
+   "text": "Go to the next room."
+  },
+  "killRealConfusionBeast": {
+   "typ": "NpcStep",
+   "wp": [
+    3055,
+    5199,
+    0
+   ],
+   "ids": [
+    1067
+   ],
+   "text": "Attack the confusion beasts until you find one which takes damage, and kill it. The others will take 8 hits to die."
+  },
+  "leaveFearRoom": {
+   "typ": "ObjectStep",
+   "wp": [
+    3046,
+    5236,
+    0
+   ],
+   "ids": [
+    13898
+   ],
+   "text": "Continue to the next room."
+  },
+  "killHopelessCreatures": {
+   "typ": "NpcStep",
+   "wp": [
+    3087,
+    5198,
+    0
+   ],
+   "ids": [
+    1072
+   ],
+   "text": "Kill each hopeless creature 3 times."
+  },
+  "leaveConfusionRoom": {
+   "typ": "ObjectStep",
+   "wp": [
+    3051,
+    5200,
+    0
+   ],
+   "ids": [
+    13912
+   ],
+   "text": "Leave the room through the confusing door."
+  },
+  "killHeads": {
+   "typ": "NpcStep",
+   "wp": [
+    2984,
+    5212,
+    1
+   ],
+   "ids": [
+    1075
+   ],
+   "text": "Kill all three of Tolna's heads."
+  },
+  "leaveHopelessRoom": {
+   "typ": "ObjectStep",
+   "wp": [
+    3021,
+    5188,
+    0
+   ],
+   "ids": [
+    13933
+   ],
+   "text": "Continue through the exit of the room."
+  },
+  "talkToTolna": {
+   "typ": "NpcStep",
+   "wp": [
+    2984,
+    5212,
+    1
+   ],
+   "ids": [
+    1057
+   ],
+   "text": "Talk to Tolna."
+  },
+  "talkToTolnaAgain": {
+   "typ": "NpcStep",
+   "wp": [
+    3307,
+    3454,
+    0
+   ],
+   "ids": [
+    1058
+   ],
+   "text": "Talk to Tolna outside the rift."
+  }
+ }
+}

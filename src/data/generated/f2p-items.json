@@ -1866,6 +1866,27 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Body_talisman"
   },
   {
+    "id": 8790,
+    "nameEn": "Bolt of cloth",
+    "examine": "A bolt of ordinary cloth.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Bolt_of_cloth.png",
+    "value": 500,
+    "highAlch": 300,
+    "lowAlch": 200,
+    "buyLocations": [
+      {
+        "shopName": "Construction supplies",
+        "location": "Sawmill",
+        "owner": "Sawmill operator",
+        "price": 650,
+        "stock": 1000,
+        "members": true
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Bolt_of_cloth"
+  },
+  {
     "id": 526,
     "nameEn": "Bones",
     "examine": "Bones are for burying!",

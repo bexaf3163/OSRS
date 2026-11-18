@@ -4,7 +4,7 @@ Written by `tests/combatAudit.test.ts` from `src/data/authored/combatAudit.json`
 
 Every stage of the route where the player fights or can be attacked, checked against the route text, the quest stage lines (Quest Helper), the OSRS Wiki infoboxes in combatFoes.json and the danger zones. The rule for a fight the quest cannot go on without: its food is a required item (readiness and the game check it before leaving), the app estimates it with the player's kit where it has the opponent's numbers, and an unread kit or bag is reported as not checked, never as ready.
 
-58 stages: 30 retained, 27 revised, 0 with a branch, 1 deferred.
+60 stages: 32 retained, 27 revised, 0 with a branch, 1 deferred.
 
 | Step | Kind | Mandatory | Opponents | Method | Estimate | Food in the item list | Decision |
 |---|---|---|---|---|---|---|---|
@@ -66,6 +66,8 @@ Every stage of the route where the player fights or can be attacked, checked aga
 | S9-44 Shilo Village | quest-fight | yes | Nazastarool (91), Nazastarool (68), Nazastarool (93), Undead one (73) | safespot | Nazastarool | Trout 10 | Retain |
 | S9-45 Biohazard | quest-fight | yes | Mourner (boss) (13) | melee | Mourner (boss) | Trout 2 | Retain |
 | S9-46 Haunted Mine | quest-fight | yes | Treus Dayth (95) | melee | Treus Dayth | Lobster 15 | Retain |
+| S9-48 Tower of Life | not-combat | no | - | none | - | - | Retain |
+| S9-49 The Ribbiting Tale of a Lily Pad Labour Dispute | incidental | yes | Cuthbert, Lord of Dread (1) | melee | Cuthbert, Lord of Dread | - | Retain |
 
 ## S1-06 The Restless Ghost
 
@@ -1395,4 +1397,40 @@ Changed:
 Evidence:
 
 - OSRS Wiki Treus Dayth: level 95, 100 hitpoints, max hit 15, read 2026-11-18.
+
+## S9-48 Tower of Life
+
+**Retain.** Tower of Life: the swordchick is an optional Ardougne Diary kill after the quest; the route does not make one.
+
+Quest stage lines: 4.6.
+
+Assumptions:
+
+- The quest completes before the optional diary task.
+
+Changed:
+
+- 2.142.0: new quest; no fight on the route.
+
+Evidence:
+
+- OSRS Wiki Tower of Life: no required kills, read 2026-11-18.
+
+## S9-49 The Ribbiting Tale of a Lily Pad Labour Dispute
+
+**Retain.** The Ribbiting Tale: defeat Cuthbert, Lord of Dread (level 1, 1 hitpoint) at the Locus Oasis.
+
+Quest stage lines: 0.12.
+
+Assumptions:
+
+- Level 1 with 1 hitpoint is no danger at this point of the route.
+
+Changed:
+
+- 2.142.0: new quest; Cuthbert is in combatFoes.json.
+
+Evidence:
+
+- OSRS Wiki Cuthbert, Lord of Dread: level 1, 1 hitpoint, read 2026-11-18.
 

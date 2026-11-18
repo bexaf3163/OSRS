@@ -1,0 +1,1163 @@
+{
+ "quest": "Another Slice of H.A.M.",
+ "status": "draft",
+ "sources": {
+  "questHelper": "b9b93706618a7b7fe7e5ea30e9a9ef35ba09673e",
+  "wiki": {
+   "title": "Another Slice of H.A.M.",
+   "revision": 15292360
+  },
+  "quickGuide": {
+   "title": "Another Slice of H.A.M./Quick guide",
+   "revision": 14458352
+  }
+ },
+ "step": {
+  "title": "Another Slice of H.A.M.",
+  "type": "quest",
+  "qp": 1,
+  "membersOnly": true,
+  "wikiUrl": "https://oldschool.runescape.wiki/w/Another_Slice_of_H.A.M.",
+  "quickGuideUrl": "https://oldschool.runescape.wiki/w/Another_Slice_of_H.A.M./Quick_guide",
+  "mapLocation": {
+   "x": 2733,
+   "y": 5365,
+   "plane": 0,
+   "label": "Talk to Ur-tag in Dorgesh-Kaan."
+  },
+  "npc": {
+   "nameEn": "Ur-tag"
+  },
+  "itemsRequired": [
+   {
+    "nameEn": "light source",
+    "amount": 1,
+    "wikiItemId": null,
+    "howToGet": null,
+    "note": "A light source"
+   },
+   {
+    "nameEn": "Trowel",
+    "amount": 1,
+    "wikiItemId": 676,
+    "howToGet": null,
+    "note": "Trowel (obtained during the quest)"
+   },
+   {
+    "nameEn": "Specimen brush",
+    "amount": 1,
+    "wikiItemId": 670,
+    "howToGet": null,
+    "note": "Specimen brush (obtained during the quest)"
+   },
+   {
+    "nameEn": "equipment",
+    "amount": 1,
+    "wikiItemId": null,
+    "howToGet": null,
+    "note": "Magic or Ranged gear for enemy fight (cannot use Melee on them)"
+   }
+  ],
+  "foes": [
+   "H.A.M. Archer",
+   "H.A.M. Mage",
+   "Sigmund"
+  ]
+ },
+ "stages": {
+  "var": [
+   "varbit",
+   3550
+  ],
+  "route": [
+   {
+    "title": "Starting out",
+    "steps": [
+     "Speak to Ur-tag or Ambassador Alvijar in the north-east part of Dorgesh-Kaan's middle level. Dialogue: \"What are you arguing about?\", \"I'd love to help!\""
+    ]
+   },
+   {
+    "title": "Excavation",
+    "steps": [
+     "Head to the south-west corner of the city's middle level.",
+     "Enter the doorway with the transportation symbol on the minimap.",
+     "Walk south on the tracks and talk to Tegdak.",
+     "Dig up artefacts from the ground with the trowel (there are six artefacts total).",
+     "Use artefacts on the specimen table to clean them.",
+     "Talk to Tegdak. Zanik will automatically follow you after (if you don't have a follower already)."
+    ]
+   },
+   {
+    "title": "To the village",
+    "steps": [
+     "Make sure Zanik is following you.",
+     "Talk to the Goblin scribe in the house west of Ur-tag where you started the quest.",
+     "Speak to Oldak in the north-west corner of the city's lower level (there are stairs down in the house west of the scribe) to teleport to the Goblin Village."
+    ]
+   },
+   {
+    "title": "The H.A.M-bush",
+    "steps": [
+     "Talk to General Wartface or Bentnoze. A cutscene will start.",
+     "Run south to the ladder, stay behind the houses on the west side to not get hit.",
+     "Climb up and kill the H.A.M. Mage and H.A.M. Archer, you must use magic or ranged. Throwing darts can work, only if you use the \"long range\" combat style. If you forgot a magic or ranged weapon, a crossbow and 50 bronze bolts spawns just to the west of your character upstairs.",
+     "Talk to General Wartface or General Bentnoze to receive ancient mace and two goblin warriors"
+    ]
+   },
+   {
+    "title": "Getting past the guards",
+    "steps": [
+     "Go to the Lumbridge Swamp Cave entrance (outside by the giant frogs in Lumbridge Swamp)",
+     "Talk to one of the goblin sergeants.",
+     "Read the following steps before doing them as this next section is time sensitive.",
+     "#Enter the caves then climb down the nearby ladder.",
+     "#As soon as you're down, talk to the sergeants and tell one of them to wait. Dialogue: \"One of you wait here\"",
+     "#Run to the room and enter.",
+     "#Wait for 2 guards to pass.",
+     "#Tell your sergeant to wait in the room. Dialogue: \"Wait here\"",
+     "#Run up to the boxes to trigger a 3rd guard and run back to the room so he doesn't see you.",
+     "#After the 3rd guard passes, ask your sergeant to follow you again. Dialogue: \"Follow me\"",
+     "#Walk (do not run) to the end of the tunnel and the final guard will attack your sergeant.",
+     "#Climb down the ladder to fight Sigmund - Use the Ancient mace's special attack ONLY AFTER he starts using prayer to disable it for the entire fight.",
+     "Defeat Sigmund.",
+     "Untie Zanik.",
+     "Congratulations, quest complete!"
+    ]
+   }
+  ],
+  "stages": [
+   {
+    "at": 0,
+    "do": [
+     {
+      "t": "Enter the Lumbridge Castle basement.",
+      "s": "Enter the Lumbridge Castle basement.",
+      "k": "goDownIntoBasement",
+      "at": [
+       3209,
+       3216,
+       0
+      ],
+      "hl": {
+       "obj": [
+        14880
+       ]
+      }
+     },
+     {
+      "t": "",
+      "s": "",
+      "k": "climbThroughHole",
+      "at": [
+       3219,
+       9618,
+       0
+      ],
+      "hl": {
+       "obj": [
+        6898
+       ]
+      }
+     },
+     {
+      "t": "Travel with Kazgar to shortcut to Mistag.",
+      "s": "Travel with Kazgar to shortcut to Mistag.",
+      "k": "talkToKazgar",
+      "at": [
+       3230,
+       9610,
+       0
+      ],
+      "hl": {
+       "npc": [
+        7300
+       ]
+      }
+     },
+     {
+      "t": "Enter Dorgesh-Kaan.",
+      "s": "Enter Dorgesh-Kaan.",
+      "k": "enterCity",
+      "at": [
+       3317,
+       9601,
+       0
+      ],
+      "hl": {
+       "obj": [
+        6919
+       ]
+      }
+     },
+     {
+      "t": "Climb up to the next floor.",
+      "s": "Climb up to the next floor.",
+      "k": "climbToF1City",
+      "at": [
+       2721,
+       5360,
+       0
+      ],
+      "hl": {
+       "obj": [
+        22939
+       ]
+      }
+     },
+     {
+      "t": "Talk to Ur-tag in the north east building.",
+      "s": "Talk to Ur-tag in the north east building.",
+      "k": "talkToUrtag",
+      "at": [
+       2733,
+       5366,
+       1
+      ],
+      "hl": {
+       "npc": [
+        2315
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 1,
+    "do": [
+     {
+      "t": "Enter the Lumbridge Castle basement.",
+      "s": "Enter the Lumbridge Castle basement.",
+      "k": "goDownIntoBasement",
+      "at": [
+       3209,
+       3216,
+       0
+      ],
+      "hl": {
+       "obj": [
+        14880
+       ]
+      }
+     },
+     {
+      "t": "",
+      "s": "",
+      "k": "climbThroughHole",
+      "at": [
+       3219,
+       9618,
+       0
+      ],
+      "hl": {
+       "obj": [
+        6898
+       ]
+      }
+     },
+     {
+      "t": "Travel with Kazgar to shortcut to Mistag.",
+      "s": "Travel with Kazgar to shortcut to Mistag.",
+      "k": "talkToKazgar",
+      "at": [
+       3230,
+       9610,
+       0
+      ],
+      "hl": {
+       "npc": [
+        7300
+       ]
+      }
+     },
+     {
+      "t": "Enter Dorgesh-Kaan.",
+      "s": "Enter Dorgesh-Kaan.",
+      "k": "enterCity",
+      "at": [
+       3317,
+       9601,
+       0
+      ],
+      "hl": {
+       "obj": [
+        6919
+       ]
+      }
+     },
+     {
+      "t": "Climb up to the next floor.",
+      "s": "Climb up to the next floor.",
+      "k": "climbToF1City",
+      "at": [
+       2721,
+       5360,
+       0
+      ],
+      "hl": {
+       "obj": [
+        22939
+       ]
+      }
+     },
+     {
+      "t": "Enter the railway entrance in the south west of Dorgesh-Kaan.",
+      "s": "Enter the railway entrance in the south west of Dorgesh-Kaan.",
+      "k": "enterRailway",
+      "at": [
+       2695,
+       5277,
+       1
+      ],
+      "hl": {
+       "obj": [
+        23052
+       ]
+      }
+     },
+     {
+      "t": "",
+      "s": "",
+      "k": "talkToTegdak",
+      "at": [
+       2512,
+       5564,
+       0
+      ],
+      "hl": {
+       "npc": [
+        5182
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 2,
+    "do": [
+     {
+      "t": "Enter the Lumbridge Castle basement.",
+      "s": "Enter the Lumbridge Castle basement.",
+      "k": "goDownIntoBasement",
+      "at": [
+       3209,
+       3216,
+       0
+      ],
+      "hl": {
+       "obj": [
+        14880
+       ]
+      }
+     },
+     {
+      "t": "",
+      "s": "",
+      "k": "climbThroughHole",
+      "at": [
+       3219,
+       9618,
+       0
+      ],
+      "hl": {
+       "obj": [
+        6898
+       ]
+      }
+     },
+     {
+      "t": "Travel with Kazgar to shortcut to Mistag.",
+      "s": "Travel with Kazgar to shortcut to Mistag.",
+      "k": "talkToKazgar",
+      "at": [
+       3230,
+       9610,
+       0
+      ],
+      "hl": {
+       "npc": [
+        7300
+       ]
+      }
+     },
+     {
+      "t": "Enter Dorgesh-Kaan.",
+      "s": "Enter Dorgesh-Kaan.",
+      "k": "enterCity",
+      "at": [
+       3317,
+       9601,
+       0
+      ],
+      "hl": {
+       "obj": [
+        6919
+       ]
+      }
+     },
+     {
+      "t": "Climb up to the next floor.",
+      "s": "Climb up to the next floor.",
+      "k": "climbToF1City",
+      "at": [
+       2721,
+       5360,
+       0
+      ],
+      "hl": {
+       "obj": [
+        22939
+       ]
+      }
+     },
+     {
+      "t": "Enter the railway entrance in the south west of Dorgesh-Kaan.",
+      "s": "Enter the railway entrance in the south west of Dorgesh-Kaan.",
+      "k": "enterRailway",
+      "at": [
+       2695,
+       5277,
+       1
+      ],
+      "hl": {
+       "obj": [
+        23052
+       ]
+      }
+     },
+     {
+      "t": "",
+      "s": "",
+      "k": "dig1",
+      "at": [
+       2513,
+       5563,
+       0
+      ],
+      "hl": {
+       "obj": [
+        23290
+       ]
+      }
+     },
+     {
+      "t": "",
+      "s": "",
+      "k": "dig2",
+      "at": [
+       2511,
+       5561,
+       0
+      ],
+      "hl": {
+       "obj": [
+        23293
+       ]
+      }
+     },
+     {
+      "t": "",
+      "s": "",
+      "k": "dig3",
+      "at": [
+       2513,
+       5550,
+       0
+      ],
+      "hl": {
+       "obj": [
+        23296
+       ]
+      }
+     },
+     {
+      "t": "",
+      "s": "",
+      "k": "dig4",
+      "at": [
+       2511,
+       5547,
+       0
+      ],
+      "hl": {
+       "obj": [
+        23534
+       ]
+      }
+     },
+     {
+      "t": "",
+      "s": "",
+      "k": "dig5",
+      "at": [
+       2512,
+       5544,
+       0
+      ],
+      "hl": {
+       "obj": [
+        23301
+       ]
+      }
+     },
+     {
+      "t": "",
+      "s": "",
+      "k": "dig6",
+      "at": [
+       2513,
+       5539,
+       0
+      ],
+      "hl": {
+       "obj": [
+        23304
+       ]
+      }
+     },
+     {
+      "t": "Clean the artefacts on the specimen table.",
+      "s": "Clean the artefacts on the specimen table.",
+      "k": "cleanArtefacts",
+      "at": [
+       2513,
+       5559,
+       0
+      ],
+      "hl": {
+       "obj": [
+        23305
+       ]
+      }
+     },
+     {
+      "t": "Show Tegdak the artefacts.",
+      "s": "Show Tegdak the artefacts.",
+      "k": "showTegdakArtefacts",
+      "at": [
+       2512,
+       5564,
+       0
+      ],
+      "hl": {
+       "npc": [
+        5182
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 3,
+    "do": [
+     {
+      "t": "Enter the Lumbridge Castle basement.",
+      "s": "Enter the Lumbridge Castle basement.",
+      "k": "goDownIntoBasement",
+      "at": [
+       3209,
+       3216,
+       0
+      ],
+      "hl": {
+       "obj": [
+        14880
+       ]
+      }
+     },
+     {
+      "t": "",
+      "s": "",
+      "k": "climbThroughHole",
+      "at": [
+       3219,
+       9618,
+       0
+      ],
+      "hl": {
+       "obj": [
+        6898
+       ]
+      }
+     },
+     {
+      "t": "Travel with Kazgar to shortcut to Mistag.",
+      "s": "Travel with Kazgar to shortcut to Mistag.",
+      "k": "talkToKazgar",
+      "at": [
+       3230,
+       9610,
+       0
+      ],
+      "hl": {
+       "npc": [
+        7300
+       ]
+      }
+     },
+     {
+      "t": "Enter Dorgesh-Kaan.",
+      "s": "Enter Dorgesh-Kaan.",
+      "k": "enterCity",
+      "at": [
+       3317,
+       9601,
+       0
+      ],
+      "hl": {
+       "obj": [
+        6919
+       ]
+      }
+     },
+     {
+      "t": "Climb up to the next floor.",
+      "s": "Climb up to the next floor.",
+      "k": "climbToF1City",
+      "at": [
+       2721,
+       5360,
+       0
+      ],
+      "hl": {
+       "obj": [
+        22939
+       ]
+      }
+     },
+     {
+      "t": "Enter the railway entrance in the south west of Dorgesh-Kaan.",
+      "s": "Enter the railway entrance in the south west of Dorgesh-Kaan.",
+      "k": "enterRailway",
+      "at": [
+       2695,
+       5277,
+       1
+      ],
+      "hl": {
+       "obj": [
+        23052
+       ]
+      }
+     },
+     {
+      "t": "Talk to Zanik.",
+      "s": "Talk to Zanik.",
+      "k": "talkToZanikRailway",
+      "at": [
+       2512,
+       5564,
+       0
+      ],
+      "hl": {
+       "npc": [
+        5184
+       ]
+      }
+     },
+     {
+      "t": "Leave the railway.",
+      "s": "Leave the railway.",
+      "k": "leaveRailway",
+      "at": [
+       2521,
+       5607,
+       0
+      ],
+      "hl": {
+       "obj": [
+        23285
+       ]
+      }
+     },
+     {
+      "t": "",
+      "s": "",
+      "k": "talkToScribe",
+      "at": [
+       2716,
+       5369,
+       1
+      ],
+      "hl": {
+       "npc": [
+        2302
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 4,
+    "do": [
+     {
+      "t": "Enter the Lumbridge Castle basement.",
+      "s": "Enter the Lumbridge Castle basement.",
+      "k": "goDownIntoBasement",
+      "at": [
+       3209,
+       3216,
+       0
+      ],
+      "hl": {
+       "obj": [
+        14880
+       ]
+      }
+     },
+     {
+      "t": "",
+      "s": "",
+      "k": "climbThroughHole",
+      "at": [
+       3219,
+       9618,
+       0
+      ],
+      "hl": {
+       "obj": [
+        6898
+       ]
+      }
+     },
+     {
+      "t": "Travel with Kazgar to shortcut to Mistag.",
+      "s": "Travel with Kazgar to shortcut to Mistag.",
+      "k": "talkToKazgar",
+      "at": [
+       3230,
+       9610,
+       0
+      ],
+      "hl": {
+       "npc": [
+        7300
+       ]
+      }
+     },
+     {
+      "t": "Enter Dorgesh-Kaan.",
+      "s": "Enter Dorgesh-Kaan.",
+      "k": "enterCity",
+      "at": [
+       3317,
+       9601,
+       0
+      ],
+      "hl": {
+       "obj": [
+        6919
+       ]
+      }
+     },
+     {
+      "t": "Enter the railway entrance in the south west of Dorgesh-Kaan.",
+      "s": "Enter the railway entrance in the south west of Dorgesh-Kaan.",
+      "k": "enterRailway",
+      "at": [
+       2695,
+       5277,
+       1
+      ],
+      "hl": {
+       "obj": [
+        23052
+       ]
+      }
+     },
+     {
+      "t": "Talk to Zanik.",
+      "s": "Talk to Zanik.",
+      "k": "talkToZanikRailway",
+      "at": [
+       2512,
+       5564,
+       0
+      ],
+      "hl": {
+       "npc": [
+        5184
+       ]
+      }
+     },
+     {
+      "t": "Leave the railway.",
+      "s": "Leave the railway.",
+      "k": "leaveRailway",
+      "at": [
+       2521,
+       5607,
+       0
+      ],
+      "hl": {
+       "obj": [
+        23285
+       ]
+      }
+     },
+     {
+      "t": "Go downstairs.",
+      "s": "Go downstairs.",
+      "k": "goDownToF0City",
+      "at": [
+       2721,
+       5360,
+       1
+      ],
+      "hl": {
+       "obj": [
+        22940
+       ]
+      }
+     },
+     {
+      "t": "",
+      "s": "",
+      "k": "talkToOldak",
+      "at": [
+       2704,
+       5365,
+       0
+      ],
+      "hl": {
+       "npc": [
+        11265
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 5,
+    "do": [
+     {
+      "t": "Talk to General Wartface and General Bentnoze in Goblin Village.",
+      "s": "Talk to General Wartface and General Bentnoze in Goblin Village.",
+      "k": "talkToGenerals",
+      "at": [
+       2957,
+       3512,
+       0
+      ],
+      "hl": {
+       "npc": [
+        670
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 6,
+    "do": [
+     {
+      "t": "Go to Goblin Village, ready to fight.",
+      "s": "Go to Goblin Village, ready to fight.",
+      "k": "goToGoblinVillage",
+      "at": [
+       2955,
+       3501,
+       0
+      ]
+     },
+     {
+      "t": "Make your way to the tower to the south, using the buildings as cover, and climb up the ladder.",
+      "s": "Make your way to the tower to the south, using the buildings as cover, and climb up the ladder.",
+      "k": "goUpLadder",
+      "at": [
+       2442,
+       5417,
+       0
+      ],
+      "hl": {
+       "obj": [
+        23531
+       ]
+      }
+     },
+     {
+      "t": "Kill the H.A.M. Mage and H.A.M. Archer with a ranged/magic weapon.",
+      "s": "Kill the H.A.M. Mage and H.A.M. Archer with a ranged/magic weapon.",
+      "k": "killHamMageAndArcher",
+      "at": [
+       2447,
+       5417,
+       2
+      ],
+      "hl": {
+       "npc": [
+        5158
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 7,
+    "do": [
+     {
+      "t": "Talk to General Wartface and General Bentnoze in Goblin Village again.",
+      "s": "Talk to General Wartface and General Bentnoze in Goblin Village again.",
+      "k": "talkToGeneralsAgain",
+      "at": [
+       2957,
+       3512,
+       0
+      ],
+      "hl": {
+       "npc": [
+        670
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 8,
+    "do": [
+     {
+      "t": "Talk to the Sergeants in Lumbridge Swamp.",
+      "s": "Talk to the Sergeants in Lumbridge Swamp.",
+      "k": "talkToSergeant",
+      "at": [
+       3170,
+       3170,
+       0
+      ],
+      "hl": {
+       "npc": [
+        5162
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 9,
+    "do": [
+     {
+      "t": "Enter the Lumbridge Swamp Caves.",
+      "s": "Enter the Lumbridge Swamp Caves.",
+      "k": "enterSwamp",
+      "at": [
+       3169,
+       3172,
+       0
+      ],
+      "hl": {
+       "obj": [
+        5947
+       ]
+      }
+     },
+     {
+      "t": "Climb down the ladder to the secret H.A.M. base.",
+      "s": "Climb down the ladder to the secret H.A.M. base.",
+      "k": "climbEnterHamBase",
+      "at": [
+       3171,
+       9568,
+       0
+      ],
+      "hl": {
+       "obj": [
+        23282
+       ]
+      }
+     },
+     {
+      "t": "Hide behind the marked crate, and wait for the guards to walk past and around the corner.",
+      "s": "Hide behind the marked crate, and wait for the guards to walk past and around the corner.",
+      "k": "goToCrate",
+      "at": [
+       2408,
+       5538,
+       0
+      ]
+     },
+     {
+      "t": "Work out how to avoid all the H.A.M guards.",
+      "s": "Work out how to avoid all the H.A.M guards.",
+      "k": "waitAtCrate"
+     },
+     {
+      "t": "Run out in front of the final guard, and wait for one of the sergeants to attack them.",
+      "s": "Run out in front of the final guard, and wait for one of the sergeants to attack them.",
+      "k": "lureHamMember",
+      "at": [
+       2412,
+       5537,
+       0
+      ]
+     },
+     {
+      "t": "Climb down the ladder.",
+      "s": "Climb down the ladder.",
+      "k": "enterFinalFight",
+      "at": [
+       2413,
+       5526,
+       0
+      ],
+      "hl": {
+       "obj": [
+        23376
+       ]
+      }
+     },
+     {
+      "t": "When Sigmund starts using protection prayers, use the ancient mace's special attack on Sigmund to remove them and then defeat him.",
+      "s": "When Sigmund starts using protection prayers, use the ancient mace's special attack on Sigmund to remove them and then defeat him.",
+      "k": "useSpecial",
+      "at": [
+       2543,
+       5511,
+       0
+      ],
+      "hl": {
+       "npc": [
+        5142
+       ]
+      }
+     },
+     {
+      "t": "Defeat Sigmund.",
+      "s": "Defeat Sigmund.",
+      "k": "defeatSigmund",
+      "at": [
+       2543,
+       5511,
+       0
+      ],
+      "hl": {
+       "npc": [
+        5146
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 10,
+    "do": [
+     {
+      "t": "Enter the Lumbridge Swamp Caves.",
+      "s": "Enter the Lumbridge Swamp Caves.",
+      "k": "enterSwamp",
+      "at": [
+       3169,
+       3172,
+       0
+      ],
+      "hl": {
+       "obj": [
+        5947
+       ]
+      }
+     },
+     {
+      "t": "Climb down the ladder to the secret H.A.M. base.",
+      "s": "Climb down the ladder to the secret H.A.M. base.",
+      "k": "climbEnterHamBase",
+      "at": [
+       3171,
+       9568,
+       0
+      ],
+      "hl": {
+       "obj": [
+        23282
+       ]
+      }
+     },
+     {
+      "t": "Climb down the ladder.",
+      "s": "Climb down the ladder.",
+      "k": "enterFinalFight",
+      "at": [
+       2413,
+       5526,
+       0
+      ],
+      "hl": {
+       "obj": [
+        23376
+       ]
+      }
+     },
+     {
+      "t": "Untie Zanik.",
+      "s": "Untie Zanik.",
+      "k": "untieZanik",
+      "at": [
+       2542,
+       5513,
+       0
+      ],
+      "hl": {
+       "obj": [
+        23284
+       ]
+      }
+     }
+    ]
+   }
+  ]
+ },
+ "facts": {
+  "id": "Another Slice of H.A.M.",
+  "stepIds": [
+   "DRAFT"
+  ],
+  "members": false,
+  "requirements": {
+   "skills": {
+    "attack": 15,
+    "prayer": 25
+   },
+   "questPoints": 0,
+   "quests": [
+    "Death to the Dorgeshuun",
+    "The Giant Dwarf",
+    "The Dig Site"
+   ],
+   "manual": [],
+   "capabilities": [
+    "combat"
+   ],
+   "unparsed": "The ability to defeat a level 64 (using any combat style) and two level 30 enemies using either [[Ranged]] or [[Magic]].",
+   "text": "*{{SCP|Attack|15|link=yes}} {{Boostable|no}} {{Questreqstart|}}\n*{{SCP|Prayer|25|link=yes}} {{Boostable|no}} {{Questreqstart|}}\n*Completion of the following quests:\n**[[Death to the Dorgeshuun]]\n***[[The Lost Tribe]]\n****[[Goblin Diplomacy]]\n****[[Rune Mysteries]]\n**[[The Giant Dwarf]]\n**[[The Dig Site]]\n*The ability to defeat a level 64 (using any combat style) and two level 30 enemies using either [[Ranged]] or [[Magic]]."
+  },
+  "rewards": {
+   "questPoints": 1,
+   "xp": {
+    "mining": 3000,
+    "prayer": 3000
+   },
+   "coins": 0
+  },
+  "resourceFlow": null,
+  "length": "Short",
+  "source": {
+   "url": "https://oldschool.runescape.wiki/w/Special:Redirect/revision/15292360",
+   "title": "Another Slice of H.A.M.",
+   "revision": 15292360,
+   "retrievedAt": "2026-11-18T05:11:38.134Z"
+  }
+ },
+ "unknown": [
+  "item \"light source\": no id in Quest Helper or on its Wiki card",
+  "item \"light source\": where to get it is not written",
+  "item \"Trowel\": where to get it is not written",
+  "item \"Specimen brush\": where to get it is not written",
+  "item \"equipment\": no id in Quest Helper or on its Wiki card",
+  "item \"equipment\": where to get it is not written",
+  "fight \"H.A.M. Archer\": no combat data",
+  "fight \"H.A.M. Mage\": no combat data",
+  "fight \"Sigmund\": not in the combat audit",
+  "step \"waitAtCrate\": Quest Helper gives no tile",
+  "Quest Helper condition \"NpcInteractingRequirement\" is not understood (1)",
+  "Quest Helper condition \"new NpcInteractingWithNpcRequirement\" is not understood (2)",
+  "requirement not reviewed: The ability to defeat a level 64 (using any combat style) and two level 30 enemies using either Ranged or Magic.",
+  "what the quest uses up and hands out is not reviewed"
+ ]
+}

@@ -1,0 +1,1157 @@
+{
+  "quest": "Daddy's Home",
+  "status": "draft",
+  "sources": {
+    "questHelper": "b9b93706618a7b7fe7e5ea30e9a9ef35ba09673e",
+    "wiki": {
+      "title": "Daddy's Home",
+      "revision": 15401680
+    },
+    "quickGuide": {
+      "title": "Daddy's Home/Quick guide",
+      "revision": 15303695
+    }
+  },
+  "step": {
+    "title": "Daddy's Home",
+    "type": "quest",
+    "qp": 1,
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Daddy's_Home",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Daddy's_Home/Quick_guide",
+    "mapLocation": {
+      "x": 3240,
+      "y": 3474,
+      "plane": 0,
+      "label": "Speak to Marlo in the Estate Agent's house in north-east Varrock."
+    },
+    "npc": {
+      "nameEn": "Marlo"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Plank",
+        "amount": 10,
+        "wikiItemId": 960,
+        "howToGet": "Buy on the Grand Exchange. Oak, teak and mahogany planks do not work.",
+        "note": "10 planks – (oak/teak/mahogany will not work)",
+        "iconUrl": "https://oldschool.runescape.wiki/images/Plank.png"
+      },
+      {
+        "nameEn": "Bolt of cloth",
+        "amount": 5,
+        "wikiItemId": 8790,
+        "howToGet": "Buy on the Grand Exchange, or from the Sawmill operator north-east of Varrock for 650 coins each.",
+        "note": "5 bolts of cloth (can be bought from the Sawmill for 650 coins per bolt)",
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bolt_of_cloth.png"
+      },
+      {
+        "nameEn": "Steel nails",
+        "amount": 100,
+        "howToGet": "Buy on the Grand Exchange. Nails bend often at low Construction, so 100 covers level 1.",
+        "wikiItemId": 1539,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Steel_nails.png"
+      }
+    ],
+    "foes": []
+  },
+  "stages": {
+    "var": [
+      "varbit",
+      10570
+    ],
+    "route": [
+      {
+        "title": "Walkthrough",
+        "steps": [
+          "Talk to Marlo in the Estate agent's house in north-east Varrock. Dialogue: \"What kind of favour do you want me to do?\", \"Tell me more about the job.\", \"Tell me where he lives, and I'll do the job.\"",
+          "Talk to Old Man Yarlo in his house south-west of Aubury's Rune Shop.",
+          "Remove all 7 old furnishings:",
+          "Talk to Old Man Yarlo again. Dialogue: \"Skip Yarlo's lecture. He'll offer it later if you like.\"",
+          "Search the crates marked with a black symbol, west of the range, for 3 waxwood logs.",
+          "Go to the Varrock sawmill and talk to the Sawmill operator. Dialogue: \"I need some waxwood planks for Old Man Yarlo.\"",
+          "Return to Old Man Yarlo's house and build the new furniture at every white, translucent hotspot.",
+          "Talk to Old Man Yarlo after building all the furniture.",
+          "Return to Marlo and claim the reward. Dialogue: \"Yeah, what have you got for me?\"",
+          "Congratulations, miniquest complete!"
+        ]
+      }
+    ],
+    "stages": [
+      {
+        "at": 0,
+        "do": [
+          {
+            "t": "Talk to Marlo in north-east Varrock.",
+            "s": "Talk to Marlo in north-east Varrock.",
+            "k": "talkToMarlo",
+            "at": [
+              3241,
+              3471,
+              0
+            ],
+            "hl": {
+              "npc": [
+                10408
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 1,
+        "do": [
+          {
+            "t": "Talk to Old Man Yarlo in south-east Varrock, west of Aubury's Rune Shop.",
+            "s": "Talk to Old Man Yarlo west of Aubury's Rune Shop.",
+            "k": "talkToYarlo",
+            "at": [
+              3240,
+              3395,
+              0
+            ],
+            "hl": {
+              "npc": [
+                10425
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 2,
+        "do": [
+          {
+            "t": "Talk to Old Man Yarlo again after removing all the broken furniture.",
+            "s": "Talk to Old Man Yarlo again after removing all the broken furniture.",
+            "k": "talkToYarloAfterRemovingFurniture",
+            "at": [
+              3240,
+              3395,
+              0
+            ],
+            "hl": {
+              "npc": [
+                10425
+              ]
+            }
+          },
+          {
+            "t": "Demolish the other broken table.",
+            "s": "Demolish the other broken table.",
+            "k": "removeTable2",
+            "at": [
+              3245,
+              3394,
+              0
+            ],
+            "hl": {
+              "obj": [
+                40223
+              ]
+            }
+          },
+          {
+            "t": "Demolish the other broken stool.",
+            "s": "Demolish the other broken stool.",
+            "k": "removeStool2",
+            "at": [
+              3244,
+              3394,
+              0
+            ],
+            "hl": {
+              "obj": [
+                40300
+              ]
+            }
+          },
+          {
+            "t": "Demolish the broken chair.",
+            "s": "Demolish the broken chair.",
+            "k": "removeChair",
+            "at": [
+              3241,
+              3393,
+              0
+            ],
+            "hl": {
+              "obj": [
+                40302
+              ]
+            }
+          },
+          {
+            "t": "Demolish the broken table.",
+            "s": "Demolish the broken table.",
+            "k": "removeTable",
+            "at": [
+              3240,
+              3394,
+              0
+            ],
+            "hl": {
+              "obj": [
+                40224
+              ]
+            }
+          },
+          {
+            "t": "Demolish the broken stool.",
+            "s": "Demolish the broken stool.",
+            "k": "removeStool",
+            "at": [
+              3239,
+              3394,
+              0
+            ],
+            "hl": {
+              "obj": [
+                40301
+              ]
+            }
+          },
+          {
+            "t": "Right-click remove the rotten carpet.",
+            "s": "Right-click remove the rotten carpet.",
+            "k": "removeCarpet",
+            "at": [
+              3239,
+              3395,
+              0
+            ],
+            "hl": {
+              "obj": [
+                40304
+              ]
+            }
+          },
+          {
+            "t": "Remove the campbed.",
+            "s": "Remove the campbed.",
+            "k": "removeCampbed",
+            "at": [
+              3242,
+              3398,
+              0
+            ],
+            "hl": {
+              "obj": [
+                40303
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 3,
+        "do": [
+          {
+            "t": "Talk to Old Man Yarlo again after removing all the broken furniture.",
+            "s": "Talk to Old Man Yarlo again after removing all the broken furniture.",
+            "k": "talkToYarloAfterRemovingFurniture",
+            "at": [
+              3240,
+              3395,
+              0
+            ],
+            "hl": {
+              "npc": [
+                10425
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 4,
+        "do": [
+          {
+            "t": "Talk to Old Man Yarlo again after removing all the broken furniture.",
+            "s": "Talk to Old Man Yarlo again after removing all the broken furniture.",
+            "k": "talkToYarloAfterRemovingFurniture",
+            "at": [
+              3240,
+              3395,
+              0
+            ],
+            "hl": {
+              "npc": [
+                10425
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 5,
+        "do": [
+          {
+            "t": "Talk to Old Man Yarlo again after rebuilding the furniture.",
+            "s": "Talk to Old Man Yarlo again after rebuilding the furniture.",
+            "k": "talkToYarloAfterBuildingFurniture",
+            "at": [
+              3240,
+              3395,
+              0
+            ],
+            "hl": {
+              "npc": [
+                10425
+              ]
+            }
+          },
+          {
+            "t": "Search the crates in Old Man Yarlo's house for waxwood logs.",
+            "s": "Search the crates in Old Man Yarlo's house for waxwood logs.",
+            "k": "searchCrate",
+            "at": [
+              3243,
+              3398,
+              0
+            ],
+            "hl": {
+              "obj": [
+                40214
+              ]
+            }
+          },
+          {
+            "t": "Talk to the Sawmill operator north-east of Varrock to make waxwood planks.",
+            "s": "Ask the Sawmill operator to make waxwood planks.",
+            "k": "talkToOperator",
+            "at": [
+              3302,
+              3492,
+              0
+            ],
+            "hl": {
+              "npc": [
+                3101
+              ]
+            }
+          },
+          {
+            "t": "Build the waxwood bed in Old Man Yarlo's house.",
+            "s": "Build the waxwood bed in Old Man Yarlo's house.",
+            "k": "buildCampbed",
+            "at": [
+              3242,
+              3398,
+              0
+            ],
+            "hl": {
+              "obj": [
+                40303
+              ]
+            }
+          },
+          {
+            "t": "Build the other table.",
+            "s": "Build the other table.",
+            "k": "buildTable2",
+            "at": [
+              3245,
+              3394,
+              0
+            ],
+            "hl": {
+              "obj": [
+                40223
+              ]
+            }
+          },
+          {
+            "t": "Build the other stool.",
+            "s": "Build the other stool.",
+            "k": "buildStool2",
+            "at": [
+              3244,
+              3394,
+              0
+            ],
+            "hl": {
+              "obj": [
+                40300
+              ]
+            }
+          },
+          {
+            "t": "Build the chair.",
+            "s": "Build the chair.",
+            "k": "buildChair",
+            "at": [
+              3241,
+              3393,
+              0
+            ],
+            "hl": {
+              "obj": [
+                40302
+              ]
+            }
+          },
+          {
+            "t": "Build the table.",
+            "s": "Build the table.",
+            "k": "buildTable",
+            "at": [
+              3240,
+              3394,
+              0
+            ],
+            "hl": {
+              "obj": [
+                40224
+              ]
+            }
+          },
+          {
+            "t": "Build the stool.",
+            "s": "Build the stool.",
+            "k": "buildStool",
+            "at": [
+              3239,
+              3394,
+              0
+            ],
+            "hl": {
+              "obj": [
+                40301
+              ]
+            }
+          },
+          {
+            "t": "Right-click build the carpet.",
+            "s": "Right-click build the carpet.",
+            "k": "buildCarpet",
+            "at": [
+              3239,
+              3395,
+              0
+            ],
+            "hl": {
+              "obj": [
+                40304
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 6,
+        "do": [
+          {
+            "t": "Talk to Old Man Yarlo again after rebuilding the furniture.",
+            "s": "Talk to Old Man Yarlo again after rebuilding the furniture.",
+            "k": "talkToYarloAfterBuildingFurniture",
+            "at": [
+              3240,
+              3395,
+              0
+            ],
+            "hl": {
+              "npc": [
+                10425
+              ]
+            }
+          },
+          {
+            "t": "Search the crates in Old Man Yarlo's house for waxwood logs.",
+            "s": "Search the crates in Old Man Yarlo's house for waxwood logs.",
+            "k": "searchCrate",
+            "at": [
+              3243,
+              3398,
+              0
+            ],
+            "hl": {
+              "obj": [
+                40214
+              ]
+            }
+          },
+          {
+            "t": "Talk to the Sawmill operator north-east of Varrock to make waxwood planks.",
+            "s": "Ask the Sawmill operator to make waxwood planks.",
+            "k": "talkToOperator",
+            "at": [
+              3302,
+              3492,
+              0
+            ],
+            "hl": {
+              "npc": [
+                3101
+              ]
+            }
+          },
+          {
+            "t": "Build the waxwood bed in Old Man Yarlo's house.",
+            "s": "Build the waxwood bed in Old Man Yarlo's house.",
+            "k": "buildCampbed",
+            "at": [
+              3242,
+              3398,
+              0
+            ],
+            "hl": {
+              "obj": [
+                40303
+              ]
+            }
+          },
+          {
+            "t": "Build the other table.",
+            "s": "Build the other table.",
+            "k": "buildTable2",
+            "at": [
+              3245,
+              3394,
+              0
+            ],
+            "hl": {
+              "obj": [
+                40223
+              ]
+            }
+          },
+          {
+            "t": "Build the other stool.",
+            "s": "Build the other stool.",
+            "k": "buildStool2",
+            "at": [
+              3244,
+              3394,
+              0
+            ],
+            "hl": {
+              "obj": [
+                40300
+              ]
+            }
+          },
+          {
+            "t": "Build the chair.",
+            "s": "Build the chair.",
+            "k": "buildChair",
+            "at": [
+              3241,
+              3393,
+              0
+            ],
+            "hl": {
+              "obj": [
+                40302
+              ]
+            }
+          },
+          {
+            "t": "Build the table.",
+            "s": "Build the table.",
+            "k": "buildTable",
+            "at": [
+              3240,
+              3394,
+              0
+            ],
+            "hl": {
+              "obj": [
+                40224
+              ]
+            }
+          },
+          {
+            "t": "Build the stool.",
+            "s": "Build the stool.",
+            "k": "buildStool",
+            "at": [
+              3239,
+              3394,
+              0
+            ],
+            "hl": {
+              "obj": [
+                40301
+              ]
+            }
+          },
+          {
+            "t": "Right-click build the carpet.",
+            "s": "Right-click build the carpet.",
+            "k": "buildCarpet",
+            "at": [
+              3239,
+              3395,
+              0
+            ],
+            "hl": {
+              "obj": [
+                40304
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 7,
+        "do": [
+          {
+            "t": "Talk to Old Man Yarlo again after rebuilding the furniture.",
+            "s": "Talk to Old Man Yarlo again after rebuilding the furniture.",
+            "k": "talkToYarloAfterBuildingFurniture",
+            "at": [
+              3240,
+              3395,
+              0
+            ],
+            "hl": {
+              "npc": [
+                10425
+              ]
+            }
+          },
+          {
+            "t": "Search the crates in Old Man Yarlo's house for waxwood logs.",
+            "s": "Search the crates in Old Man Yarlo's house for waxwood logs.",
+            "k": "searchCrate",
+            "at": [
+              3243,
+              3398,
+              0
+            ],
+            "hl": {
+              "obj": [
+                40214
+              ]
+            }
+          },
+          {
+            "t": "Talk to the Sawmill operator north-east of Varrock to make waxwood planks.",
+            "s": "Ask the Sawmill operator to make waxwood planks.",
+            "k": "talkToOperator",
+            "at": [
+              3302,
+              3492,
+              0
+            ],
+            "hl": {
+              "npc": [
+                3101
+              ]
+            }
+          },
+          {
+            "t": "Build the waxwood bed in Old Man Yarlo's house.",
+            "s": "Build the waxwood bed in Old Man Yarlo's house.",
+            "k": "buildCampbed",
+            "at": [
+              3242,
+              3398,
+              0
+            ],
+            "hl": {
+              "obj": [
+                40303
+              ]
+            }
+          },
+          {
+            "t": "Build the other table.",
+            "s": "Build the other table.",
+            "k": "buildTable2",
+            "at": [
+              3245,
+              3394,
+              0
+            ],
+            "hl": {
+              "obj": [
+                40223
+              ]
+            }
+          },
+          {
+            "t": "Build the other stool.",
+            "s": "Build the other stool.",
+            "k": "buildStool2",
+            "at": [
+              3244,
+              3394,
+              0
+            ],
+            "hl": {
+              "obj": [
+                40300
+              ]
+            }
+          },
+          {
+            "t": "Build the chair.",
+            "s": "Build the chair.",
+            "k": "buildChair",
+            "at": [
+              3241,
+              3393,
+              0
+            ],
+            "hl": {
+              "obj": [
+                40302
+              ]
+            }
+          },
+          {
+            "t": "Build the table.",
+            "s": "Build the table.",
+            "k": "buildTable",
+            "at": [
+              3240,
+              3394,
+              0
+            ],
+            "hl": {
+              "obj": [
+                40224
+              ]
+            }
+          },
+          {
+            "t": "Build the stool.",
+            "s": "Build the stool.",
+            "k": "buildStool",
+            "at": [
+              3239,
+              3394,
+              0
+            ],
+            "hl": {
+              "obj": [
+                40301
+              ]
+            }
+          },
+          {
+            "t": "Right-click build the carpet.",
+            "s": "Right-click build the carpet.",
+            "k": "buildCarpet",
+            "at": [
+              3239,
+              3395,
+              0
+            ],
+            "hl": {
+              "obj": [
+                40304
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 8,
+        "do": [
+          {
+            "t": "Talk to Old Man Yarlo again after rebuilding the furniture.",
+            "s": "Talk to Old Man Yarlo again after rebuilding the furniture.",
+            "k": "talkToYarloAfterBuildingFurniture",
+            "at": [
+              3240,
+              3395,
+              0
+            ],
+            "hl": {
+              "npc": [
+                10425
+              ]
+            }
+          },
+          {
+            "t": "Search the crates in Old Man Yarlo's house for waxwood logs.",
+            "s": "Search the crates in Old Man Yarlo's house for waxwood logs.",
+            "k": "searchCrate",
+            "at": [
+              3243,
+              3398,
+              0
+            ],
+            "hl": {
+              "obj": [
+                40214
+              ]
+            }
+          },
+          {
+            "t": "Talk to the Sawmill operator north-east of Varrock to make waxwood planks.",
+            "s": "Ask the Sawmill operator to make waxwood planks.",
+            "k": "talkToOperator",
+            "at": [
+              3302,
+              3492,
+              0
+            ],
+            "hl": {
+              "npc": [
+                3101
+              ]
+            }
+          },
+          {
+            "t": "Build the waxwood bed in Old Man Yarlo's house.",
+            "s": "Build the waxwood bed in Old Man Yarlo's house.",
+            "k": "buildCampbed",
+            "at": [
+              3242,
+              3398,
+              0
+            ],
+            "hl": {
+              "obj": [
+                40303
+              ]
+            }
+          },
+          {
+            "t": "Build the other table.",
+            "s": "Build the other table.",
+            "k": "buildTable2",
+            "at": [
+              3245,
+              3394,
+              0
+            ],
+            "hl": {
+              "obj": [
+                40223
+              ]
+            }
+          },
+          {
+            "t": "Build the other stool.",
+            "s": "Build the other stool.",
+            "k": "buildStool2",
+            "at": [
+              3244,
+              3394,
+              0
+            ],
+            "hl": {
+              "obj": [
+                40300
+              ]
+            }
+          },
+          {
+            "t": "Build the chair.",
+            "s": "Build the chair.",
+            "k": "buildChair",
+            "at": [
+              3241,
+              3393,
+              0
+            ],
+            "hl": {
+              "obj": [
+                40302
+              ]
+            }
+          },
+          {
+            "t": "Build the table.",
+            "s": "Build the table.",
+            "k": "buildTable",
+            "at": [
+              3240,
+              3394,
+              0
+            ],
+            "hl": {
+              "obj": [
+                40224
+              ]
+            }
+          },
+          {
+            "t": "Build the stool.",
+            "s": "Build the stool.",
+            "k": "buildStool",
+            "at": [
+              3239,
+              3394,
+              0
+            ],
+            "hl": {
+              "obj": [
+                40301
+              ]
+            }
+          },
+          {
+            "t": "Right-click build the carpet.",
+            "s": "Right-click build the carpet.",
+            "k": "buildCarpet",
+            "at": [
+              3239,
+              3395,
+              0
+            ],
+            "hl": {
+              "obj": [
+                40304
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 9,
+        "do": [
+          {
+            "t": "Talk to Old Man Yarlo again after rebuilding the furniture.",
+            "s": "Talk to Old Man Yarlo again after rebuilding the furniture.",
+            "k": "talkToYarloAfterBuildingFurniture",
+            "at": [
+              3240,
+              3395,
+              0
+            ],
+            "hl": {
+              "npc": [
+                10425
+              ]
+            }
+          },
+          {
+            "t": "Search the crates in Old Man Yarlo's house for waxwood logs.",
+            "s": "Search the crates in Old Man Yarlo's house for waxwood logs.",
+            "k": "searchCrate",
+            "at": [
+              3243,
+              3398,
+              0
+            ],
+            "hl": {
+              "obj": [
+                40214
+              ]
+            }
+          },
+          {
+            "t": "Talk to the Sawmill operator north-east of Varrock to make waxwood planks.",
+            "s": "Ask the Sawmill operator to make waxwood planks.",
+            "k": "talkToOperator",
+            "at": [
+              3302,
+              3492,
+              0
+            ],
+            "hl": {
+              "npc": [
+                3101
+              ]
+            }
+          },
+          {
+            "t": "Build the waxwood bed in Old Man Yarlo's house.",
+            "s": "Build the waxwood bed in Old Man Yarlo's house.",
+            "k": "buildCampbed",
+            "at": [
+              3242,
+              3398,
+              0
+            ],
+            "hl": {
+              "obj": [
+                40303
+              ]
+            }
+          },
+          {
+            "t": "Build the other table.",
+            "s": "Build the other table.",
+            "k": "buildTable2",
+            "at": [
+              3245,
+              3394,
+              0
+            ],
+            "hl": {
+              "obj": [
+                40223
+              ]
+            }
+          },
+          {
+            "t": "Build the other stool.",
+            "s": "Build the other stool.",
+            "k": "buildStool2",
+            "at": [
+              3244,
+              3394,
+              0
+            ],
+            "hl": {
+              "obj": [
+                40300
+              ]
+            }
+          },
+          {
+            "t": "Build the chair.",
+            "s": "Build the chair.",
+            "k": "buildChair",
+            "at": [
+              3241,
+              3393,
+              0
+            ],
+            "hl": {
+              "obj": [
+                40302
+              ]
+            }
+          },
+          {
+            "t": "Build the table.",
+            "s": "Build the table.",
+            "k": "buildTable",
+            "at": [
+              3240,
+              3394,
+              0
+            ],
+            "hl": {
+              "obj": [
+                40224
+              ]
+            }
+          },
+          {
+            "t": "Build the stool.",
+            "s": "Build the stool.",
+            "k": "buildStool",
+            "at": [
+              3239,
+              3394,
+              0
+            ],
+            "hl": {
+              "obj": [
+                40301
+              ]
+            }
+          },
+          {
+            "t": "Right-click build the carpet.",
+            "s": "Right-click build the carpet.",
+            "k": "buildCarpet",
+            "at": [
+              3239,
+              3395,
+              0
+            ],
+            "hl": {
+              "obj": [
+                40304
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 10,
+        "do": [
+          {
+            "t": "Talk to Marlo in north-east Varrock to complete the quest.",
+            "s": "Talk to Marlo in north-east Varrock to complete the quest.",
+            "k": "talkToMarloToFinish",
+            "at": [
+              3241,
+              3471,
+              0
+            ],
+            "hl": {
+              "npc": [
+                10408
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 11,
+        "do": [
+          {
+            "t": "Talk to Marlo in north-east Varrock to complete the quest.",
+            "s": "Talk to Marlo in north-east Varrock to complete the quest.",
+            "k": "talkToMarloToFinish",
+            "at": [
+              3241,
+              3471,
+              0
+            ],
+            "hl": {
+              "npc": [
+                10408
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 12,
+        "do": [
+          {
+            "t": "Talk to Marlo in north-east Varrock to complete the quest.",
+            "s": "Talk to Marlo in north-east Varrock to complete the quest.",
+            "k": "talkToMarloToFinish",
+            "at": [
+              3241,
+              3471,
+              0
+            ],
+            "hl": {
+              "npc": [
+                10408
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "facts": {
+    "id": "Daddy's Home",
+    "stepIds": [
+      "DRAFT"
+    ],
+    "members": true,
+    "requirements": {
+      "skills": {},
+      "questPoints": 0,
+      "quests": [],
+      "manual": [],
+      "capabilities": [],
+      "unparsed": null,
+      "text": "None"
+    },
+    "rewards": {
+      "questPoints": 1,
+      "xp": {
+        "construction": 400
+      },
+      "coins": null
+    },
+    "resourceFlow": null,
+    "length": "Short",
+    "source": {
+      "url": "https://oldschool.runescape.wiki/w/Special:Redirect/revision/15401680",
+      "title": "Daddy's Home",
+      "revision": 15401680,
+      "retrievedAt": "2026-11-18T05:13:17.083Z"
+    }
+  },
+  "unknown": [
+    "what the quest uses up and hands out is not reviewed"
+  ]
+}

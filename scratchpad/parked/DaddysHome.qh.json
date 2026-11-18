@@ -1,0 +1,556 @@
+{
+ "title": "Daddy's Home",
+ "cls": "DaddysHome",
+ "var": [
+  "varbit",
+  10570
+ ],
+ "members": true,
+ "revision": "b9b93706618a7b7fe7e5ea30e9a9ef35ba09673e",
+ "machine": {
+  "stages": {
+   "0": {
+    "s": "talkToMarlo"
+   },
+   "1": {
+    "s": "talkToYarlo"
+   },
+   "2": "n1",
+   "3": {
+    "s": "talkToYarloAfterRemovingFurniture"
+   },
+   "4": {
+    "s": "talkToYarloAfterRemovingFurniture"
+   },
+   "5": "n3",
+   "6": "n3",
+   "7": "n3",
+   "8": "n3",
+   "9": "n3",
+   "10": {
+    "s": "talkToMarloToFinish"
+   },
+   "11": {
+    "s": "talkToMarloToFinish"
+   },
+   "12": {
+    "s": "talkToMarloToFinish"
+   }
+  },
+  "nodes": {
+   "n1": {
+    "n": "cRemoveFurniture",
+    "c": [
+     [
+      {
+       "o": "or",
+       "a": [
+        "r1",
+        "r2",
+        "r3",
+        "r4",
+        "r5",
+        "r6",
+        {
+         "o": "vb",
+         "id": 10566,
+         "op": "<",
+         "v": 2
+        }
+       ]
+      },
+      "n2"
+     ]
+    ],
+    "d": {
+     "s": "talkToYarloAfterRemovingFurniture"
+    }
+   },
+   "n2": {
+    "n": "removeFurniture",
+    "c": [
+     [
+      "r1",
+      {
+       "s": "removeCampbed"
+      }
+     ],
+     [
+      "r2",
+      {
+       "s": "removeCarpet"
+      }
+     ],
+     [
+      "r3",
+      {
+       "s": "removeStool"
+      }
+     ],
+     [
+      "r4",
+      {
+       "s": "removeTable"
+      }
+     ],
+     [
+      "r5",
+      {
+       "s": "removeChair"
+      }
+     ],
+     [
+      "r6",
+      {
+       "s": "removeStool2"
+      }
+     ]
+    ],
+    "d": {
+     "s": "removeTable2"
+    }
+   },
+   "n3": {
+    "n": "cRepairFurniture",
+    "c": [
+     [
+      {
+       "o": "or",
+       "a": [
+        "r7",
+        "r8",
+        "r9",
+        "r10",
+        "r11",
+        {
+         "o": "vb",
+         "id": 10566,
+         "op": "<",
+         "v": 3
+        }
+       ]
+      },
+      "n4"
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r12",
+        {
+         "o": "item",
+         "nm": "Waxwood plank",
+         "ids": [
+          24939
+         ],
+         "q": 3,
+         "bank": 1
+        }
+       ]
+      },
+      {
+       "s": "buildCampbed"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r12",
+        {
+         "o": "item",
+         "nm": "Waxwood log",
+         "ids": [
+          24938
+         ],
+         "q": 3,
+         "bank": 1
+        }
+       ]
+      },
+      {
+       "s": "talkToOperator"
+      }
+     ],
+     [
+      "r12",
+      {
+       "s": "searchCrate"
+      }
+     ]
+    ],
+    "d": {
+     "s": "talkToYarloAfterBuildingFurniture"
+    }
+   },
+   "n4": {
+    "n": "buildSimpleFurniture",
+    "c": [
+     [
+      "r7",
+      {
+       "s": "buildCarpet"
+      }
+     ],
+     [
+      "r8",
+      {
+       "s": "buildStool"
+      }
+     ],
+     [
+      "r9",
+      {
+       "s": "buildTable"
+      }
+     ],
+     [
+      "r10",
+      {
+       "s": "buildChair"
+      }
+     ],
+     [
+      "r11",
+      {
+       "s": "buildStool2"
+      }
+     ]
+    ],
+    "d": {
+     "s": "buildTable2"
+    }
+   }
+  },
+  "reqs": {
+   "r1": {
+    "o": "vb",
+    "id": 10568,
+    "op": "<",
+    "v": 2
+   },
+   "r2": {
+    "o": "vb",
+    "id": 10569,
+    "op": "<",
+    "v": 2
+   },
+   "r3": {
+    "o": "vb",
+    "id": 10564,
+    "op": "<",
+    "v": 2
+   },
+   "r4": {
+    "o": "vb",
+    "id": 10567,
+    "op": "<",
+    "v": 2
+   },
+   "r5": {
+    "o": "vb",
+    "id": 10565,
+    "op": "<",
+    "v": 2
+   },
+   "r6": {
+    "o": "vb",
+    "id": 10563,
+    "op": "<",
+    "v": 2
+   },
+   "r7": {
+    "o": "vb",
+    "id": 10569,
+    "op": "<",
+    "v": 3
+   },
+   "r8": {
+    "o": "vb",
+    "id": 10564,
+    "op": "<",
+    "v": 3
+   },
+   "r9": {
+    "o": "vb",
+    "id": 10567,
+    "op": "<",
+    "v": 3
+   },
+   "r10": {
+    "o": "vb",
+    "id": 10565,
+    "op": "<",
+    "v": 3
+   },
+   "r11": {
+    "o": "vb",
+    "id": 10563,
+    "op": "<",
+    "v": 3
+   },
+   "r12": {
+    "o": "vb",
+    "id": 10568,
+    "op": "<",
+    "v": 3
+   }
+  },
+  "alias": {}
+ },
+ "unknown": {},
+ "steps": {
+  "talkToMarlo": {
+   "typ": "NpcStep",
+   "wp": [
+    3241,
+    3471,
+    0
+   ],
+   "ids": [
+    10408
+   ],
+   "text": "Talk to Marlo in north-east Varrock."
+  },
+  "talkToYarlo": {
+   "typ": "NpcStep",
+   "wp": [
+    3240,
+    3395,
+    0
+   ],
+   "ids": [
+    10425
+   ],
+   "text": "Talk to Old Man Yarlo in south-east Varrock, west of Aubury's Rune Shop."
+  },
+  "talkToYarloAfterRemovingFurniture": {
+   "typ": "NpcStep",
+   "wp": [
+    3240,
+    3395,
+    0
+   ],
+   "ids": [
+    10425
+   ],
+   "text": "Talk to Old Man Yarlo again after removing all the broken furniture."
+  },
+  "removeTable2": {
+   "typ": "ObjectStep",
+   "wp": [
+    3245,
+    3394,
+    0
+   ],
+   "ids": [
+    40223
+   ],
+   "text": "Demolish the other broken table."
+  },
+  "removeCampbed": {
+   "typ": "ObjectStep",
+   "wp": [
+    3242,
+    3398,
+    0
+   ],
+   "ids": [
+    40303
+   ],
+   "text": "Remove the campbed."
+  },
+  "removeCarpet": {
+   "typ": "ObjectStep",
+   "wp": [
+    3239,
+    3395,
+    0
+   ],
+   "ids": [
+    40304
+   ],
+   "text": "Right-click remove the rotten carpet."
+  },
+  "removeStool": {
+   "typ": "ObjectStep",
+   "wp": [
+    3239,
+    3394,
+    0
+   ],
+   "ids": [
+    40301
+   ],
+   "text": "Demolish the broken stool."
+  },
+  "removeTable": {
+   "typ": "ObjectStep",
+   "wp": [
+    3240,
+    3394,
+    0
+   ],
+   "ids": [
+    40224
+   ],
+   "text": "Demolish the broken table."
+  },
+  "removeChair": {
+   "typ": "ObjectStep",
+   "wp": [
+    3241,
+    3393,
+    0
+   ],
+   "ids": [
+    40302
+   ],
+   "text": "Demolish the broken chair."
+  },
+  "removeStool2": {
+   "typ": "ObjectStep",
+   "wp": [
+    3244,
+    3394,
+    0
+   ],
+   "ids": [
+    40300
+   ],
+   "text": "Demolish the other broken stool."
+  },
+  "talkToYarloAfterBuildingFurniture": {
+   "typ": "NpcStep",
+   "wp": [
+    3240,
+    3395,
+    0
+   ],
+   "ids": [
+    10425
+   ],
+   "text": "Talk to Old Man Yarlo again after rebuilding the furniture."
+  },
+  "buildTable2": {
+   "typ": "ObjectStep",
+   "wp": [
+    3245,
+    3394,
+    0
+   ],
+   "ids": [
+    40223
+   ],
+   "text": "Build the other table."
+  },
+  "buildCarpet": {
+   "typ": "ObjectStep",
+   "wp": [
+    3239,
+    3395,
+    0
+   ],
+   "ids": [
+    40304
+   ],
+   "text": "Right-click build the carpet."
+  },
+  "buildStool": {
+   "typ": "ObjectStep",
+   "wp": [
+    3239,
+    3394,
+    0
+   ],
+   "ids": [
+    40301
+   ],
+   "text": "Build the stool."
+  },
+  "buildTable": {
+   "typ": "ObjectStep",
+   "wp": [
+    3240,
+    3394,
+    0
+   ],
+   "ids": [
+    40224
+   ],
+   "text": "Build the table."
+  },
+  "buildChair": {
+   "typ": "ObjectStep",
+   "wp": [
+    3241,
+    3393,
+    0
+   ],
+   "ids": [
+    40302
+   ],
+   "text": "Build the chair."
+  },
+  "buildStool2": {
+   "typ": "ObjectStep",
+   "wp": [
+    3244,
+    3394,
+    0
+   ],
+   "ids": [
+    40300
+   ],
+   "text": "Build the other stool."
+  },
+  "buildCampbed": {
+   "typ": "ObjectStep",
+   "wp": [
+    3242,
+    3398,
+    0
+   ],
+   "ids": [
+    40303
+   ],
+   "text": "Build the waxwood bed in Old Man Yarlo's house."
+  },
+  "talkToOperator": {
+   "typ": "NpcStep",
+   "wp": [
+    3302,
+    3492,
+    0
+   ],
+   "ids": [
+    3101
+   ],
+   "text": "Talk to the Sawmill operator north-east of Varrock to make waxwood planks."
+  },
+  "searchCrate": {
+   "typ": "ObjectStep",
+   "wp": [
+    3243,
+    3398,
+    0
+   ],
+   "ids": [
+    40214
+   ],
+   "text": "Search the crates in Old Man Yarlo's house for waxwood logs."
+  },
+  "talkToMarloToFinish": {
+   "typ": "NpcStep",
+   "wp": [
+    3241,
+    3471,
+    0
+   ],
+   "ids": [
+    10408
+   ],
+   "text": "Talk to Marlo in north-east Varrock to complete the quest."
+  }
+ }
+}

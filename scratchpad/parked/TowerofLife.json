@@ -1,0 +1,1061 @@
+{
+  "quest": "Tower of Life",
+  "status": "draft",
+  "sources": {
+    "questHelper": "b9b93706618a7b7fe7e5ea30e9a9ef35ba09673e",
+    "wiki": {
+      "title": "Tower of Life",
+      "revision": 15366014
+    },
+    "quickGuide": {
+      "title": "Tower of Life/Quick guide",
+      "revision": 14831032
+    }
+  },
+  "step": {
+    "title": "Tower of Life",
+    "type": "quest",
+    "qp": 2,
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Tower_of_Life",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Tower_of_Life/Quick_guide",
+    "mapLocation": {
+      "x": 2639,
+      "y": 3218,
+      "plane": 0,
+      "label": "Talk to Effigy at the Tower of Life just east of the Ardougne Monastery."
+    },
+    "npc": {
+      "nameEn": "Effigy"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Hammer",
+        "amount": 1,
+        "wikiItemId": 2347,
+        "howToGet": "Buy on the Grand Exchange, or from a general store for 1 gp.",
+        "note": "Hammer (or Imcando hammer)"
+      },
+      {
+        "nameEn": "Saw",
+        "amount": 1,
+        "wikiItemId": 8794,
+        "howToGet": "Buy on the Grand Exchange, or from the Sawmill operator's shop for 13 gp.",
+        "note": "Saw (or crystal saw)"
+      },
+      {
+        "nameEn": "Beer",
+        "amount": 1,
+        "wikiItemId": 1917,
+        "howToGet": "Buy on the Grand Exchange, or from a pub for 2 gp. 'The Guns' wants one.",
+        "note": "Beer (must be a regular beer - other beers do not work.)"
+      }
+    ],
+    "foes": []
+  },
+  "stages": {
+    "var": [
+      "varbit",
+      3337
+    ],
+    "route": [
+      {
+        "title": "Walkthrough",
+        "steps": [
+          "Talk to Effigy south of East Ardougne (south-west of fairy ring , Ardougne cloak monastery teleport and walk east, or minigame teleport to Fishing Trawler and walk north) to begin the quest. Dialogue: \"Sure, why not.\"",
+          "Talk to Bonafido at the tower's entrance. He will ask to get a builder's costume.",
+          "Wear the full costume. Talk to Bonafido and answer his questions. Dialogue: \"Tea\", \"Whistle for attention\", \"Your legs are getting a bit cold\", \"Carry on, it'll fix itself\"",
+          "Enter the tower while still wearing the full costume"
+        ]
+      },
+      {
+        "title": "=Fix the pressure machine=",
+        "steps": [
+          "Take the following supplies (by searching the crates inside the tower):",
+          "Head up the first staircase on the west side of the tower.",
+          "Fix the pressure machine on the north side of the room.",
+          "Complete the puzzle (turn the valves until all holes are plugged, pull the levers when necessary).",
+          "Once all the holes are plugged, make sure to turn the valves until all of the pipes are filled with water. You should see a message that says \"The machine is working!\" when you have completed the puzzle."
+        ]
+      },
+      {
+        "title": "=Fix the pipe machine=",
+        "steps": [
+          "Take the following supplies:",
+          "Head up two floors.",
+          "Fix the pipe machine on the south side of the room. You should see a message that says \"The machine is working!\" when you have completed the puzzle."
+        ]
+      },
+      {
+        "title": "=Fix the cage=",
+        "steps": [
+          "Take the following supplies:",
+          "Head up to the top floor of the tower.",
+          "Fix the cage.",
+          "Complete the puzzle. You should see a message that says \"The cage is complete!\" when you have completed the puzzle."
+        ]
+      },
+      {
+        "title": "=Finishing up=",
+        "steps": [
+          "Talk to Effigy.",
+          "Go to the top floor for a cutscene involving the alchemists and the Homunculus.",
+          "Go outside to talk to Effigy.",
+          "Return to the top floor and answer the Homunculus' questions until the bar is filled with either 'Logic' or 'Magic'.",
+          "Talk to Effigy again.",
+          "Go to the dungeon floor inside the tower via the trapdoor to the south and talk to the Homunculus to the north.",
+          "Optional: Medium Ardougne Diary task - kill a \"swordchick\" (requires 1 raw swordfish and 1 raw chicken.",
+          "Congratulations, quest complete!"
+        ]
+      }
+    ],
+    "stages": [
+      {
+        "at": 0,
+        "do": [
+          {
+            "t": "Talk to Effigy outside the Tower of Life.",
+            "s": "Talk to Effigy outside the Tower of Life.",
+            "k": "talkToEffigy",
+            "at": [
+              2637,
+              3218,
+              0
+            ],
+            "hl": {
+              "npc": [
+                3585
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 2,
+        "do": [
+          {
+            "t": "Talk to Bonafido.",
+            "s": "Talk to Bonafido.",
+            "k": "talkToBonafido",
+            "at": [
+              2651,
+              3228,
+              0
+            ],
+            "hl": {
+              "npc": [
+                3587
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 4,
+        "do": [
+          {
+            "t": "Get the Hard Hat from 'Black-eye'.",
+            "s": "Get the Hard Hat from 'Black-eye'.",
+            "k": "talkToBlackeye",
+            "hl": {
+              "npc": [
+                3596
+              ]
+            }
+          },
+          {
+            "t": "Talk to 'No fingers'.",
+            "s": "Talk to 'No fingers'.",
+            "k": "talkToNoFingers",
+            "at": [
+              2645,
+              3224,
+              0
+            ],
+            "hl": {
+              "npc": [
+                3597
+              ]
+            }
+          },
+          {
+            "t": "Pickpocket 'No fingers'.",
+            "s": "Pickpocket 'No fingers'.",
+            "k": "pickpocketNoFingers",
+            "at": [
+              2645,
+              3224,
+              0
+            ],
+            "hl": {
+              "npc": [
+                3597
+              ]
+            }
+          },
+          {
+            "t": "Get a Beer for 'The Guns'.",
+            "s": "Get a Beer for 'The Guns'.",
+            "k": "getBeerForGuns"
+          },
+          {
+            "t": "Talk to 'The Guns'.",
+            "s": "Talk to 'The Guns'.",
+            "k": "talkToGuns",
+            "at": [
+              2643,
+              3226,
+              0
+            ],
+            "hl": {
+              "npc": [
+                3599
+              ]
+            }
+          },
+          {
+            "t": "Search the bushes to the south for some Builder's Trousers.",
+            "s": "Search the bushes to the south for some Builder's Trousers.",
+            "k": "getTrousers",
+            "hl": {
+              "obj": [
+                21924
+              ]
+            }
+          },
+          {
+            "t": "Speak to Bonafido wearing the Builder's outfit.",
+            "s": "Speak to Bonafido wearing the Builder's outfit.",
+            "k": "talkToBonafidoWithOutfit",
+            "hl": {
+              "npc": [
+                3587
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 6,
+        "do": [
+          {
+            "t": "Enter the tower.",
+            "s": "Enter the tower.",
+            "k": "enterTower",
+            "at": [
+              2649,
+              3225,
+              0
+            ],
+            "hl": {
+              "obj": [
+                21814
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 8,
+        "do": [
+          {
+            "t": "Enter the tower.",
+            "s": "Enter the tower.",
+            "k": "enterTower",
+            "at": [
+              2649,
+              3225,
+              0
+            ],
+            "hl": {
+              "obj": [
+                21814
+              ]
+            }
+          },
+          {
+            "t": "Get 3 Metal sheets.",
+            "s": "Get 3 Metal sheets.",
+            "k": "fixPressureMachineGetSheets",
+            "at": [
+              2643,
+              3219,
+              0
+            ],
+            "hl": {
+              "obj": [
+                21913
+              ]
+            }
+          },
+          {
+            "t": "Get 4 Coloured balls.",
+            "s": "Get 4 Coloured balls.",
+            "k": "fixPressureMachineGetBalls",
+            "at": [
+              2644,
+              3216,
+              0
+            ],
+            "hl": {
+              "obj": [
+                21914
+              ]
+            }
+          },
+          {
+            "t": "Get 4 Valve wheels.",
+            "s": "Get 4 Valve wheels.",
+            "k": "fixPressureMachineGetWheels",
+            "at": [
+              2655,
+              3217,
+              0
+            ],
+            "hl": {
+              "obj": [
+                21912
+              ]
+            }
+          },
+          {
+            "t": "Go downstairs.",
+            "s": "Go downstairs.",
+            "k": "climbDownToFloor2",
+            "at": [
+              2647,
+              3221,
+              3
+            ],
+            "hl": {
+              "obj": [
+                17975
+              ]
+            }
+          },
+          {
+            "t": "Go downstairs.",
+            "s": "Go downstairs.",
+            "k": "climbDownToFloor1",
+            "at": [
+              2653,
+              3220,
+              2
+            ],
+            "hl": {
+              "obj": [
+                21872
+              ]
+            }
+          },
+          {
+            "t": "Go downstairs.",
+            "s": "Go downstairs.",
+            "k": "climbDownToGround",
+            "at": [
+              2645,
+              3220,
+              1
+            ],
+            "hl": {
+              "obj": [
+                21872
+              ]
+            }
+          },
+          {
+            "t": "Go upstairs.",
+            "s": "Go upstairs.",
+            "k": "climbUpToFloor1",
+            "at": [
+              2645,
+              3220,
+              0
+            ],
+            "hl": {
+              "obj": [
+                21871
+              ]
+            }
+          },
+          {
+            "t": "Build the Pressure Machine.",
+            "s": "Build the Pressure Machine.",
+            "k": "buildPressureMachine",
+            "at": [
+              2649,
+              3223,
+              1
+            ],
+            "hl": {
+              "obj": [
+                21873
+              ]
+            }
+          },
+          {
+            "t": "Fix the pressure machine: turn the valves and pull the levers until every hole is plugged, then turn them until every pipe fills with water.",
+            "s": "Fix the pressure machine: plug every hole, then fill every pipe.",
+            "k": "solvePressureMachinePuzzle"
+          },
+          {
+            "t": "Get 4 Pipes.",
+            "s": "Get 4 Pipes.",
+            "k": "fixPipeMachineGetPipes",
+            "at": [
+              2648,
+              3222,
+              0
+            ],
+            "hl": {
+              "obj": [
+                21909
+              ]
+            }
+          },
+          {
+            "t": "Get 5 Pipe rings.",
+            "s": "Get 5 Pipe rings.",
+            "k": "fixPipeMachineGetRings",
+            "at": [
+              2652,
+              3222,
+              0
+            ],
+            "hl": {
+              "obj": [
+                21910
+              ]
+            }
+          },
+          {
+            "t": "Get 6 Rivets.",
+            "s": "Get 6 Rivets.",
+            "k": "fixPipeMachineGetRivets",
+            "at": [
+              2654,
+              3220,
+              0
+            ],
+            "hl": {
+              "obj": [
+                21911
+              ]
+            }
+          },
+          {
+            "t": "Go upstairs.",
+            "s": "Go upstairs.",
+            "k": "climbUpToFloor2",
+            "at": [
+              2653,
+              3220,
+              1
+            ],
+            "hl": {
+              "obj": [
+                21871
+              ]
+            }
+          },
+          {
+            "t": "Build the Pipe Machine.",
+            "s": "Build the Pipe Machine.",
+            "k": "buildPipeMachine",
+            "at": [
+              2650,
+              3214,
+              2
+            ],
+            "hl": {
+              "obj": [
+                21943
+              ]
+            }
+          },
+          {
+            "t": "Fix the pipe machine on the south side of the room: connect the pipes until 'The machine is working!' appears.",
+            "s": "Connect the pipe machine until the machine is working.",
+            "k": "solvePipeMachinePuzzle"
+          },
+          {
+            "t": "Get 5 Metal bars.",
+            "s": "Get 5 Metal bars.",
+            "k": "fixCageGetBars",
+            "at": [
+              2650,
+              3212,
+              0
+            ],
+            "hl": {
+              "obj": [
+                21917
+              ]
+            }
+          },
+          {
+            "t": "Get 4 Binding fluid.",
+            "s": "Get 4 Binding fluid.",
+            "k": "fixCageGetFluid",
+            "at": [
+              2651,
+              3213,
+              0
+            ],
+            "hl": {
+              "obj": [
+                21915
+              ]
+            }
+          },
+          {
+            "t": "Go upstairs.",
+            "s": "Go upstairs.",
+            "k": "climbUpToFloor3",
+            "at": [
+              2647,
+              3221,
+              2
+            ],
+            "hl": {
+              "obj": [
+                17974
+              ]
+            }
+          },
+          {
+            "t": "Build the cage.",
+            "s": "Build the cage.",
+            "k": "buildCage",
+            "at": [
+              2649,
+              3218,
+              3
+            ],
+            "hl": {
+              "obj": [
+                21941
+              ]
+            }
+          },
+          {
+            "t": "Build the cage on the top floor from the bars until 'The cage is complete!' appears.",
+            "s": "Build the cage on the top floor.",
+            "k": "solveCagePuzzle"
+          },
+          {
+            "t": "Go back and talk to Effigy.",
+            "s": "Go back and talk to Effigy.",
+            "k": "talkToEffigyAgain",
+            "at": [
+              2637,
+              3218,
+              0
+            ],
+            "hl": {
+              "npc": [
+                3585
+              ]
+            }
+          },
+          {
+            "t": "Go back downstairs.",
+            "s": "Go back downstairs.",
+            "k": "climbBackDownToFloor2",
+            "at": [
+              2647,
+              3221,
+              3
+            ],
+            "hl": {
+              "obj": [
+                17975
+              ]
+            }
+          },
+          {
+            "t": "Go back downstairs.",
+            "s": "Go back downstairs.",
+            "k": "climbBackDownToFloor1",
+            "at": [
+              2653,
+              3220,
+              2
+            ],
+            "hl": {
+              "obj": [
+                21872
+              ]
+            }
+          },
+          {
+            "t": "Go back downstairs.",
+            "s": "Go back downstairs.",
+            "k": "climbBackDownToGround",
+            "at": [
+              2645,
+              3220,
+              1
+            ],
+            "hl": {
+              "obj": [
+                21872
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 10,
+        "do": [
+          {
+            "t": "Go back into the tower.",
+            "s": "Go back into the tower.",
+            "k": "enterTowerAgain",
+            "at": [
+              2649,
+              3225,
+              0
+            ],
+            "hl": {
+              "obj": [
+                21814
+              ]
+            }
+          },
+          {
+            "t": "Go back upstairs.",
+            "s": "Go back upstairs.",
+            "k": "climbBackUpToFloor3",
+            "at": [
+              2647,
+              3221,
+              2
+            ],
+            "hl": {
+              "obj": [
+                17974
+              ]
+            }
+          },
+          {
+            "t": "Go back upstairs.",
+            "s": "Go back upstairs.",
+            "k": "climbBackUpToFloor2",
+            "at": [
+              2653,
+              3220,
+              1
+            ],
+            "hl": {
+              "obj": [
+                21871
+              ]
+            }
+          },
+          {
+            "t": "Go back upstairs.",
+            "s": "Go back upstairs.",
+            "k": "climbBackUpToFloor1",
+            "at": [
+              2645,
+              3220,
+              0
+            ],
+            "hl": {
+              "obj": [
+                21871
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 11,
+        "do": [
+          {
+            "t": "Go back and talk to Effigy.",
+            "s": "Go back and talk to Effigy.",
+            "k": "talkToEffigyAgain",
+            "at": [
+              2637,
+              3218,
+              0
+            ],
+            "hl": {
+              "npc": [
+                3585
+              ]
+            }
+          },
+          {
+            "t": "Go back downstairs.",
+            "s": "Go back downstairs.",
+            "k": "climbBackDownToGround",
+            "at": [
+              2645,
+              3220,
+              1
+            ],
+            "hl": {
+              "obj": [
+                21872
+              ]
+            }
+          },
+          {
+            "t": "Go back downstairs.",
+            "s": "Go back downstairs.",
+            "k": "climbBackDownToFloor1",
+            "at": [
+              2653,
+              3220,
+              2
+            ],
+            "hl": {
+              "obj": [
+                21872
+              ]
+            }
+          },
+          {
+            "t": "Go back downstairs.",
+            "s": "Go back downstairs.",
+            "k": "climbBackDownToFloor2",
+            "at": [
+              2647,
+              3221,
+              3
+            ],
+            "hl": {
+              "obj": [
+                17975
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 12,
+        "do": [
+          {
+            "t": "Go back into the tower.",
+            "s": "Go back into the tower.",
+            "k": "enterTowerAgain",
+            "at": [
+              2649,
+              3225,
+              0
+            ],
+            "hl": {
+              "obj": [
+                21814
+              ]
+            }
+          },
+          {
+            "t": "Talk to the homunculus at the top of the tower. For Logic, answer 1, 3, 3, 1, 2, 2, 3.",
+            "s": "Talk to the homunculus. Logic answers: 1, 3, 3, 1, 2, 2, 3.",
+            "k": "talkToHomunculusTopOfTower",
+            "at": [
+              2649,
+              3218,
+              3
+            ],
+            "hl": {
+              "npc": [
+                3590
+              ]
+            }
+          },
+          {
+            "t": "Go back upstairs.",
+            "s": "Go back upstairs.",
+            "k": "climbBackUpToFloor3",
+            "at": [
+              2647,
+              3221,
+              2
+            ],
+            "hl": {
+              "obj": [
+                17974
+              ]
+            }
+          },
+          {
+            "t": "Go back upstairs.",
+            "s": "Go back upstairs.",
+            "k": "climbBackUpToFloor2",
+            "at": [
+              2653,
+              3220,
+              1
+            ],
+            "hl": {
+              "obj": [
+                21871
+              ]
+            }
+          },
+          {
+            "t": "Go back upstairs.",
+            "s": "Go back upstairs.",
+            "k": "climbBackUpToFloor1",
+            "at": [
+              2645,
+              3220,
+              0
+            ],
+            "hl": {
+              "obj": [
+                21871
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 14,
+        "do": [
+          {
+            "t": "Go back into the tower.",
+            "s": "Go back into the tower.",
+            "k": "enterTowerAgain",
+            "at": [
+              2649,
+              3225,
+              0
+            ],
+            "hl": {
+              "obj": [
+                21814
+              ]
+            }
+          },
+          {
+            "t": "Talk to the homunculus at the top of the tower. For Logic, answer 1, 3, 3, 1, 2, 2, 3.",
+            "s": "Talk to the homunculus. Logic answers: 1, 3, 3, 1, 2, 2, 3.",
+            "k": "talkToHomunculusTopOfTower",
+            "at": [
+              2649,
+              3218,
+              3
+            ],
+            "hl": {
+              "npc": [
+                3590
+              ]
+            }
+          },
+          {
+            "t": "Go back upstairs.",
+            "s": "Go back upstairs.",
+            "k": "climbBackUpToFloor3",
+            "at": [
+              2647,
+              3221,
+              2
+            ],
+            "hl": {
+              "obj": [
+                17974
+              ]
+            }
+          },
+          {
+            "t": "Go back upstairs.",
+            "s": "Go back upstairs.",
+            "k": "climbBackUpToFloor2",
+            "at": [
+              2653,
+              3220,
+              1
+            ],
+            "hl": {
+              "obj": [
+                21871
+              ]
+            }
+          },
+          {
+            "t": "Go back upstairs.",
+            "s": "Go back upstairs.",
+            "k": "climbBackUpToFloor1",
+            "at": [
+              2645,
+              3220,
+              0
+            ],
+            "hl": {
+              "obj": [
+                21871
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 16,
+        "do": [
+          {
+            "t": "Go back and talk to Effigy.",
+            "s": "Go back and talk to Effigy.",
+            "k": "talkToEffigyAgain",
+            "at": [
+              2637,
+              3218,
+              0
+            ],
+            "hl": {
+              "npc": [
+                3585
+              ]
+            }
+          },
+          {
+            "t": "Go back downstairs.",
+            "s": "Go back downstairs.",
+            "k": "climbBackDownToGround",
+            "at": [
+              2645,
+              3220,
+              1
+            ],
+            "hl": {
+              "obj": [
+                21872
+              ]
+            }
+          },
+          {
+            "t": "Go back downstairs.",
+            "s": "Go back downstairs.",
+            "k": "climbBackDownToFloor1",
+            "at": [
+              2653,
+              3220,
+              2
+            ],
+            "hl": {
+              "obj": [
+                21872
+              ]
+            }
+          },
+          {
+            "t": "Go back downstairs.",
+            "s": "Go back downstairs.",
+            "k": "climbBackDownToFloor2",
+            "at": [
+              2647,
+              3221,
+              3
+            ],
+            "hl": {
+              "obj": [
+                17975
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 17,
+        "do": [
+          {
+            "t": "Enter the tower.",
+            "s": "Enter the tower.",
+            "k": "enterTower",
+            "at": [
+              2649,
+              3225,
+              0
+            ],
+            "hl": {
+              "obj": [
+                21814
+              ]
+            }
+          },
+          {
+            "t": "Go downstairs.",
+            "s": "Go downstairs.",
+            "k": "climbDownToBasement",
+            "at": [
+              2648,
+              3212,
+              0
+            ],
+            "hl": {
+              "obj": [
+                21944
+              ]
+            }
+          },
+          {
+            "t": "Talk to the homunculus.",
+            "s": "Talk to the homunculus.",
+            "k": "talkToHomunculusBasement",
+            "at": [
+              3040,
+              4400,
+              0
+            ],
+            "hl": {
+              "npc": [
+                3588
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "facts": {
+    "id": "Tower of Life",
+    "stepIds": [
+      "DRAFT"
+    ],
+    "members": false,
+    "requirements": {
+      "skills": {
+        "construction": 10
+      },
+      "questPoints": 0,
+      "quests": [],
+      "manual": [],
+      "capabilities": [],
+      "unparsed": null,
+      "text": "*{{SCP|Construction|10|link=yes}} {{Boostable|no}} {{Questreqstart|yes}}"
+    },
+    "rewards": {
+      "questPoints": 2,
+      "xp": {
+        "construction": 1000,
+        "crafting": 500,
+        "thieving": 500
+      },
+      "coins": 0
+    },
+    "resourceFlow": null,
+    "length": "Medium",
+    "source": {
+      "url": "https://oldschool.runescape.wiki/w/Special:Redirect/revision/15366014",
+      "title": "Tower of Life",
+      "revision": 15366014,
+      "retrievedAt": "2026-11-18T05:11:35.945Z"
+    }
+  },
+  "unknown": [
+    "step \"talkToBlackeye\": Quest Helper gives no tile",
+    "step \"getBeerForGuns\": Quest Helper gives no tile",
+    "step \"getTrousers\": Quest Helper gives no tile",
+    "step \"talkToBonafidoWithOutfit\": Quest Helper gives no tile",
+    "step \"solvePressureMachinePuzzle\": Quest Helper gives no tile",
+    "step \"solvePipeMachinePuzzle\": Quest Helper gives no tile",
+    "step \"solveCagePuzzle\": Quest Helper gives no tile",
+    "Quest Helper condition \"zone\" is not understood (4)",
+    "what the quest uses up and hands out is not reviewed"
+  ]
+}

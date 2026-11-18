@@ -66969,6 +66969,2382 @@
      ]
     }
    ]
+  },
+  "S9-47": {
+   "var": [
+    "varbit",
+    10570
+   ],
+   "route": [
+    {
+     "title": "Walkthrough",
+     "steps": [
+      "Talk to Marlo in the Estate agent's house in north-east Varrock. Dialogue: \"What kind of favour do you want me to do?\", \"Tell me more about the job.\", \"Tell me where he lives, and I'll do the job.\"",
+      "Talk to Old Man Yarlo in his house south-west of Aubury's Rune Shop.",
+      "Remove all 7 old furnishings:",
+      "Talk to Old Man Yarlo again. Dialogue: \"Skip Yarlo's lecture. He'll offer it later if you like.\"",
+      "Search the crates marked with a black symbol, west of the range, for 3 waxwood logs.",
+      "Go to the Varrock sawmill and talk to the Sawmill operator. Dialogue: \"I need some waxwood planks for Old Man Yarlo.\"",
+      "Return to Old Man Yarlo's house and build the new furniture at every white, translucent hotspot.",
+      "Talk to Old Man Yarlo after building all the furniture.",
+      "Return to Marlo and claim the reward. Dialogue: \"Yeah, what have you got for me?\"",
+      "Congratulations, miniquest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Talk to Marlo in north-east Varrock.",
+       "s": "Talk to Marlo in north-east Varrock.",
+       "k": "talkToMarlo",
+       "at": [
+        3241,
+        3471,
+        0
+       ],
+       "hl": {
+        "npc": [
+         10408
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 1,
+     "do": [
+      {
+       "t": "Talk to Old Man Yarlo in south-east Varrock, west of Aubury's Rune Shop.",
+       "s": "Talk to Old Man Yarlo west of Aubury's Rune Shop.",
+       "k": "talkToYarlo",
+       "at": [
+        3240,
+        3395,
+        0
+       ],
+       "hl": {
+        "npc": [
+         10425
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 2,
+     "do": [
+      {
+       "t": "Talk to Old Man Yarlo again after removing all the broken furniture.",
+       "s": "Talk to Old Man Yarlo again after removing all the broken furniture.",
+       "k": "talkToYarloAfterRemovingFurniture",
+       "at": [
+        3240,
+        3395,
+        0
+       ],
+       "hl": {
+        "npc": [
+         10425
+        ]
+       }
+      },
+      {
+       "t": "Demolish the other broken table.",
+       "s": "Demolish the other broken table.",
+       "k": "removeTable2",
+       "at": [
+        3245,
+        3394,
+        0
+       ],
+       "hl": {
+        "obj": [
+         40223
+        ]
+       }
+      },
+      {
+       "t": "Demolish the other broken stool.",
+       "s": "Demolish the other broken stool.",
+       "k": "removeStool2",
+       "at": [
+        3244,
+        3394,
+        0
+       ],
+       "hl": {
+        "obj": [
+         40300
+        ]
+       }
+      },
+      {
+       "t": "Demolish the broken chair.",
+       "s": "Demolish the broken chair.",
+       "k": "removeChair",
+       "at": [
+        3241,
+        3393,
+        0
+       ],
+       "hl": {
+        "obj": [
+         40302
+        ]
+       }
+      },
+      {
+       "t": "Demolish the broken table.",
+       "s": "Demolish the broken table.",
+       "k": "removeTable",
+       "at": [
+        3240,
+        3394,
+        0
+       ],
+       "hl": {
+        "obj": [
+         40224
+        ]
+       }
+      },
+      {
+       "t": "Demolish the broken stool.",
+       "s": "Demolish the broken stool.",
+       "k": "removeStool",
+       "at": [
+        3239,
+        3394,
+        0
+       ],
+       "hl": {
+        "obj": [
+         40301
+        ]
+       }
+      },
+      {
+       "t": "Right-click remove the rotten carpet.",
+       "s": "Right-click remove the rotten carpet.",
+       "k": "removeCarpet",
+       "at": [
+        3239,
+        3395,
+        0
+       ],
+       "hl": {
+        "obj": [
+         40304
+        ]
+       }
+      },
+      {
+       "t": "Remove the campbed.",
+       "s": "Remove the campbed.",
+       "k": "removeCampbed",
+       "at": [
+        3242,
+        3398,
+        0
+       ],
+       "hl": {
+        "obj": [
+         40303
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 3,
+     "do": [
+      {
+       "t": "Talk to Old Man Yarlo again after removing all the broken furniture.",
+       "s": "Talk to Old Man Yarlo again after removing all the broken furniture.",
+       "k": "talkToYarloAfterRemovingFurniture",
+       "at": [
+        3240,
+        3395,
+        0
+       ],
+       "hl": {
+        "npc": [
+         10425
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 4,
+     "do": [
+      {
+       "t": "Talk to Old Man Yarlo again after removing all the broken furniture.",
+       "s": "Talk to Old Man Yarlo again after removing all the broken furniture.",
+       "k": "talkToYarloAfterRemovingFurniture",
+       "at": [
+        3240,
+        3395,
+        0
+       ],
+       "hl": {
+        "npc": [
+         10425
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 5,
+     "do": [
+      {
+       "t": "Talk to Old Man Yarlo again after rebuilding the furniture.",
+       "s": "Talk to Old Man Yarlo again after rebuilding the furniture.",
+       "k": "talkToYarloAfterBuildingFurniture",
+       "at": [
+        3240,
+        3395,
+        0
+       ],
+       "hl": {
+        "npc": [
+         10425
+        ]
+       }
+      },
+      {
+       "t": "Search the crates in Old Man Yarlo's house for waxwood logs.",
+       "s": "Search the crates in Old Man Yarlo's house for waxwood logs.",
+       "k": "searchCrate",
+       "at": [
+        3243,
+        3398,
+        0
+       ],
+       "hl": {
+        "obj": [
+         40214
+        ]
+       }
+      },
+      {
+       "t": "Talk to the Sawmill operator north-east of Varrock to make waxwood planks.",
+       "s": "Ask the Sawmill operator to make waxwood planks.",
+       "k": "talkToOperator",
+       "at": [
+        3302,
+        3492,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3101
+        ]
+       }
+      },
+      {
+       "t": "Build the waxwood bed in Old Man Yarlo's house.",
+       "s": "Build the waxwood bed in Old Man Yarlo's house.",
+       "k": "buildCampbed",
+       "at": [
+        3242,
+        3398,
+        0
+       ],
+       "hl": {
+        "obj": [
+         40303
+        ]
+       }
+      },
+      {
+       "t": "Build the other table.",
+       "s": "Build the other table.",
+       "k": "buildTable2",
+       "at": [
+        3245,
+        3394,
+        0
+       ],
+       "hl": {
+        "obj": [
+         40223
+        ]
+       }
+      },
+      {
+       "t": "Build the other stool.",
+       "s": "Build the other stool.",
+       "k": "buildStool2",
+       "at": [
+        3244,
+        3394,
+        0
+       ],
+       "hl": {
+        "obj": [
+         40300
+        ]
+       }
+      },
+      {
+       "t": "Build the chair.",
+       "s": "Build the chair.",
+       "k": "buildChair",
+       "at": [
+        3241,
+        3393,
+        0
+       ],
+       "hl": {
+        "obj": [
+         40302
+        ]
+       }
+      },
+      {
+       "t": "Build the table.",
+       "s": "Build the table.",
+       "k": "buildTable",
+       "at": [
+        3240,
+        3394,
+        0
+       ],
+       "hl": {
+        "obj": [
+         40224
+        ]
+       }
+      },
+      {
+       "t": "Build the stool.",
+       "s": "Build the stool.",
+       "k": "buildStool",
+       "at": [
+        3239,
+        3394,
+        0
+       ],
+       "hl": {
+        "obj": [
+         40301
+        ]
+       }
+      },
+      {
+       "t": "Right-click build the carpet.",
+       "s": "Right-click build the carpet.",
+       "k": "buildCarpet",
+       "at": [
+        3239,
+        3395,
+        0
+       ],
+       "hl": {
+        "obj": [
+         40304
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 6,
+     "do": [
+      {
+       "t": "Talk to Old Man Yarlo again after rebuilding the furniture.",
+       "s": "Talk to Old Man Yarlo again after rebuilding the furniture.",
+       "k": "talkToYarloAfterBuildingFurniture",
+       "at": [
+        3240,
+        3395,
+        0
+       ],
+       "hl": {
+        "npc": [
+         10425
+        ]
+       }
+      },
+      {
+       "t": "Search the crates in Old Man Yarlo's house for waxwood logs.",
+       "s": "Search the crates in Old Man Yarlo's house for waxwood logs.",
+       "k": "searchCrate",
+       "at": [
+        3243,
+        3398,
+        0
+       ],
+       "hl": {
+        "obj": [
+         40214
+        ]
+       }
+      },
+      {
+       "t": "Talk to the Sawmill operator north-east of Varrock to make waxwood planks.",
+       "s": "Ask the Sawmill operator to make waxwood planks.",
+       "k": "talkToOperator",
+       "at": [
+        3302,
+        3492,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3101
+        ]
+       }
+      },
+      {
+       "t": "Build the waxwood bed in Old Man Yarlo's house.",
+       "s": "Build the waxwood bed in Old Man Yarlo's house.",
+       "k": "buildCampbed",
+       "at": [
+        3242,
+        3398,
+        0
+       ],
+       "hl": {
+        "obj": [
+         40303
+        ]
+       }
+      },
+      {
+       "t": "Build the other table.",
+       "s": "Build the other table.",
+       "k": "buildTable2",
+       "at": [
+        3245,
+        3394,
+        0
+       ],
+       "hl": {
+        "obj": [
+         40223
+        ]
+       }
+      },
+      {
+       "t": "Build the other stool.",
+       "s": "Build the other stool.",
+       "k": "buildStool2",
+       "at": [
+        3244,
+        3394,
+        0
+       ],
+       "hl": {
+        "obj": [
+         40300
+        ]
+       }
+      },
+      {
+       "t": "Build the chair.",
+       "s": "Build the chair.",
+       "k": "buildChair",
+       "at": [
+        3241,
+        3393,
+        0
+       ],
+       "hl": {
+        "obj": [
+         40302
+        ]
+       }
+      },
+      {
+       "t": "Build the table.",
+       "s": "Build the table.",
+       "k": "buildTable",
+       "at": [
+        3240,
+        3394,
+        0
+       ],
+       "hl": {
+        "obj": [
+         40224
+        ]
+       }
+      },
+      {
+       "t": "Build the stool.",
+       "s": "Build the stool.",
+       "k": "buildStool",
+       "at": [
+        3239,
+        3394,
+        0
+       ],
+       "hl": {
+        "obj": [
+         40301
+        ]
+       }
+      },
+      {
+       "t": "Right-click build the carpet.",
+       "s": "Right-click build the carpet.",
+       "k": "buildCarpet",
+       "at": [
+        3239,
+        3395,
+        0
+       ],
+       "hl": {
+        "obj": [
+         40304
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 7,
+     "do": [
+      {
+       "t": "Talk to Old Man Yarlo again after rebuilding the furniture.",
+       "s": "Talk to Old Man Yarlo again after rebuilding the furniture.",
+       "k": "talkToYarloAfterBuildingFurniture",
+       "at": [
+        3240,
+        3395,
+        0
+       ],
+       "hl": {
+        "npc": [
+         10425
+        ]
+       }
+      },
+      {
+       "t": "Search the crates in Old Man Yarlo's house for waxwood logs.",
+       "s": "Search the crates in Old Man Yarlo's house for waxwood logs.",
+       "k": "searchCrate",
+       "at": [
+        3243,
+        3398,
+        0
+       ],
+       "hl": {
+        "obj": [
+         40214
+        ]
+       }
+      },
+      {
+       "t": "Talk to the Sawmill operator north-east of Varrock to make waxwood planks.",
+       "s": "Ask the Sawmill operator to make waxwood planks.",
+       "k": "talkToOperator",
+       "at": [
+        3302,
+        3492,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3101
+        ]
+       }
+      },
+      {
+       "t": "Build the waxwood bed in Old Man Yarlo's house.",
+       "s": "Build the waxwood bed in Old Man Yarlo's house.",
+       "k": "buildCampbed",
+       "at": [
+        3242,
+        3398,
+        0
+       ],
+       "hl": {
+        "obj": [
+         40303
+        ]
+       }
+      },
+      {
+       "t": "Build the other table.",
+       "s": "Build the other table.",
+       "k": "buildTable2",
+       "at": [
+        3245,
+        3394,
+        0
+       ],
+       "hl": {
+        "obj": [
+         40223
+        ]
+       }
+      },
+      {
+       "t": "Build the other stool.",
+       "s": "Build the other stool.",
+       "k": "buildStool2",
+       "at": [
+        3244,
+        3394,
+        0
+       ],
+       "hl": {
+        "obj": [
+         40300
+        ]
+       }
+      },
+      {
+       "t": "Build the chair.",
+       "s": "Build the chair.",
+       "k": "buildChair",
+       "at": [
+        3241,
+        3393,
+        0
+       ],
+       "hl": {
+        "obj": [
+         40302
+        ]
+       }
+      },
+      {
+       "t": "Build the table.",
+       "s": "Build the table.",
+       "k": "buildTable",
+       "at": [
+        3240,
+        3394,
+        0
+       ],
+       "hl": {
+        "obj": [
+         40224
+        ]
+       }
+      },
+      {
+       "t": "Build the stool.",
+       "s": "Build the stool.",
+       "k": "buildStool",
+       "at": [
+        3239,
+        3394,
+        0
+       ],
+       "hl": {
+        "obj": [
+         40301
+        ]
+       }
+      },
+      {
+       "t": "Right-click build the carpet.",
+       "s": "Right-click build the carpet.",
+       "k": "buildCarpet",
+       "at": [
+        3239,
+        3395,
+        0
+       ],
+       "hl": {
+        "obj": [
+         40304
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 8,
+     "do": [
+      {
+       "t": "Talk to Old Man Yarlo again after rebuilding the furniture.",
+       "s": "Talk to Old Man Yarlo again after rebuilding the furniture.",
+       "k": "talkToYarloAfterBuildingFurniture",
+       "at": [
+        3240,
+        3395,
+        0
+       ],
+       "hl": {
+        "npc": [
+         10425
+        ]
+       }
+      },
+      {
+       "t": "Search the crates in Old Man Yarlo's house for waxwood logs.",
+       "s": "Search the crates in Old Man Yarlo's house for waxwood logs.",
+       "k": "searchCrate",
+       "at": [
+        3243,
+        3398,
+        0
+       ],
+       "hl": {
+        "obj": [
+         40214
+        ]
+       }
+      },
+      {
+       "t": "Talk to the Sawmill operator north-east of Varrock to make waxwood planks.",
+       "s": "Ask the Sawmill operator to make waxwood planks.",
+       "k": "talkToOperator",
+       "at": [
+        3302,
+        3492,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3101
+        ]
+       }
+      },
+      {
+       "t": "Build the waxwood bed in Old Man Yarlo's house.",
+       "s": "Build the waxwood bed in Old Man Yarlo's house.",
+       "k": "buildCampbed",
+       "at": [
+        3242,
+        3398,
+        0
+       ],
+       "hl": {
+        "obj": [
+         40303
+        ]
+       }
+      },
+      {
+       "t": "Build the other table.",
+       "s": "Build the other table.",
+       "k": "buildTable2",
+       "at": [
+        3245,
+        3394,
+        0
+       ],
+       "hl": {
+        "obj": [
+         40223
+        ]
+       }
+      },
+      {
+       "t": "Build the other stool.",
+       "s": "Build the other stool.",
+       "k": "buildStool2",
+       "at": [
+        3244,
+        3394,
+        0
+       ],
+       "hl": {
+        "obj": [
+         40300
+        ]
+       }
+      },
+      {
+       "t": "Build the chair.",
+       "s": "Build the chair.",
+       "k": "buildChair",
+       "at": [
+        3241,
+        3393,
+        0
+       ],
+       "hl": {
+        "obj": [
+         40302
+        ]
+       }
+      },
+      {
+       "t": "Build the table.",
+       "s": "Build the table.",
+       "k": "buildTable",
+       "at": [
+        3240,
+        3394,
+        0
+       ],
+       "hl": {
+        "obj": [
+         40224
+        ]
+       }
+      },
+      {
+       "t": "Build the stool.",
+       "s": "Build the stool.",
+       "k": "buildStool",
+       "at": [
+        3239,
+        3394,
+        0
+       ],
+       "hl": {
+        "obj": [
+         40301
+        ]
+       }
+      },
+      {
+       "t": "Right-click build the carpet.",
+       "s": "Right-click build the carpet.",
+       "k": "buildCarpet",
+       "at": [
+        3239,
+        3395,
+        0
+       ],
+       "hl": {
+        "obj": [
+         40304
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 9,
+     "do": [
+      {
+       "t": "Talk to Old Man Yarlo again after rebuilding the furniture.",
+       "s": "Talk to Old Man Yarlo again after rebuilding the furniture.",
+       "k": "talkToYarloAfterBuildingFurniture",
+       "at": [
+        3240,
+        3395,
+        0
+       ],
+       "hl": {
+        "npc": [
+         10425
+        ]
+       }
+      },
+      {
+       "t": "Search the crates in Old Man Yarlo's house for waxwood logs.",
+       "s": "Search the crates in Old Man Yarlo's house for waxwood logs.",
+       "k": "searchCrate",
+       "at": [
+        3243,
+        3398,
+        0
+       ],
+       "hl": {
+        "obj": [
+         40214
+        ]
+       }
+      },
+      {
+       "t": "Talk to the Sawmill operator north-east of Varrock to make waxwood planks.",
+       "s": "Ask the Sawmill operator to make waxwood planks.",
+       "k": "talkToOperator",
+       "at": [
+        3302,
+        3492,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3101
+        ]
+       }
+      },
+      {
+       "t": "Build the waxwood bed in Old Man Yarlo's house.",
+       "s": "Build the waxwood bed in Old Man Yarlo's house.",
+       "k": "buildCampbed",
+       "at": [
+        3242,
+        3398,
+        0
+       ],
+       "hl": {
+        "obj": [
+         40303
+        ]
+       }
+      },
+      {
+       "t": "Build the other table.",
+       "s": "Build the other table.",
+       "k": "buildTable2",
+       "at": [
+        3245,
+        3394,
+        0
+       ],
+       "hl": {
+        "obj": [
+         40223
+        ]
+       }
+      },
+      {
+       "t": "Build the other stool.",
+       "s": "Build the other stool.",
+       "k": "buildStool2",
+       "at": [
+        3244,
+        3394,
+        0
+       ],
+       "hl": {
+        "obj": [
+         40300
+        ]
+       }
+      },
+      {
+       "t": "Build the chair.",
+       "s": "Build the chair.",
+       "k": "buildChair",
+       "at": [
+        3241,
+        3393,
+        0
+       ],
+       "hl": {
+        "obj": [
+         40302
+        ]
+       }
+      },
+      {
+       "t": "Build the table.",
+       "s": "Build the table.",
+       "k": "buildTable",
+       "at": [
+        3240,
+        3394,
+        0
+       ],
+       "hl": {
+        "obj": [
+         40224
+        ]
+       }
+      },
+      {
+       "t": "Build the stool.",
+       "s": "Build the stool.",
+       "k": "buildStool",
+       "at": [
+        3239,
+        3394,
+        0
+       ],
+       "hl": {
+        "obj": [
+         40301
+        ]
+       }
+      },
+      {
+       "t": "Right-click build the carpet.",
+       "s": "Right-click build the carpet.",
+       "k": "buildCarpet",
+       "at": [
+        3239,
+        3395,
+        0
+       ],
+       "hl": {
+        "obj": [
+         40304
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 10,
+     "do": [
+      {
+       "t": "Talk to Marlo in north-east Varrock to complete the quest.",
+       "s": "Talk to Marlo in north-east Varrock to complete the quest.",
+       "k": "talkToMarloToFinish",
+       "at": [
+        3241,
+        3471,
+        0
+       ],
+       "hl": {
+        "npc": [
+         10408
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 11,
+     "do": [
+      {
+       "t": "Talk to Marlo in north-east Varrock to complete the quest.",
+       "s": "Talk to Marlo in north-east Varrock to complete the quest.",
+       "k": "talkToMarloToFinish",
+       "at": [
+        3241,
+        3471,
+        0
+       ],
+       "hl": {
+        "npc": [
+         10408
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 12,
+     "do": [
+      {
+       "t": "Talk to Marlo in north-east Varrock to complete the quest.",
+       "s": "Talk to Marlo in north-east Varrock to complete the quest.",
+       "k": "talkToMarloToFinish",
+       "at": [
+        3241,
+        3471,
+        0
+       ],
+       "hl": {
+        "npc": [
+         10408
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  "S9-48": {
+   "var": [
+    "varbit",
+    3337
+   ],
+   "route": [
+    {
+     "title": "Walkthrough",
+     "steps": [
+      "Talk to Effigy south of East Ardougne (south-west of fairy ring , Ardougne cloak monastery teleport and walk east, or minigame teleport to Fishing Trawler and walk north) to begin the quest. Dialogue: \"Sure, why not.\"",
+      "Talk to Bonafido at the tower's entrance. He will ask to get a builder's costume.",
+      "Wear the full costume. Talk to Bonafido and answer his questions. Dialogue: \"Tea\", \"Whistle for attention\", \"Your legs are getting a bit cold\", \"Carry on, it'll fix itself\"",
+      "Enter the tower while still wearing the full costume"
+     ]
+    },
+    {
+     "title": "=Fix the pressure machine=",
+     "steps": [
+      "Take the following supplies (by searching the crates inside the tower):",
+      "Head up the first staircase on the west side of the tower.",
+      "Fix the pressure machine on the north side of the room.",
+      "Complete the puzzle (turn the valves until all holes are plugged, pull the levers when necessary).",
+      "Once all the holes are plugged, make sure to turn the valves until all of the pipes are filled with water. You should see a message that says \"The machine is working!\" when you have completed the puzzle."
+     ]
+    },
+    {
+     "title": "=Fix the pipe machine=",
+     "steps": [
+      "Take the following supplies:",
+      "Head up two floors.",
+      "Fix the pipe machine on the south side of the room. You should see a message that says \"The machine is working!\" when you have completed the puzzle."
+     ]
+    },
+    {
+     "title": "=Fix the cage=",
+     "steps": [
+      "Take the following supplies:",
+      "Head up to the top floor of the tower.",
+      "Fix the cage.",
+      "Complete the puzzle. You should see a message that says \"The cage is complete!\" when you have completed the puzzle."
+     ]
+    },
+    {
+     "title": "=Finishing up=",
+     "steps": [
+      "Talk to Effigy.",
+      "Go to the top floor for a cutscene involving the alchemists and the Homunculus.",
+      "Go outside to talk to Effigy.",
+      "Return to the top floor and answer the Homunculus' questions until the bar is filled with either 'Logic' or 'Magic'.",
+      "Talk to Effigy again.",
+      "Go to the dungeon floor inside the tower via the trapdoor to the south and talk to the Homunculus to the north.",
+      "Optional: Medium Ardougne Diary task - kill a \"swordchick\" (requires 1 raw swordfish and 1 raw chicken.",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Talk to Effigy outside the Tower of Life.",
+       "s": "Talk to Effigy outside the Tower of Life.",
+       "k": "talkToEffigy",
+       "at": [
+        2637,
+        3218,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3585
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 2,
+     "do": [
+      {
+       "t": "Talk to Bonafido.",
+       "s": "Talk to Bonafido.",
+       "k": "talkToBonafido",
+       "at": [
+        2651,
+        3228,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3587
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 4,
+     "do": [
+      {
+       "t": "Get the Hard Hat from 'Black-eye'.",
+       "s": "Get the Hard Hat from 'Black-eye'.",
+       "k": "talkToBlackeye",
+       "hl": {
+        "npc": [
+         3596
+        ]
+       }
+      },
+      {
+       "t": "Talk to 'No fingers'.",
+       "s": "Talk to 'No fingers'.",
+       "k": "talkToNoFingers",
+       "at": [
+        2645,
+        3224,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3597
+        ]
+       }
+      },
+      {
+       "t": "Pickpocket 'No fingers'.",
+       "s": "Pickpocket 'No fingers'.",
+       "k": "pickpocketNoFingers",
+       "at": [
+        2645,
+        3224,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3597
+        ]
+       }
+      },
+      {
+       "t": "Get a Beer for 'The Guns'.",
+       "s": "Get a Beer for 'The Guns'.",
+       "k": "getBeerForGuns",
+       "has": "Beer"
+      },
+      {
+       "t": "Talk to 'The Guns'.",
+       "s": "Talk to 'The Guns'.",
+       "k": "talkToGuns",
+       "at": [
+        2643,
+        3226,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3599
+        ]
+       }
+      },
+      {
+       "t": "Search the bushes to the south for some Builder's Trousers.",
+       "s": "Search the bushes to the south for some Builder's Trousers.",
+       "k": "getTrousers",
+       "hl": {
+        "obj": [
+         21924
+        ]
+       }
+      },
+      {
+       "t": "Speak to Bonafido wearing the Builder's outfit.",
+       "s": "Speak to Bonafido wearing the Builder's outfit.",
+       "k": "talkToBonafidoWithOutfit",
+       "hl": {
+        "npc": [
+         3587
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 6,
+     "do": [
+      {
+       "t": "Enter the tower.",
+       "s": "Enter the tower.",
+       "k": "enterTower",
+       "at": [
+        2649,
+        3225,
+        0
+       ],
+       "hl": {
+        "obj": [
+         21814
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 8,
+     "do": [
+      {
+       "t": "Enter the tower.",
+       "s": "Enter the tower.",
+       "k": "enterTower",
+       "at": [
+        2649,
+        3225,
+        0
+       ],
+       "hl": {
+        "obj": [
+         21814
+        ]
+       }
+      },
+      {
+       "t": "Get 3 Metal sheets.",
+       "s": "Get 3 Metal sheets.",
+       "k": "fixPressureMachineGetSheets",
+       "at": [
+        2643,
+        3219,
+        0
+       ],
+       "hl": {
+        "obj": [
+         21913
+        ]
+       }
+      },
+      {
+       "t": "Get 4 Coloured balls.",
+       "s": "Get 4 Coloured balls.",
+       "k": "fixPressureMachineGetBalls",
+       "at": [
+        2644,
+        3216,
+        0
+       ],
+       "hl": {
+        "obj": [
+         21914
+        ]
+       }
+      },
+      {
+       "t": "Get 4 Valve wheels.",
+       "s": "Get 4 Valve wheels.",
+       "k": "fixPressureMachineGetWheels",
+       "at": [
+        2655,
+        3217,
+        0
+       ],
+       "hl": {
+        "obj": [
+         21912
+        ]
+       }
+      },
+      {
+       "t": "Go downstairs.",
+       "s": "Go downstairs.",
+       "k": "climbDownToFloor2",
+       "at": [
+        2647,
+        3221,
+        3
+       ],
+       "hl": {
+        "obj": [
+         17975
+        ]
+       }
+      },
+      {
+       "t": "Go downstairs.",
+       "s": "Go downstairs.",
+       "k": "climbDownToFloor1",
+       "at": [
+        2653,
+        3220,
+        2
+       ],
+       "hl": {
+        "obj": [
+         21872
+        ]
+       }
+      },
+      {
+       "t": "Go downstairs.",
+       "s": "Go downstairs.",
+       "k": "climbDownToGround",
+       "at": [
+        2645,
+        3220,
+        1
+       ],
+       "hl": {
+        "obj": [
+         21872
+        ]
+       }
+      },
+      {
+       "t": "Go upstairs.",
+       "s": "Go upstairs.",
+       "k": "climbUpToFloor1",
+       "at": [
+        2645,
+        3220,
+        0
+       ],
+       "hl": {
+        "obj": [
+         21871
+        ]
+       }
+      },
+      {
+       "t": "Build the Pressure Machine.",
+       "s": "Build the Pressure Machine.",
+       "k": "buildPressureMachine",
+       "at": [
+        2649,
+        3223,
+        1
+       ],
+       "hl": {
+        "obj": [
+         21873
+        ]
+       }
+      },
+      {
+       "t": "Fix the pressure machine: turn the valves and pull the levers until every hole is plugged, then turn them until every pipe fills with water.",
+       "s": "Fix the pressure machine: plug every hole, then fill every pipe.",
+       "k": "solvePressureMachinePuzzle"
+      },
+      {
+       "t": "Get 4 Pipes.",
+       "s": "Get 4 Pipes.",
+       "k": "fixPipeMachineGetPipes",
+       "at": [
+        2648,
+        3222,
+        0
+       ],
+       "hl": {
+        "obj": [
+         21909
+        ]
+       }
+      },
+      {
+       "t": "Get 5 Pipe rings.",
+       "s": "Get 5 Pipe rings.",
+       "k": "fixPipeMachineGetRings",
+       "at": [
+        2652,
+        3222,
+        0
+       ],
+       "hl": {
+        "obj": [
+         21910
+        ]
+       }
+      },
+      {
+       "t": "Get 6 Rivets.",
+       "s": "Get 6 Rivets.",
+       "k": "fixPipeMachineGetRivets",
+       "at": [
+        2654,
+        3220,
+        0
+       ],
+       "hl": {
+        "obj": [
+         21911
+        ]
+       }
+      },
+      {
+       "t": "Go upstairs.",
+       "s": "Go upstairs.",
+       "k": "climbUpToFloor2",
+       "at": [
+        2653,
+        3220,
+        1
+       ],
+       "hl": {
+        "obj": [
+         21871
+        ]
+       }
+      },
+      {
+       "t": "Build the Pipe Machine.",
+       "s": "Build the Pipe Machine.",
+       "k": "buildPipeMachine",
+       "at": [
+        2650,
+        3214,
+        2
+       ],
+       "hl": {
+        "obj": [
+         21943
+        ]
+       }
+      },
+      {
+       "t": "Fix the pipe machine on the south side of the room: connect the pipes until 'The machine is working!' appears.",
+       "s": "Connect the pipe machine until the machine is working.",
+       "k": "solvePipeMachinePuzzle"
+      },
+      {
+       "t": "Get 5 Metal bars.",
+       "s": "Get 5 Metal bars.",
+       "k": "fixCageGetBars",
+       "at": [
+        2650,
+        3212,
+        0
+       ],
+       "hl": {
+        "obj": [
+         21917
+        ]
+       }
+      },
+      {
+       "t": "Get 4 Binding fluid.",
+       "s": "Get 4 Binding fluid.",
+       "k": "fixCageGetFluid",
+       "at": [
+        2651,
+        3213,
+        0
+       ],
+       "hl": {
+        "obj": [
+         21915
+        ]
+       }
+      },
+      {
+       "t": "Go upstairs.",
+       "s": "Go upstairs.",
+       "k": "climbUpToFloor3",
+       "at": [
+        2647,
+        3221,
+        2
+       ],
+       "hl": {
+        "obj": [
+         17974
+        ]
+       }
+      },
+      {
+       "t": "Build the cage.",
+       "s": "Build the cage.",
+       "k": "buildCage",
+       "at": [
+        2649,
+        3218,
+        3
+       ],
+       "hl": {
+        "obj": [
+         21941
+        ]
+       }
+      },
+      {
+       "t": "Build the cage on the top floor from the bars until 'The cage is complete!' appears.",
+       "s": "Build the cage on the top floor.",
+       "k": "solveCagePuzzle"
+      },
+      {
+       "t": "Go back and talk to Effigy.",
+       "s": "Go back and talk to Effigy.",
+       "k": "talkToEffigyAgain",
+       "at": [
+        2637,
+        3218,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3585
+        ]
+       }
+      },
+      {
+       "t": "Go back downstairs.",
+       "s": "Go back downstairs",
+       "k": "climbBackDownToFloor2",
+       "at": [
+        2647,
+        3221,
+        3
+       ],
+       "hl": {
+        "obj": [
+         17975
+        ]
+       }
+      },
+      {
+       "t": "Go back downstairs.",
+       "s": "Go back downstairs",
+       "k": "climbBackDownToFloor1",
+       "at": [
+        2653,
+        3220,
+        2
+       ],
+       "hl": {
+        "obj": [
+         21872
+        ]
+       }
+      },
+      {
+       "t": "Go back downstairs.",
+       "s": "Go back downstairs",
+       "k": "climbBackDownToGround",
+       "at": [
+        2645,
+        3220,
+        1
+       ],
+       "hl": {
+        "obj": [
+         21872
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 10,
+     "do": [
+      {
+       "t": "Go back into the tower.",
+       "s": "Go back into the tower.",
+       "k": "enterTowerAgain",
+       "at": [
+        2649,
+        3225,
+        0
+       ],
+       "hl": {
+        "obj": [
+         21814
+        ]
+       }
+      },
+      {
+       "t": "Go back upstairs.",
+       "s": "Go back upstairs.",
+       "k": "climbBackUpToFloor3",
+       "at": [
+        2647,
+        3221,
+        2
+       ],
+       "hl": {
+        "obj": [
+         17974
+        ]
+       }
+      },
+      {
+       "t": "Go back upstairs.",
+       "s": "Go back upstairs.",
+       "k": "climbBackUpToFloor2",
+       "at": [
+        2653,
+        3220,
+        1
+       ],
+       "hl": {
+        "obj": [
+         21871
+        ]
+       }
+      },
+      {
+       "t": "Go back upstairs.",
+       "s": "Go back upstairs.",
+       "k": "climbBackUpToFloor1",
+       "at": [
+        2645,
+        3220,
+        0
+       ],
+       "hl": {
+        "obj": [
+         21871
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 11,
+     "do": [
+      {
+       "t": "Go back and talk to Effigy.",
+       "s": "Go back and talk to Effigy.",
+       "k": "talkToEffigyAgain",
+       "at": [
+        2637,
+        3218,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3585
+        ]
+       }
+      },
+      {
+       "t": "Go back downstairs.",
+       "s": "Go back downstairs",
+       "k": "climbBackDownToGround",
+       "at": [
+        2645,
+        3220,
+        1
+       ],
+       "hl": {
+        "obj": [
+         21872
+        ]
+       }
+      },
+      {
+       "t": "Go back downstairs.",
+       "s": "Go back downstairs",
+       "k": "climbBackDownToFloor1",
+       "at": [
+        2653,
+        3220,
+        2
+       ],
+       "hl": {
+        "obj": [
+         21872
+        ]
+       }
+      },
+      {
+       "t": "Go back downstairs.",
+       "s": "Go back downstairs",
+       "k": "climbBackDownToFloor2",
+       "at": [
+        2647,
+        3221,
+        3
+       ],
+       "hl": {
+        "obj": [
+         17975
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 12,
+     "do": [
+      {
+       "t": "Go back into the tower.",
+       "s": "Go back into the tower.",
+       "k": "enterTowerAgain",
+       "at": [
+        2649,
+        3225,
+        0
+       ],
+       "hl": {
+        "obj": [
+         21814
+        ]
+       }
+      },
+      {
+       "t": "Talk to the homunculus at the top of the tower. For Logic, answer 1, 3, 3, 1, 2, 2, 3.",
+       "s": "Talk to the homunculus. Logic answers: 1, 3, 3, 1, 2, 2, 3.",
+       "k": "talkToHomunculusTopOfTower",
+       "at": [
+        2649,
+        3218,
+        3
+       ],
+       "hl": {
+        "npc": [
+         3590
+        ]
+       }
+      },
+      {
+       "t": "Go back upstairs.",
+       "s": "Go back upstairs.",
+       "k": "climbBackUpToFloor3",
+       "at": [
+        2647,
+        3221,
+        2
+       ],
+       "hl": {
+        "obj": [
+         17974
+        ]
+       }
+      },
+      {
+       "t": "Go back upstairs.",
+       "s": "Go back upstairs.",
+       "k": "climbBackUpToFloor2",
+       "at": [
+        2653,
+        3220,
+        1
+       ],
+       "hl": {
+        "obj": [
+         21871
+        ]
+       }
+      },
+      {
+       "t": "Go back upstairs.",
+       "s": "Go back upstairs.",
+       "k": "climbBackUpToFloor1",
+       "at": [
+        2645,
+        3220,
+        0
+       ],
+       "hl": {
+        "obj": [
+         21871
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 14,
+     "do": [
+      {
+       "t": "Go back into the tower.",
+       "s": "Go back into the tower.",
+       "k": "enterTowerAgain",
+       "at": [
+        2649,
+        3225,
+        0
+       ],
+       "hl": {
+        "obj": [
+         21814
+        ]
+       }
+      },
+      {
+       "t": "Talk to the homunculus at the top of the tower. For Logic, answer 1, 3, 3, 1, 2, 2, 3.",
+       "s": "Talk to the homunculus. Logic answers: 1, 3, 3, 1, 2, 2, 3.",
+       "k": "talkToHomunculusTopOfTower",
+       "at": [
+        2649,
+        3218,
+        3
+       ],
+       "hl": {
+        "npc": [
+         3590
+        ]
+       }
+      },
+      {
+       "t": "Go back upstairs.",
+       "s": "Go back upstairs.",
+       "k": "climbBackUpToFloor3",
+       "at": [
+        2647,
+        3221,
+        2
+       ],
+       "hl": {
+        "obj": [
+         17974
+        ]
+       }
+      },
+      {
+       "t": "Go back upstairs.",
+       "s": "Go back upstairs.",
+       "k": "climbBackUpToFloor2",
+       "at": [
+        2653,
+        3220,
+        1
+       ],
+       "hl": {
+        "obj": [
+         21871
+        ]
+       }
+      },
+      {
+       "t": "Go back upstairs.",
+       "s": "Go back upstairs.",
+       "k": "climbBackUpToFloor1",
+       "at": [
+        2645,
+        3220,
+        0
+       ],
+       "hl": {
+        "obj": [
+         21871
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 16,
+     "do": [
+      {
+       "t": "Go back and talk to Effigy.",
+       "s": "Go back and talk to Effigy.",
+       "k": "talkToEffigyAgain",
+       "at": [
+        2637,
+        3218,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3585
+        ]
+       }
+      },
+      {
+       "t": "Go back downstairs.",
+       "s": "Go back downstairs",
+       "k": "climbBackDownToGround",
+       "at": [
+        2645,
+        3220,
+        1
+       ],
+       "hl": {
+        "obj": [
+         21872
+        ]
+       }
+      },
+      {
+       "t": "Go back downstairs.",
+       "s": "Go back downstairs",
+       "k": "climbBackDownToFloor1",
+       "at": [
+        2653,
+        3220,
+        2
+       ],
+       "hl": {
+        "obj": [
+         21872
+        ]
+       }
+      },
+      {
+       "t": "Go back downstairs.",
+       "s": "Go back downstairs",
+       "k": "climbBackDownToFloor2",
+       "at": [
+        2647,
+        3221,
+        3
+       ],
+       "hl": {
+        "obj": [
+         17975
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 17,
+     "do": [
+      {
+       "t": "Enter the tower.",
+       "s": "Enter the tower.",
+       "k": "enterTower",
+       "at": [
+        2649,
+        3225,
+        0
+       ],
+       "hl": {
+        "obj": [
+         21814
+        ]
+       }
+      },
+      {
+       "t": "Go downstairs.",
+       "s": "Go downstairs.",
+       "k": "climbDownToBasement",
+       "at": [
+        2648,
+        3212,
+        0
+       ],
+       "hl": {
+        "obj": [
+         21944
+        ]
+       }
+      },
+      {
+       "t": "Talk to the homunculus.",
+       "s": "Talk to the homunculus.",
+       "k": "talkToHomunculusBasement",
+       "at": [
+        3040,
+        4400,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3588
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  "S9-49": {
+   "var": [
+    "varbit",
+    9844
+   ],
+   "route": [
+    {
+     "title": "Walkthrough",
+     "steps": [
+      "Speak to Marcellus at the Locus Oasis.",
+      "Speak to the blue frogs on the north-east side of the pond.",
+      "Return to Marcellus. If you do not have an axe, take the bronze axe from the logs next to him.",
+      "Speak to either Gary or Sue again to arrange an election.",
+      "Go south and speak to either Jane or Dave, the yellow frogs.",
+      "Chop down the orange tree near them to distract them.",
+      "While they are distracted, sabotage the lily pad in the pond near them.",
+      "Return to Gary or Sue to start the election.",
+      "Return to Marcellus.",
+      "Return to Gary or Sue to discuss framing the flies.",
+      "Enter Marcellus' house and open the chest using the combination NALIA to obtain the plushy.",
+      "Plant the plushy in the capybara dung east of Marcellus and south of the orange tree.",
+      "Defeat Cuthbert (1 Hitpoint).",
+      "Tell Marcellus about the plushy.",
+      "Return to Gary or Sue to resolve the dispute.",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Talk to Marcellus near the Locus Oasis south of Civitas illa Fortis. AJP Fairy ring is fastest.",
+       "s": "Talk to Marcellus at the Locus Oasis (fairy ring AJP).",
+       "k": "talkToMarcellus",
+       "at": [
+        1683,
+        2973,
+        0
+       ],
+       "hl": {
+        "npc": [
+         12935
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 2,
+     "do": [
+      {
+       "t": "Talk to the blue frogs in the north-east of the oasis.",
+       "s": "Talk to the blue frogs in the north-east of the oasis.",
+       "k": "talkToBlueFrogs",
+       "at": [
+        1694,
+        2996,
+        0
+       ],
+       "hl": {
+        "npc": [
+         12938
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 4,
+     "do": [
+      {
+       "t": "Return to Marcellus.",
+       "s": "Return to Marcellus.",
+       "k": "talkToMarcellus2",
+       "at": [
+        1683,
+        2973,
+        0
+       ],
+       "hl": {
+        "npc": [
+         12935
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 6,
+     "do": [
+      {
+       "t": "Return to the blue frogs Sue and Gary in the north-east of the oasis.",
+       "s": "Return to the blue frogs Sue and Gary in the north-east of the oasis.",
+       "k": "talkToGary",
+       "at": [
+        1694,
+        2996,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "at": 8,
+     "do": [
+      {
+       "t": "Talk to the yellow frogs Jane and Dave to the south of Gary.",
+       "s": "Talk to the yellow frogs Jane and Dave to the south of Gary.",
+       "k": "talkToYellowFrogs",
+       "at": [
+        1696,
+        2982,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "at": 10,
+     "do": [
+      {
+       "t": "Take the axe from the logs next to Marcellus.",
+       "s": "Take the axe from the logs next to Marcellus.",
+       "k": "pickUpAxe",
+       "at": [
+        1683,
+        2975,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5581
+        ]
+       }
+      },
+      {
+       "t": "Chop down the orange tree next to the yellow frog.",
+       "s": "Chop down the orange tree next to the yellow frog.",
+       "k": "chopOrangeTree",
+       "at": [
+        1695,
+        2980,
+        0
+       ],
+       "hl": {
+        "obj": [
+         52977
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 12,
+     "do": [
+      {
+       "t": "Sabotage the lily pad near to the yellow frogs.",
+       "s": "Sabotage the lily pad near to the yellow frogs.",
+       "k": "sabotageLilyPad",
+       "at": [
+        1692,
+        2983,
+        0
+       ],
+       "hl": {
+        "obj": [
+         50891
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 14,
+     "do": [
+      {
+       "t": "Return to Sue and Gary in the north-east of the oasis.",
+       "s": "Return to Sue and Gary in the north-east of the oasis.",
+       "k": "talkToGary2",
+       "at": [
+        1694,
+        2996,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "at": 16,
+     "do": [
+      {
+       "t": "Return to Sue and Gary in the north-east of the oasis.",
+       "s": "Return to Sue and Gary in the north-east of the oasis.",
+       "k": "talkToGary2",
+       "at": [
+        1694,
+        2996,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "at": 18,
+     "do": [
+      {
+       "t": "Return to Marcellus.",
+       "s": "Return to Marcellus.",
+       "k": "talkToMarcellus3",
+       "at": [
+        1683,
+        2973,
+        0
+       ],
+       "hl": {
+        "npc": [
+         12935
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 20,
+     "do": [
+      {
+       "t": "Go talk to Sue and Gary to discuss framing the flies.",
+       "s": "Go talk to Sue and Gary to discuss framing the flies.",
+       "k": "talkToGaryToBlame",
+       "at": [
+        1694,
+        2996,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "at": 22,
+     "do": [
+      {
+       "t": "Search the chest in the building next to Marcellus. The code is 'NALIA'.",
+       "s": "Search the chest next to Marcellus. The code is NALIA.",
+       "k": "openChest",
+       "at": [
+        1676,
+        2974,
+        0
+       ]
+      },
+      {
+       "t": "Open the chest in Marcellus' house with the code NALIA.",
+       "s": "Open the chest in Marcellus' house with the code NALIA.",
+       "k": "enterCode"
+      }
+     ]
+    },
+    {
+     "at": 24,
+     "do": [
+      {
+       "t": "Plant the plushy in the capybara dung east of Marcellus, south of the orange tree.",
+       "s": "Plant the plushy in the capybara dung east of Marcellus.",
+       "k": "plantPlushy",
+       "at": [
+        1694,
+        2976,
+        0
+       ],
+       "hl": {
+        "obj": [
+         52979
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 26,
+     "do": [
+      {
+       "t": "Inspect the dung east of Marcellus, south of the orange tree.",
+       "s": "Inspect the dung east of Marcellus, south of the orange tree.",
+       "k": "inspectDung",
+       "at": [
+        1694,
+        2976,
+        0
+       ],
+       "hl": {
+        "obj": [
+         52979
+        ]
+       }
+      },
+      {
+       "t": "Defeat Cuthbert, Lord of Dread.",
+       "s": "Defeat Cuthbert, Lord of Dread.",
+       "k": "defeatCuthbert",
+       "at": [
+        1688,
+        2977,
+        0
+       ],
+       "hl": {
+        "npc": [
+         12957
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 28,
+     "do": [
+      {
+       "t": "Tell Marcellus about the plushy.",
+       "s": "Tell Marcellus about the plushy.",
+       "k": "talkToMarcellusEnd",
+       "at": [
+        1683,
+        2973,
+        0
+       ],
+       "hl": {
+        "npc": [
+         12935
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 30,
+     "do": [
+      {
+       "t": "Talk to Sue and Gary to resolve the dispute!",
+       "s": "Talk to Sue and Gary to resolve the dispute!",
+       "k": "talkToGaryEnd",
+       "at": [
+        1694,
+        2996,
+        0
+       ]
+      }
+     ]
+    }
+   ]
   }
  }
 }

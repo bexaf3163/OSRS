@@ -1,0 +1,374 @@
+{
+ "title": "The Ribbiting Tale of a Lily Pad Labour Dispute",
+ "cls": "TheRibbitingTaleOfALilyPadLabourDispute",
+ "var": [
+  "varbit",
+  9844
+ ],
+ "members": true,
+ "revision": "b9b93706618a7b7fe7e5ea30e9a9ef35ba09673e",
+ "machine": {
+  "stages": {
+   "0": {
+    "s": "talkToMarcellus"
+   },
+   "2": {
+    "s": "talkToBlueFrogs"
+   },
+   "4": {
+    "s": "talkToMarcellus2"
+   },
+   "6": {
+    "s": "talkToGary"
+   },
+   "8": {
+    "s": "talkToYellowFrogs"
+   },
+   "10": "n1",
+   "12": {
+    "s": "sabotageLilyPad"
+   },
+   "14": {
+    "s": "talkToGary2"
+   },
+   "16": {
+    "s": "talkToGary2"
+   },
+   "18": {
+    "s": "talkToMarcellus3"
+   },
+   "20": {
+    "s": "talkToGaryToBlame"
+   },
+   "22": "n2",
+   "24": {
+    "s": "plantPlushy"
+   },
+   "26": "n3",
+   "28": {
+    "s": "talkToMarcellusEnd"
+   },
+   "30": {
+    "s": "talkToGaryEnd"
+   }
+  },
+  "nodes": {
+   "n1": {
+    "n": "goChopOrangeTree",
+    "c": [
+     [
+      {
+       "o": "item",
+       "nm": "Any axe",
+       "ids": [
+        23673,
+        28220,
+        20011,
+        25110,
+        25066,
+        13241,
+        25371,
+        13242,
+        25378,
+        6739,
+        28217,
+        1359,
+        28214,
+        23279,
+        1357,
+        28211,
+        1355,
+        28208,
+        1361,
+        28205,
+        1353,
+        28202,
+        1349,
+        28199,
+        1351,
+        28196
+       ]
+      },
+      {
+       "s": "chopOrangeTree"
+      }
+     ]
+    ],
+    "d": {
+     "s": "pickUpAxe"
+    }
+   },
+   "n2": {
+    "n": "goOpenChest",
+    "c": [
+     [
+      {
+       "o": "wt",
+       "g": 809,
+       "c": 5,
+       "m": [
+        "Confirm"
+       ],
+       "cc": 9
+      },
+      {
+       "s": "enterCode"
+      }
+     ]
+    ],
+    "d": {
+     "s": "openChest"
+    }
+   },
+   "n3": {
+    "n": "goDefeatCuthbert",
+    "c": [
+     [
+      {
+       "o": "?",
+       "d": "NpcRequirement"
+      },
+      {
+       "s": "defeatCuthbert"
+      }
+     ]
+    ],
+    "d": {
+     "s": "inspectDung"
+    }
+   }
+  },
+  "reqs": {},
+  "alias": {
+   "pickUpAxe": [
+    "chopOrangeTree"
+   ],
+   "chestStep": [
+    "openChest"
+   ],
+   "enterCode": [
+    "openChest"
+   ],
+   "inspectDung": [
+    "defeatCuthbert"
+   ]
+  }
+ },
+ "unknown": {
+  "NpcRequirement": 1
+ },
+ "steps": {
+  "talkToMarcellus": {
+   "typ": "NpcStep",
+   "wp": [
+    1683,
+    2973,
+    0
+   ],
+   "ids": [
+    12935
+   ],
+   "text": "Talk to Marcellus near the Locus Oasis south of Civitas illa Fortis. AJP Fairy ring is fastest."
+  },
+  "talkToBlueFrogs": {
+   "typ": "NpcStep",
+   "wp": [
+    1694,
+    2996,
+    0
+   ],
+   "ids": [
+    12938
+   ],
+   "text": "Talk to the blue frogs in the north-east of the oasis."
+  },
+  "talkToMarcellus2": {
+   "typ": "NpcStep",
+   "wp": [
+    1683,
+    2973,
+    0
+   ],
+   "ids": [
+    12935
+   ],
+   "text": "Return to Marcellus."
+  },
+  "talkToGary": {
+   "typ": "NpcStep",
+   "wp": [
+    1694,
+    2996,
+    0
+   ],
+   "ids": [],
+   "text": "Return to the blue frogs Sue and Gary in the north-east of the oasis."
+  },
+  "talkToYellowFrogs": {
+   "typ": "NpcStep",
+   "wp": [
+    1696,
+    2982,
+    0
+   ],
+   "ids": [],
+   "text": "Talk to the yellow frogs Jane and Dave to the south of Gary."
+  },
+  "pickUpAxe": {
+   "typ": "ObjectStep",
+   "wp": [
+    1683,
+    2975,
+    0
+   ],
+   "ids": [
+    5581
+   ],
+   "text": "Take the axe from the logs next to Marcellus."
+  },
+  "chopOrangeTree": {
+   "typ": "ObjectStep",
+   "wp": [
+    1695,
+    2980,
+    0
+   ],
+   "ids": [
+    52977
+   ],
+   "text": "Chop down the orange tree next to the yellow frog."
+  },
+  "sabotageLilyPad": {
+   "typ": "ObjectStep",
+   "wp": [
+    1692,
+    2983,
+    0
+   ],
+   "ids": [
+    50891
+   ],
+   "text": "Sabotage the lily pad near to the yellow frogs."
+  },
+  "talkToGary2": {
+   "typ": "NpcStep",
+   "wp": [
+    1694,
+    2996,
+    0
+   ],
+   "ids": [],
+   "text": "Return to Sue and Gary in the north-east of the oasis."
+  },
+  "talkToMarcellus3": {
+   "typ": "NpcStep",
+   "wp": [
+    1683,
+    2973,
+    0
+   ],
+   "ids": [
+    12935
+   ],
+   "text": "Return to Marcellus."
+  },
+  "talkToGaryToBlame": {
+   "typ": "NpcStep",
+   "wp": [
+    1694,
+    2996,
+    0
+   ],
+   "ids": [],
+   "text": "Go talk to Sue and Gary to discuss framing the flies."
+  },
+  "openChest": {
+   "typ": "PuzzleWrapperStep",
+   "wp": [
+    1676,
+    2974,
+    0
+   ],
+   "ids": [
+    50895
+   ],
+   "text": "Search the chest in the building next to Marcellus. The code is 'NALIA'."
+  },
+  "chestStep": {
+   "typ": "ObjectStep",
+   "wp": [
+    1676,
+    2974,
+    0
+   ],
+   "ids": [
+    50895
+   ],
+   "text": "Search the chest in the building next to Marcellus. The code is 'NALIA'."
+  },
+  "enterCode": {
+   "typ": "PuzzleWrapperStep",
+   "wp": null,
+   "ids": [],
+   "text": "Work out how to open the chest in Marcellus' house."
+  },
+  "plantPlushy": {
+   "typ": "ObjectStep",
+   "wp": [
+    1694,
+    2976,
+    0
+   ],
+   "ids": [
+    52979
+   ],
+   "text": "Plant the plushy in the capybara dung east of Marcellus, south of the orange tree."
+  },
+  "inspectDung": {
+   "typ": "ObjectStep",
+   "wp": [
+    1694,
+    2976,
+    0
+   ],
+   "ids": [
+    52979
+   ],
+   "text": "Inspect the dung east of Marcellus, south of the orange tree."
+  },
+  "defeatCuthbert": {
+   "typ": "NpcStep",
+   "wp": [
+    1688,
+    2977,
+    0
+   ],
+   "ids": [
+    12957
+   ],
+   "text": "Defeat Cuthbert, Lord of Dread."
+  },
+  "talkToMarcellusEnd": {
+   "typ": "NpcStep",
+   "wp": [
+    1683,
+    2973,
+    0
+   ],
+   "ids": [
+    12935
+   ],
+   "text": "Tell Marcellus about the plushy."
+  },
+  "talkToGaryEnd": {
+   "typ": "NpcStep",
+   "wp": [
+    1694,
+    2996,
+    0
+   ],
+   "ids": [],
+   "text": "Talk to Sue and Gary to resolve the dispute!"
+  }
+ }
+}
