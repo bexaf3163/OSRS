@@ -1,0 +1,893 @@
+{
+ "title": "Twilight's Promise",
+ "cls": "TwilightsPromise",
+ "var": [
+  "varbit",
+  9649
+ ],
+ "members": true,
+ "revision": "b9b93706618a7b7fe7e5ea30e9a9ef35ba09673e",
+ "machine": {
+  "stages": {
+   "0": "n1",
+   "2": "n1",
+   "4": {
+    "s": "talkToMetzli"
+   },
+   "6": {
+    "s": "talkToMetzli"
+   },
+   "8": "n2",
+   "10": "n2",
+   "12": "n3",
+   "14": "n4",
+   "16": "n4",
+   "18": "n4",
+   "20": "n4",
+   "22": "n9",
+   "24": "n10",
+   "26": "n10",
+   "28": "n11",
+   "30": "n11",
+   "32": "n11",
+   "34": {
+    "s": "talkToRegulusForTransport"
+   },
+   "36": {
+    "s": "feedRenu"
+   },
+   "38": "n12",
+   "40": "n12",
+   "42": {
+    "s": "talkToMetzliNearTemple"
+   },
+   "44": "n13",
+   "46": {
+    "s": "finishQuest"
+   },
+   "48": {
+    "s": "finishQuest"
+   }
+  },
+  "nodes": {
+   "n1": {
+    "n": "goStart",
+    "c": [
+     [
+      {
+       "o": "vb",
+       "id": 9650,
+       "v": 1
+      },
+      {
+       "s": "talkToEnnius"
+      }
+     ]
+    ],
+    "d": {
+     "s": "talkToRegulusStart"
+    }
+   },
+   "n2": {
+    "n": "goTalkToPrince",
+    "c": [
+     [
+      "r1",
+      {
+       "s": "talkToPrince"
+      }
+     ]
+    ],
+    "d": {
+     "s": "enterCrypt"
+    }
+   },
+   "n3": {
+    "n": "returnToEnnius",
+    "c": [
+     [
+      "r1",
+      {
+       "s": "leaveCrypt"
+      }
+     ]
+    ],
+    "d": {
+     "s": "talkToEnnius2"
+    }
+   },
+   "n4": {
+    "n": "findKnights",
+    "c": [
+     [
+      {
+       "o": "nor",
+       "a": [
+        {
+         "o": "vb",
+         "id": 9829,
+         "op": ">=",
+         "v": 3
+        }
+       ]
+      },
+      "n5"
+     ],
+     [
+      {
+       "o": "nor",
+       "a": [
+        {
+         "o": "vb",
+         "id": 9830,
+         "op": ">=",
+         "v": 3
+        }
+       ]
+      },
+      "n6"
+     ],
+     [
+      {
+       "o": "nor",
+       "a": [
+        {
+         "o": "vb",
+         "id": 9831,
+         "op": ">=",
+         "v": 3
+        }
+       ]
+      },
+      "n7"
+     ]
+    ],
+    "d": "n8"
+   },
+   "n5": {
+    "n": "findBazaarKnight",
+    "c": [
+     [
+      {
+       "o": "item",
+       "nm": "Stolen amulet",
+       "ids": [
+        28976
+       ],
+       "bank": 1
+      },
+      {
+       "s": "returnAmulet"
+      }
+     ],
+     [
+      {
+       "o": "vb",
+       "id": 9829,
+       "op": ">=",
+       "v": 1
+      },
+      {
+       "s": "pickpocketCitizen"
+      }
+     ]
+    ],
+    "d": {
+     "s": "talkToBazaarKnight"
+    }
+   },
+   "n6": {
+    "n": "findCothonKnight",
+    "c": [
+     [
+      {
+       "o": "vb",
+       "id": 9830,
+       "op": ">=",
+       "v": 2
+      },
+      {
+       "s": "returnToCothonKnight"
+      }
+     ],
+     [
+      {
+       "o": "vb",
+       "id": 9830,
+       "op": ">=",
+       "v": 1
+      },
+      {
+       "s": "searchCrate"
+      }
+     ]
+    ],
+    "d": {
+     "s": "talkToCothonKnight"
+    }
+   },
+   "n7": {
+    "n": "findPubKnights",
+    "c": [
+     [
+      {
+       "o": "vb",
+       "id": 9831,
+       "op": ">=",
+       "v": 2
+      },
+      {
+       "s": "talkToPubKnightAtFountain"
+      }
+     ],
+     [
+      {
+       "o": "vp",
+       "id": 447,
+       "vs": [
+        13393,
+        12912
+       ],
+       "sh": 16
+      },
+      {
+       "s": "takePubKnightsToFountain"
+      }
+     ]
+    ],
+    "d": {
+     "s": "talkToPubKnights"
+    }
+   },
+   "n8": {
+    "n": "findColosseumKnight",
+    "c": [
+     [
+      {
+       "o": "and",
+       "a": [
+        "r2",
+        {
+         "o": "vb",
+         "id": 9832,
+         "op": ">=",
+         "v": 2
+        }
+       ]
+      },
+      {
+       "s": "talkToColosseumKnight2"
+      }
+     ],
+     [
+      {
+       "o": "?",
+       "d": "NpcRequirement"
+      },
+      {
+       "s": "defeatColosseumKnight"
+      }
+     ],
+     [
+      "r2",
+      {
+       "s": "talkToColosseumKnight"
+      }
+     ]
+    ],
+    "d": {
+     "s": "enterColosseum"
+    }
+   },
+   "n9": {
+    "n": "enniusAfterKnights",
+    "c": [
+     [
+      "r2",
+      {
+       "s": "climbStairs"
+      }
+     ]
+    ],
+    "d": {
+     "s": "talkToEnniusAfterKnights"
+    }
+   },
+   "n10": {
+    "n": "goReadLetter",
+    "c": [
+     [
+      {
+       "o": "item",
+       "nm": "Incriminating letter",
+       "ids": [
+        28974
+       ],
+       "bank": 1
+      },
+      {
+       "s": "readLetter"
+      }
+     ],
+     [
+      "r3",
+      {
+       "s": "searchHQChest"
+      }
+     ],
+     [
+      "r4",
+      {
+       "s": "goUpHQ2"
+      }
+     ]
+    ],
+    "d": {
+     "s": "goUpHQ"
+    }
+   },
+   "n11": {
+    "n": "goBringLetter",
+    "c": [
+     [
+      "r3",
+      {
+       "s": "goDownHQ2To1"
+      }
+     ],
+     [
+      "r4",
+      {
+       "s": "goDownHQ1To0"
+      }
+     ]
+    ],
+    "d": {
+     "s": "returnToEnniusAfterLetter"
+    }
+   },
+   "n12": {
+    "n": "goToTeomat",
+    "c": [
+     [
+      "r5",
+      {
+       "s": "talkToPrinceInTemple"
+      }
+     ]
+    ],
+    "d": {
+     "s": "travelToTeomat"
+    }
+   },
+   "n13": {
+    "n": "goDefeatCultists",
+    "c": [
+     [
+      {
+       "o": "and",
+       "a": [
+        "r5",
+        {
+         "o": "true"
+        }
+       ]
+      },
+      {
+       "s": "defeat8Cultists"
+      }
+     ]
+    ],
+    "d": {
+     "s": "talkToMetzliNearTemple"
+    }
+   }
+  },
+  "reqs": {
+   "r1": {
+    "o": "zone",
+    "z": [
+     [
+      1664,
+      9472,
+      1728,
+      9536,
+      0,
+      2
+     ]
+    ]
+   },
+   "r2": {
+    "o": "zone",
+    "z": [
+     [
+      1792,
+      9472,
+      1856,
+      9536,
+      0,
+      2
+     ]
+    ]
+   },
+   "r3": {
+    "o": "zone",
+    "z": [
+     [
+      1636,
+      3137,
+      1654,
+      3158,
+      2,
+      2
+     ]
+    ]
+   },
+   "r4": {
+    "o": "zone",
+    "z": [
+     [
+      1636,
+      3137,
+      1654,
+      3158,
+      1,
+      1
+     ]
+    ]
+   },
+   "r5": {
+    "o": "zone",
+    "z": [
+     [
+      1377,
+      2951,
+      1536,
+      3262,
+      0,
+      3
+     ]
+    ]
+   }
+  },
+  "alias": {
+   "climbStairs": [
+    "talkToEnniusAfterKnights"
+   ],
+   "goUpHQ2": [
+    "goUpHQ"
+   ],
+   "goDownHQ2To1": [
+    "returnToEnniusAfterLetter"
+   ],
+   "goDownHQ1To0": [
+    "returnToEnniusAfterLetter"
+   ]
+  }
+ },
+ "unknown": {
+  "NpcRequirement": 1
+ },
+ "steps": {
+  "talkToRegulusStart": {
+   "typ": "NpcStep",
+   "wp": [
+    3281,
+    3413,
+    0
+   ],
+   "ids": [
+    12883
+   ],
+   "text": "Talk to Regulus Cento outside Varrock's East Gate to travel to Varlamore."
+  },
+  "talkToEnnius": {
+   "typ": "NpcStep",
+   "wp": [
+    1687,
+    3141,
+    0
+   ],
+   "ids": [
+    12892
+   ],
+   "text": "Talk to Ennius Tullus just west of where you arrived, next to the fountain."
+  },
+  "talkToMetzli": {
+   "typ": "NpcStep",
+   "wp": [
+    1697,
+    3087,
+    0
+   ],
+   "ids": [
+    12894
+   ],
+   "text": "Talk to Metzli in the temple in the south of the city."
+  },
+  "enterCrypt": {
+   "typ": "ObjectStep",
+   "wp": [
+    1692,
+    3088,
+    0
+   ],
+   "ids": [
+    50859
+   ],
+   "text": "Enter the temple's crypt."
+  },
+  "talkToPrince": {
+   "typ": "NpcStep",
+   "wp": [
+    1685,
+    9514,
+    0
+   ],
+   "ids": [
+    12896
+   ],
+   "text": "Talk to Prince Itzla Arkan in the north room."
+  },
+  "talkToEnnius2": {
+   "typ": "NpcStep",
+   "wp": [
+    1684,
+    3156,
+    0
+   ],
+   "ids": [
+    12892
+   ],
+   "text": "Return to Ennius Tullus, who is now in the palace."
+  },
+  "leaveCrypt": {
+   "typ": "ObjectStep",
+   "wp": [
+    1692,
+    9492,
+    0
+   ],
+   "ids": [
+    50860
+   ],
+   "text": "Leave the crypt."
+  },
+  "enterColosseum": {
+   "typ": "ObjectStep",
+   "wp": [
+    1796,
+    3106,
+    0
+   ],
+   "ids": [
+    50749
+   ],
+   "text": "Enter the Colosseum in the east of the city."
+  },
+  "talkToColosseumKnight2": {
+   "typ": "NpcStep",
+   "wp": [
+    1805,
+    9522,
+    0
+   ],
+   "ids": [
+    12914
+   ],
+   "text": "Talk to the Knight of Varlamore in the northern training room once more."
+  },
+  "defeatColosseumKnight": {
+   "typ": "NpcStep",
+   "wp": [
+    1824,
+    3105,
+    0
+   ],
+   "ids": [
+    12916
+   ],
+   "text": "Defeat the knight, swapping combat styles to bypass his prayers."
+  },
+  "talkToColosseumKnight": {
+   "typ": "NpcStep",
+   "wp": [
+    1805,
+    9522,
+    0
+   ],
+   "ids": [
+    12914
+   ],
+   "text": "Talk to the Knight of Varlamore in the north training room, ready to fight."
+  },
+  "talkToBazaarKnight": {
+   "typ": "NpcStep",
+   "wp": [
+    1682,
+    3104,
+    0
+   ],
+   "ids": [
+    12902
+   ],
+   "text": "Talk to the Knight of Varlamore in the bazaar south of the palace."
+  },
+  "returnAmulet": {
+   "typ": "NpcStep",
+   "wp": [
+    1682,
+    3104,
+    0
+   ],
+   "ids": [
+    12902
+   ],
+   "text": "Return the amulet to the knight in the bazaar."
+  },
+  "pickpocketCitizen": {
+   "typ": "NpcStep",
+   "wp": [
+    1686,
+    3109,
+    0
+   ],
+   "ids": [
+    12929
+   ],
+   "text": "Pickpocket the citizen in turquoise robes in the bazaar."
+  },
+  "talkToCothonKnight": {
+   "typ": "NpcStep",
+   "wp": [
+    1746,
+    3120,
+    0
+   ],
+   "ids": [
+    12906
+   ],
+   "text": "Talk to the Knight of Varlamore on the south western part of the Fortis Cothon (docks) in the east of the city."
+  },
+  "returnToCothonKnight": {
+   "typ": "NpcStep",
+   "wp": [
+    1746,
+    3120,
+    0
+   ],
+   "ids": [
+    12906
+   ],
+   "text": "Return to the Knight of Varlamore on the south part of the Fortis Cothon."
+  },
+  "searchCrate": {
+   "typ": "ObjectStep",
+   "wp": [
+    1778,
+    3149,
+    0
+   ],
+   "ids": [
+    50870
+   ],
+   "text": "Search the crate in the north-east of the Cothon, next to two barrels of fish."
+  },
+  "talkToPubKnights": {
+   "typ": "NpcStep",
+   "wp": [
+    1721,
+    3075,
+    0
+   ],
+   "ids": [
+    12912
+   ],
+   "text": "Talk to the Knights of Varlamore in the pub OUTSIDE the walls of the city to the south."
+  },
+  "talkToPubKnightAtFountain": {
+   "typ": "NpcStep",
+   "wp": [
+    1756,
+    3069,
+    0
+   ],
+   "ids": [
+    12910
+   ],
+   "text": "Talk to the sobered knight at the fountain."
+  },
+  "takePubKnightsToFountain": {
+   "typ": "DetailedQuestStep",
+   "wp": [
+    1757,
+    3069,
+    0
+   ],
+   "ids": [],
+   "text": "Lead the knight to the fountain to the east. Whenever they stop following you, talk to them again."
+  },
+  "talkToEnniusAfterKnights": {
+   "typ": "NpcStep",
+   "wp": [
+    1684,
+    3156,
+    0
+   ],
+   "ids": [
+    12892
+   ],
+   "text": "Return to Ennius Tullus in the palace."
+  },
+  "climbStairs": {
+   "typ": "ObjectStep",
+   "wp": [
+    1796,
+    9506,
+    0
+   ],
+   "ids": [
+    50750
+   ],
+   "text": "Return to Ennius Tullus in the palace."
+  },
+  "goUpHQ": {
+   "typ": "ObjectStep",
+   "wp": [
+    1638,
+    3155,
+    0
+   ],
+   "ids": [
+    52628
+   ],
+   "text": "Go to the top floor of the Kualti Headquarters, just west of the palace."
+  },
+  "goUpHQ2": {
+   "typ": "ObjectStep",
+   "wp": [
+    1650,
+    3155,
+    1
+   ],
+   "ids": [
+    52628
+   ],
+   "text": "Go to the top floor of the Kualti Headquarters, just west of the palace."
+  },
+  "readLetter": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Read the incriminating letter."
+  },
+  "searchHQChest": {
+   "typ": "ObjectStep",
+   "wp": [
+    1648,
+    3142,
+    2
+   ],
+   "ids": [
+    50866
+   ],
+   "text": "Search the chest in the south-east room on the south wall."
+  },
+  "returnToEnniusAfterLetter": {
+   "typ": "NpcStep",
+   "wp": [
+    1684,
+    3156,
+    0
+   ],
+   "ids": [
+    12892
+   ],
+   "text": "Return to Ennius and Furia in the palace."
+  },
+  "goDownHQ2To1": {
+   "typ": "ObjectStep",
+   "wp": [
+    1651,
+    3155,
+    2
+   ],
+   "ids": [
+    52629
+   ],
+   "text": "Return to Ennius and Furia in the palace."
+  },
+  "goDownHQ1To0": {
+   "typ": "ObjectStep",
+   "wp": [
+    1638,
+    3155,
+    1
+   ],
+   "ids": [
+    52629
+   ],
+   "text": "Return to Ennius and Furia in the palace."
+  },
+  "talkToRegulusForTransport": {
+   "typ": "NpcStep",
+   "wp": [
+    1699,
+    3141,
+    0
+   ],
+   "ids": [
+    12885
+   ],
+   "text": "TALK to Regulus Cento south-east of the palace."
+  },
+  "feedRenu": {
+   "typ": "NpcStep",
+   "wp": [
+    1703,
+    3142,
+    0
+   ],
+   "ids": [
+    13348
+   ],
+   "text": "Feed Renu the feed."
+  },
+  "travelToTeomat": {
+   "typ": "NpcStep",
+   "wp": [
+    1697,
+    3142,
+    0
+   ],
+   "ids": [
+    13350
+   ],
+   "text": "Travel with Renu to Teomat."
+  },
+  "talkToPrinceInTemple": {
+   "typ": "NpcStep",
+   "wp": [
+    1454,
+    3173,
+    0
+   ],
+   "ids": [
+    12896
+   ],
+   "text": "Talk to Prince Itzla Arkan in the temple, near the altar."
+  },
+  "talkToMetzliNearTemple": {
+   "typ": "NpcStep",
+   "wp": [
+    1448,
+    3196,
+    0
+   ],
+   "ids": [
+    12894
+   ],
+   "text": "Talk to Metzli in the northern building of the Teomat."
+  },
+  "defeat8Cultists": {
+   "typ": "NpcStep",
+   "wp": null,
+   "ids": [
+    12918
+   ],
+   "text": "Defeat the cultists."
+  },
+  "finishQuest": {
+   "typ": "NpcStep",
+   "wp": [
+    1454,
+    3173,
+    0
+   ],
+   "ids": [
+    12896
+   ],
+   "text": "Talk to Prince Itzla Arkan in Teomat, near the altar, to finish the quest."
+  }
+ }
+}

@@ -1,0 +1,1146 @@
+{
+  "quest": "Scrambled!",
+  "status": "draft",
+  "sources": {
+    "questHelper": "b9b93706618a7b7fe7e5ea30e9a9ef35ba09673e",
+    "wiki": {
+      "title": "Scrambled!",
+      "revision": 15373706
+    },
+    "quickGuide": {
+      "title": "Scrambled!/Quick guide",
+      "revision": 15395341
+    }
+  },
+  "step": {
+    "title": "Scrambled!",
+    "type": "quest",
+    "qp": 1,
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Scrambled!",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Scrambled!/Quick_guide",
+    "mapLocation": {
+      "x": 1247,
+      "y": 3166,
+      "plane": 0,
+      "label": "Talk to Alan at the temple of Tal Teok north of Tal Teklan."
+    },
+    "npc": {
+      "nameEn": "Alan (Scrambled!)"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Staff of fire",
+        "amount": 1,
+        "howToGet": "Pays the fire runes of Fire Bolt on the jaguar and the red dragon from their safespots. Buy on the Grand Exchange or from Zaff in Varrock.",
+        "wikiItemId": 1387,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Staff_of_fire.png"
+      },
+      {
+        "nameEn": "Chaos rune",
+        "amount": 60,
+        "howToGet": "Fire Bolts on the jaguar and the red dragon from their safespots. Buy on the Grand Exchange or at a rune shop.",
+        "wikiItemId": 562,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Chaos_rune.png"
+      },
+      {
+        "nameEn": "Air rune",
+        "amount": 180,
+        "howToGet": "Fire Bolts on the jaguar and the red dragon from their safespots. Buy on the Grand Exchange or at a rune shop.",
+        "wikiItemId": 556,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Air_rune.png"
+      },
+      {
+        "nameEn": "Trout",
+        "amount": 3,
+        "howToGet": "Buy on the Grand Exchange. The large chicken (level 16) is fought up close.",
+        "wikiItemId": 333,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Trout.png",
+        "heals": 7,
+        "anyOf": [
+          "Salmon"
+        ]
+      }
+    ],
+    "foes": [
+      "Large chicken",
+      "Black jaguar (Scrambled!)",
+      "Red dragon (Scrambled!)"
+    ]
+  },
+  "stages": {
+    "var": [
+      "varbit",
+      16758
+    ],
+    "route": [
+      {
+        "title": "Walkthrough",
+        "steps": [
+          "Talk to Alan, Tal Teok Temple north of Tal Teklan Dialogue: \"Yes.\"",
+          "Talk to Alan again. Dialogue: \"Of course!.\"",
+          "Inspect the egg",
+          "Talk to King, the bartender in The King's Inn west of the bank. Dialogue: \"Scrumpty Rumpty fell off a wall!.\"",
+          "Talk to Acatzin in the inn Dialogue: \"I can talk to the blacksmith!.\"",
+          "Fill the bowl with water at the fountain outside.",
+          "Talk to Nezketi at the temple directly south of the inn for an empty cup. Dialogue: \"I can get you some tea!.\"",
+          "Talk to Kauayotl, outside the eastern entrance of Tal Teklan. Dialogue: \"I see. Well, maybe I can help out with that?\"",
+          "Return to Tal Teok Temple and speak to any of King's men.",
+          "Large egg:",
+          "Dragon egg:",
+          "Jaguar egg:",
+          "Speak to each of King's men to initiate a cutscene.",
+          "Put the egg together - players can hover over the puzzle piece icon to view the solution. When a piece is rotated in the correct orientation and placed in the correct location, it will stay in place indicating the correct placement.",
+          "Watch the final cutscene."
+        ]
+      }
+    ],
+    "stages": [
+      {
+        "at": 0,
+        "do": [
+          {
+            "t": "Talk to Alan in Tal Teok Temple, north of Tal Teklan, to start the quest.",
+            "s": "Talk to Alan in Tal Teok Temple, north of Tal Teklan.",
+            "k": "startQuest",
+            "at": [
+              1247,
+              3167,
+              0
+            ],
+            "hl": {
+              "npc": [
+                14475
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 2,
+        "do": [
+          {
+            "t": "Talk to Alan in Tal Teok Temple, north of Tal Teklan, to start the quest.",
+            "s": "Talk to Alan in Tal Teok Temple, north of Tal Teklan.",
+            "k": "startQuest",
+            "at": [
+              1247,
+              3167,
+              0
+            ],
+            "hl": {
+              "npc": [
+                14475
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 4,
+        "do": [
+          {
+            "t": "Talk to Alan in Tal Teok Temple, north of Tal Teklan, to start the quest.",
+            "s": "Talk to Alan in Tal Teok Temple, north of Tal Teklan.",
+            "k": "startQuest",
+            "at": [
+              1247,
+              3167,
+              0
+            ],
+            "hl": {
+              "npc": [
+                14475
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 6,
+        "do": [
+          {
+            "t": "Inspect the egg in front of you.",
+            "s": "Inspect the egg in front of you.",
+            "k": "inspectEggAfterItFell",
+            "at": [
+              1247,
+              3170,
+              0
+            ],
+            "hl": {
+              "npc": [
+                14488
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 8,
+        "do": [
+          {
+            "t": "Head south into Tal Teklan and talk to King in the pub.",
+            "s": "Head south into Tal Teklan and talk to King in the pub.",
+            "k": "talkToKing",
+            "at": [
+              1224,
+              3119,
+              0
+            ],
+            "hl": {
+              "npc": [
+                14496
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 10,
+        "do": [
+          {
+            "t": "Head south into Tal Teklan and talk to King in the pub.",
+            "s": "Head south into Tal Teklan and talk to King in the pub.",
+            "k": "talkToKing",
+            "at": [
+              1224,
+              3119,
+              0
+            ],
+            "hl": {
+              "npc": [
+                14496
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 12,
+        "do": [
+          {
+            "t": "Head south into Tal Teklan and talk to King in the pub.",
+            "s": "Head south into Tal Teklan and talk to King in the pub.",
+            "k": "talkToKing",
+            "at": [
+              1224,
+              3119,
+              0
+            ],
+            "hl": {
+              "npc": [
+                14496
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 14,
+        "do": [
+          {
+            "t": "Talk to Nezketi in the Tal Teklan temple.",
+            "s": "Talk to Nezketi in the Tal Teklan temple.",
+            "k": "talkToNezketi",
+            "at": [
+              1224,
+              3105,
+              0
+            ],
+            "hl": {
+              "npc": [
+                14503
+              ]
+            }
+          },
+          {
+            "t": "Pick the damiana bush at the east entrance of Tal Teklan for some damiana leaves, we'll need these later.",
+            "s": "Pick damiana leaves from the bush at the east entrance.",
+            "k": "getDamianaLeaves",
+            "at": [
+              1250,
+              3110,
+              0
+            ],
+            "hl": {
+              "obj": [
+                56935
+              ]
+            }
+          },
+          {
+            "t": "Get an empty bowl from the pub, will need it later. If it's not there, hop worlds or wait for it to spawn again.",
+            "s": "Take an empty bowl from the pub; hop worlds if it is gone.",
+            "k": "getEmptyBowl",
+            "at": [
+              1229,
+              3119,
+              0
+            ]
+          },
+          {
+            "t": "Fill your empty bowl with water at the water pump near the eastern entrance of Tal Teklan.",
+            "s": "Fill the bowl at the water pump at the east entrance.",
+            "k": "fillEmptyBowlWithWater",
+            "at": [
+              1242,
+              3097,
+              0
+            ],
+            "hl": {
+              "obj": [
+                52646
+              ]
+            }
+          },
+          {
+            "t": "Mix damiana leaves with your bowl of water.",
+            "s": "Mix damiana leaves with your bowl of water.",
+            "k": "mixWaterAndDamianaLeaves"
+          },
+          {
+            "t": "Use your bowl of damiana water on the stove in the east part of Tal Teklan to boil it.",
+            "s": "Boil the damiana water on the stove in east Tal Teklan.",
+            "k": "boilDamianaWater",
+            "hl": {
+              "obj": [
+                57333
+              ]
+            }
+          },
+          {
+            "t": "Pour the damiana tea from your bowl into the empty cup",
+            "s": "Pour the damiana tea from your bowl into the empty cup",
+            "k": "pourTeaIntoCup"
+          },
+          {
+            "t": "Return to Nezketi in the Tal Teklan temple and give him the cup of damiana tea.",
+            "s": "Talk to Nezketi in the temple with the cup of damiana tea.",
+            "k": "giveTeaToNezketi",
+            "at": [
+              1224,
+              3105,
+              0
+            ],
+            "hl": {
+              "npc": [
+                14503
+              ]
+            }
+          },
+          {
+            "t": "Talk to Kauayotl at the east entrance of Tal Teklan.",
+            "s": "Talk to Kauayotl at the east entrance of Tal Teklan.",
+            "k": "talkToKauayotl",
+            "at": [
+              1251,
+              3104,
+              0
+            ],
+            "hl": {
+              "npc": [
+                14504
+              ]
+            }
+          },
+          {
+            "t": "Repair Kauayotl's cart.",
+            "s": "Repair Kauayotl's cart.",
+            "k": "kauayotlRepairCart",
+            "at": [
+              1250,
+              3107,
+              0
+            ],
+            "hl": {
+              "obj": [
+                56943
+              ]
+            }
+          },
+          {
+            "t": "Go south-west of Kauayotl and pick up two planks from besides the lake. If it's not there, hop worlds or wait for it to spawn again.",
+            "s": "Pick up two planks south-west of Kauayotl, by the lake.",
+            "k": "getPlanks",
+            "at": [
+              1238,
+              3076,
+              0
+            ]
+          },
+          {
+            "t": "Get the Saw from the house to the south, we'll need it later. If it's not there, hop worlds or wait for it to spawn again.",
+            "s": "Take the saw from the house to the south; hop worlds if it is gone.",
+            "k": "acatzinGetSaw",
+            "at": [
+              1212,
+              3093,
+              0
+            ]
+          },
+          {
+            "t": "Get the hammer from the table. If it's not there, hop worlds or wait for it to spawn again.",
+            "s": "Take the hammer from the table; hop worlds if it is gone.",
+            "k": "acatzinGetHammer",
+            "at": [
+              1207,
+              3108,
+              0
+            ]
+          },
+          {
+            "t": "Talk to Kauayotl again after repairing his cart.",
+            "s": "Talk to Kauayotl again after repairing his cart.",
+            "k": "talkToKauayotlAgain",
+            "at": [
+              1251,
+              3104,
+              0
+            ],
+            "hl": {
+              "npc": [
+                14504
+              ]
+            }
+          },
+          {
+            "t": "Talk to Acatzin inside the Tal Teklan pub.",
+            "s": "Talk to Acatzin inside the Tal Teklan pub.",
+            "k": "talkToAcatzin",
+            "at": [
+              1228,
+              3117,
+              0
+            ],
+            "hl": {
+              "npc": [
+                14505
+              ]
+            }
+          },
+          {
+            "t": "Repair the axe on the whetstone.",
+            "s": "Repair the axe on the whetstone.",
+            "k": "acatzinRepairAxe",
+            "at": [
+              1211,
+              3108,
+              0
+            ],
+            "hl": {
+              "obj": [
+                56939
+              ]
+            }
+          },
+          {
+            "t": "Talk to the Blacksmith again after fixing the whetstone to receive a damaged axe.",
+            "s": "Talk to the Blacksmith again for a damaged axe.",
+            "k": "acatzinTalkToBlacksmithAgain",
+            "at": [
+              1209,
+              3109,
+              0
+            ],
+            "hl": {
+              "npc": [
+                14509
+              ]
+            }
+          },
+          {
+            "t": "Return the repaired axe to Acatzin in the Tel Teklan pub.",
+            "s": "Return the repaired axe to Acatzin in the Tel Teklan pub.",
+            "k": "acatzinReturnRepairedAxe",
+            "at": [
+              1228,
+              3117,
+              0
+            ],
+            "hl": {
+              "npc": [
+                14505
+              ]
+            }
+          },
+          {
+            "t": "Fix the whetstone.",
+            "s": "Fix the whetstone.",
+            "k": "acatzinFixWhetstone",
+            "at": [
+              1211,
+              3108,
+              0
+            ],
+            "hl": {
+              "obj": [
+                56938
+              ]
+            }
+          },
+          {
+            "t": "Get some nails from the blacksmith's workbench, we'll need them later.",
+            "s": "Get some nails from the blacksmith's workbench, we'll need them later.",
+            "k": "acatzinGetNails",
+            "at": [
+              1210,
+              3112,
+              0
+            ],
+            "hl": {
+              "obj": [
+                56945
+              ]
+            }
+          },
+          {
+            "t": "Talk to the Blacksmith west of the Tal Teklan pub.",
+            "s": "Talk to the Blacksmith west of the Tal Teklan pub.",
+            "k": "acatzinTalkToBlacksmith",
+            "at": [
+              1209,
+              3109,
+              0
+            ],
+            "hl": {
+              "npc": [
+                14509
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 16,
+        "do": [
+          {
+            "t": "Return to the temple north of Tal Teklan and speak with one of King's men.",
+            "s": "Talk to one of King's men at the temple north of Tal Teklan.",
+            "k": "talkToGatheredMen",
+            "at": [
+              1247,
+              3166,
+              0
+            ]
+          }
+        ]
+      },
+      {
+        "at": 18,
+        "do": [
+          {
+            "t": "Return to the temple north of Tal Teklan with the egg replacements and speak with one of \"King\"'s men.",
+            "s": "Bring the eggs to one of King's men at the temple.",
+            "k": "returnToTempleWithEggs",
+            "at": [
+              1247,
+              3166,
+              0
+            ]
+          },
+          {
+            "t": "Give Acatzin the Large egg.",
+            "s": "Give Acatzin the Large egg.",
+            "k": "returnToTempleWithChickenEgg",
+            "at": [
+              1247,
+              3166,
+              0
+            ],
+            "hl": {
+              "npc": [
+                14505
+              ]
+            }
+          },
+          {
+            "t": "Give Nezketi the Jaguar egg.",
+            "s": "Give Nezketi the Jaguar egg.",
+            "k": "returnToTempleWithJaguarEgg",
+            "at": [
+              1247,
+              3166,
+              0
+            ],
+            "hl": {
+              "npc": [
+                14503
+              ]
+            }
+          },
+          {
+            "t": "Give Kauayotl the Dragon egg.",
+            "s": "Give Kauayotl the Dragon egg.",
+            "k": "returnToTempleWithDragonEgg",
+            "at": [
+              1247,
+              3166,
+              0
+            ],
+            "hl": {
+              "npc": [
+                14504
+              ]
+            }
+          },
+          {
+            "t": "Exit the dragon's cave.",
+            "s": "Exit the dragon's cave.",
+            "k": "exitDragonCave",
+            "at": [
+              1244,
+              9528,
+              0
+            ],
+            "hl": {
+              "obj": [
+                57592
+              ]
+            }
+          },
+          {
+            "t": "Search the Eggs at the camp, east of the dragon age, and collect your Jaguar egg.",
+            "s": "Search the eggs at the camp east of the cave for the Jaguar egg.",
+            "k": "collectJaguarEgg",
+            "at": [
+              1332,
+              3122,
+              0
+            ],
+            "hl": {
+              "obj": [
+                56933
+              ]
+            }
+          },
+          {
+            "t": "Search the eggs at the camp east of the cave; a jaguar appears.",
+            "s": "Search the eggs at the camp; a jaguar appears.",
+            "k": "spawnJaguarFromEgg",
+            "at": [
+              1332,
+              3122,
+              0
+            ],
+            "hl": {
+              "obj": [
+                56933
+              ]
+            }
+          },
+          {
+            "t": "Fight the Jaguar. You can safespot it by standing just north east of the camp.",
+            "s": "Fight the jaguar; safespot it just north-east of the camp.",
+            "k": "fightJaguar",
+            "at": [
+              1329,
+              3122,
+              0
+            ],
+            "hl": {
+              "npc": [
+                14512
+              ]
+            }
+          },
+          {
+            "t": "Enter the dragon cave across the log balance.",
+            "s": "Enter the dragon cave across the log balance.",
+            "k": "enterDragonCave",
+            "at": [
+              1288,
+              3133,
+              0
+            ],
+            "hl": {
+              "obj": [
+                57591
+              ]
+            }
+          },
+          {
+            "t": "Step across the log balance towards the dragon cave.",
+            "s": "Step across the log balance towards the dragon cave.",
+            "k": "useDragonShortcut",
+            "at": [
+              1283,
+              3146,
+              0
+            ],
+            "hl": {
+              "obj": [
+                57593
+              ]
+            }
+          },
+          {
+            "t": "Search the Eggs in the dragon cave.",
+            "s": "Search the Eggs in the dragon cave.",
+            "k": "spawnDragonFromEgg",
+            "at": [
+              1259,
+              9482,
+              0
+            ],
+            "hl": {
+              "obj": [
+                56930
+              ]
+            }
+          },
+          {
+            "t": "Fight the red dragon. You can safespot it by standing south-east of the Eggs.",
+            "s": "Fight the red dragon; safespot it south-east of the eggs.",
+            "k": "fightRedDragon",
+            "at": [
+              1257,
+              9482,
+              0
+            ],
+            "hl": {
+              "npc": [
+                14511
+              ]
+            }
+          },
+          {
+            "t": "Search the Eggs in the south-east of the dragon cave to collect your Dragon egg.",
+            "s": "Search the eggs in the south-east of the cave for the Dragon egg.",
+            "k": "collectDragonEgg",
+            "at": [
+              1259,
+              9482,
+              0
+            ],
+            "hl": {
+              "obj": [
+                56930
+              ]
+            }
+          },
+          {
+            "t": "Search the Eggs to get a Large egg.",
+            "s": "Search the Eggs to get a Large egg.",
+            "k": "collectLargeEgg",
+            "at": [
+              1238,
+              3137,
+              0
+            ],
+            "hl": {
+              "obj": [
+                56927
+              ]
+            }
+          },
+          {
+            "t": "Search the eggs south-west of the temple for a Large egg; a large chicken appears.",
+            "s": "Search the eggs for a Large egg; a large chicken appears.",
+            "k": "collectLargeEggSpawnChicken",
+            "at": [
+              1238,
+              3137,
+              0
+            ],
+            "hl": {
+              "obj": [
+                56927
+              ]
+            }
+          },
+          {
+            "t": "Kill the large chicken.",
+            "s": "Kill the large chicken.",
+            "k": "fightLargeChicken",
+            "at": [
+              1239,
+              3137,
+              0
+            ],
+            "hl": {
+              "npc": [
+                14510
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 19,
+        "do": [
+          {
+            "t": "Return to the temple north of Tal Teklan with the egg replacements and speak with one of \"King\"'s men.",
+            "s": "Bring the eggs to one of King's men at the temple.",
+            "k": "returnToTempleWithEggs",
+            "at": [
+              1247,
+              3166,
+              0
+            ]
+          },
+          {
+            "t": "Give Acatzin the Large egg.",
+            "s": "Give Acatzin the Large egg.",
+            "k": "returnToTempleWithChickenEgg",
+            "at": [
+              1247,
+              3166,
+              0
+            ],
+            "hl": {
+              "npc": [
+                14505
+              ]
+            }
+          },
+          {
+            "t": "Give Nezketi the Jaguar egg.",
+            "s": "Give Nezketi the Jaguar egg.",
+            "k": "returnToTempleWithJaguarEgg",
+            "at": [
+              1247,
+              3166,
+              0
+            ],
+            "hl": {
+              "npc": [
+                14503
+              ]
+            }
+          },
+          {
+            "t": "Give Kauayotl the Dragon egg.",
+            "s": "Give Kauayotl the Dragon egg.",
+            "k": "returnToTempleWithDragonEgg",
+            "at": [
+              1247,
+              3166,
+              0
+            ],
+            "hl": {
+              "npc": [
+                14504
+              ]
+            }
+          },
+          {
+            "t": "Exit the dragon's cave.",
+            "s": "Exit the dragon's cave.",
+            "k": "exitDragonCave",
+            "at": [
+              1244,
+              9528,
+              0
+            ],
+            "hl": {
+              "obj": [
+                57592
+              ]
+            }
+          },
+          {
+            "t": "Search the Eggs at the camp, east of the dragon age, and collect your Jaguar egg.",
+            "s": "Search the eggs at the camp east of the cave for the Jaguar egg.",
+            "k": "collectJaguarEgg",
+            "at": [
+              1332,
+              3122,
+              0
+            ],
+            "hl": {
+              "obj": [
+                56933
+              ]
+            }
+          },
+          {
+            "t": "Search the eggs at the camp east of the cave; a jaguar appears.",
+            "s": "Search the eggs at the camp; a jaguar appears.",
+            "k": "spawnJaguarFromEgg",
+            "at": [
+              1332,
+              3122,
+              0
+            ],
+            "hl": {
+              "obj": [
+                56933
+              ]
+            }
+          },
+          {
+            "t": "Fight the Jaguar. You can safespot it by standing just north east of the camp.",
+            "s": "Fight the jaguar; safespot it just north-east of the camp.",
+            "k": "fightJaguar",
+            "at": [
+              1329,
+              3122,
+              0
+            ],
+            "hl": {
+              "npc": [
+                14512
+              ]
+            }
+          },
+          {
+            "t": "Enter the dragon cave across the log balance.",
+            "s": "Enter the dragon cave across the log balance.",
+            "k": "enterDragonCave",
+            "at": [
+              1288,
+              3133,
+              0
+            ],
+            "hl": {
+              "obj": [
+                57591
+              ]
+            }
+          },
+          {
+            "t": "Step across the log balance towards the dragon cave.",
+            "s": "Step across the log balance towards the dragon cave.",
+            "k": "useDragonShortcut",
+            "at": [
+              1283,
+              3146,
+              0
+            ],
+            "hl": {
+              "obj": [
+                57593
+              ]
+            }
+          },
+          {
+            "t": "Search the Eggs in the dragon cave.",
+            "s": "Search the Eggs in the dragon cave.",
+            "k": "spawnDragonFromEgg",
+            "at": [
+              1259,
+              9482,
+              0
+            ],
+            "hl": {
+              "obj": [
+                56930
+              ]
+            }
+          },
+          {
+            "t": "Fight the red dragon. You can safespot it by standing south-east of the Eggs.",
+            "s": "Fight the red dragon; safespot it south-east of the eggs.",
+            "k": "fightRedDragon",
+            "at": [
+              1257,
+              9482,
+              0
+            ],
+            "hl": {
+              "npc": [
+                14511
+              ]
+            }
+          },
+          {
+            "t": "Search the Eggs in the south-east of the dragon cave to collect your Dragon egg.",
+            "s": "Search the eggs in the south-east of the cave for the Dragon egg.",
+            "k": "collectDragonEgg",
+            "at": [
+              1259,
+              9482,
+              0
+            ],
+            "hl": {
+              "obj": [
+                56930
+              ]
+            }
+          },
+          {
+            "t": "Search the Eggs to get a Large egg.",
+            "s": "Search the Eggs to get a Large egg.",
+            "k": "collectLargeEgg",
+            "at": [
+              1238,
+              3137,
+              0
+            ],
+            "hl": {
+              "obj": [
+                56927
+              ]
+            }
+          },
+          {
+            "t": "Search the eggs south-west of the temple for a Large egg; a large chicken appears.",
+            "s": "Search the eggs for a Large egg; a large chicken appears.",
+            "k": "collectLargeEggSpawnChicken",
+            "at": [
+              1238,
+              3137,
+              0
+            ],
+            "hl": {
+              "obj": [
+                56927
+              ]
+            }
+          },
+          {
+            "t": "Kill the large chicken.",
+            "s": "Kill the large chicken.",
+            "k": "fightLargeChicken",
+            "at": [
+              1239,
+              3137,
+              0
+            ],
+            "hl": {
+              "npc": [
+                14510
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 20,
+        "do": [
+          {
+            "t": "Return to the large temple north of Tal Teklan and talk with one of King's men to evaluate the Humphrey Dumphrey alternatives.",
+            "s": "Talk to one of King's men at the temple to judge the eggs.",
+            "k": "judgeEggs",
+            "at": [
+              1247,
+              3166,
+              0
+            ]
+          }
+        ]
+      },
+      {
+        "at": 22,
+        "do": [
+          {
+            "t": "Talk to one of King's men to figure out how to solve the broken-egg conundrum.",
+            "s": "Talk to one of King's men about the broken egg.",
+            "k": "panicWithKingsMen",
+            "at": [
+              1247,
+              3166,
+              0
+            ]
+          }
+        ]
+      },
+      {
+        "at": 24,
+        "do": [
+          {
+            "t": "Inspect the egg.",
+            "s": "Inspect the egg.",
+            "k": "putEggBackTogether",
+            "at": [
+              1244,
+              3168,
+              0
+            ],
+            "hl": {
+              "npc": [
+                14489
+              ]
+            }
+          },
+          {
+            "t": "Fit the pieces of the broken egg back together.",
+            "s": "Fit the pieces of the broken egg back together.",
+            "k": "puzzleSolver"
+          }
+        ]
+      },
+      {
+        "at": 26,
+        "do": [
+          {
+            "t": "Talk to one of King's men to finish the quest.",
+            "s": "Talk to one of King's men to finish the quest.",
+            "k": "finishQuest",
+            "at": [
+              1247,
+              3166,
+              0
+            ]
+          }
+        ]
+      },
+      {
+        "at": 28,
+        "do": [
+          {
+            "t": "Talk to one of King's men to finish the quest.",
+            "s": "Talk to one of King's men to finish the quest.",
+            "k": "finishQuest",
+            "at": [
+              1247,
+              3166,
+              0
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "facts": {
+    "id": "Scrambled!",
+    "stepIds": [
+      "DRAFT"
+    ],
+    "members": false,
+    "requirements": {
+      "skills": {
+        "construction": 38,
+        "cooking": 36,
+        "smithing": 35
+      },
+      "questPoints": 0,
+      "quests": [
+        "Children of the Sun"
+      ],
+      "manual": [],
+      "capabilities": [],
+      "unparsed": null,
+      "text": "* {{SCP|Construction|38|link=yes}}  {{Boostable|no}} {{Questreqstart|yes}}\n* {{SCP|Cooking|36|link=yes}}  {{Boostable|no}} {{Questreqstart|yes}}\n* {{SCP|Smithing|35|link=yes}}  {{Boostable|no}} {{Questreqstart|yes}}\n* Completion of the following quests:\n** [[Children of the Sun]]"
+    },
+    "rewards": {
+      "questPoints": 1,
+      "xp": {
+        "construction": 5000,
+        "cooking": 5000,
+        "smithing": 5000
+      },
+      "coins": 0
+    },
+    "resourceFlow": null,
+    "length": "Short",
+    "source": {
+      "url": "https://oldschool.runescape.wiki/w/Special:Redirect/revision/15373706",
+      "title": "Scrambled!",
+      "revision": 15373706,
+      "retrievedAt": "2026-11-18T06:48:25.989Z"
+    }
+  },
+  "unknown": [
+    "fight \"Large chicken\": no combat data",
+    "fight \"Black jaguar (Scrambled!)\": no combat data",
+    "fight \"Red dragon (Scrambled!)\": no combat data",
+    "step \"mixWaterAndDamianaLeaves\": Quest Helper gives no tile",
+    "step \"boilDamianaWater\": Quest Helper gives no tile",
+    "step \"pourTeaIntoCup\": Quest Helper gives no tile",
+    "step \"puzzleSolver\": Quest Helper gives no tile",
+    "Quest Helper condition \"new WidgetPresenceRequirement\" is not understood (1)",
+    "what the quest uses up and hands out is not reviewed"
+  ]
+}

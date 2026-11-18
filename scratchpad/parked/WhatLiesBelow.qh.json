@@ -1,0 +1,322 @@
+{
+ "title": "What Lies Below",
+ "cls": "WhatLiesBelow",
+ "var": [
+  "varbit",
+  3523
+ ],
+ "members": true,
+ "revision": "b9b93706618a7b7fe7e5ea30e9a9ef35ba09673e",
+ "machine": {
+  "stages": {
+   "0": {
+    "s": "talkToRat"
+   },
+   "5": {
+    "s": "talkToRat"
+   },
+   "10": "n1",
+   "20": {
+    "s": "talkToRatAfterFolder"
+   },
+   "25": {
+    "s": "talkToSurok"
+   },
+   "30": {
+    "s": "talkToSurokNoLetter"
+   },
+   "40": {
+    "s": "talkToSurokNoLetter"
+   },
+   "45": {
+    "s": "talkToSurokNoLetter"
+   },
+   "46": {
+    "s": "talkToSurokNoLetter"
+   },
+   "50": "n2",
+   "55": {
+    "s": "bringWandToSurok"
+   },
+   "60": {
+    "s": "talkToRatAfterSurok"
+   },
+   "61": {
+    "s": "talkToRatAfterSurok"
+   },
+   "70": {
+    "s": "talkToRatAfterSurokNoLetter"
+   },
+   "71": {
+    "s": "talkToRatAfterSurokNoLetter"
+   },
+   "72": {
+    "s": "talkToRatAfterSurokNoLetter"
+   },
+   "80": {
+    "s": "talkToZaff"
+   },
+   "81": {
+    "s": "talkToZaff"
+   },
+   "110": "n3",
+   "115": "n3",
+   "120": "n3",
+   "140": {
+    "s": "talkToRatToFinish"
+   }
+  },
+  "nodes": {
+   "n1": {
+    "n": "getIntel",
+    "c": [
+     [
+      {
+       "o": "item",
+       "nm": "Full folder",
+       "ids": [
+        11007
+       ]
+      },
+      {
+       "s": "bringFolderToRat"
+      }
+     ]
+    ],
+    "d": {
+     "s": "killOutlaws"
+    }
+   },
+   "n2": {
+    "n": "chargeWand",
+    "c": [
+     [
+      {
+       "o": "zone",
+       "z": [
+        [
+         2245,
+         4823,
+         2299,
+         4860,
+         0,
+         2
+        ]
+       ]
+      },
+      {
+       "s": "useWandOnAltar"
+      }
+     ]
+    ],
+    "d": {
+     "s": "enterChaosAltar"
+    }
+   },
+   "n3": {
+    "n": "defeatSurok",
+    "c": [
+     [
+      {
+       "o": "vb",
+       "id": 6719,
+       "v": 2
+      },
+      {
+       "s": "fightRoald"
+      }
+     ]
+    ],
+    "d": {
+     "s": "talkToSurokToFight"
+    }
+   }
+  },
+  "reqs": {},
+  "alias": {
+   "talkToRatAfterFolder": [
+    "bringFolderToRat"
+   ],
+   "talkToSurokNoLetter": [
+    "talkToSurok"
+   ]
+  }
+ },
+ "unknown": {},
+ "steps": {
+  "talkToRat": {
+   "typ": "NpcStep",
+   "wp": [
+    3266,
+    3333,
+    0
+   ],
+   "ids": [
+    4158
+   ],
+   "text": "Talk to Rat Burgiss south of Varrock."
+  },
+  "killOutlaws": {
+   "typ": "NpcStep",
+   "wp": [
+    3118,
+    3472,
+    0
+   ],
+   "ids": [
+    4167
+   ],
+   "text": "Go to the Bandits west of the Grand Exchange and kill 5 for intel. Put the intel into the folder Rat gave you."
+  },
+  "bringFolderToRat": {
+   "typ": "NpcStep",
+   "wp": [
+    3266,
+    3333,
+    0
+   ],
+   "ids": [
+    4158
+   ],
+   "text": "Return to Rat Burgiss south of Varrock."
+  },
+  "talkToRatAfterFolder": {
+   "typ": "NpcStep",
+   "wp": [
+    3266,
+    3333,
+    0
+   ],
+   "ids": [
+    4158
+   ],
+   "text": "Return to Rat Burgiss south of Varrock."
+  },
+  "talkToSurok": {
+   "typ": "NpcStep",
+   "wp": [
+    3211,
+    3493,
+    0
+   ],
+   "ids": [
+    6186
+   ],
+   "text": "Talk to Surok Magis in the Varrock Library."
+  },
+  "talkToSurokNoLetter": {
+   "typ": "NpcStep",
+   "wp": [
+    3211,
+    3493,
+    0
+   ],
+   "ids": [
+    3205
+   ],
+   "text": "Talk to Surok Magis in the Varrock Library."
+  },
+  "enterChaosAltar": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Travel to the chaos altar with the wand and 15 chaos runes. You can either enter with a chaos talisman, or use the abyss."
+  },
+  "useWandOnAltar": {
+   "typ": "ObjectStep",
+   "wp": [
+    2271,
+    4842,
+    0
+   ],
+   "ids": [
+    34769
+   ],
+   "text": "Use the wand on the chaos altar."
+  },
+  "bringWandToSurok": {
+   "typ": "NpcStep",
+   "wp": [
+    3211,
+    3493,
+    0
+   ],
+   "ids": [
+    6186
+   ],
+   "text": "Return to Surok Magis in the Varrock Library with the wand and a bowl."
+  },
+  "talkToRatAfterSurok": {
+   "typ": "NpcStep",
+   "wp": [
+    3266,
+    3333,
+    0
+   ],
+   "ids": [
+    4158
+   ],
+   "text": "Return to Rat Burgiss south of Varrock."
+  },
+  "talkToRatAfterSurokNoLetter": {
+   "typ": "NpcStep",
+   "wp": [
+    3266,
+    3333,
+    0
+   ],
+   "ids": [
+    4158
+   ],
+   "text": "Return to Rat Burgiss south of Varrock."
+  },
+  "talkToZaff": {
+   "typ": "NpcStep",
+   "wp": [
+    3202,
+    3434,
+    0
+   ],
+   "ids": [
+    2880
+   ],
+   "text": "Talk to Zaff in the Varrock staff shop."
+  },
+  "talkToSurokToFight": {
+   "typ": "NpcStep",
+   "wp": [
+    3211,
+    3493,
+    0
+   ],
+   "ids": [
+    4160
+   ],
+   "text": "Prepare to fight King Roald (level 47), then go talk to Surok Magis in the Varrock Library."
+  },
+  "fightRoald": {
+   "typ": "NpcStep",
+   "wp": [
+    3211,
+    3493,
+    0
+   ],
+   "ids": [
+    4163
+   ],
+   "text": "Fight King Roald. When he's at 1hp, right-click operate the beacon ring."
+  },
+  "talkToRatToFinish": {
+   "typ": "NpcStep",
+   "wp": [
+    3266,
+    3333,
+    0
+   ],
+   "ids": [
+    4158
+   ],
+   "text": "Return to Rat Burgiss south of Varrock to finish the quest."
+  }
+ }
+}

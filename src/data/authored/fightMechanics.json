@@ -112,6 +112,16 @@
       "url": "https://oldschool.runescape.wiki/w/Troll_General",
       "safespot": { "spell": "Fire Bolt" },
       "facts": ["The wiki says the Troll General can be safespotted; Troll Stronghold kills one with Fire Bolt for the prison key (combat audit S9-28)."]
+    },
+    "Black jaguar (Scrambled!)": {
+      "url": "https://oldschool.runescape.wiki/w/Scrambled!",
+      "safespot": { "spell": "Fire Bolt" },
+      "facts": ["The wiki says the jaguar can be safespotted just north-east of the camp; Scrambled! fights it with Fire Bolt from there (combat audit S9-54)."]
+    },
+    "Red dragon (Scrambled!)": {
+      "url": "https://oldschool.runescape.wiki/w/Scrambled!",
+      "safespot": { "spell": "Fire Bolt" },
+      "facts": ["The wiki says the red dragon can be safespotted south-east of the eggs; Scrambled! fights it with Fire Bolt from there (combat audit S9-54)."]
     }
   }
 }

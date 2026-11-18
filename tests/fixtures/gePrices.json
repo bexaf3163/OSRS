@@ -1,5 +1,5 @@
 {
- "source": "OSRS Wiki real-time prices API /latest (high = buy, low = sell), F2P route items and gear, read 2026-11-10; Members route items added 2026-11-14 and 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-17; Members route items added 2026-11-17; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18",
+ "source": "OSRS Wiki real-time prices API /latest (high = buy, low = sell), F2P route items and gear, read 2026-11-10; Members route items added 2026-11-14 and 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-17; Members route items added 2026-11-17; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18",
  "prices": {
   "Adamant 2h sword": {
    "buy": 3670,
@@ -2976,6 +2976,26 @@
   "Box trap": {
    "buy": 59,
    "sell": 58
+  },
+  "Chaos talisman": {
+   "buy": 103,
+   "sell": 91
+  },
+  "Air tiara": {
+   "buy": 30,
+   "sell": 19
+  },
+  "Body tiara": {
+   "buy": 40,
+   "sell": 10
+  },
+  "Earth tiara": {
+   "buy": 5,
+   "sell": 4
+  },
+  "Fire tiara": {
+   "buy": 40,
+   "sell": 38
   }
  }
 }

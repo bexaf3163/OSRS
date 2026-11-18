@@ -1,0 +1,701 @@
+{
+ "title": "Meat and Greet",
+ "cls": "MeatAndGreet",
+ "var": [
+  "varbit",
+  11182
+ ],
+ "members": true,
+ "revision": "b9b93706618a7b7fe7e5ea30e9a9ef35ba09673e",
+ "machine": {
+  "stages": {
+   "0": {
+    "s": "talkToEmelioToStartQuest"
+   },
+   "2": {
+    "s": "talkToEmelioToStartQuest"
+   },
+   "4": "n1",
+   "6": {
+    "s": "returnToEmelio"
+   },
+   "8": {
+    "s": "recipeStepWrapper"
+   },
+   "10": {
+    "s": "returnToEmelioWithNewsOfYourKebabSuccess"
+   },
+   "12": {
+    "s": "returnToEmelioWithNewsOfYourKebabSuccess"
+   },
+   "14": "n3",
+   "16": {
+    "s": "talkToLeliaAfterGivingHerTheKebab"
+   },
+   "18": "n4",
+   "20": "n5",
+   "22": "n6",
+   "24": "n7"
+  },
+  "nodes": {
+   "n1": {
+    "n": "solveSupplyChainIssues",
+    "c": [
+     [
+      {
+       "o": "?",
+       "d": "new WidgetPresenceRequirement"
+      },
+      {
+       "s": "enterCodeWrapper"
+      }
+     ],
+     [
+      {
+       "o": "vb",
+       "id": 11183,
+       "op": "<",
+       "v": 4
+      },
+      {
+       "s": "talkToSpiceMerchantInBazaar"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        {
+         "o": "vb",
+         "id": 11184,
+         "v": 3
+        },
+        "r1"
+       ]
+      },
+      {
+       "s": "exitWolfDen"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r2",
+        "r1"
+       ]
+      },
+      {
+       "s": "killDireWolfAlpha"
+      }
+     ],
+     [
+      "r2",
+      "n2"
+     ],
+     [
+      {
+       "o": "vb",
+       "id": 11184,
+       "op": "<",
+       "v": 2
+      },
+      {
+       "s": "talkToAlba"
+      }
+     ]
+    ],
+    "d": {
+     "s": "returnToAlba"
+    }
+   },
+   "n2": {
+    "n": "enterWolfDenAndKillTheDireWolfAlpha",
+    "c": [],
+    "d": {
+     "s": "headWestAndEnterTheDungeon"
+    }
+   },
+   "n3": {
+    "n": "giveKebabToLelia",
+    "c": [
+     [
+      "r3",
+      {
+       "s": "talkToLelia"
+      }
+     ]
+    ],
+    "d": {
+     "s": "headIntoColosseum"
+    }
+   },
+   "n4": {
+    "n": "fightMinotaurWithKebab",
+    "c": [
+     [
+      "r4",
+      {
+       "s": "fightMinotaur"
+      }
+     ],
+     [
+      {
+       "o": "nor",
+       "a": [
+        "r5",
+        "r3"
+       ]
+      },
+      {
+       "s": "getAnotherKebabFromEmelio"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        {
+         "o": "nor",
+         "a": [
+          "r5"
+         ]
+        },
+        "r3"
+       ]
+      },
+      {
+       "s": "leaveColosseumToGetAnotherKebabFromEmelio"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r5",
+        {
+         "o": "nor",
+         "a": [
+          "r3"
+         ]
+        }
+       ]
+      },
+      {
+       "s": "headIntoColosseum2"
+      }
+     ]
+    ],
+    "d": {
+     "s": "enterArenaWithKebab"
+    }
+   },
+   "n5": {
+    "n": "fightMinotaurWithKebabAfterEnteringAtLeastOnce",
+    "c": [
+     [
+      "r4",
+      {
+       "s": "fightMinotaur"
+      }
+     ],
+     [
+      {
+       "o": "nor",
+       "a": [
+        "r3"
+       ]
+      },
+      {
+       "s": "headIntoColosseumAfterFailing"
+      }
+     ],
+     [
+      {
+       "o": "nor",
+       "a": [
+        "r3"
+       ]
+      },
+      {
+       "s": "headIntoColosseumAfterDefeatingTheMinotaur"
+      }
+     ]
+    ],
+    "d": {
+     "s": "enterArenaAfterFailing"
+    }
+   },
+   "n6": {
+    "n": "talkToLeliaAfterBeatingTheMinotaurStep",
+    "c": [],
+    "d": {
+     "s": "talkToLeliaAfterBeatingTheMinotaur"
+    }
+   },
+   "n7": {
+    "n": "returnToEmelioWithNewsOfYourAdvertisingSuccessStep",
+    "c": [
+     [
+      "r3",
+      {
+       "s": "leaveColosseumToReturnToEmelio"
+      }
+     ]
+    ],
+    "d": {
+     "s": "returnToEmelioWithNewsOfYourAdvertisingSuccess"
+    }
+   }
+  },
+  "reqs": {
+   "r1": {
+    "o": "zone",
+    "z": [
+     [
+      1472,
+      9472,
+      1536,
+      9536,
+      0,
+      2
+     ]
+    ]
+   },
+   "r2": {
+    "o": "vb",
+    "id": 11184,
+    "v": 2
+   },
+   "r3": {
+    "o": "zone",
+    "z": [
+     [
+      1792,
+      9472,
+      1856,
+      9536,
+      0,
+      2
+     ]
+    ]
+   },
+   "r4": {
+    "o": "zone",
+    "z": [
+     [
+      1808,
+      3090,
+      1840,
+      3123,
+      0,
+      0
+     ]
+    ]
+   },
+   "r5": {
+    "o": "item",
+    "nm": "Test kebab",
+    "ids": [
+     29899
+    ]
+   }
+  },
+  "alias": {
+   "exitWolfDen": [
+    "returnToAlba"
+   ],
+   "enterCode": [
+    "enterCodeWrapper"
+   ],
+   "recipeStep": [
+    "recipeStepWrapper"
+   ],
+   "headIntoColosseum": [
+    "talkToLelia"
+   ],
+   "headIntoColosseum2": [
+    "enterArenaWithKebab"
+   ],
+   "leaveColosseumToGetAnotherKebabFromEmelio": [
+    "enterArenaWithKebab"
+   ],
+   "getAnotherKebabFromEmelio": [
+    "enterArenaWithKebab"
+   ],
+   "enterArenaAfterFailing": [
+    "enterArenaWithKebab"
+   ],
+   "headIntoColosseumAfterFailing": [
+    "enterArenaWithKebab"
+   ],
+   "leaveColosseumToReturnToEmelio": [
+    "returnToEmelioWithNewsOfYourAdvertisingSuccess"
+   ]
+  }
+ },
+ "unknown": {
+  "new WidgetPresenceRequirement": 1
+ },
+ "steps": {
+  "talkToEmelioToStartQuest": {
+   "typ": "NpcStep",
+   "wp": [
+    1753,
+    3074,
+    0
+   ],
+   "ids": [
+    13804
+   ],
+   "text": "Talk to Emelio in Outer Fortis at the south-eastern entrance of Civitas illa Fortis to start the quest."
+  },
+  "returnToAlba": {
+   "typ": "NpcStep",
+   "wp": [
+    1587,
+    3126,
+    0
+   ],
+   "ids": [
+    13807
+   ],
+   "text": "Return to Alba in the farmhouse west of Civitas illa Fortis to tell them about the Dire Wolf Alpha's demise."
+  },
+  "exitWolfDen": {
+   "typ": "ObjectStep",
+   "wp": [
+    1488,
+    9502,
+    1
+   ],
+   "ids": [
+    54691
+   ],
+   "text": "Exit the wolf den, then head back to Alba in the farmhouse west of Civitas illa Fortis."
+  },
+  "enterCodeWrapper": {
+   "typ": "PuzzleWrapperStep",
+   "wp": null,
+   "ids": [],
+   "text": "Figure out the correct code to unlock the box of spices."
+  },
+  "resetCode": {
+   "typ": "WidgetStep",
+   "wp": null,
+   "ids": [],
+   "text": "Reset the code."
+  },
+  "submitCode": {
+   "typ": "WidgetStep",
+   "wp": null,
+   "ids": [
+    888,
+    7
+   ],
+   "text": "Submit the code."
+  },
+  "enterFourthNumber": {
+   "typ": "WidgetStep",
+   "wp": null,
+   "ids": [],
+   "text": "Click 6."
+  },
+  "enterThirdNumber": {
+   "typ": "WidgetStep",
+   "wp": null,
+   "ids": [],
+   "text": "Click 4."
+  },
+  "enterSecondNumber": {
+   "typ": "WidgetStep",
+   "wp": null,
+   "ids": [],
+   "text": "Click 5."
+  },
+  "enterFirstNumber": {
+   "typ": "WidgetStep",
+   "wp": null,
+   "ids": [],
+   "text": "Click 2."
+  },
+  "talkToSpiceMerchantInBazaar": {
+   "typ": "NpcStep",
+   "wp": [
+    1685,
+    3101,
+    0
+   ],
+   "ids": [
+    13337
+   ],
+   "text": "Talk to the Spice Merchant in the Bazaar in the middle of Civitas illa Fortis about the missing delivery."
+  },
+  "killDireWolfAlpha": {
+   "typ": "NpcStep",
+   "wp": null,
+   "ids": [
+    13812
+   ],
+   "text": "Kill the Dire Wolf Alpha. Use Protect from Melee to avoid most damage. His pups deal ranged damage."
+  },
+  "headWestAndEnterTheDungeon": {
+   "typ": "ObjectStep",
+   "wp": [
+    1498,
+    3132,
+    0
+   ],
+   "ids": [
+    54692
+   ],
+   "text": "Head west from the farm and enter the Wolf Den, prepared to kill the Dire Wolf Alpha."
+  },
+  "talkToAlba": {
+   "typ": "NpcStep",
+   "wp": [
+    1587,
+    3126,
+    0
+   ],
+   "ids": [
+    13807
+   ],
+   "text": "Talk to Alba in the farmhouse west of Civitas illa Fortis."
+  },
+  "returnToEmelio": {
+   "typ": "NpcStep",
+   "wp": [
+    1753,
+    3074,
+    0
+   ],
+   "ids": [
+    13804
+   ],
+   "text": "Return to Emelio in Outer Fortis at the south-eastern entrance of Civitas illa Fortis to find the perfect ratio of ingredients for the kebab."
+  },
+  "recipeStepWrapper": {
+   "typ": "PuzzleWrapperStep",
+   "wp": null,
+   "ids": [],
+   "text": "Figure out the correct ratio of meat, salad, spice, and sauce by talking to the kebab connoisseurs outside then give the final recipe to Emelio."
+  },
+  "adjustRecipe": {
+   "typ": "NpcStep",
+   "wp": [
+    1753,
+    3074,
+    0
+   ],
+   "ids": [
+    13804
+   ],
+   "text": "Adjust the recipe with Emelio. Four portions of meat, two portions of salad, one portion of spice, and three portions of sauce."
+  },
+  "giveExperimentalKebabToRenata": {
+   "typ": "NpcStep",
+   "wp": [
+    1750,
+    3072,
+    0
+   ],
+   "ids": [
+    13809
+   ],
+   "text": "Talk to Renata to have them test your test kebab."
+  },
+  "giveRecipeToEmelio": {
+   "typ": "NpcStep",
+   "wp": [
+    1753,
+    3074,
+    0
+   ],
+   "ids": [
+    13804
+   ],
+   "text": "Tell Emelio the recipe is perfect."
+  },
+  "returnToEmelioWithNewsOfYourKebabSuccess": {
+   "typ": "NpcStep",
+   "wp": [
+    1754,
+    3074,
+    0
+   ],
+   "ids": [
+    13804
+   ],
+   "text": "Return to Emelio with news of your kebab success!"
+  },
+  "headIntoColosseum": {
+   "typ": "ObjectStep",
+   "wp": [
+    1796,
+    3106,
+    0
+   ],
+   "ids": [
+    50749
+   ],
+   "text": "Head into the Fortis Colosseum and talk to Lelia about kebab sales."
+  },
+  "talkToLelia": {
+   "typ": "NpcStep",
+   "wp": [
+    1819,
+    9484,
+    0
+   ],
+   "ids": [
+    13806
+   ],
+   "text": "Head into the Fortis Colosseum, then into the southern room and talk to Lelia about kebab sales."
+  },
+  "talkToLeliaAfterGivingHerTheKebab": {
+   "typ": "NpcStep",
+   "wp": [
+    1819,
+    9484,
+    0
+   ],
+   "ids": [
+    13806
+   ],
+   "text": "Talk to Lelia after letting her taste your test kebab."
+  },
+  "enterArenaWithKebab": {
+   "typ": "NpcStep",
+   "wp": [
+    1819,
+    9484,
+    0
+   ],
+   "ids": [
+    13806
+   ],
+   "text": "Talk to Lelia in the southern room, ready to fight the Minotaur."
+  },
+  "headIntoColosseum2": {
+   "typ": "ObjectStep",
+   "wp": [
+    1796,
+    3106,
+    0
+   ],
+   "ids": [
+    50749
+   ],
+   "text": "Head into the Fortis Colosseum, ready to fight the Minotaur."
+  },
+  "leaveColosseumToGetAnotherKebabFromEmelio": {
+   "typ": "ObjectStep",
+   "wp": [
+    1798,
+    9506,
+    0
+   ],
+   "ids": [
+    50750
+   ],
+   "text": "Talk to Emelio to get another test kebab."
+  },
+  "getAnotherKebabFromEmelio": {
+   "typ": "NpcStep",
+   "wp": [
+    1754,
+    3074,
+    0
+   ],
+   "ids": [
+    13804
+   ],
+   "text": "Talk to Emelio to get another test kebab before you can fight the Minotaur."
+  },
+  "enterArenaAfterFailing": {
+   "typ": "NpcStep",
+   "wp": [
+    1819,
+    9484,
+    0
+   ],
+   "ids": [
+    13806
+   ],
+   "text": "Talk to Lelia in the southern room, ready to fight the Minotaur again."
+  },
+  "headIntoColosseumAfterFailing": {
+   "typ": "ObjectStep",
+   "wp": [
+    1796,
+    3106,
+    0
+   ],
+   "ids": [
+    50749
+   ],
+   "text": "Head into the Fortis Colosseum, ready to fight the Minotaur again."
+  },
+  "fightMinotaur": {
+   "typ": "NpcStep",
+   "wp": [
+    1823,
+    3105,
+    0
+   ],
+   "ids": [
+    13815
+   ],
+   "text": "Fight the Minotaur. Protect from Melee to avoid most damage. When it shouts Moo! switch to Protect from Magic for one attack."
+  },
+  "headIntoColosseumAfterDefeatingTheMinotaur": {
+   "typ": "ObjectStep",
+   "wp": [
+    1796,
+    3106,
+    0
+   ],
+   "ids": [
+    50749
+   ],
+   "text": "Head into the Fortis Colosseum and talk to Lelia."
+  },
+  "talkToLeliaAfterBeatingTheMinotaur": {
+   "typ": "NpcStep",
+   "wp": [
+    1818,
+    9484,
+    0
+   ],
+   "ids": [
+    13806
+   ],
+   "text": "Talk to Lelia in the southern room of the Fortis Colosseum after defeating the Minotaur."
+  },
+  "returnToEmelioWithNewsOfYourAdvertisingSuccess": {
+   "typ": "NpcStep",
+   "wp": [
+    1754,
+    3074,
+    0
+   ],
+   "ids": [
+    13804
+   ],
+   "text": "Return to Emelio in Outer Fortis at the south-eastern entrance of Civitas illa Fortis and tell him about your success."
+  },
+  "leaveColosseumToReturnToEmelio": {
+   "typ": "ObjectStep",
+   "wp": [
+    1798,
+    9506,
+    0
+   ],
+   "ids": [
+    50750
+   ],
+   "text": "Exit the colosseum, then return to Emelio in Outer Fortis at the south-eastern entrance of Civitas illa Fortis and tell him about your success."
+  }
+ }
+}

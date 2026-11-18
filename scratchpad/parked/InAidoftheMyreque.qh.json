@@ -1,0 +1,1301 @@
+{
+ "title": "In Aid of the Myreque",
+ "cls": "InAidOfTheMyreque",
+ "var": [
+  "varbit",
+  1990
+ ],
+ "members": true,
+ "revision": "b9b93706618a7b7fe7e5ea30e9a9ef35ba09673e",
+ "machine": {
+  "stages": {
+   "0": "n1",
+   "20": "n3",
+   "30": {
+    "s": "putFoodInChest"
+   },
+   "40": {
+    "s": "talkToRazvan"
+   },
+   "50": {
+    "s": "talkToRazvan"
+   },
+   "60": {
+    "s": "clearTrapdoorRubble"
+   },
+   "70": {
+    "s": "clearTrapdoorRubble"
+   },
+   "80": {
+    "s": "enterBurghPubBasement"
+   },
+   "90": {
+    "s": "enterBurghPubBasement"
+   },
+   "100": "n4",
+   "110": "n5",
+   "120": "n6",
+   "130": "n6",
+   "140": "n6",
+   "150": "n7",
+   "160": {
+    "s": "talkToAurelForCrate"
+   },
+   "165": "n8",
+   "170": {
+    "s": "repairBooth"
+   },
+   "180": {
+    "s": "repairBankWall"
+   },
+   "190": {
+    "s": "talkToCornelius"
+   },
+   "200": {
+    "s": "talkToRazvanAfterRepairs"
+   },
+   "205": {
+    "s": "repairFurnace"
+   },
+   "210": "n9",
+   "220": {
+    "s": "lightFurnace"
+   },
+   "230": "n10",
+   "240": "n11",
+   "250": "n11",
+   "260": "n11",
+   "280": "n12",
+   "290": "n14",
+   "300": "n15",
+   "310": "n15",
+   "315": "n16",
+   "320": "n16",
+   "330": "n16",
+   "340": "n16",
+   "350": "n17",
+   "360": "n18",
+   "370": "n18",
+   "375": "n19",
+   "380": "n19",
+   "390": "n19",
+   "400": "n19",
+   "410": "n19",
+   "420": "n23"
+  },
+  "nodes": {
+   "n1": {
+    "n": "startQuest",
+    "c": [
+     [
+      "r1",
+      {
+       "s": "talkToVeliaf"
+      }
+     ]
+    ],
+    "d": "n2"
+   },
+   "n2": {
+    "n": "goToHollowBase",
+    "c": [
+     [
+      "r2",
+      {
+       "s": "enterMyrequeCave"
+      }
+     ]
+    ],
+    "d": {
+     "s": "climbDownCanifis"
+    }
+   },
+   "n3": {
+    "n": "travelToBurgh",
+    "c": [
+     [
+      {
+       "o": "zone",
+       "z": [
+        [
+         3480,
+         3373,
+         3530,
+         3429,
+         0,
+         0
+        ]
+       ]
+      },
+      {
+       "s": "takeBoatToMortton"
+      }
+     ],
+     [
+      {
+       "o": "zone",
+       "z": [
+        [
+         3426,
+         3430,
+         3513,
+         3464,
+         0,
+         0
+        ]
+       ]
+      },
+      {
+       "s": "goOverBridge"
+      }
+     ],
+     [
+      "r1",
+      {
+       "s": "leaveMyrequeCave"
+      }
+     ],
+     [
+      "r2",
+      {
+       "s": "leaveCavesIntoSwamp"
+      }
+     ]
+    ],
+    "d": {
+     "s": "talkToFlorin"
+    }
+   },
+   "n4": {
+    "n": "clearBasement",
+    "c": [
+     [
+      "r3",
+      {
+       "s": "clearBasementRubble"
+      }
+     ]
+    ],
+    "d": {
+     "s": "enterBurghPubBasement"
+    }
+   },
+   "n5": {
+    "n": "goTalkToRazAfterClearing",
+    "c": [
+     [
+      "r3",
+      {
+       "s": "leavePubBasement"
+      }
+     ]
+    ],
+    "d": {
+     "s": "talkToAurel"
+    }
+   },
+   "n6": {
+    "n": "goRepairRoof",
+    "c": [
+     [
+      "r4",
+      {
+       "s": "fixRoof"
+      }
+     ]
+    ],
+    "d": {
+     "s": "climbShopLadder"
+    }
+   },
+   "n7": {
+    "n": "goRepairShopWall",
+    "c": [
+     [
+      "r4",
+      {
+       "s": "climbDownShopLadder"
+      }
+     ]
+    ],
+    "d": {
+     "s": "fixShopWall"
+    }
+   },
+   "n8": {
+    "n": "goFillCrate",
+    "c": [
+     [
+      {
+       "o": "vb",
+       "id": 1994,
+       "v": 938
+      },
+      {
+       "s": "talkToAurelWithCrate"
+      }
+     ]
+    ],
+    "d": {
+     "s": "fillCrate"
+    }
+   },
+   "n9": {
+    "n": "goStartFurnace",
+    "c": [
+     [
+      {
+       "o": "vb",
+       "id": 1980,
+       "v": 2
+      },
+      {
+       "s": "lightFurnace"
+      }
+     ]
+    ],
+    "d": {
+     "s": "addCoalToFurnace"
+    }
+   },
+   "n10": {
+    "n": "investigateShop",
+    "c": [
+     [
+      {
+       "o": "and",
+       "a": [
+        "r5",
+        {
+         "o": "vb",
+         "id": 1997,
+         "v": 1
+        }
+       ]
+      },
+      {
+       "s": "talkToWiskit"
+      }
+     ],
+     [
+      "r5",
+      {
+       "s": "talkToJuvinate"
+      }
+     ]
+    ],
+    "d": {
+     "s": "talkToGadderanks"
+    }
+   },
+   "n11": {
+    "n": "defeatGadderanks",
+    "c": [
+     [
+      {
+       "o": "and",
+       "a": [
+        "r6",
+        {
+         "o": "vb",
+         "id": 1999,
+         "v": 3
+        }
+       ]
+      },
+      {
+       "s": "talkToGadderanks"
+      }
+     ],
+     [
+      "r6",
+      {
+       "s": "killGadderanksAndJuvinates"
+      }
+     ]
+    ],
+    "d": {
+     "s": "talkToGadderanks"
+    }
+   },
+   "n12": {
+    "n": "goBackToHollow",
+    "c": [
+     [
+      {
+       "o": "vb",
+       "id": 1981,
+       "op": ">=",
+       "v": 3
+      },
+      "n13"
+     ]
+    ],
+    "d": {
+     "s": "talkToVeliafAfterFight"
+    }
+   },
+   "n13": {
+    "n": "returnToHideout",
+    "c": [
+     [
+      "r1",
+      {
+       "s": "talkToVeliafInHideoutAgain"
+      }
+     ]
+    ],
+    "d": "n2"
+   },
+   "n14": {
+    "n": "goTalkToPolmafi",
+    "c": [
+     [
+      "r1",
+      {
+       "s": "talkToPolmafi"
+      }
+     ]
+    ],
+    "d": "n2"
+   },
+   "n15": {
+    "n": "travelWithIvan",
+    "c": [
+     [
+      {
+       "o": "zone",
+       "z": [
+        [
+         2824,
+         4576,
+         2847,
+         4599,
+         0,
+         0
+        ]
+       ]
+      },
+      {
+       "s": "killJuvinates2"
+      }
+     ],
+     [
+      {
+       "o": "zone",
+       "z": [
+        [
+         2845,
+         4550,
+         2872,
+         4575,
+         0,
+         0
+        ]
+       ]
+      },
+      {
+       "s": "killJuvinates"
+      }
+     ],
+     [
+      "r1",
+      {
+       "s": "talkToIvanForTrek"
+      }
+     ]
+    ],
+    "d": "n2"
+   },
+   "n16": {
+    "n": "goTalkToDrezel",
+    "c": [
+     [
+      "r7",
+      {
+       "s": "talkToDrezel"
+      }
+     ]
+    ],
+    "d": {
+     "s": "goDownToDrezel"
+    }
+   },
+   "n17": {
+    "n": "unlockLibrary",
+    "c": [
+     [
+      "r7",
+      {
+       "s": "useKeyOnHole"
+      }
+     ]
+    ],
+    "d": {
+     "s": "goDownToDrezel"
+    }
+   },
+   "n18": {
+    "n": "goReadBook",
+    "c": [
+     [
+      {
+       "o": "item",
+       "nm": "The sleeping seven",
+       "ids": [
+        7633
+       ]
+      },
+      {
+       "s": "readBook"
+      }
+     ],
+     [
+      {
+       "o": "zone",
+       "z": [
+        [
+         3351,
+         9899,
+         3362,
+         9905,
+         0,
+         0
+        ]
+       ]
+      },
+      {
+       "s": "searchBookcase"
+      }
+     ],
+     [
+      "r7",
+      {
+       "s": "enterLibrary"
+      }
+     ]
+    ],
+    "d": {
+     "s": "goDownToDrezel"
+    }
+   },
+   "n19": {
+    "n": "goMakeRod",
+    "c": [
+     [
+      {
+       "o": "item",
+       "nm": "Silvthrill rod",
+       "ids": [
+        7638
+       ]
+      },
+      "n20"
+     ],
+     [
+      {
+       "o": "item",
+       "nm": "Silvthrill rod",
+       "ids": [
+        7637
+       ]
+      },
+      {
+       "s": "enchantRod"
+      }
+     ],
+     [
+      {
+       "o": "item",
+       "nm": "Rod mould",
+       "ids": [
+        7649
+       ]
+      },
+      {
+       "s": "makeRod"
+      }
+     ],
+     [
+      {
+       "o": "zone",
+       "z": [
+        [
+         3490,
+         9858,
+         3517,
+         9882,
+         0,
+         0
+        ]
+       ]
+      },
+      {
+       "s": "useClayOnCoffin"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r2",
+        {
+         "o": "vb",
+         "id": 1983,
+         "v": 1
+        }
+       ]
+      },
+      {
+       "s": "enterCoffinRoom"
+      }
+     ],
+     [
+      "r2",
+      {
+       "s": "useHammerOnBoards"
+      }
+     ]
+    ],
+    "d": "n22"
+   },
+   "n20": {
+    "n": "goBlessRod",
+    "c": [
+     [
+      "r7",
+      {
+       "s": "useRodOnWell"
+      }
+     ]
+    ],
+    "d": "n21"
+   },
+   "n21": {
+    "n": "enterPaterToBless",
+    "c": [],
+    "d": {
+     "s": "goDownToDrezel"
+    }
+   },
+   "n22": {
+    "n": "goIntoCavesAgain",
+    "c": [],
+    "d": {
+     "s": "climbDownCanifis"
+    }
+   },
+   "n23": {
+    "n": "finishQuest",
+    "c": [
+     [
+      "r3",
+      {
+       "s": "talkToVeliafToFinish"
+      }
+     ]
+    ],
+    "d": {
+     "s": "enterBurghPubBasement"
+    }
+   }
+  },
+  "reqs": {
+   "r1": {
+    "o": "zone",
+    "z": [
+     [
+      3502,
+      9829,
+      3515,
+      9846,
+      0,
+      0
+     ]
+    ]
+   },
+   "r2": {
+    "o": "zone",
+    "z": [
+     [
+      3450,
+      9792,
+      3504,
+      9847,
+      0,
+      2
+     ]
+    ]
+   },
+   "r3": {
+    "o": "zone",
+    "z": [
+     [
+      3489,
+      9622,
+      3500,
+      9632,
+      0,
+      1
+     ]
+    ]
+   },
+   "r4": {
+    "o": "zone",
+    "z": [
+     [
+      3512,
+      3239,
+      3518,
+      3243,
+      2,
+      2
+     ]
+    ]
+   },
+   "r5": {
+    "o": "vb",
+    "id": 1995,
+    "v": 1
+   },
+   "r6": {
+    "o": "and",
+    "a": [
+     {
+      "o": "zone",
+      "z": [
+       [
+        3512,
+        3239,
+        3518,
+        3243,
+        0,
+        0
+       ]
+      ]
+     },
+     {
+      "o": "true"
+     }
+    ]
+   },
+   "r7": {
+    "o": "zone",
+    "z": [
+     [
+      3402,
+      9880,
+      3443,
+      9907,
+      0,
+      0
+     ]
+    ]
+   }
+  },
+  "alias": {
+   "leavePubBasement": [
+    "talkToAurel"
+   ]
+  }
+ },
+ "unknown": {},
+ "steps": {
+  "climbDownCanifis": {
+   "typ": "ObjectStep",
+   "wp": [
+    3495,
+    3464,
+    0
+   ],
+   "ids": [
+    5055
+   ],
+   "text": "Enter the trapdoor behind the Canifis Pub."
+  },
+  "enterMyrequeCave": {
+   "typ": "ObjectStep",
+   "wp": [
+    3492,
+    9823,
+    0
+   ],
+   "ids": [
+    5046
+   ],
+   "text": "Enter the cave on the east side."
+  },
+  "talkToVeliaf": {
+   "typ": "NpcStep",
+   "wp": [
+    3506,
+    9837,
+    0
+   ],
+   "ids": [
+    5048
+   ],
+   "text": "Talk to Veliaf Hurtz."
+  },
+  "talkToFlorin": {
+   "typ": "NpcStep",
+   "wp": [
+    3484,
+    3242,
+    0
+   ],
+   "ids": [
+    4454
+   ],
+   "text": ""
+  },
+  "takeBoatToMortton": {
+   "typ": "ObjectStep",
+   "wp": [
+    3499,
+    3378,
+    0
+   ],
+   "ids": [
+    6970
+   ],
+   "text": "Board the boat to the south to Mort'ton."
+  },
+  "goOverBridge": {
+   "typ": "ObjectStep",
+   "wp": [
+    3502,
+    3431,
+    0
+   ],
+   "ids": [
+    5003
+   ],
+   "text": "Cross the bridge to the south."
+  },
+  "leaveMyrequeCave": {
+   "typ": "ObjectStep",
+   "wp": [
+    3505,
+    9831,
+    0
+   ],
+   "ids": [
+    5046
+   ],
+   "text": "Leave the cave."
+  },
+  "leaveCavesIntoSwamp": {
+   "typ": "ObjectStep",
+   "wp": [
+    3501,
+    9813,
+    0
+   ],
+   "ids": [
+    5057
+   ],
+   "text": "Leave through the doors to the south."
+  },
+  "putFoodInChest": {
+   "typ": "ObjectStep",
+   "wp": [
+    3483,
+    3246,
+    0
+   ],
+   "ids": [
+    12736
+   ],
+   "text": "Place some food in the nearby chest."
+  },
+  "talkToRazvan": {
+   "typ": "NpcStep",
+   "wp": [
+    3493,
+    3235,
+    0
+   ],
+   "ids": [
+    4468
+   ],
+   "text": "Talk to Razvan in Burgh de Rott."
+  },
+  "clearTrapdoorRubble": {
+   "typ": "ObjectStep",
+   "wp": [
+    3490,
+    3232,
+    0
+   ],
+   "ids": [
+    12738
+   ],
+   "text": "Use a pickaxe on the rubble in the building south of Razvan."
+  },
+  "enterBurghPubBasement": {
+   "typ": "ObjectStep",
+   "wp": [
+    3490,
+    3232,
+    0
+   ],
+   "ids": [
+    12743
+   ],
+   "text": "Enter the trapdoor."
+  },
+  "clearBasementRubble": {
+   "typ": "ObjectStep",
+   "wp": null,
+   "ids": [
+    12812
+   ],
+   "text": "Mine all the rubble in the room, and then clean it up with a spade. You'll need an empty bucket when using the spade. You can empty the buckets outside on the rubble pile."
+  },
+  "talkToAurel": {
+   "typ": "NpcStep",
+   "wp": [
+    3515,
+    3241,
+    0
+   ],
+   "ids": [
+    4445
+   ],
+   "text": "Talk to Aurel in north east Burgh de Rott."
+  },
+  "leavePubBasement": {
+   "typ": "ObjectStep",
+   "wp": [
+    3490,
+    9632,
+    1
+   ],
+   "ids": [
+    12779
+   ],
+   "text": "Leave the basement."
+  },
+  "climbShopLadder": {
+   "typ": "ObjectStep",
+   "wp": [
+    3513,
+    3238,
+    0
+   ],
+   "ids": [
+    12780
+   ],
+   "text": "Go to the roof of Aurel's shop."
+  },
+  "fixRoof": {
+   "typ": "ObjectStep",
+   "wp": [
+    3515,
+    3240,
+    2
+   ],
+   "ids": [
+    12751
+   ],
+   "text": "Repair the broken roof."
+  },
+  "fixShopWall": {
+   "typ": "ObjectStep",
+   "wp": [
+    3517,
+    3238,
+    0
+   ],
+   "ids": [
+    12859
+   ],
+   "text": "Repair the shop's wall."
+  },
+  "climbDownShopLadder": {
+   "typ": "ObjectStep",
+   "wp": [
+    3513,
+    3238,
+    2
+   ],
+   "ids": [
+    12781
+   ],
+   "text": "Climb back down the ladder."
+  },
+  "talkToAurelForCrate": {
+   "typ": "NpcStep",
+   "wp": [
+    3515,
+    3241,
+    0
+   ],
+   "ids": [
+    4445
+   ],
+   "text": "Talk to Aurel again."
+  },
+  "fillCrate": {
+   "typ": null,
+   "wp": null,
+   "ids": [],
+   "text": null
+  },
+  "talkToAurelWithCrate": {
+   "typ": "NpcStep",
+   "wp": [
+    3515,
+    3241,
+    0
+   ],
+   "ids": [
+    4445
+   ],
+   "text": "Return to Aurel with the filled crate."
+  },
+  "repairBooth": {
+   "typ": "ObjectStep",
+   "wp": [
+    3494,
+    3211,
+    0
+   ],
+   "ids": [
+    12759
+   ],
+   "text": "Repair the bank booth."
+  },
+  "repairBankWall": {
+   "typ": "ObjectStep",
+   "wp": [
+    3491,
+    3211,
+    0
+   ],
+   "ids": [
+    12859
+   ],
+   "text": "Repair the bank's outside wall."
+  },
+  "talkToCornelius": {
+   "typ": "NpcStep",
+   "wp": [
+    3496,
+    3211,
+    0
+   ],
+   "ids": [
+    4470
+   ],
+   "text": "Talk to Cornelius and ask him to be the banker."
+  },
+  "talkToRazvanAfterRepairs": {
+   "typ": "NpcStep",
+   "wp": [
+    3493,
+    3235,
+    0
+   ],
+   "ids": [
+    4468
+   ],
+   "text": "Talk to Razvan."
+  },
+  "repairFurnace": {
+   "typ": "ObjectStep",
+   "wp": [
+    3528,
+    3210,
+    0
+   ],
+   "ids": [
+    12805
+   ],
+   "text": "Repair the furnace in the south east of Burgh de Rott. You can use the bank you just made to get items out."
+  },
+  "addCoalToFurnace": {
+   "typ": "ObjectStep",
+   "wp": [
+    3528,
+    3210,
+    0
+   ],
+   "ids": [
+    12805
+   ],
+   "text": "Add coal to the furnace."
+  },
+  "lightFurnace": {
+   "typ": "ObjectStep",
+   "wp": [
+    3528,
+    3210,
+    0
+   ],
+   "ids": [
+    12805
+   ],
+   "text": "Light the furnace."
+  },
+  "talkToGadderanks": {
+   "typ": "NpcStep",
+   "wp": [
+    3515,
+    3241,
+    0
+   ],
+   "ids": [
+    4483
+   ],
+   "text": "Talk to Gadderanks in the shop."
+  },
+  "talkToWiskit": {
+   "typ": "NpcStep",
+   "wp": [
+    3515,
+    3241,
+    0
+   ],
+   "ids": [
+    4480
+   ],
+   "text": "Talk to Wiskit in the shop. Be prepared to fight the vampyres and Gadderanks."
+  },
+  "talkToJuvinate": {
+   "typ": "NpcStep",
+   "wp": [
+    3515,
+    3241,
+    0
+   ],
+   "ids": [
+    4482
+   ],
+   "text": "Talk to a juvinate in the shop."
+  },
+  "killGadderanksAndJuvinates": {
+   "typ": "NpcStep",
+   "wp": [
+    3515,
+    3241,
+    0
+   ],
+   "ids": [
+    4484
+   ],
+   "text": "Defeat Gadderanks and the juvinates."
+  },
+  "talkToVeliafAfterFight": {
+   "typ": "NpcStep",
+   "wp": [
+    3515,
+    3241,
+    0
+   ],
+   "ids": [
+    9633
+   ],
+   "text": "Talk to Veliaf in Burgh de Rott."
+  },
+  "talkToVeliafInHideoutAgain": {
+   "typ": "NpcStep",
+   "wp": [
+    3506,
+    9837,
+    0
+   ],
+   "ids": [
+    5048
+   ],
+   "text": "Talk to Veliaf Hurtz."
+  },
+  "talkToPolmafi": {
+   "typ": "NpcStep",
+   "wp": [
+    3506,
+    9837,
+    0
+   ],
+   "ids": [
+    5052
+   ],
+   "text": ""
+  },
+  "killJuvinates2": {
+   "typ": "NpcStep",
+   "wp": [
+    2839,
+    4589,
+    0
+   ],
+   "ids": [
+    4442
+   ],
+   "text": "Kill the juvenates."
+  },
+  "killJuvinates": {
+   "typ": "NpcStep",
+   "wp": [
+    2859,
+    4564,
+    0
+   ],
+   "ids": [
+    4443
+   ],
+   "text": "Kill the juvenates."
+  },
+  "talkToIvanForTrek": {
+   "typ": "NpcStep",
+   "wp": [
+    3506,
+    9837,
+    0
+   ],
+   "ids": [
+    5053
+   ],
+   "text": ""
+  },
+  "goDownToDrezel": {
+   "typ": "ObjectStep",
+   "wp": [
+    3422,
+    3485,
+    0
+   ],
+   "ids": [
+    3432
+   ],
+   "text": "Talk to Drezel under the Paterdomus Temple."
+  },
+  "talkToDrezel": {
+   "typ": "NpcStep",
+   "wp": [
+    3439,
+    9896,
+    0
+   ],
+   "ids": [
+    9636
+   ],
+   "text": "Talk to Drezel under the Paterdomus Temple."
+  },
+  "useKeyOnHole": {
+   "typ": "ObjectStep",
+   "wp": [
+    3443,
+    9898,
+    0
+   ],
+   "ids": [
+    12765
+   ],
+   "text": "Use the key on the keyhole near Drezel."
+  },
+  "readBook": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Read 'The Sleeping Seven'."
+  },
+  "searchBookcase": {
+   "typ": "ObjectStep",
+   "wp": [
+    3354,
+    9902,
+    0
+   ],
+   "ids": [
+    12767
+   ],
+   "text": "Search the bookcases for 'The Sleeping Seven' book."
+  },
+  "enterLibrary": {
+   "typ": "ObjectStep",
+   "wp": [
+    3441,
+    9899,
+    0
+   ],
+   "ids": [
+    12762
+   ],
+   "text": "Enter the library."
+  },
+  "useRodOnWell": {
+   "typ": "ObjectStep",
+   "wp": [
+    3423,
+    9890,
+    0
+   ],
+   "ids": [
+    3485
+   ],
+   "text": ""
+  },
+  "enchantRod": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Cast Lvl-1 enchant on the rod."
+  },
+  "makeRod": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Make a silvthrill rod at any furnace."
+  },
+  "useClayOnCoffin": {
+   "typ": "ObjectStep",
+   "wp": [
+    3511,
+    9864,
+    0
+   ],
+   "ids": [
+    12802
+   ],
+   "text": "Use a piece of soft clay on the coffin."
+  },
+  "enterCoffinRoom": {
+   "typ": "ObjectStep",
+   "wp": [
+    3484,
+    9832,
+    0
+   ],
+   "ids": [
+    12770
+   ],
+   "text": "Enter the cave."
+  },
+  "useHammerOnBoards": {
+   "typ": "ObjectStep",
+   "wp": [
+    3483,
+    9832,
+    0
+   ],
+   "ids": [
+    12772
+   ],
+   "text": "Use a hammer on the boarded up cave."
+  },
+  "talkToVeliafToFinish": {
+   "typ": "NpcStep",
+   "wp": [
+    3494,
+    9628,
+    0
+   ],
+   "ids": [
+    9489
+   ],
+   "text": ""
+  }
+ }
+}

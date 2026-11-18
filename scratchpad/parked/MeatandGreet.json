@@ -1,0 +1,568 @@
+{
+ "quest": "Meat and Greet",
+ "status": "draft",
+ "sources": {
+  "questHelper": "b9b93706618a7b7fe7e5ea30e9a9ef35ba09673e",
+  "wiki": {
+   "title": "Meat and Greet",
+   "revision": 15391667
+  },
+  "quickGuide": {
+   "title": "Meat and Greet/Quick guide",
+   "revision": 15031976
+  }
+ },
+ "step": {
+  "title": "Meat and Greet",
+  "type": "quest",
+  "qp": 1,
+  "membersOnly": true,
+  "wikiUrl": "https://oldschool.runescape.wiki/w/Meat_and_Greet",
+  "quickGuideUrl": "https://oldschool.runescape.wiki/w/Meat_and_Greet/Quick_guide",
+  "mapLocation": {
+   "x": 1754,
+   "y": 3074,
+   "plane": 0,
+   "label": "Talk to Emelio at his home in Outer Fortis."
+  },
+  "npc": {
+   "nameEn": "Emelio"
+  },
+  "itemsRequired": [],
+  "foes": [
+   "Dire Wolf Alpha",
+   "Minotaur (Meat and Greet)"
+  ]
+ },
+ "stages": {
+  "var": [
+   "varbit",
+   11182
+  ],
+  "route": [
+   {
+    "title": "Walkthrough",
+    "steps": [
+     "Talk to Emelio in south-east Outer FortisDialogue: \"Yes.\"",
+     "Talk to the Spice Merchant in the Bazaar about missing deliveryDialogue: \"I'm here about a missing delivery.\"",
+     "Open the box using the code 2546.",
+     "Talk to Alba at the north of Ortus Farm just outside the western entryway of the city, in the building north of the Buffalo pen.",
+     "Go west of the farm to the wolf den and inside the cave and kill the Dire Wolf Alpha. Bring food, as this fight takes place in a multicombat area with both melee and ranged damage being dealt simultaneously.",
+     "Return to Alba.",
+     "Return to Emelio",
+     "Talk to Emelio again and give him these numbers:",
+     "Give the test kebab to Vincens, Renata or Lucas outside.",
+     "Talk to Emelio again.",
+     "Talk to Lelia inside the Fortis Colosseum. She can be found in the southern room.",
+     "Fight and defeat the Minotaur.",
+     "Talk to Lelia after defeating the minotaur.",
+     "Talk to Emelio to finish the quest."
+    ]
+   }
+  ],
+  "stages": [
+   {
+    "at": 0,
+    "do": [
+     {
+      "t": "Talk to Emelio in Outer Fortis at the south-eastern entrance of Civitas illa Fortis to start the quest.",
+      "s": "Talk to Emelio in Outer Fortis at the south-eastern entrance of Civitas illa Fortis to start the quest.",
+      "k": "talkToEmelioToStartQuest",
+      "at": [
+       1753,
+       3074,
+       0
+      ],
+      "hl": {
+       "npc": [
+        13804
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 2,
+    "do": [
+     {
+      "t": "Talk to Emelio in Outer Fortis at the south-eastern entrance of Civitas illa Fortis to start the quest.",
+      "s": "Talk to Emelio in Outer Fortis at the south-eastern entrance of Civitas illa Fortis to start the quest.",
+      "k": "talkToEmelioToStartQuest",
+      "at": [
+       1753,
+       3074,
+       0
+      ],
+      "hl": {
+       "npc": [
+        13804
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 4,
+    "do": [
+     {
+      "t": "Return to Alba in the farmhouse west of Civitas illa Fortis to tell them about the Dire Wolf Alpha's demise.",
+      "s": "Return to Alba in the farmhouse west of Civitas illa Fortis to tell them about the Dire Wolf Alpha's demise.",
+      "k": "returnToAlba",
+      "at": [
+       1587,
+       3126,
+       0
+      ],
+      "hl": {
+       "npc": [
+        13807
+       ]
+      }
+     },
+     {
+      "t": "Talk to Alba in the farmhouse west of Civitas illa Fortis.",
+      "s": "Talk to Alba in the farmhouse west of Civitas illa Fortis.",
+      "k": "talkToAlba",
+      "at": [
+       1587,
+       3126,
+       0
+      ],
+      "hl": {
+       "npc": [
+        13807
+       ]
+      }
+     },
+     {
+      "t": "Head west from the farm and enter the Wolf Den, prepared to kill the Dire Wolf Alpha.",
+      "s": "Head west from the farm and enter the Wolf Den, prepared to kill the Dire Wolf Alpha.",
+      "k": "headWestAndEnterTheDungeon",
+      "at": [
+       1498,
+       3132,
+       0
+      ],
+      "hl": {
+       "obj": [
+        54692
+       ]
+      }
+     },
+     {
+      "t": "Kill the Dire Wolf Alpha. Use Protect from Melee to avoid most damage. His pups deal ranged damage.",
+      "s": "Kill the Dire Wolf Alpha. Use Protect from Melee to avoid most damage. His pups deal ranged damage.",
+      "k": "killDireWolfAlpha",
+      "hl": {
+       "npc": [
+        13812
+       ]
+      }
+     },
+     {
+      "t": "Exit the wolf den, then head back to Alba in the farmhouse west of Civitas illa Fortis.",
+      "s": "Exit the wolf den, then head back to Alba in the farmhouse west of Civitas illa Fortis.",
+      "k": "exitWolfDen",
+      "at": [
+       1488,
+       9502,
+       1
+      ],
+      "hl": {
+       "obj": [
+        54691
+       ]
+      }
+     },
+     {
+      "t": "Talk to the Spice Merchant in the Bazaar in the middle of Civitas illa Fortis about the missing delivery.",
+      "s": "Talk to the Spice Merchant in the Bazaar in the middle of Civitas illa Fortis about the missing delivery.",
+      "k": "talkToSpiceMerchantInBazaar",
+      "at": [
+       1685,
+       3101,
+       0
+      ],
+      "hl": {
+       "npc": [
+        13337
+       ]
+      }
+     },
+     {
+      "t": "Figure out the correct code to unlock the box of spices.",
+      "s": "Figure out the correct code to unlock the box of spices.",
+      "k": "enterCodeWrapper"
+     }
+    ]
+   },
+   {
+    "at": 6,
+    "do": [
+     {
+      "t": "Return to Emelio in Outer Fortis at the south-eastern entrance of Civitas illa Fortis to find the perfect ratio of ingredients for the kebab.",
+      "s": "Return to Emelio in Outer Fortis at the south-eastern entrance of Civitas illa Fortis to find the perfect ratio of ingredients for the kebab.",
+      "k": "returnToEmelio",
+      "at": [
+       1753,
+       3074,
+       0
+      ],
+      "hl": {
+       "npc": [
+        13804
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 8,
+    "do": [
+     {
+      "t": "Figure out the correct ratio of meat, salad, spice, and sauce by talking to the kebab connoisseurs outside then give the final recipe to Emelio.",
+      "s": "Figure out the correct ratio of meat, salad, spice, and sauce by talking to the kebab connoisseurs outside then give the final recipe to Emelio.",
+      "k": "recipeStepWrapper"
+     }
+    ]
+   },
+   {
+    "at": 10,
+    "do": [
+     {
+      "t": "Return to Emelio with news of your kebab success!",
+      "s": "Return to Emelio with news of your kebab success!",
+      "k": "returnToEmelioWithNewsOfYourKebabSuccess",
+      "at": [
+       1754,
+       3074,
+       0
+      ],
+      "hl": {
+       "npc": [
+        13804
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 12,
+    "do": [
+     {
+      "t": "Return to Emelio with news of your kebab success!",
+      "s": "Return to Emelio with news of your kebab success!",
+      "k": "returnToEmelioWithNewsOfYourKebabSuccess",
+      "at": [
+       1754,
+       3074,
+       0
+      ],
+      "hl": {
+       "npc": [
+        13804
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 14,
+    "do": [
+     {
+      "t": "Head into the Fortis Colosseum and talk to Lelia about kebab sales.",
+      "s": "Head into the Fortis Colosseum and talk to Lelia about kebab sales.",
+      "k": "headIntoColosseum",
+      "at": [
+       1796,
+       3106,
+       0
+      ],
+      "hl": {
+       "obj": [
+        50749
+       ]
+      }
+     },
+     {
+      "t": "Head into the Fortis Colosseum, then into the southern room and talk to Lelia about kebab sales.",
+      "s": "Head into the Fortis Colosseum, then into the southern room and talk to Lelia about kebab sales.",
+      "k": "talkToLelia",
+      "at": [
+       1819,
+       9484,
+       0
+      ],
+      "hl": {
+       "npc": [
+        13806
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 16,
+    "do": [
+     {
+      "t": "Talk to Lelia after letting her taste your test kebab.",
+      "s": "Talk to Lelia after letting her taste your test kebab.",
+      "k": "talkToLeliaAfterGivingHerTheKebab",
+      "at": [
+       1819,
+       9484,
+       0
+      ],
+      "hl": {
+       "npc": [
+        13806
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 18,
+    "do": [
+     {
+      "t": "Talk to Lelia in the southern room, ready to fight the Minotaur.",
+      "s": "Talk to Lelia in the southern room, ready to fight the Minotaur.",
+      "k": "enterArenaWithKebab",
+      "at": [
+       1819,
+       9484,
+       0
+      ],
+      "hl": {
+       "npc": [
+        13806
+       ]
+      }
+     },
+     {
+      "t": "Head into the Fortis Colosseum, ready to fight the Minotaur.",
+      "s": "Head into the Fortis Colosseum, ready to fight the Minotaur.",
+      "k": "headIntoColosseum2",
+      "at": [
+       1796,
+       3106,
+       0
+      ],
+      "hl": {
+       "obj": [
+        50749
+       ]
+      }
+     },
+     {
+      "t": "Talk to Emelio to get another test kebab.",
+      "s": "Talk to Emelio to get another test kebab.",
+      "k": "leaveColosseumToGetAnotherKebabFromEmelio",
+      "at": [
+       1798,
+       9506,
+       0
+      ],
+      "hl": {
+       "obj": [
+        50750
+       ]
+      }
+     },
+     {
+      "t": "Talk to Emelio to get another test kebab before you can fight the Minotaur.",
+      "s": "Talk to Emelio to get another test kebab before you can fight the Minotaur.",
+      "k": "getAnotherKebabFromEmelio",
+      "at": [
+       1754,
+       3074,
+       0
+      ],
+      "hl": {
+       "npc": [
+        13804
+       ]
+      }
+     },
+     {
+      "t": "Fight the Minotaur. Protect from Melee to avoid most damage. When it shouts Moo! switch to Protect from Magic for one attack.",
+      "s": "Fight the Minotaur. Protect from Melee to avoid most damage. When it shouts Moo! switch to Protect from Magic for one attack.",
+      "k": "fightMinotaur",
+      "at": [
+       1823,
+       3105,
+       0
+      ],
+      "hl": {
+       "npc": [
+        13815
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 20,
+    "do": [
+     {
+      "t": "Talk to Lelia in the southern room, ready to fight the Minotaur again.",
+      "s": "Talk to Lelia in the southern room, ready to fight the Minotaur again.",
+      "k": "enterArenaAfterFailing",
+      "at": [
+       1819,
+       9484,
+       0
+      ],
+      "hl": {
+       "npc": [
+        13806
+       ]
+      }
+     },
+     {
+      "t": "Head into the Fortis Colosseum and talk to Lelia.",
+      "s": "Head into the Fortis Colosseum and talk to Lelia.",
+      "k": "headIntoColosseumAfterDefeatingTheMinotaur",
+      "at": [
+       1796,
+       3106,
+       0
+      ],
+      "hl": {
+       "obj": [
+        50749
+       ]
+      }
+     },
+     {
+      "t": "Head into the Fortis Colosseum, ready to fight the Minotaur again.",
+      "s": "Head into the Fortis Colosseum, ready to fight the Minotaur again.",
+      "k": "headIntoColosseumAfterFailing",
+      "at": [
+       1796,
+       3106,
+       0
+      ],
+      "hl": {
+       "obj": [
+        50749
+       ]
+      }
+     },
+     {
+      "t": "Fight the Minotaur. Protect from Melee to avoid most damage. When it shouts Moo! switch to Protect from Magic for one attack.",
+      "s": "Fight the Minotaur. Protect from Melee to avoid most damage. When it shouts Moo! switch to Protect from Magic for one attack.",
+      "k": "fightMinotaur",
+      "at": [
+       1823,
+       3105,
+       0
+      ],
+      "hl": {
+       "npc": [
+        13815
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 22,
+    "do": [
+     {
+      "t": "Talk to Lelia in the southern room of the Fortis Colosseum after defeating the Minotaur.",
+      "s": "Talk to Lelia in the southern room of the Fortis Colosseum after defeating the Minotaur.",
+      "k": "talkToLeliaAfterBeatingTheMinotaur",
+      "at": [
+       1818,
+       9484,
+       0
+      ],
+      "hl": {
+       "npc": [
+        13806
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 24,
+    "do": [
+     {
+      "t": "Return to Emelio in Outer Fortis at the south-eastern entrance of Civitas illa Fortis and tell him about your success.",
+      "s": "Return to Emelio in Outer Fortis at the south-eastern entrance of Civitas illa Fortis and tell him about your success.",
+      "k": "returnToEmelioWithNewsOfYourAdvertisingSuccess",
+      "at": [
+       1754,
+       3074,
+       0
+      ],
+      "hl": {
+       "npc": [
+        13804
+       ]
+      }
+     },
+     {
+      "t": "Exit the colosseum, then return to Emelio in Outer Fortis at the south-eastern entrance of Civitas illa Fortis and tell him about your success.",
+      "s": "Exit the colosseum, then return to Emelio in Outer Fortis at the south-eastern entrance of Civitas illa Fortis and tell him about your success.",
+      "k": "leaveColosseumToReturnToEmelio",
+      "at": [
+       1798,
+       9506,
+       0
+      ],
+      "hl": {
+       "obj": [
+        50750
+       ]
+      }
+     }
+    ]
+   }
+  ]
+ },
+ "facts": {
+  "id": "Meat and Greet",
+  "stepIds": [
+   "DRAFT"
+  ],
+  "members": false,
+  "requirements": {
+   "skills": {},
+   "questPoints": 0,
+   "quests": [
+    "Children of the Sun"
+   ],
+   "manual": [],
+   "capabilities": [],
+   "unparsed": null,
+   "text": "* Completion of the following quests:\n** [[Children of the Sun]]"
+  },
+  "rewards": {
+   "questPoints": 1,
+   "xp": {
+    "cooking": 8000
+   },
+   "coins": 0
+  },
+  "resourceFlow": null,
+  "length": "Short",
+  "source": {
+   "url": "https://oldschool.runescape.wiki/w/Special:Redirect/revision/15391667",
+   "title": "Meat and Greet",
+   "revision": 15391667,
+   "retrievedAt": "2026-11-18T06:48:23.899Z"
+  }
+ },
+ "unknown": [
+  "fight \"Dire Wolf Alpha\": no combat data",
+  "fight \"Minotaur (Meat and Greet)\": no combat data",
+  "step \"killDireWolfAlpha\": Quest Helper gives no tile",
+  "step \"enterCodeWrapper\": Quest Helper gives no tile",
+  "step \"recipeStepWrapper\": Quest Helper gives no tile",
+  "Quest Helper condition \"new WidgetPresenceRequirement\" is not understood (1)",
+  "what the quest uses up and hands out is not reviewed"
+ ]
+}

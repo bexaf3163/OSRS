@@ -4,7 +4,7 @@ Written by `tests/combatAudit.test.ts` from `src/data/authored/combatAudit.json`
 
 Every stage of the route where the player fights or can be attacked, checked against the route text, the quest stage lines (Quest Helper), the OSRS Wiki infoboxes in combatFoes.json and the danger zones. The rule for a fight the quest cannot go on without: its food is a required item (readiness and the game check it before leaving), the app estimates it with the player's kit where it has the opponent's numbers, and an unread kit or bag is reported as not checked, never as ready.
 
-61 stages: 33 retained, 27 revised, 0 with a branch, 1 deferred.
+63 stages: 35 retained, 27 revised, 0 with a branch, 1 deferred.
 
 | Step | Kind | Mandatory | Opponents | Method | Estimate | Food in the item list | Decision |
 |---|---|---|---|---|---|---|---|
@@ -69,6 +69,8 @@ Every stage of the route where the player fights or can be attacked, checked aga
 | S9-48 Tower of Life | not-combat | no | - | none | - | - | Retain |
 | S9-49 The Ribbiting Tale of a Lily Pad Labour Dispute | incidental | yes | Cuthbert, Lord of Dread (1) | melee | Cuthbert, Lord of Dread | - | Retain |
 | S9-50 Death on the Isle | incidental | yes | - | melee | - | - | Retain |
+| S9-53 What Lies Below | quest-fight | yes | Outlaw (32), King Roald (47) | melee | Outlaw, King Roald | Trout 2 | Retain |
+| S9-54 Scrambled! | quest-fight | yes | Large chicken (16), Black jaguar (Scrambled!) (88), Red dragon (Scrambled!) (106) | safespot | Large chicken, Black jaguar (Scrambled!), Red dragon (Scrambled!) | Trout 3 | Retain |
 
 ## S1-06 The Restless Ghost
 
@@ -1452,4 +1454,42 @@ Changed:
 Evidence:
 
 - OSRS Wiki Death on the Isle: kills field, read 2026-11-18.
+
+## S9-53 What Lies Below
+
+**Retain.** What Lies Below: kill 5 outlaws (level 32, 20 hitpoints, hits up to 3) west of the Grand Exchange, then fight King Roald (level 47, 75 hitpoints, hits up to 3) until the beacon ring stops him.
+
+Quest stage lines: 0.1.
+
+Assumptions:
+
+- Two trout cover both fights; King Roald cannot die, the beacon ring ends the fight at 1 hitpoint.
+
+Changed:
+
+- 2.144.0: new quest; Outlaw and King Roald are in combatFoes.json.
+
+Evidence:
+
+- OSRS Wiki Outlaw and King Roald: levels 32 and 47, max hit 3, read 2026-11-18.
+
+## S9-54 Scrambled!
+
+**Retain.** Scrambled!: kill the large chicken (level 16, hits up to 2) up close, then the jaguar (level 88, 85 hitpoints, hits up to 8) and the red dragon (level 106, 100 hitpoints, hits up to 10) with Fire Bolt from their safespots.
+
+Assumptions:
+
+- Sixty Fire Bolts cover both safespot fights; three trout cover the chicken.
+
+Alternatives:
+
+- Ranged from the same safespots works too (wiki).
+
+Changed:
+
+- 2.144.0: new quest; the three foes are in combatFoes.json and the two safespots in fightMechanics.json.
+
+Evidence:
+
+- OSRS Wiki Scrambled!: kills field with safespots, read 2026-11-18.
 

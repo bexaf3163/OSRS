@@ -1,0 +1,1320 @@
+{
+ "title": "Scrambled!",
+ "cls": "Scrambled",
+ "var": [
+  "varbit",
+  16758
+ ],
+ "members": true,
+ "revision": "b9b93706618a7b7fe7e5ea30e9a9ef35ba09673e",
+ "machine": {
+  "stages": {
+   "0": {
+    "s": "startQuest"
+   },
+   "2": {
+    "s": "startQuest"
+   },
+   "4": {
+    "s": "startQuest"
+   },
+   "6": {
+    "s": "inspectEggAfterItFell"
+   },
+   "8": {
+    "s": "talkToKing"
+   },
+   "10": {
+    "s": "talkToKing"
+   },
+   "12": {
+    "s": "talkToKing"
+   },
+   "14": "n1",
+   "16": {
+    "s": "talkToGatheredMen"
+   },
+   "18": "n8",
+   "19": "n8",
+   "20": {
+    "s": "judgeEggs"
+   },
+   "22": {
+    "s": "panicWithKingsMen"
+   },
+   "24": "n13",
+   "26": {
+    "s": "finishQuest"
+   },
+   "28": {
+    "s": "finishQuest"
+   }
+  },
+  "nodes": {
+   "n1": {
+    "n": "gatherTheMen",
+    "c": [
+     [
+      {
+       "o": "vb",
+       "id": 16765,
+       "op": "<",
+       "v": 7
+      },
+      "n2"
+     ],
+     [
+      {
+       "o": "vb",
+       "id": 16764,
+       "op": "<",
+       "v": 7
+      },
+      "n5"
+     ]
+    ],
+    "d": "n6"
+   },
+   "n2": {
+    "n": "helpAcatzin",
+    "c": [
+     [
+      {
+       "o": "and",
+       "a": [
+        {
+         "o": "nor",
+         "a": [
+          "r1"
+         ]
+        },
+        {
+         "o": "nor",
+         "a": [
+          "r2"
+         ]
+        }
+       ]
+      },
+      {
+       "s": "getEmptyBowl"
+      }
+     ],
+     [
+      {
+       "o": "vb",
+       "id": 16765,
+       "v": 2
+      },
+      {
+       "s": "acatzinTalkToBlacksmith"
+      }
+     ],
+     [
+      {
+       "o": "vb",
+       "id": 16765,
+       "v": 3
+      },
+      "n3"
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r4",
+        {
+         "o": "nor",
+         "a": [
+          "r5"
+         ]
+        }
+       ]
+      },
+      {
+       "s": "acatzinGetSaw"
+      }
+     ],
+     [
+      "r4",
+      {
+       "s": "acatzinReturnRepairedAxe"
+      }
+     ],
+     [
+      {
+       "o": "vb",
+       "id": 16765,
+       "v": 4
+      },
+      "n4"
+     ]
+    ],
+    "d": {
+     "s": "talkToAcatzin"
+    }
+   },
+   "n3": {
+    "n": "cAcatzinFixWhetstone",
+    "c": [
+     [
+      {
+       "o": "vb",
+       "id": 16995,
+       "v": 0
+      },
+      {
+       "s": "acatzinGetNails"
+      }
+     ],
+     [
+      {
+       "o": "nor",
+       "a": [
+        "r3"
+       ]
+      },
+      {
+       "s": "acatzinGetHammer"
+      }
+     ]
+    ],
+    "d": {
+     "s": "acatzinFixWhetstone"
+    }
+   },
+   "n4": {
+    "n": "cAcatzinRepairAxe",
+    "c": [
+     [
+      {
+       "o": "nor",
+       "a": [
+        {
+         "o": "item",
+         "nm": "Acatzin's damaged axe",
+         "ids": [
+          30989
+         ]
+        }
+       ]
+      },
+      {
+       "s": "acatzinTalkToBlacksmithAgain"
+      }
+     ]
+    ],
+    "d": {
+     "s": "acatzinRepairAxe"
+    }
+   },
+   "n5": {
+    "n": "helpKauayotl",
+    "c": [
+     [
+      {
+       "o": "vb",
+       "id": 16764,
+       "v": 3
+      },
+      {
+       "s": "talkToKauayotlAgain"
+      }
+     ],
+     [
+      {
+       "o": "nor",
+       "a": [
+        "r3"
+       ]
+      },
+      {
+       "s": "acatzinGetHammer"
+      }
+     ],
+     [
+      {
+       "o": "nor",
+       "a": [
+        "r5"
+       ]
+      },
+      {
+       "s": "acatzinGetSaw"
+      }
+     ],
+     [
+      {
+       "o": "nor",
+       "a": [
+        "r6"
+       ]
+      },
+      {
+       "s": "getDamianaLeaves"
+      }
+     ],
+     [
+      {
+       "o": "nor",
+       "a": [
+        {
+         "o": "item",
+         "nm": "Plank",
+         "ids": [
+          960
+         ],
+         "q": 2
+        }
+       ]
+      },
+      {
+       "s": "getPlanks"
+      }
+     ],
+     [
+      {
+       "o": "vb",
+       "id": 16764,
+       "v": 2
+      },
+      {
+       "s": "kauayotlRepairCart"
+      }
+     ]
+    ],
+    "d": {
+     "s": "talkToKauayotl"
+    }
+   },
+   "n6": {
+    "n": "helpNezketi",
+    "c": [
+     [
+      {
+       "o": "item",
+       "nm": "Cup of damiana tea",
+       "ids": [
+        30985
+       ]
+      },
+      {
+       "s": "giveTeaToNezketi"
+      }
+     ],
+     [
+      {
+       "o": "vb",
+       "id": 16759,
+       "v": 2
+      },
+      "n7"
+     ]
+    ],
+    "d": {
+     "s": "talkToNezketi"
+    }
+   },
+   "n7": {
+    "n": "cMakeTea",
+    "c": [
+     [
+      {
+       "o": "and",
+       "a": [
+        {
+         "o": "item",
+         "nm": "Damiana tea",
+         "ids": [
+          30981
+         ]
+        },
+        "r7"
+       ]
+      },
+      {
+       "s": "pourTeaIntoCup"
+      }
+     ],
+     [
+      {
+       "o": "item",
+       "nm": "Damiana water",
+       "ids": [
+        30979
+       ]
+      },
+      {
+       "s": "boilDamianaWater"
+      }
+     ],
+     [
+      {
+       "o": "nor",
+       "a": [
+        "r7"
+       ]
+      },
+      {
+       "s": "talkToNezketi"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r6",
+        "r2"
+       ]
+      },
+      {
+       "s": "mixWaterAndDamianaLeaves"
+      }
+     ],
+     [
+      {
+       "o": "nor",
+       "a": [
+        "r2"
+       ]
+      },
+      {
+       "s": "fillEmptyBowlWithWater"
+      }
+     ],
+     [
+      {
+       "o": "nor",
+       "a": [
+        "r1"
+       ]
+      },
+      {
+       "s": "getEmptyBowl"
+      }
+     ]
+    ],
+    "d": {
+     "s": "getDamianaLeaves"
+    }
+   },
+   "n8": {
+    "n": "collectAllEggs",
+    "c": [
+     [
+      {
+       "o": "and",
+       "a": [
+        {
+         "o": "nor",
+         "a": [
+          {
+           "o": "item",
+           "nm": "Large egg",
+           "ids": [
+            30967
+           ]
+          }
+         ]
+        },
+        {
+         "o": "nor",
+         "a": [
+          "r8"
+         ]
+        }
+       ]
+      },
+      "n9"
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        {
+         "o": "nor",
+         "a": [
+          {
+           "o": "item",
+           "nm": "Dragon egg",
+           "ids": [
+            30968
+           ]
+          }
+         ]
+        },
+        {
+         "o": "nor",
+         "a": [
+          "r9"
+         ]
+        }
+       ]
+      },
+      "n10"
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        {
+         "o": "nor",
+         "a": [
+          {
+           "o": "item",
+           "nm": "Jaguar egg",
+           "ids": [
+            30969
+           ]
+          }
+         ]
+        },
+        {
+         "o": "nor",
+         "a": [
+          "r11"
+         ]
+        }
+       ]
+      },
+      "n11"
+     ]
+    ],
+    "d": "n12"
+   },
+   "n9": {
+    "n": "cCollectLargeEgg",
+    "c": [
+     [
+      {
+       "o": "hint",
+       "ids": [
+        14510
+       ]
+      },
+      {
+       "s": "fightLargeChicken"
+      }
+     ],
+     [
+      {
+       "o": "vb",
+       "id": 16770,
+       "op": ">=",
+       "v": 1
+      },
+      {
+       "s": "collectLargeEggSpawnChicken"
+      }
+     ]
+    ],
+    "d": {
+     "s": "collectLargeEgg"
+    }
+   },
+   "n10": {
+    "n": "cCollectDragonEgg",
+    "c": [
+     [
+      {
+       "o": "and",
+       "a": [
+        "r10",
+        {
+         "o": "vb",
+         "id": 16769,
+         "v": 3
+        }
+       ]
+      },
+      {
+       "s": "collectDragonEgg"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r10",
+        {
+         "o": "hint",
+         "ids": [
+          14511
+         ]
+        }
+       ]
+      },
+      {
+       "s": "fightRedDragon"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r10",
+        {
+         "o": "vb",
+         "id": 16769,
+         "op": ">=",
+         "v": 1
+        }
+       ]
+      },
+      {
+       "s": "spawnDragonFromEgg"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        {
+         "o": "skill",
+         "s": "AGILITY",
+         "l": 40
+        },
+        {
+         "o": "nor",
+         "a": [
+          {
+           "o": "zone",
+           "z": [
+            [
+             1277,
+             3134,
+             1299,
+             3141,
+             0,
+             0
+            ]
+           ]
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "s": "useDragonShortcut"
+      }
+     ]
+    ],
+    "d": {
+     "s": "enterDragonCave"
+    }
+   },
+   "n11": {
+    "n": "cCollectJaguarEgg",
+    "c": [
+     [
+      "r10",
+      {
+       "s": "exitDragonCave"
+      }
+     ],
+     [
+      {
+       "o": "hint",
+       "ids": [
+        14512
+       ]
+      },
+      {
+       "s": "fightJaguar"
+      }
+     ],
+     [
+      {
+       "o": "vb",
+       "id": 16766,
+       "op": ">=",
+       "v": 1
+      },
+      {
+       "s": "spawnJaguarFromEgg"
+      }
+     ]
+    ],
+    "d": {
+     "s": "collectJaguarEgg"
+    }
+   },
+   "n12": {
+    "n": "cReturnToTempleWithEggs",
+    "c": [
+     [
+      "r10",
+      {
+       "s": "exitDragonCave"
+      }
+     ],
+     [
+      {
+       "o": "nor",
+       "a": [
+        "r9"
+       ]
+      },
+      {
+       "s": "returnToTempleWithDragonEgg"
+      }
+     ],
+     [
+      {
+       "o": "nor",
+       "a": [
+        "r11"
+       ]
+      },
+      {
+       "s": "returnToTempleWithJaguarEgg"
+      }
+     ],
+     [
+      {
+       "o": "nor",
+       "a": [
+        "r8"
+       ]
+      },
+      {
+       "s": "returnToTempleWithChickenEgg"
+      }
+     ]
+    ],
+    "d": {
+     "s": "returnToTempleWithEggs"
+    }
+   },
+   "n13": {
+    "n": "cPutEggBackTogether",
+    "c": [
+     [
+      {
+       "o": "?",
+       "d": "new WidgetPresenceRequirement"
+      },
+      {
+       "s": "puzzleSolver"
+      }
+     ]
+    ],
+    "d": {
+     "s": "putEggBackTogether"
+    }
+   }
+  },
+  "reqs": {
+   "r1": {
+    "o": "item",
+    "nm": "Empty bowl",
+    "ids": [
+     1923
+    ]
+   },
+   "r2": {
+    "o": "item",
+    "nm": "Bowl of water",
+    "ids": [
+     1921
+    ]
+   },
+   "r3": {
+    "o": "item",
+    "nm": "Hammer",
+    "ids": [
+     2347,
+     25644,
+     29775
+    ]
+   },
+   "r4": {
+    "o": "item",
+    "nm": "Acatzin's axe",
+    "ids": [
+     30990
+    ]
+   },
+   "r5": {
+    "o": "item",
+    "nm": "Saw",
+    "ids": [
+     8794,
+     24880,
+     29774,
+     9625
+    ]
+   },
+   "r6": {
+    "o": "item",
+    "nm": "Damiana leaves",
+    "ids": [
+     30977
+    ]
+   },
+   "r7": {
+    "o": "item",
+    "nm": "Empty cup",
+    "ids": [
+     1980
+    ]
+   },
+   "r8": {
+    "o": "vb",
+    "id": 16770,
+    "v": 4
+   },
+   "r9": {
+    "o": "vb",
+    "id": 16769,
+    "v": 4
+   },
+   "r10": {
+    "o": "zone",
+    "z": [
+     [
+      1216,
+      9472,
+      1280,
+      9536,
+      0,
+      2
+     ]
+    ]
+   },
+   "r11": {
+    "o": "vb",
+    "id": 16766,
+    "v": 4
+   }
+  },
+  "alias": {
+   "acatzinGetHammer": [
+    "acatzinFixWhetstone"
+   ],
+   "acatzinGetNails": [
+    "acatzinFixWhetstone"
+   ],
+   "acatzinTalkToBlacksmithAgain": [
+    "acatzinRepairAxe"
+   ]
+  }
+ },
+ "unknown": {
+  "new WidgetPresenceRequirement": 1
+ },
+ "steps": {
+  "startQuest": {
+   "typ": "NpcStep",
+   "wp": [
+    1247,
+    3167,
+    0
+   ],
+   "ids": [
+    14475
+   ],
+   "text": "Talk to Alan in Tal Teok Temple, north of Tal Teklan, to start the quest."
+  },
+  "inspectEggAfterItFell": {
+   "typ": "NpcStep",
+   "wp": [
+    1247,
+    3170,
+    0
+   ],
+   "ids": [
+    14488
+   ],
+   "text": "Inspect the egg in front of you."
+  },
+  "talkToKing": {
+   "typ": "NpcStep",
+   "wp": [
+    1224,
+    3119,
+    0
+   ],
+   "ids": [
+    14496
+   ],
+   "text": "Head south into Tal Teklan and talk to King in the pub."
+  },
+  "talkToNezketi": {
+   "typ": "NpcStep",
+   "wp": [
+    1224,
+    3105,
+    0
+   ],
+   "ids": [
+    14503
+   ],
+   "text": "Talk to Nezketi in the Tal Teklan temple."
+  },
+  "giveTeaToNezketi": {
+   "typ": "NpcStep",
+   "wp": [
+    1224,
+    3105,
+    0
+   ],
+   "ids": [
+    14503
+   ],
+   "text": "Return to Nezketi in the Tal Teklan temple and give him the cup of damiana tea."
+  },
+  "getDamianaLeaves": {
+   "typ": "ObjectStep",
+   "wp": [
+    1250,
+    3110,
+    0
+   ],
+   "ids": [
+    56935
+   ],
+   "text": "Pick the damiana bush at the east entrance of Tal Teklan for some damiana leaves, we'll need these later."
+  },
+  "pourTeaIntoCup": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Pour the damiana tea from your bowl into the empty cup"
+  },
+  "boilDamianaWater": {
+   "typ": "ObjectStep",
+   "wp": null,
+   "ids": [
+    57333
+   ],
+   "text": "Use your bowl of damiana water on the stove in the east part of Tal Teklan to boil it."
+  },
+  "mixWaterAndDamianaLeaves": {
+   "typ": "ItemStep",
+   "wp": null,
+   "ids": [],
+   "text": "Mix damiana leaves with your bowl of water."
+  },
+  "fillEmptyBowlWithWater": {
+   "typ": "ObjectStep",
+   "wp": [
+    1242,
+    3097,
+    0
+   ],
+   "ids": [
+    52646
+   ],
+   "text": "Fill your empty bowl with water at the water pump near the eastern entrance of Tal Teklan."
+  },
+  "getEmptyBowl": {
+   "typ": "ItemStep",
+   "wp": [
+    1229,
+    3119,
+    0
+   ],
+   "ids": [],
+   "text": "Get an empty bowl from the pub, will need it later. If it's not there, hop worlds or wait for it to spawn again."
+  },
+  "talkToAcatzin": {
+   "typ": "NpcStep",
+   "wp": [
+    1228,
+    3117,
+    0
+   ],
+   "ids": [
+    14505
+   ],
+   "text": "Talk to Acatzin inside the Tal Teklan pub."
+  },
+  "acatzinTalkToBlacksmith": {
+   "typ": "NpcStep",
+   "wp": [
+    1209,
+    3109,
+    0
+   ],
+   "ids": [
+    14509
+   ],
+   "text": "Talk to the Blacksmith west of the Tal Teklan pub."
+  },
+  "acatzinFixWhetstone": {
+   "typ": "ObjectStep",
+   "wp": [
+    1211,
+    3108,
+    0
+   ],
+   "ids": [
+    56938
+   ],
+   "text": "Fix the whetstone."
+  },
+  "acatzinGetHammer": {
+   "typ": "ItemStep",
+   "wp": [
+    1207,
+    3108,
+    0
+   ],
+   "ids": [],
+   "text": "Get the hammer from the table. If it's not there, hop worlds or wait for it to spawn again."
+  },
+  "acatzinGetNails": {
+   "typ": "ObjectStep",
+   "wp": [
+    1210,
+    3112,
+    0
+   ],
+   "ids": [
+    56945
+   ],
+   "text": "Get some nails from the blacksmith's workbench, we'll need them later."
+  },
+  "acatzinGetSaw": {
+   "typ": "ItemStep",
+   "wp": [
+    1212,
+    3093,
+    0
+   ],
+   "ids": [],
+   "text": "Get the Saw from the house to the south, we'll need it later. If it's not there, hop worlds or wait for it to spawn again."
+  },
+  "acatzinReturnRepairedAxe": {
+   "typ": "NpcStep",
+   "wp": [
+    1228,
+    3117,
+    0
+   ],
+   "ids": [
+    14505
+   ],
+   "text": "Return the repaired axe to Acatzin in the Tel Teklan pub."
+  },
+  "acatzinRepairAxe": {
+   "typ": "ObjectStep",
+   "wp": [
+    1211,
+    3108,
+    0
+   ],
+   "ids": [
+    56939
+   ],
+   "text": "Repair the axe on the whetstone."
+  },
+  "acatzinTalkToBlacksmithAgain": {
+   "typ": "NpcStep",
+   "wp": [
+    1209,
+    3109,
+    0
+   ],
+   "ids": [
+    14509
+   ],
+   "text": "Talk to the Blacksmith again after fixing the whetstone to receive a damaged axe."
+  },
+  "talkToKauayotl": {
+   "typ": "NpcStep",
+   "wp": [
+    1251,
+    3104,
+    0
+   ],
+   "ids": [
+    14504
+   ],
+   "text": "Talk to Kauayotl at the east entrance of Tal Teklan."
+  },
+  "talkToKauayotlAgain": {
+   "typ": "NpcStep",
+   "wp": [
+    1251,
+    3104,
+    0
+   ],
+   "ids": [
+    14504
+   ],
+   "text": "Talk to Kauayotl again after repairing his cart."
+  },
+  "getPlanks": {
+   "typ": "ItemStep",
+   "wp": [
+    1238,
+    3076,
+    0
+   ],
+   "ids": [],
+   "text": "Go south-west of Kauayotl and pick up two planks from besides the lake. If it's not there, hop worlds or wait for it to spawn again."
+  },
+  "kauayotlRepairCart": {
+   "typ": "ObjectStep",
+   "wp": [
+    1250,
+    3107,
+    0
+   ],
+   "ids": [
+    56943
+   ],
+   "text": "Repair Kauayotl's cart."
+  },
+  "talkToGatheredMen": {
+   "typ": "NpcStep",
+   "wp": [
+    1247,
+    3166,
+    0
+   ],
+   "ids": [],
+   "text": "Return to the temple north of Tal Teklan and speak with one of King's men."
+  },
+  "returnToTempleWithEggs": {
+   "typ": "NpcStep",
+   "wp": [
+    1247,
+    3166,
+    0
+   ],
+   "ids": [],
+   "text": "Return to the temple north of Tal Teklan with the egg replacements and speak with one of \"King\"'s men."
+  },
+  "exitDragonCave": {
+   "typ": "ObjectStep",
+   "wp": [
+    1244,
+    9528,
+    0
+   ],
+   "ids": [
+    57592
+   ],
+   "text": "Exit the dragon's cave."
+  },
+  "returnToTempleWithDragonEgg": {
+   "typ": "NpcStep",
+   "wp": [
+    1247,
+    3166,
+    0
+   ],
+   "ids": [
+    14504
+   ],
+   "text": "Give Kauayotl the Dragon egg."
+  },
+  "returnToTempleWithJaguarEgg": {
+   "typ": "NpcStep",
+   "wp": [
+    1247,
+    3166,
+    0
+   ],
+   "ids": [
+    14503
+   ],
+   "text": "Give Nezketi the Jaguar egg."
+  },
+  "returnToTempleWithChickenEgg": {
+   "typ": "NpcStep",
+   "wp": [
+    1247,
+    3166,
+    0
+   ],
+   "ids": [
+    14505
+   ],
+   "text": "Give Acatzin the Large egg."
+  },
+  "collectLargeEgg": {
+   "typ": "ObjectStep",
+   "wp": [
+    1238,
+    3137,
+    0
+   ],
+   "ids": [
+    56927
+   ],
+   "text": "Search the Eggs to get a Large egg."
+  },
+  "fightLargeChicken": {
+   "typ": "NpcStep",
+   "wp": [
+    1239,
+    3137,
+    0
+   ],
+   "ids": [
+    14510
+   ],
+   "text": "Kill the large chicken."
+  },
+  "collectLargeEggSpawnChicken": {
+   "typ": "ObjectStep",
+   "wp": [
+    1238,
+    3137,
+    0
+   ],
+   "ids": [
+    56927
+   ],
+   "text": ""
+  },
+  "enterDragonCave": {
+   "typ": "ObjectStep",
+   "wp": [
+    1288,
+    3133,
+    0
+   ],
+   "ids": [
+    57591
+   ],
+   "text": ""
+  },
+  "collectDragonEgg": {
+   "typ": "ObjectStep",
+   "wp": [
+    1259,
+    9482,
+    0
+   ],
+   "ids": [
+    56930
+   ],
+   "text": "Search the Eggs in the south-east of the dragon cave to collect your Dragon egg."
+  },
+  "fightRedDragon": {
+   "typ": "NpcStep",
+   "wp": [
+    1257,
+    9482,
+    0
+   ],
+   "ids": [
+    14511
+   ],
+   "text": "Fight the red dragon. You can safespot it by standing south-east of the Eggs."
+  },
+  "spawnDragonFromEgg": {
+   "typ": "ObjectStep",
+   "wp": [
+    1259,
+    9482,
+    0
+   ],
+   "ids": [
+    56930
+   ],
+   "text": "Search the Eggs in the dragon cave."
+  },
+  "useDragonShortcut": {
+   "typ": "ObjectStep",
+   "wp": [
+    1283,
+    3146,
+    0
+   ],
+   "ids": [
+    57593
+   ],
+   "text": "Step across the log balance towards the dragon cave."
+  },
+  "collectJaguarEgg": {
+   "typ": "ObjectStep",
+   "wp": [
+    1332,
+    3122,
+    0
+   ],
+   "ids": [
+    56933
+   ],
+   "text": "Search the Eggs at the camp, east of the dragon age, and collect your Jaguar egg."
+  },
+  "fightJaguar": {
+   "typ": "NpcStep",
+   "wp": [
+    1329,
+    3122,
+    0
+   ],
+   "ids": [
+    14512
+   ],
+   "text": "Fight the Jaguar. You can safespot it by standing just north east of the camp."
+  },
+  "spawnJaguarFromEgg": {
+   "typ": "ObjectStep",
+   "wp": [
+    1332,
+    3122,
+    0
+   ],
+   "ids": [
+    56933
+   ],
+   "text": ""
+  },
+  "judgeEggs": {
+   "typ": "NpcStep",
+   "wp": [
+    1247,
+    3166,
+    0
+   ],
+   "ids": [],
+   "text": "Return to the large temple north of Tal Teklan and talk with one of King's men to evaluate the Humphrey Dumphrey alternatives."
+  },
+  "panicWithKingsMen": {
+   "typ": "NpcStep",
+   "wp": [
+    1247,
+    3166,
+    0
+   ],
+   "ids": [],
+   "text": "Talk to one of King's men to figure out how to solve the broken-egg conundrum."
+  },
+  "putEggBackTogether": {
+   "typ": "NpcStep",
+   "wp": [
+    1244,
+    3168,
+    0
+   ],
+   "ids": [
+    14489
+   ],
+   "text": "Inspect the egg."
+  },
+  "puzzleSolver": {
+   "typ": "PuzzleWrapperStep",
+   "wp": null,
+   "ids": [],
+   "text": null
+  },
+  "finishQuest": {
+   "typ": "NpcStep",
+   "wp": [
+    1247,
+    3166,
+    0
+   ],
+   "ids": [],
+   "text": "Talk to one of King's men to finish the quest."
+  }
+ }
+}

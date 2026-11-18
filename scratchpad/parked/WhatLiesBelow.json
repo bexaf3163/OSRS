@@ -1,0 +1,636 @@
+{
+  "quest": "What Lies Below",
+  "status": "draft",
+  "sources": {
+    "questHelper": "b9b93706618a7b7fe7e5ea30e9a9ef35ba09673e",
+    "wiki": {
+      "title": "What Lies Below",
+      "revision": 15373739
+    },
+    "quickGuide": {
+      "title": "What Lies Below/Quick guide",
+      "revision": 14458317
+    }
+  },
+  "step": {
+    "title": "What Lies Below",
+    "type": "quest",
+    "qp": 1,
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/What_Lies_Below",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/What_Lies_Below/Quick_guide",
+    "mapLocation": {
+      "x": 3266,
+      "y": 3333,
+      "plane": 0,
+      "label": "Talk to Rat Burgiss south of Varrock."
+    },
+    "npc": {
+      "nameEn": "Rat Burgiss"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Bowl",
+        "amount": 1,
+        "wikiItemId": 1923,
+        "howToGet": "Buy on the Grand Exchange, or from a general store.",
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bowl.png"
+      },
+      {
+        "nameEn": "Chaos rune",
+        "amount": 15,
+        "wikiItemId": 562,
+        "howToGet": "Buy on the Grand Exchange, or from Aubury's Rune Shop in Varrock for 90 gp.",
+        "note": "15 chaos runes"
+      },
+      {
+        "nameEn": "Chaos talisman",
+        "amount": 1,
+        "wikiItemId": 1452,
+        "howToGet": "Buy on the Grand Exchange. It opens the Chaos altar ruins in the Wilderness.",
+        "note": "Access to the Chaos Altar (Chaos talisman or tiara, Catalytic talisman or tiara, or travelling through the Abyss or Temple of the Eye)",
+        "iconUrl": "https://oldschool.runescape.wiki/images/Chaos_talisman.png"
+      }
+    ],
+    "foes": [
+      "Outlaw",
+      "King Roald"
+    ]
+  },
+  "stages": {
+    "var": [
+      "varbit",
+      3523
+    ],
+    "route": [
+      {
+        "title": "Walkthrough",
+        "steps": [
+          "Talk to Rat Burgiss at the crossing south of Varrock. Dialogue: \"Shall I get them back for you?\", \"Of course! Tell me what you need me to do.\"",
+          "Kill 5 Outlaws just west of the Grand Exchange (from Grand Exchange, use the tunnel and walk south) and collect 5 rat's paper.",
+          "Fill the folder with 5 papers.",
+          "Return the folder to Rat Burgiss.",
+          "Talk to Surok Magis in the Varrock library (the northern-most room in Varrock Palace). Dialogue: \"Go on, then!\"",
+          "Read Sin'keth's diary.",
+          "Enter the Chaos Altar and use the wand on the altar with 15 chaos runes in your inventory.",
+          "Return to Surok Magis with the infused wand and an empty bowl. Dialogue: \"I have the things you wanted!\"",
+          "Talk to Rat Burgiss. Dialogue: \"Yes! I have a letter for you!\"",
+          "Talk to Zaff. Dialogue: \"Rat Burgiss sent me!\"",
+          "Talk to Surok Magis. Dialogue: \"Bring it on!\"",
+          "Bring King Roald to low health (2 hitpoints or less) then operate the Beacon ring. Your chatbox will show \"Now would be a good time to summon Zaff!\" when the ring is ready to be operated. (Instanced)",
+          "Talk to Rat Burgiss.",
+          "Congratulations, quest complete!"
+        ]
+      }
+    ],
+    "stages": [
+      {
+        "at": 0,
+        "do": [
+          {
+            "t": "Talk to Rat Burgiss south of Varrock.",
+            "s": "Talk to Rat Burgiss south of Varrock.",
+            "k": "talkToRat",
+            "at": [
+              3266,
+              3333,
+              0
+            ],
+            "hl": {
+              "npc": [
+                4158
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 5,
+        "do": [
+          {
+            "t": "Talk to Rat Burgiss south of Varrock.",
+            "s": "Talk to Rat Burgiss south of Varrock.",
+            "k": "talkToRat",
+            "at": [
+              3266,
+              3333,
+              0
+            ],
+            "hl": {
+              "npc": [
+                4158
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 10,
+        "do": [
+          {
+            "t": "Go to the Bandits west of the Grand Exchange and kill 5 for intel. Put the intel into the folder Rat gave you.",
+            "s": "Kill 5 outlaws west of the Grand Exchange for their intel.",
+            "k": "killOutlaws",
+            "at": [
+              3118,
+              3472,
+              0
+            ],
+            "hl": {
+              "npc": [
+                4167
+              ]
+            }
+          },
+          {
+            "t": "Return to Rat Burgiss south of Varrock.",
+            "s": "Return to Rat Burgiss south of Varrock.",
+            "k": "bringFolderToRat",
+            "at": [
+              3266,
+              3333,
+              0
+            ],
+            "hl": {
+              "npc": [
+                4158
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 20,
+        "do": [
+          {
+            "t": "Return to Rat Burgiss south of Varrock.",
+            "s": "Return to Rat Burgiss south of Varrock.",
+            "k": "talkToRatAfterFolder",
+            "at": [
+              3266,
+              3333,
+              0
+            ],
+            "hl": {
+              "npc": [
+                4158
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 25,
+        "do": [
+          {
+            "t": "Talk to Surok Magis in the Varrock Library.",
+            "s": "Talk to Surok Magis in the Varrock Library.",
+            "k": "talkToSurok",
+            "at": [
+              3211,
+              3493,
+              0
+            ],
+            "hl": {
+              "npc": [
+                6186
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 30,
+        "do": [
+          {
+            "t": "Talk to Surok Magis in the Varrock Library.",
+            "s": "Talk to Surok Magis in the Varrock Library.",
+            "k": "talkToSurokNoLetter",
+            "at": [
+              3211,
+              3493,
+              0
+            ],
+            "hl": {
+              "npc": [
+                3205
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 40,
+        "do": [
+          {
+            "t": "Talk to Surok Magis in the Varrock Library.",
+            "s": "Talk to Surok Magis in the Varrock Library.",
+            "k": "talkToSurokNoLetter",
+            "at": [
+              3211,
+              3493,
+              0
+            ],
+            "hl": {
+              "npc": [
+                3205
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 45,
+        "do": [
+          {
+            "t": "Talk to Surok Magis in the Varrock Library.",
+            "s": "Talk to Surok Magis in the Varrock Library.",
+            "k": "talkToSurokNoLetter",
+            "at": [
+              3211,
+              3493,
+              0
+            ],
+            "hl": {
+              "npc": [
+                3205
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 46,
+        "do": [
+          {
+            "t": "Talk to Surok Magis in the Varrock Library.",
+            "s": "Talk to Surok Magis in the Varrock Library.",
+            "k": "talkToSurokNoLetter",
+            "at": [
+              3211,
+              3493,
+              0
+            ],
+            "hl": {
+              "npc": [
+                3205
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 50,
+        "do": [
+          {
+            "t": "Take the wand, 15 chaos runes and a chaos talisman to the Chaos altar ruins in the Wilderness, south-east of the Dark Warriors' Fortress, and enter them.",
+            "s": "Enter the Chaos altar ruins in the Wilderness with a chaos talisman.",
+            "k": "enterChaosAltar"
+          },
+          {
+            "t": "Use the wand on the chaos altar.",
+            "s": "Use the wand on the chaos altar.",
+            "k": "useWandOnAltar",
+            "at": [
+              2271,
+              4842,
+              0
+            ],
+            "hl": {
+              "obj": [
+                34769
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 55,
+        "do": [
+          {
+            "t": "Return to Surok Magis in the Varrock Library with the wand and a bowl.",
+            "s": "Return to Surok Magis in the Varrock Library with the wand and a bowl.",
+            "k": "bringWandToSurok",
+            "at": [
+              3211,
+              3493,
+              0
+            ],
+            "hl": {
+              "npc": [
+                6186
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 60,
+        "do": [
+          {
+            "t": "Return to Rat Burgiss south of Varrock.",
+            "s": "Return to Rat Burgiss south of Varrock.",
+            "k": "talkToRatAfterSurok",
+            "at": [
+              3266,
+              3333,
+              0
+            ],
+            "hl": {
+              "npc": [
+                4158
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 61,
+        "do": [
+          {
+            "t": "Return to Rat Burgiss south of Varrock.",
+            "s": "Return to Rat Burgiss south of Varrock.",
+            "k": "talkToRatAfterSurok",
+            "at": [
+              3266,
+              3333,
+              0
+            ],
+            "hl": {
+              "npc": [
+                4158
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 70,
+        "do": [
+          {
+            "t": "Return to Rat Burgiss south of Varrock.",
+            "s": "Return to Rat Burgiss south of Varrock.",
+            "k": "talkToRatAfterSurokNoLetter",
+            "at": [
+              3266,
+              3333,
+              0
+            ],
+            "hl": {
+              "npc": [
+                4158
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 71,
+        "do": [
+          {
+            "t": "Return to Rat Burgiss south of Varrock.",
+            "s": "Return to Rat Burgiss south of Varrock.",
+            "k": "talkToRatAfterSurokNoLetter",
+            "at": [
+              3266,
+              3333,
+              0
+            ],
+            "hl": {
+              "npc": [
+                4158
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 72,
+        "do": [
+          {
+            "t": "Return to Rat Burgiss south of Varrock.",
+            "s": "Return to Rat Burgiss south of Varrock.",
+            "k": "talkToRatAfterSurokNoLetter",
+            "at": [
+              3266,
+              3333,
+              0
+            ],
+            "hl": {
+              "npc": [
+                4158
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 80,
+        "do": [
+          {
+            "t": "Talk to Zaff in the Varrock staff shop.",
+            "s": "Talk to Zaff in the Varrock staff shop.",
+            "k": "talkToZaff",
+            "at": [
+              3202,
+              3434,
+              0
+            ],
+            "hl": {
+              "npc": [
+                2880
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 81,
+        "do": [
+          {
+            "t": "Talk to Zaff in the Varrock staff shop.",
+            "s": "Talk to Zaff in the Varrock staff shop.",
+            "k": "talkToZaff",
+            "at": [
+              3202,
+              3434,
+              0
+            ],
+            "hl": {
+              "npc": [
+                2880
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 110,
+        "do": [
+          {
+            "t": "Prepare to fight King Roald (level 47), then go talk to Surok Magis in the Varrock Library.",
+            "s": "Talk to Surok Magis in the Varrock Library, ready to fight.",
+            "k": "talkToSurokToFight",
+            "at": [
+              3211,
+              3493,
+              0
+            ],
+            "hl": {
+              "npc": [
+                4160
+              ]
+            }
+          },
+          {
+            "t": "Fight King Roald. When he's at 1hp, right-click operate the beacon ring.",
+            "s": "Fight King Roald; at 1 hitpoint, operate the beacon ring.",
+            "k": "fightRoald",
+            "at": [
+              3211,
+              3493,
+              0
+            ],
+            "hl": {
+              "npc": [
+                4163
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 115,
+        "do": [
+          {
+            "t": "Prepare to fight King Roald (level 47), then go talk to Surok Magis in the Varrock Library.",
+            "s": "Talk to Surok Magis in the Varrock Library, ready to fight.",
+            "k": "talkToSurokToFight",
+            "at": [
+              3211,
+              3493,
+              0
+            ],
+            "hl": {
+              "npc": [
+                4160
+              ]
+            }
+          },
+          {
+            "t": "Fight King Roald. When he's at 1hp, right-click operate the beacon ring.",
+            "s": "Fight King Roald; at 1 hitpoint, operate the beacon ring.",
+            "k": "fightRoald",
+            "at": [
+              3211,
+              3493,
+              0
+            ],
+            "hl": {
+              "npc": [
+                4163
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 120,
+        "do": [
+          {
+            "t": "Prepare to fight King Roald (level 47), then go talk to Surok Magis in the Varrock Library.",
+            "s": "Talk to Surok Magis in the Varrock Library, ready to fight.",
+            "k": "talkToSurokToFight",
+            "at": [
+              3211,
+              3493,
+              0
+            ],
+            "hl": {
+              "npc": [
+                4160
+              ]
+            }
+          },
+          {
+            "t": "Fight King Roald. When he's at 1hp, right-click operate the beacon ring.",
+            "s": "Fight King Roald; at 1 hitpoint, operate the beacon ring.",
+            "k": "fightRoald",
+            "at": [
+              3211,
+              3493,
+              0
+            ],
+            "hl": {
+              "npc": [
+                4163
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 140,
+        "do": [
+          {
+            "t": "Return to Rat Burgiss south of Varrock to finish the quest.",
+            "s": "Return to Rat Burgiss south of Varrock to finish the quest.",
+            "k": "talkToRatToFinish",
+            "at": [
+              3266,
+              3333,
+              0
+            ],
+            "hl": {
+              "npc": [
+                4158
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "facts": {
+    "id": "What Lies Below",
+    "stepIds": [
+      "DRAFT"
+    ],
+    "members": false,
+    "requirements": {
+      "skills": {
+        "runecraft": 35
+      },
+      "questPoints": 0,
+      "quests": [
+        "Rune Mysteries"
+      ],
+      "manual": [],
+      "capabilities": [],
+      "unparsed": null,
+      "text": "*Completion of the following quests:\n**[[Rune Mysteries]]\n*{{SCP|Runecraft|35|link=yes}} {{Boostable|no}} {{Questreqstart|yes}}"
+    },
+    "rewards": {
+      "questPoints": 1,
+      "xp": {
+        "runecraft": 8000,
+        "defence": 2000
+      },
+      "coins": 0
+    },
+    "resourceFlow": null,
+    "length": "Short",
+    "source": {
+      "url": "https://oldschool.runescape.wiki/w/Special:Redirect/revision/15373739",
+      "title": "What Lies Below",
+      "revision": 15373739,
+      "retrievedAt": "2026-11-18T06:48:27.735Z"
+    }
+  },
+  "unknown": [
+    "fight \"Outlaw\": no combat data",
+    "fight \"King Roald\": no combat data",
+    "step \"enterChaosAltar\": Quest Helper gives no tile",
+    "what the quest uses up and hands out is not reviewed"
+  ]
+}

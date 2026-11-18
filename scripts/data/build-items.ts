@@ -91,8 +91,8 @@ const stepItems = steps.flatMap((s) => [...(s.itemsRequired ?? []), ...(s.itemsR
 
 const wanted = new Set<string>(KEY_ITEMS);
 // Training tools and supplies too, or the planner cannot read whether the player holds them (Noose wand for Hunter).
-const methods = JSON.parse(readFileSync(`${root}src/data/authored/trainingMethods.json`, 'utf8')) as { methods: { needs?: { type: string; name: string }[] }[] };
-for (const m of methods.methods) for (const n of m.needs ?? []) if (n.type === 'item') wanted.add(n.name);
+const methods = JSON.parse(readFileSync(`${root}src/data/authored/trainingMethods.json`, 'utf8')) as { methods: { needs?: { type: string; name: string; anyOf?: string[] }[] }[] };
+for (const m of methods.methods) for (const n of m.needs ?? []) if (n.type === 'item') for (const name of [n.name, ...(n.anyOf ?? [])]) wanted.add(name);
 for (const it of stepItems) wanted.add(it.nameEn);
 
 const mappingRes = await fetchFn('https://prices.runescape.wiki/api/v1/osrs/mapping');

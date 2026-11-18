@@ -21,6 +21,7 @@ const { portals, floors, skipped } = parseTransports(await res.text());
 const AUTHORED: (number | string)[][] = [
   [3361, 3150, 0, 3361, 11482, 0, 44635, 'Enter Cave', ''], // Giants' Foundry (Sleeping Giants)
   [3361, 11482, 0, 3361, 3150, 0, 44636, 'Exit Cave', ''],
+  [3059, 3590, 0, 2281, 4837, 0, 34742, 'Enter Mysterious ruins', ''], // Chaos altar, with a chaos talisman (What Lies Below)
 ];
 const rows = [...dedupePortals(portals).map(toRow), ...AUTHORED];
 const floorRows = dedupePortals(floors).map(toRow);

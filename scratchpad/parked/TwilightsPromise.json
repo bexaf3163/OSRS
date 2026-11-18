@@ -1,0 +1,1622 @@
+{
+ "quest": "Twilight's Promise",
+ "status": "draft",
+ "sources": {
+  "questHelper": "b9b93706618a7b7fe7e5ea30e9a9ef35ba09673e",
+  "wiki": {
+   "title": "Twilight's Promise",
+   "revision": 15391672
+  },
+  "quickGuide": {
+   "title": "Twilight's Promise/Quick guide",
+   "revision": 15214722
+  }
+ },
+ "step": {
+  "title": "Twilight's Promise",
+  "type": "quest",
+  "qp": 1,
+  "membersOnly": true,
+  "wikiUrl": "https://oldschool.runescape.wiki/w/Twilight's_Promise",
+  "quickGuideUrl": "https://oldschool.runescape.wiki/w/Twilight's_Promise/Quick_guide",
+  "mapLocation": {
+   "x": 1686,
+   "y": 3141,
+   "plane": 0,
+   "label": "Talk to Ennius Tullus or Furia Tullus in front of the Sunrise Palace."
+  },
+  "npc": {
+   "nameEn": "Ennius Tullus"
+  },
+  "itemsRequired": [
+   {
+    "nameEn": "combat classes",
+    "amount": 1,
+    "wikiItemId": null,
+    "howToGet": null,
+    "note": "Items for two different combat classes or a poisoned weapon (be warned that the poison method is much slower)."
+   }
+  ],
+  "foes": [
+   "Knight of Varlamore (Twilight's Promise)",
+   "cultist"
+  ]
+ },
+ "stages": {
+  "var": [
+   "varbit",
+   9649
+  ],
+  "route": [
+   {
+    "title": "With friends like these...",
+    "steps": [
+     "Speak to Ennius or Furia Tullus outside the Sunrise Palace. Dialogue: \"Yes.\"",
+     "Head south to the temple inside city walls and speak to Metzli, Teokan of Ranul. Dialogue: \"I'm meant to be meeting Prince Itzla here.\"",
+     "Head down the stairs into the temple crypt.",
+     "Head north through the gate and talk to Prince Itzla Arkan and Servius, Teokan of Ralos.",
+     "Return to Ennius and Furia inside the Sunrise Palace, in the green area by the entrance, to receive a Varlamore crest."
+    ]
+   },
+   {
+    "title": "Oh Brother!",
+    "steps": [
+     "Six Knight of Varlamore must now be found around the city.",
+     "Head back to the Sunrise Palace and speak to Ennius and Furia. They will want you to search the Kualti Headquarters to the west for evidence.",
+     "Head to the headquarters (large building west of Sunrise Palace) and go to the top floor. Search the southern chest in the south-eastern room to find an incriminating letter.",
+     "Read the letter.",
+     "Return to Ennius and Furia, and watch the cutscene.",
+     "Speak to Ennius again."
+    ]
+   },
+   {
+    "title": "The Twilight Emissaries",
+    "steps": [
+     "Speak to Regulus Cento south-east of the palace. Dialogue: \"I was told to ask you about getting to the Teomat.\"",
+     "Feed Renu.",
+     "Travel with Renu to Ralos' Rise (The Teomat).",
+     "Speak with Prince Itzla inside the Teomat temple.",
+     "Speak to Metzli in the northern building.",
+     "Defeat all 8 cultists.",
+     "Finish the cutscene and ensuing dialogue.",
+     "Congratulations, quest complete!"
+    ]
+   }
+  ],
+  "stages": [
+   {
+    "at": 0,
+    "do": [
+     {
+      "t": "Talk to Regulus Cento outside Varrock's East Gate to travel to Varlamore.",
+      "s": "Talk to Regulus Cento outside Varrock's East Gate to travel to Varlamore.",
+      "k": "talkToRegulusStart",
+      "at": [
+       3281,
+       3413,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12883
+       ]
+      }
+     },
+     {
+      "t": "Talk to Ennius Tullus just west of where you arrived, next to the fountain.",
+      "s": "Talk to Ennius Tullus just west of where you arrived, next to the fountain.",
+      "k": "talkToEnnius",
+      "at": [
+       1687,
+       3141,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12892
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 2,
+    "do": [
+     {
+      "t": "Talk to Regulus Cento outside Varrock's East Gate to travel to Varlamore.",
+      "s": "Talk to Regulus Cento outside Varrock's East Gate to travel to Varlamore.",
+      "k": "talkToRegulusStart",
+      "at": [
+       3281,
+       3413,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12883
+       ]
+      }
+     },
+     {
+      "t": "Talk to Ennius Tullus just west of where you arrived, next to the fountain.",
+      "s": "Talk to Ennius Tullus just west of where you arrived, next to the fountain.",
+      "k": "talkToEnnius",
+      "at": [
+       1687,
+       3141,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12892
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 4,
+    "do": [
+     {
+      "t": "Talk to Metzli in the temple in the south of the city.",
+      "s": "Talk to Metzli in the temple in the south of the city.",
+      "k": "talkToMetzli",
+      "at": [
+       1697,
+       3087,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12894
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 6,
+    "do": [
+     {
+      "t": "Talk to Metzli in the temple in the south of the city.",
+      "s": "Talk to Metzli in the temple in the south of the city.",
+      "k": "talkToMetzli",
+      "at": [
+       1697,
+       3087,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12894
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 8,
+    "do": [
+     {
+      "t": "Enter the temple's crypt.",
+      "s": "Enter the temple's crypt.",
+      "k": "enterCrypt",
+      "at": [
+       1692,
+       3088,
+       0
+      ],
+      "hl": {
+       "obj": [
+        50859
+       ]
+      }
+     },
+     {
+      "t": "Talk to Prince Itzla Arkan in the north room.",
+      "s": "Talk to Prince Itzla Arkan in the north room.",
+      "k": "talkToPrince",
+      "at": [
+       1685,
+       9514,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12896
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 10,
+    "do": [
+     {
+      "t": "Enter the temple's crypt.",
+      "s": "Enter the temple's crypt.",
+      "k": "enterCrypt",
+      "at": [
+       1692,
+       3088,
+       0
+      ],
+      "hl": {
+       "obj": [
+        50859
+       ]
+      }
+     },
+     {
+      "t": "Talk to Prince Itzla Arkan in the north room.",
+      "s": "Talk to Prince Itzla Arkan in the north room.",
+      "k": "talkToPrince",
+      "at": [
+       1685,
+       9514,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12896
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 12,
+    "do": [
+     {
+      "t": "Return to Ennius Tullus, who is now in the palace.",
+      "s": "Return to Ennius Tullus, who is now in the palace.",
+      "k": "talkToEnnius2",
+      "at": [
+       1684,
+       3156,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12892
+       ]
+      }
+     },
+     {
+      "t": "Leave the crypt.",
+      "s": "Leave the crypt.",
+      "k": "leaveCrypt",
+      "at": [
+       1692,
+       9492,
+       0
+      ],
+      "hl": {
+       "obj": [
+        50860
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 14,
+    "do": [
+     {
+      "t": "Enter the Colosseum in the east of the city.",
+      "s": "Enter the Colosseum in the east of the city.",
+      "k": "enterColosseum",
+      "at": [
+       1796,
+       3106,
+       0
+      ],
+      "hl": {
+       "obj": [
+        50749
+       ]
+      }
+     },
+     {
+      "t": "Talk to the Knight of Varlamore in the north training room, ready to fight.",
+      "s": "Talk to the Knight of Varlamore in the north training room, ready to fight.",
+      "k": "talkToColosseumKnight",
+      "at": [
+       1805,
+       9522,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12914
+       ]
+      }
+     },
+     {
+      "t": "Defeat the knight, swapping combat styles to bypass his prayers.",
+      "s": "Defeat the knight, swapping combat styles to bypass his prayers.",
+      "k": "defeatColosseumKnight",
+      "at": [
+       1824,
+       3105,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12916
+       ]
+      }
+     },
+     {
+      "t": "Talk to the Knight of Varlamore in the northern training room once more.",
+      "s": "Talk to the Knight of Varlamore in the northern training room once more.",
+      "k": "talkToColosseumKnight2",
+      "at": [
+       1805,
+       9522,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12914
+       ]
+      }
+     },
+     {
+      "t": "Talk to the Knights of Varlamore in the pub OUTSIDE the walls of the city to the south.",
+      "s": "Talk to the Knights of Varlamore in the pub OUTSIDE the walls of the city to the south.",
+      "k": "talkToPubKnights",
+      "at": [
+       1721,
+       3075,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12912
+       ]
+      }
+     },
+     {
+      "t": "Lead the knight to the fountain to the east. Whenever they stop following you, talk to them again.",
+      "s": "Lead the knight to the fountain to the east. Whenever they stop following you, talk to them again.",
+      "k": "takePubKnightsToFountain",
+      "at": [
+       1757,
+       3069,
+       0
+      ]
+     },
+     {
+      "t": "Talk to the sobered knight at the fountain.",
+      "s": "Talk to the sobered knight at the fountain.",
+      "k": "talkToPubKnightAtFountain",
+      "at": [
+       1756,
+       3069,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12910
+       ]
+      }
+     },
+     {
+      "t": "Talk to the Knight of Varlamore on the south western part of the Fortis Cothon (docks) in the east of the city.",
+      "s": "Talk to the Knight of Varlamore on the south western part of the Fortis Cothon (docks) in the east of the city.",
+      "k": "talkToCothonKnight",
+      "at": [
+       1746,
+       3120,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12906
+       ]
+      }
+     },
+     {
+      "t": "Search the crate in the north-east of the Cothon, next to two barrels of fish.",
+      "s": "Search the crate in the north-east of the Cothon, next to two barrels of fish.",
+      "k": "searchCrate",
+      "at": [
+       1778,
+       3149,
+       0
+      ],
+      "hl": {
+       "obj": [
+        50870
+       ]
+      }
+     },
+     {
+      "t": "Return to the Knight of Varlamore on the south part of the Fortis Cothon.",
+      "s": "Return to the Knight of Varlamore on the south part of the Fortis Cothon.",
+      "k": "returnToCothonKnight",
+      "at": [
+       1746,
+       3120,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12906
+       ]
+      }
+     },
+     {
+      "t": "Talk to the Knight of Varlamore in the bazaar south of the palace.",
+      "s": "Talk to the Knight of Varlamore in the bazaar south of the palace.",
+      "k": "talkToBazaarKnight",
+      "at": [
+       1682,
+       3104,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12902
+       ]
+      }
+     },
+     {
+      "t": "Pickpocket the citizen in turquoise robes in the bazaar.",
+      "s": "Pickpocket the citizen in turquoise robes in the bazaar.",
+      "k": "pickpocketCitizen",
+      "at": [
+       1686,
+       3109,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12929
+       ]
+      }
+     },
+     {
+      "t": "Return the amulet to the knight in the bazaar.",
+      "s": "Return the amulet to the knight in the bazaar.",
+      "k": "returnAmulet",
+      "at": [
+       1682,
+       3104,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12902
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 16,
+    "do": [
+     {
+      "t": "Enter the Colosseum in the east of the city.",
+      "s": "Enter the Colosseum in the east of the city.",
+      "k": "enterColosseum",
+      "at": [
+       1796,
+       3106,
+       0
+      ],
+      "hl": {
+       "obj": [
+        50749
+       ]
+      }
+     },
+     {
+      "t": "Talk to the Knight of Varlamore in the north training room, ready to fight.",
+      "s": "Talk to the Knight of Varlamore in the north training room, ready to fight.",
+      "k": "talkToColosseumKnight",
+      "at": [
+       1805,
+       9522,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12914
+       ]
+      }
+     },
+     {
+      "t": "Defeat the knight, swapping combat styles to bypass his prayers.",
+      "s": "Defeat the knight, swapping combat styles to bypass his prayers.",
+      "k": "defeatColosseumKnight",
+      "at": [
+       1824,
+       3105,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12916
+       ]
+      }
+     },
+     {
+      "t": "Talk to the Knight of Varlamore in the northern training room once more.",
+      "s": "Talk to the Knight of Varlamore in the northern training room once more.",
+      "k": "talkToColosseumKnight2",
+      "at": [
+       1805,
+       9522,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12914
+       ]
+      }
+     },
+     {
+      "t": "Talk to the Knights of Varlamore in the pub OUTSIDE the walls of the city to the south.",
+      "s": "Talk to the Knights of Varlamore in the pub OUTSIDE the walls of the city to the south.",
+      "k": "talkToPubKnights",
+      "at": [
+       1721,
+       3075,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12912
+       ]
+      }
+     },
+     {
+      "t": "Lead the knight to the fountain to the east. Whenever they stop following you, talk to them again.",
+      "s": "Lead the knight to the fountain to the east. Whenever they stop following you, talk to them again.",
+      "k": "takePubKnightsToFountain",
+      "at": [
+       1757,
+       3069,
+       0
+      ]
+     },
+     {
+      "t": "Talk to the sobered knight at the fountain.",
+      "s": "Talk to the sobered knight at the fountain.",
+      "k": "talkToPubKnightAtFountain",
+      "at": [
+       1756,
+       3069,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12910
+       ]
+      }
+     },
+     {
+      "t": "Talk to the Knight of Varlamore on the south western part of the Fortis Cothon (docks) in the east of the city.",
+      "s": "Talk to the Knight of Varlamore on the south western part of the Fortis Cothon (docks) in the east of the city.",
+      "k": "talkToCothonKnight",
+      "at": [
+       1746,
+       3120,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12906
+       ]
+      }
+     },
+     {
+      "t": "Search the crate in the north-east of the Cothon, next to two barrels of fish.",
+      "s": "Search the crate in the north-east of the Cothon, next to two barrels of fish.",
+      "k": "searchCrate",
+      "at": [
+       1778,
+       3149,
+       0
+      ],
+      "hl": {
+       "obj": [
+        50870
+       ]
+      }
+     },
+     {
+      "t": "Return to the Knight of Varlamore on the south part of the Fortis Cothon.",
+      "s": "Return to the Knight of Varlamore on the south part of the Fortis Cothon.",
+      "k": "returnToCothonKnight",
+      "at": [
+       1746,
+       3120,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12906
+       ]
+      }
+     },
+     {
+      "t": "Talk to the Knight of Varlamore in the bazaar south of the palace.",
+      "s": "Talk to the Knight of Varlamore in the bazaar south of the palace.",
+      "k": "talkToBazaarKnight",
+      "at": [
+       1682,
+       3104,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12902
+       ]
+      }
+     },
+     {
+      "t": "Pickpocket the citizen in turquoise robes in the bazaar.",
+      "s": "Pickpocket the citizen in turquoise robes in the bazaar.",
+      "k": "pickpocketCitizen",
+      "at": [
+       1686,
+       3109,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12929
+       ]
+      }
+     },
+     {
+      "t": "Return the amulet to the knight in the bazaar.",
+      "s": "Return the amulet to the knight in the bazaar.",
+      "k": "returnAmulet",
+      "at": [
+       1682,
+       3104,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12902
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 18,
+    "do": [
+     {
+      "t": "Enter the Colosseum in the east of the city.",
+      "s": "Enter the Colosseum in the east of the city.",
+      "k": "enterColosseum",
+      "at": [
+       1796,
+       3106,
+       0
+      ],
+      "hl": {
+       "obj": [
+        50749
+       ]
+      }
+     },
+     {
+      "t": "Talk to the Knight of Varlamore in the north training room, ready to fight.",
+      "s": "Talk to the Knight of Varlamore in the north training room, ready to fight.",
+      "k": "talkToColosseumKnight",
+      "at": [
+       1805,
+       9522,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12914
+       ]
+      }
+     },
+     {
+      "t": "Defeat the knight, swapping combat styles to bypass his prayers.",
+      "s": "Defeat the knight, swapping combat styles to bypass his prayers.",
+      "k": "defeatColosseumKnight",
+      "at": [
+       1824,
+       3105,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12916
+       ]
+      }
+     },
+     {
+      "t": "Talk to the Knight of Varlamore in the northern training room once more.",
+      "s": "Talk to the Knight of Varlamore in the northern training room once more.",
+      "k": "talkToColosseumKnight2",
+      "at": [
+       1805,
+       9522,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12914
+       ]
+      }
+     },
+     {
+      "t": "Talk to the Knights of Varlamore in the pub OUTSIDE the walls of the city to the south.",
+      "s": "Talk to the Knights of Varlamore in the pub OUTSIDE the walls of the city to the south.",
+      "k": "talkToPubKnights",
+      "at": [
+       1721,
+       3075,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12912
+       ]
+      }
+     },
+     {
+      "t": "Lead the knight to the fountain to the east. Whenever they stop following you, talk to them again.",
+      "s": "Lead the knight to the fountain to the east. Whenever they stop following you, talk to them again.",
+      "k": "takePubKnightsToFountain",
+      "at": [
+       1757,
+       3069,
+       0
+      ]
+     },
+     {
+      "t": "Talk to the sobered knight at the fountain.",
+      "s": "Talk to the sobered knight at the fountain.",
+      "k": "talkToPubKnightAtFountain",
+      "at": [
+       1756,
+       3069,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12910
+       ]
+      }
+     },
+     {
+      "t": "Talk to the Knight of Varlamore on the south western part of the Fortis Cothon (docks) in the east of the city.",
+      "s": "Talk to the Knight of Varlamore on the south western part of the Fortis Cothon (docks) in the east of the city.",
+      "k": "talkToCothonKnight",
+      "at": [
+       1746,
+       3120,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12906
+       ]
+      }
+     },
+     {
+      "t": "Search the crate in the north-east of the Cothon, next to two barrels of fish.",
+      "s": "Search the crate in the north-east of the Cothon, next to two barrels of fish.",
+      "k": "searchCrate",
+      "at": [
+       1778,
+       3149,
+       0
+      ],
+      "hl": {
+       "obj": [
+        50870
+       ]
+      }
+     },
+     {
+      "t": "Return to the Knight of Varlamore on the south part of the Fortis Cothon.",
+      "s": "Return to the Knight of Varlamore on the south part of the Fortis Cothon.",
+      "k": "returnToCothonKnight",
+      "at": [
+       1746,
+       3120,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12906
+       ]
+      }
+     },
+     {
+      "t": "Talk to the Knight of Varlamore in the bazaar south of the palace.",
+      "s": "Talk to the Knight of Varlamore in the bazaar south of the palace.",
+      "k": "talkToBazaarKnight",
+      "at": [
+       1682,
+       3104,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12902
+       ]
+      }
+     },
+     {
+      "t": "Pickpocket the citizen in turquoise robes in the bazaar.",
+      "s": "Pickpocket the citizen in turquoise robes in the bazaar.",
+      "k": "pickpocketCitizen",
+      "at": [
+       1686,
+       3109,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12929
+       ]
+      }
+     },
+     {
+      "t": "Return the amulet to the knight in the bazaar.",
+      "s": "Return the amulet to the knight in the bazaar.",
+      "k": "returnAmulet",
+      "at": [
+       1682,
+       3104,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12902
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 20,
+    "do": [
+     {
+      "t": "Enter the Colosseum in the east of the city.",
+      "s": "Enter the Colosseum in the east of the city.",
+      "k": "enterColosseum",
+      "at": [
+       1796,
+       3106,
+       0
+      ],
+      "hl": {
+       "obj": [
+        50749
+       ]
+      }
+     },
+     {
+      "t": "Talk to the Knight of Varlamore in the north training room, ready to fight.",
+      "s": "Talk to the Knight of Varlamore in the north training room, ready to fight.",
+      "k": "talkToColosseumKnight",
+      "at": [
+       1805,
+       9522,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12914
+       ]
+      }
+     },
+     {
+      "t": "Defeat the knight, swapping combat styles to bypass his prayers.",
+      "s": "Defeat the knight, swapping combat styles to bypass his prayers.",
+      "k": "defeatColosseumKnight",
+      "at": [
+       1824,
+       3105,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12916
+       ]
+      }
+     },
+     {
+      "t": "Talk to the Knight of Varlamore in the northern training room once more.",
+      "s": "Talk to the Knight of Varlamore in the northern training room once more.",
+      "k": "talkToColosseumKnight2",
+      "at": [
+       1805,
+       9522,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12914
+       ]
+      }
+     },
+     {
+      "t": "Talk to the Knights of Varlamore in the pub OUTSIDE the walls of the city to the south.",
+      "s": "Talk to the Knights of Varlamore in the pub OUTSIDE the walls of the city to the south.",
+      "k": "talkToPubKnights",
+      "at": [
+       1721,
+       3075,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12912
+       ]
+      }
+     },
+     {
+      "t": "Lead the knight to the fountain to the east. Whenever they stop following you, talk to them again.",
+      "s": "Lead the knight to the fountain to the east. Whenever they stop following you, talk to them again.",
+      "k": "takePubKnightsToFountain",
+      "at": [
+       1757,
+       3069,
+       0
+      ]
+     },
+     {
+      "t": "Talk to the sobered knight at the fountain.",
+      "s": "Talk to the sobered knight at the fountain.",
+      "k": "talkToPubKnightAtFountain",
+      "at": [
+       1756,
+       3069,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12910
+       ]
+      }
+     },
+     {
+      "t": "Talk to the Knight of Varlamore on the south western part of the Fortis Cothon (docks) in the east of the city.",
+      "s": "Talk to the Knight of Varlamore on the south western part of the Fortis Cothon (docks) in the east of the city.",
+      "k": "talkToCothonKnight",
+      "at": [
+       1746,
+       3120,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12906
+       ]
+      }
+     },
+     {
+      "t": "Search the crate in the north-east of the Cothon, next to two barrels of fish.",
+      "s": "Search the crate in the north-east of the Cothon, next to two barrels of fish.",
+      "k": "searchCrate",
+      "at": [
+       1778,
+       3149,
+       0
+      ],
+      "hl": {
+       "obj": [
+        50870
+       ]
+      }
+     },
+     {
+      "t": "Return to the Knight of Varlamore on the south part of the Fortis Cothon.",
+      "s": "Return to the Knight of Varlamore on the south part of the Fortis Cothon.",
+      "k": "returnToCothonKnight",
+      "at": [
+       1746,
+       3120,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12906
+       ]
+      }
+     },
+     {
+      "t": "Talk to the Knight of Varlamore in the bazaar south of the palace.",
+      "s": "Talk to the Knight of Varlamore in the bazaar south of the palace.",
+      "k": "talkToBazaarKnight",
+      "at": [
+       1682,
+       3104,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12902
+       ]
+      }
+     },
+     {
+      "t": "Pickpocket the citizen in turquoise robes in the bazaar.",
+      "s": "Pickpocket the citizen in turquoise robes in the bazaar.",
+      "k": "pickpocketCitizen",
+      "at": [
+       1686,
+       3109,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12929
+       ]
+      }
+     },
+     {
+      "t": "Return the amulet to the knight in the bazaar.",
+      "s": "Return the amulet to the knight in the bazaar.",
+      "k": "returnAmulet",
+      "at": [
+       1682,
+       3104,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12902
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 22,
+    "do": [
+     {
+      "t": "Return to Ennius Tullus in the palace.",
+      "s": "Return to Ennius Tullus in the palace.",
+      "k": "talkToEnniusAfterKnights",
+      "at": [
+       1684,
+       3156,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12892
+       ]
+      }
+     },
+     {
+      "t": "Return to Ennius Tullus in the palace.",
+      "s": "Return to Ennius Tullus in the palace.",
+      "k": "climbStairs",
+      "at": [
+       1796,
+       9506,
+       0
+      ],
+      "hl": {
+       "obj": [
+        50750
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 24,
+    "do": [
+     {
+      "t": "Go to the top floor of the Kualti Headquarters, just west of the palace.",
+      "s": "Go to the top floor of the Kualti Headquarters, just west of the palace.",
+      "k": "goUpHQ",
+      "at": [
+       1638,
+       3155,
+       0
+      ],
+      "hl": {
+       "obj": [
+        52628
+       ]
+      }
+     },
+     {
+      "t": "Go to the top floor of the Kualti Headquarters, just west of the palace.",
+      "s": "Go to the top floor of the Kualti Headquarters, just west of the palace.",
+      "k": "goUpHQ2",
+      "at": [
+       1650,
+       3155,
+       1
+      ],
+      "hl": {
+       "obj": [
+        52628
+       ]
+      }
+     },
+     {
+      "t": "Search the chest in the south-east room on the south wall.",
+      "s": "Search the chest in the south-east room on the south wall.",
+      "k": "searchHQChest",
+      "at": [
+       1648,
+       3142,
+       2
+      ],
+      "hl": {
+       "obj": [
+        50866
+       ]
+      }
+     },
+     {
+      "t": "Read the incriminating letter.",
+      "s": "Read the incriminating letter.",
+      "k": "readLetter"
+     }
+    ]
+   },
+   {
+    "at": 26,
+    "do": [
+     {
+      "t": "Go to the top floor of the Kualti Headquarters, just west of the palace.",
+      "s": "Go to the top floor of the Kualti Headquarters, just west of the palace.",
+      "k": "goUpHQ",
+      "at": [
+       1638,
+       3155,
+       0
+      ],
+      "hl": {
+       "obj": [
+        52628
+       ]
+      }
+     },
+     {
+      "t": "Go to the top floor of the Kualti Headquarters, just west of the palace.",
+      "s": "Go to the top floor of the Kualti Headquarters, just west of the palace.",
+      "k": "goUpHQ2",
+      "at": [
+       1650,
+       3155,
+       1
+      ],
+      "hl": {
+       "obj": [
+        52628
+       ]
+      }
+     },
+     {
+      "t": "Search the chest in the south-east room on the south wall.",
+      "s": "Search the chest in the south-east room on the south wall.",
+      "k": "searchHQChest",
+      "at": [
+       1648,
+       3142,
+       2
+      ],
+      "hl": {
+       "obj": [
+        50866
+       ]
+      }
+     },
+     {
+      "t": "Read the incriminating letter.",
+      "s": "Read the incriminating letter.",
+      "k": "readLetter"
+     }
+    ]
+   },
+   {
+    "at": 28,
+    "do": [
+     {
+      "t": "Return to Ennius and Furia in the palace.",
+      "s": "Return to Ennius and Furia in the palace.",
+      "k": "returnToEnniusAfterLetter",
+      "at": [
+       1684,
+       3156,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12892
+       ]
+      }
+     },
+     {
+      "t": "Return to Ennius and Furia in the palace.",
+      "s": "Return to Ennius and Furia in the palace.",
+      "k": "goDownHQ1To0",
+      "at": [
+       1638,
+       3155,
+       1
+      ],
+      "hl": {
+       "obj": [
+        52629
+       ]
+      }
+     },
+     {
+      "t": "Return to Ennius and Furia in the palace.",
+      "s": "Return to Ennius and Furia in the palace.",
+      "k": "goDownHQ2To1",
+      "at": [
+       1651,
+       3155,
+       2
+      ],
+      "hl": {
+       "obj": [
+        52629
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 30,
+    "do": [
+     {
+      "t": "Return to Ennius and Furia in the palace.",
+      "s": "Return to Ennius and Furia in the palace.",
+      "k": "returnToEnniusAfterLetter",
+      "at": [
+       1684,
+       3156,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12892
+       ]
+      }
+     },
+     {
+      "t": "Return to Ennius and Furia in the palace.",
+      "s": "Return to Ennius and Furia in the palace.",
+      "k": "goDownHQ1To0",
+      "at": [
+       1638,
+       3155,
+       1
+      ],
+      "hl": {
+       "obj": [
+        52629
+       ]
+      }
+     },
+     {
+      "t": "Return to Ennius and Furia in the palace.",
+      "s": "Return to Ennius and Furia in the palace.",
+      "k": "goDownHQ2To1",
+      "at": [
+       1651,
+       3155,
+       2
+      ],
+      "hl": {
+       "obj": [
+        52629
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 32,
+    "do": [
+     {
+      "t": "Return to Ennius and Furia in the palace.",
+      "s": "Return to Ennius and Furia in the palace.",
+      "k": "returnToEnniusAfterLetter",
+      "at": [
+       1684,
+       3156,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12892
+       ]
+      }
+     },
+     {
+      "t": "Return to Ennius and Furia in the palace.",
+      "s": "Return to Ennius and Furia in the palace.",
+      "k": "goDownHQ1To0",
+      "at": [
+       1638,
+       3155,
+       1
+      ],
+      "hl": {
+       "obj": [
+        52629
+       ]
+      }
+     },
+     {
+      "t": "Return to Ennius and Furia in the palace.",
+      "s": "Return to Ennius and Furia in the palace.",
+      "k": "goDownHQ2To1",
+      "at": [
+       1651,
+       3155,
+       2
+      ],
+      "hl": {
+       "obj": [
+        52629
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 34,
+    "do": [
+     {
+      "t": "TALK to Regulus Cento south-east of the palace.",
+      "s": "TALK to Regulus Cento south-east of the palace.",
+      "k": "talkToRegulusForTransport",
+      "at": [
+       1699,
+       3141,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12885
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 36,
+    "do": [
+     {
+      "t": "Feed Renu the feed.",
+      "s": "Feed Renu the feed.",
+      "k": "feedRenu",
+      "at": [
+       1703,
+       3142,
+       0
+      ],
+      "hl": {
+       "npc": [
+        13348
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 38,
+    "do": [
+     {
+      "t": "Travel with Renu to Teomat.",
+      "s": "Travel with Renu to Teomat.",
+      "k": "travelToTeomat",
+      "at": [
+       1697,
+       3142,
+       0
+      ],
+      "hl": {
+       "npc": [
+        13350
+       ]
+      }
+     },
+     {
+      "t": "Talk to Prince Itzla Arkan in the temple, near the altar.",
+      "s": "Talk to Prince Itzla Arkan in the temple, near the altar.",
+      "k": "talkToPrinceInTemple",
+      "at": [
+       1454,
+       3173,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12896
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 40,
+    "do": [
+     {
+      "t": "Travel with Renu to Teomat.",
+      "s": "Travel with Renu to Teomat.",
+      "k": "travelToTeomat",
+      "at": [
+       1697,
+       3142,
+       0
+      ],
+      "hl": {
+       "npc": [
+        13350
+       ]
+      }
+     },
+     {
+      "t": "Talk to Prince Itzla Arkan in the temple, near the altar.",
+      "s": "Talk to Prince Itzla Arkan in the temple, near the altar.",
+      "k": "talkToPrinceInTemple",
+      "at": [
+       1454,
+       3173,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12896
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 42,
+    "do": [
+     {
+      "t": "Talk to Metzli in the northern building of the Teomat.",
+      "s": "Talk to Metzli in the northern building of the Teomat.",
+      "k": "talkToMetzliNearTemple",
+      "at": [
+       1448,
+       3196,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12894
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 44,
+    "do": [
+     {
+      "t": "Talk to Metzli in the northern building of the Teomat.",
+      "s": "Talk to Metzli in the northern building of the Teomat.",
+      "k": "talkToMetzliNearTemple",
+      "at": [
+       1448,
+       3196,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12894
+       ]
+      }
+     },
+     {
+      "t": "Defeat the cultists.",
+      "s": "Defeat the cultists.",
+      "k": "defeat8Cultists",
+      "hl": {
+       "npc": [
+        12918
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 46,
+    "do": [
+     {
+      "t": "Talk to Prince Itzla Arkan in Teomat, near the altar, to finish the quest.",
+      "s": "Talk to Prince Itzla Arkan in Teomat, near the altar, to finish the quest.",
+      "k": "finishQuest",
+      "at": [
+       1454,
+       3173,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12896
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 48,
+    "do": [
+     {
+      "t": "Talk to Prince Itzla Arkan in Teomat, near the altar, to finish the quest.",
+      "s": "Talk to Prince Itzla Arkan in Teomat, near the altar, to finish the quest.",
+      "k": "finishQuest",
+      "at": [
+       1454,
+       3173,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12896
+       ]
+      }
+     }
+    ]
+   }
+  ]
+ },
+ "facts": {
+  "id": "Twilight's Promise",
+  "stepIds": [
+   "DRAFT"
+  ],
+  "members": false,
+  "requirements": {
+   "skills": {},
+   "questPoints": 0,
+   "quests": [
+    "Children of the Sun"
+   ],
+   "manual": [],
+   "capabilities": [],
+   "unparsed": null,
+   "text": "* Completion of the following quests:\n** [[Children of the Sun]]"
+  },
+  "rewards": {
+   "questPoints": 1,
+   "xp": {
+    "thieving": 3000
+   },
+   "coins": 0
+  },
+  "resourceFlow": null,
+  "length": "Short",
+  "source": {
+   "url": "https://oldschool.runescape.wiki/w/Special:Redirect/revision/15391672",
+   "title": "Twilight's Promise",
+   "revision": 15391672,
+   "retrievedAt": "2026-11-18T06:48:22.306Z"
+  }
+ },
+ "unknown": [
+  "item \"combat classes\": no id in Quest Helper or on its Wiki card",
+  "item \"combat classes\": where to get it is not written",
+  "fight \"Knight of Varlamore (Twilight's Promise)\": no combat data",
+  "fight \"cultist\": no combat data",
+  "step \"readLetter\": Quest Helper gives no tile",
+  "step \"defeat8Cultists\": Quest Helper gives no tile",
+  "Quest Helper condition \"NpcRequirement\" is not understood (1)",
+  "what the quest uses up and hands out is not reviewed"
+ ]
+}

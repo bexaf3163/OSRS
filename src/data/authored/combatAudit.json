@@ -2124,6 +2124,85 @@
       "evidence": [
         "OSRS Wiki Death on the Isle: kills field, read 2026-11-18."
       ]
+    },
+    {
+      "stepId": "S9-53",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "melee",
+      "objective": "What Lies Below: kill 5 outlaws (level 32, 20 hitpoints, hits up to 3) west of the Grand Exchange, then fight King Roald (level 47, 75 hitpoints, hits up to 3) until the beacon ring stops him.",
+      "enemies": [
+        {
+          "name": "Outlaw",
+          "level": 32,
+          "maxHit": 3,
+          "table": true
+        },
+        {
+          "name": "King Roald",
+          "level": 47,
+          "maxHit": 3,
+          "table": true
+        }
+      ],
+      "lines": [
+        "0.1"
+      ],
+      "assumptions": [
+        "Two trout cover both fights; King Roald cannot die, the beacon ring ends the fight at 1 hitpoint."
+      ],
+      "problems": [],
+      "alternatives": [],
+      "decision": "retain",
+      "changed": [
+        "2.144.0: new quest; Outlaw and King Roald are in combatFoes.json."
+      ],
+      "evidence": [
+        "OSRS Wiki Outlaw and King Roald: levels 32 and 47, max hit 3, read 2026-11-18."
+      ]
+    },
+    {
+      "stepId": "S9-54",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "safespot",
+      "runPast": false,
+      "objective": "Scrambled!: kill the large chicken (level 16, hits up to 2) up close, then the jaguar (level 88, 85 hitpoints, hits up to 8) and the red dragon (level 106, 100 hitpoints, hits up to 10) with Fire Bolt from their safespots.",
+      "enemies": [
+        {
+          "name": "Large chicken",
+          "level": 16,
+          "maxHit": 2,
+          "table": true
+        },
+        {
+          "name": "Black jaguar (Scrambled!)",
+          "level": 88,
+          "maxHit": 8,
+          "table": true
+        },
+        {
+          "name": "Red dragon (Scrambled!)",
+          "level": 106,
+          "maxHit": 10,
+          "table": true
+        }
+      ],
+      "lines": [],
+      "assumptions": [
+        "Sixty Fire Bolts cover both safespot fights; three trout cover the chicken."
+      ],
+      "problems": [],
+      "alternatives": [
+        "Ranged from the same safespots works too (wiki)."
+      ],
+      "decision": "retain",
+      "changed": [
+        "2.144.0: new quest; the three foes are in combatFoes.json and the two safespots in fightMechanics.json."
+      ],
+      "evidence": [
+        "OSRS Wiki Scrambled!: kills field with safespots, read 2026-11-18."
+      ]
     }
   ]
 }

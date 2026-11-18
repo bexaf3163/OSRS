@@ -404,6 +404,17 @@ const REVIEWED_FLOWS: Record<string, { revision: number; flow: NonNullable<Quest
     consumes: [], receives: [], unknownItems: ['Stone tablet', 'Note', 'Journal'],
     uncertainReceipts: [], partialDelivery: false, fromStartOnly: false,
   } },
+  // The chaos runes charge the wand and Surok keeps the bowl; the talisman is kept.
+  'What Lies Below': { revision: 15373739, flow: {
+    consumes: [{ name: 'Chaos rune', count: 15 }, { name: 'Bowl', count: 1 }], receives: [],
+    unknownItems: ["Rat's letter", 'Wand', 'Infused wand', 'Folder', 'Used folder', 'Intel', "Surok's letter", 'Beacon ring'],
+    uncertainReceipts: ['Trout'], partialDelivery: false, fromStartOnly: false,
+  } },
+  // Fire Bolts spend runes on the jaguar and the dragon; the tools and eggs are found in Tal Teklan.
+  'Scrambled!': { revision: 15373706, flow: {
+    consumes: [], receives: [], unknownItems: ['Planks', 'Nails', 'Saw', 'Hammer', 'Bowl of water', 'Damiana leaves', 'Large egg', 'Jaguar egg', 'Dragon egg'],
+    uncertainReceipts: ['Trout', 'Chaos rune', 'Air rune'], partialDelivery: false, fromStartOnly: false,
+  } },
   'Ernest the Chicken': { revision: 15390916, flow: {
     // All puzzle parts are obtained within the manor; a spade is reused, not handed in.
     consumes: [], receives: [], unknownItems: ['Fish food', 'Poison', 'Poisoned fish food', 'Pressure gauge', 'Rubber tube', 'Oil can', 'Key'],

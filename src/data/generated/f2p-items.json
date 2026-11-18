@@ -779,6 +779,17 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Air_talisman"
   },
   {
+    "id": 5527,
+    "nameEn": "Air tiara",
+    "examine": "A tiara infused with the properties of air.",
+    "members": false,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Air_tiara.png",
+    "value": 100,
+    "highAlch": 60,
+    "lowAlch": 40,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Air_tiara"
+  },
+  {
     "id": 1478,
     "nameEn": "Amulet of accuracy",
     "examine": "It increases my aim.",
@@ -1864,6 +1875,17 @@
       }
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Body_talisman"
+  },
+  {
+    "id": 5533,
+    "nameEn": "Body tiara",
+    "examine": "A tiara infused with the properties of the body.",
+    "members": false,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Body_tiara.png",
+    "value": 100,
+    "highAlch": 60,
+    "lowAlch": 40,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Body_tiara"
   },
   {
     "id": 8790,
@@ -3866,6 +3888,59 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Chaos_rune"
   },
   {
+    "id": 1452,
+    "nameEn": "Chaos talisman",
+    "examine": "A mysterious power emanates from the talisman...",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Chaos_talisman.png",
+    "value": 4,
+    "highAlch": 2,
+    "lowAlch": 1,
+    "dropSources": [
+      {
+        "monster": "Green dragon#Wilderness Slayer Cave",
+        "combatLevel": null,
+        "rate": "1/1,092.27"
+      },
+      {
+        "monster": "Jelly#Wilderness Slayer Cave",
+        "combatLevel": null,
+        "rate": "1/546.13"
+      },
+      {
+        "monster": "Moss giant#Regular",
+        "combatLevel": null,
+        "rate": "1/1,365.33"
+      },
+      {
+        "monster": "Lesser demon#Regular",
+        "combatLevel": null,
+        "rate": "1/1,365.33"
+      },
+      {
+        "monster": "Abyssal demon#Wilderness Slayer Cave",
+        "combatLevel": null,
+        "rate": "1/68"
+      },
+      {
+        "monster": "Abyssal demon#Standard",
+        "combatLevel": null,
+        "rate": "1/128"
+      },
+      {
+        "monster": "Lesser demon#Wilderness Slayer Cave",
+        "combatLevel": null,
+        "rate": "1/332.8"
+      },
+      {
+        "monster": "Cyclops#Warriors' Guild Basement",
+        "combatLevel": null,
+        "rate": "1/13,653.33"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Chaos_talisman"
+  },
+  {
     "id": 973,
     "nameEn": "Charcoal",
     "examine": "A lump of charcoal.",
@@ -5719,6 +5794,17 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Earth_talisman"
   },
   {
+    "id": 5535,
+    "nameEn": "Earth tiara",
+    "examine": "A tiara infused with the properties of the earth.",
+    "members": false,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Earth_tiara.png",
+    "value": 100,
+    "highAlch": 60,
+    "lowAlch": 40,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Earth_tiara"
+  },
+  {
     "id": 4278,
     "nameEn": "Ecto-token",
     "examine": "A token with ectoplasm on it.",
@@ -6435,6 +6521,17 @@
       }
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Fire_talisman"
+  },
+  {
+    "id": 5537,
+    "nameEn": "Fire tiara",
+    "examine": "A tiara infused with the properties of fire.",
+    "members": false,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Fire_tiara.png",
+    "value": 100,
+    "highAlch": 60,
+    "lowAlch": 40,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Fire_tiara"
   },
   {
     "id": 313,

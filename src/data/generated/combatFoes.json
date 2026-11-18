@@ -1899,6 +1899,126 @@
       "aggressive": true
     },
     {
+      "name": "Outlaw",
+      "version": "1",
+      "combat": 32,
+      "members": false,
+      "hitpoints": 20,
+      "attackLevel": 35,
+      "strengthLevel": 30,
+      "defenceLevel": 25,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "crush",
+      "maxHit": 3,
+      "speedTicks": 4,
+      "aggressive": false,
+      "xpBonus": -97
+    },
+    {
+      "name": "King Roald",
+      "combat": 47,
+      "members": true,
+      "hitpoints": 75,
+      "attackLevel": 35,
+      "strengthLevel": 30,
+      "defenceLevel": 30,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "crush",
+      "maxHit": 3,
+      "speedTicks": 4,
+      "aggressive": true
+    },
+    {
+      "name": "Large chicken",
+      "combat": 16,
+      "members": true,
+      "hitpoints": 30,
+      "attackLevel": 10,
+      "strengthLevel": 10,
+      "defenceLevel": 10,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "stab",
+      "maxHit": 2,
+      "speedTicks": 4,
+      "aggressive": true
+    },
+    {
+      "name": "Black jaguar (Scrambled!)",
+      "combat": 88,
+      "members": true,
+      "hitpoints": 85,
+      "attackLevel": 75,
+      "strengthLevel": 75,
+      "defenceLevel": 75,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "slash",
+      "maxHit": 8,
+      "speedTicks": 4,
+      "aggressive": true,
+      "weakness": {
+        "element": "fire",
+        "percent": 30
+      }
+    },
+    {
+      "name": "Red dragon (Scrambled!)",
+      "combat": 106,
+      "members": true,
+      "hitpoints": 100,
+      "attackLevel": 90,
+      "strengthLevel": 90,
+      "defenceLevel": 90,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 10,
+        "slash": 70,
+        "crush": 70,
+        "magic": 60,
+        "ranged": 50
+      },
+      "attackStyle": "slash",
+      "maxHit": 10,
+      "speedTicks": 4,
+      "aggressive": true,
+      "weakness": {
+        "element": "water",
+        "percent": 50
+      }
+    },
+    {
       "name": "Cow",
       "version": "1",
       "combat": 2,
