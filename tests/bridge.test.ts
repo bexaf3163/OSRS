@@ -123,7 +123,9 @@ describe('auto-mark triggers on the route', () => {
     for (const { s, t } of quests) {
       // As the step (a dash is a hyphen, as in RuneLite) or as the wiki article of the step: "Triumph at Oziach" is Dragon Slayer I.
       const article = decodeURIComponent((s.wikiUrl ?? '').replace(/^.*\/w\//, '')).replace(/_/g, ' ');
-      expect([s.title.replace(/ — /g, ' - '), article]).toContain(t.questName);
+      // RuneLite drops "Freeing" from Recipe for Disaster parts and calls the Goblin generals Wartface & Bentnoze.
+      const part = s.title.replace(/^Recipe for Disaster\/(Freeing (the )?)?/, 'Recipe for Disaster - ').replace('Goblin generals', 'Wartface & Bentnoze');
+      expect([s.title.replace(/ — /g, ' - '), article, part]).toContain(t.questName);
     }
     const names = quests.map(({ t }) => t.questName);
     expect(new Set(names).size).toBe(names.length);

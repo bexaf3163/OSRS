@@ -1,5 +1,6 @@
 import { useSyncExternalStore } from 'react';
-import { parseTracked } from '../domain/training/skillTrack';
+import { freeOnlyOf, parseTracked } from '../domain/training/skillTrack';
+import type { GameMode } from '../types';
 import { parsePlanningIntent, readPlanningIntent } from '../domain/planning/intent';
 import type { PlanningIntent } from '../domain/planning/intent';
 import { STORAGE_KEYS } from '../domain/persistence/storageKeys';
@@ -62,6 +63,12 @@ export function setPlanningIntent(intent: PlanningIntent): boolean {
   notify();
   return true;
 }
+/** A followed skill plan takes the header's new mode: Members unlocks its Members methods, Free limits it again. */
+export function followModeChange(mode: GameMode): void {
+  const { intent } = getPlanningIntent();
+  if (intent.kind === 'training' && freeOnlyOf(intent.training) !== (mode === 'f2p')) setPlanningIntent({ kind: 'training', training: { ...intent.training, freeOnly: mode === 'f2p' } });
+}
+
 export function usePlanningIntent(): PlanningIntentState {
   useProfiles(); // Also invalidate before a profile-switch reload finishes.
   return useSyncExternalStore(listener => { listeners.add(listener); return () => { listeners.delete(listener); }; }, getPlanningIntent, () => EMPTY);

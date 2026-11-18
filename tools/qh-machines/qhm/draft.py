@@ -23,10 +23,20 @@ REPO = os.path.join(WORK, 'quest-helper')
 ENUM = os.path.join(REPO, 'src', 'main', 'java', 'com', 'questhelper', 'questinfo', 'QuestHelperQuest.java')
 
 
+# Wiki subquest titles whose Quest Helper entry is named after the freed character.
+SUBQUESTS = {
+    'Recipe for Disaster/Freeing the Goblin generals': 'RECIPE_FOR_DISASTER_WARTFACE_AND_BENTNOZE',
+    'Recipe for Disaster/Freeing the Mountain Dwarf': 'RECIPE_FOR_DISASTER_DWARF',
+    'Recipe for Disaster/Freeing Pirate Pete': 'RECIPE_FOR_DISASTER_PIRATE_PETE',
+    'Recipe for Disaster/Freeing Skrach Uglogwee': 'RECIPE_FOR_DISASTER_SKRACH_UGLOGWEE',
+}
+
+
 def registered(title):
     """(class, variable kind, variable id, members) from Quest Helper's own quest table."""
-    name = re.sub(r'[^A-Z0-9]+', '_', title.upper().replace("'", '').replace('.', '')).strip('_')
-    line = re.search(r'^\s*%s\(new (\w+)\(\), [^,]+, (QuestVarPlayer|QuestVarbits)\.(\w+), QuestDetails\.Type\.(\w+),' % name,
+    name = SUBQUESTS.get(title) or re.sub(r'[^A-Z0-9]+', '_', title.upper().replace("'", '').replace('.', '')).strip('_')
+    # Subquests (Recipe for Disaster) carry a display name and keywords before their variable.
+    line = re.search(r'^\s*%s\(new (\w+)\(\),.*?(QuestVarPlayer|QuestVarbits)\.(\w+), QuestDetails\.Type\.(\w+),' % name,
                      open(ENUM, encoding='utf-8').read(), re.M)
     if not line:
         sys.exit('%s: no %s in QuestHelperQuest.java' % (title, name))

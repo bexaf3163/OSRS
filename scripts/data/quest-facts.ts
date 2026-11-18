@@ -161,10 +161,10 @@ const REVIEWED_FLOWS: Record<string, { revision: number; flow: NonNullable<Quest
     receives: [{ name: 'Elemental shield', count: 1, when: 'complete' }],
     unknownItems: ['Battered book', 'Battered key', 'Stone bowl', 'Elemental ore', 'Elemental metal'], partialDelivery: false, fromStartOnly: true,
   } },
-  // Feathers and wolf bones become the ogre arrows Rantz keeps; the bow, bellows, toads and chompy are quest items.
+  // Feathers and wolf bones become the ogre arrows Rantz keeps; you keep his ogre bow and the bellows (Freeing Skrach Uglogwee needs both).
   'Big Chompy Bird Hunting': { revision: 15367289, flow: {
-    consumes: [{ name: 'Feather', count: 100 }, { name: 'Wolf bones', count: 4 }], receives: [],
-    unknownItems: ['Achey tree logs', 'Ogre arrow shaft', 'Ogre arrow', 'Ogre bellows', 'Bloated toad', 'Ogre bow', 'Raw chompy', 'Seasoned chompy'],
+    consumes: [{ name: 'Feather', count: 100 }, { name: 'Wolf bones', count: 4 }], receives: [{ name: 'Ogre bow', count: 1, when: 'complete' }, { name: 'Ogre bellows', count: 1, when: 'complete' }],
+    unknownItems: ['Achey tree logs', 'Ogre arrow shaft', 'Ogre arrow', 'Bloated toad', 'Raw chompy', 'Seasoned chompy'],
     partialDelivery: true, fromStartOnly: true,
   } },
   // The beer, the berries and vial (the dye), the lens, the earth runes and the sand are all handed over or used up.
@@ -435,6 +435,30 @@ const REVIEWED_FLOWS: Record<string, { revision: number; flow: NonNullable<Quest
     receives: [], unknownItems: ['Rod mould', 'Silvthrill rod', 'Rod of Ivandis', 'Book of the Sleeping Seven', 'Library key', 'Crate'],
     uncertainReceipts: ['Salmon'], partialDelivery: false, fromStartOnly: false,
   } },
+  // The slop of compromise uses every ingredient; the knife is kept.
+  'Recipe for Disaster/Freeing the Goblin generals': { revision: 15361105, flow: {
+    consumes: [{ name: 'Bread', count: 1 }, { name: 'Orange', count: 1 }, { name: 'Blue dye', count: 1 }, { name: 'Spice', count: 1 }, { name: 'Fishing bait', count: 1 }, { name: 'Bucket of water', count: 1 }, { name: 'Charcoal', count: 1 }],
+    receives: [], unknownItems: ['Soggy bread', 'Orange slices', 'Blue orange slices', 'Spicy maggots', 'Slop of compromise'],
+    uncertainReceipts: ['Bucket'], partialDelivery: false, fromStartOnly: false,
+  } },
+  // Rohak drinks the ales and bakes the rock cake from the ingredients and 300 coins; the gloves are kept.
+  'Recipe for Disaster/Freeing the Mountain Dwarf': { revision: 15389712, flow: {
+    consumes: [{ name: 'Bucket of milk', count: 1 }, { name: 'Pot of flour', count: 1 }, { name: 'Egg', count: 1 }, { name: 'Bowl of water', count: 1 }, { name: 'Asgarnian ale', count: 4 }, { name: 'Coins', count: 304 }],
+    receives: [], unknownItems: ['Asgoldian ale', 'Dwarven rock cake'],
+    uncertainReceipts: ['Asgarnian ale', 'Coins', 'Bucket', 'Pot', 'Bowl', 'Trout'], partialDelivery: false, fromStartOnly: false,
+  } },
+  // Nung makes the diving helmet from the fishbowl and wire; one cod and one bread become the fishcake.
+  'Recipe for Disaster/Freeing Pirate Pete': { revision: 15398344, flow: {
+    consumes: [{ name: 'Empty fishbowl', count: 1 }, { name: 'Bronze wire', count: 3 }, { name: 'Raw cod', count: 1 }, { name: 'Bread', count: 1 }],
+    receives: [], unknownItems: ['Fishbowl helmet', 'Diving apparatus', 'Mudskipper hide', 'Kelp', 'Ground kelp', 'Crab meat', 'Ground crab meat', 'Ground cod', 'Breadcrumbs', 'Raw fishcake', 'Cooked fishcake', 'Rock'],
+    uncertainReceipts: ['Raw cod', 'Bread', 'Trout'], partialDelivery: false, fromStartOnly: false,
+  } },
+  // The chompy is cooked on Karamja and handed to Rantz's kids; one log burns; the Jubbly goes to Skrach; bow, bellows and tools stay.
+  'Recipe for Disaster/Freeing Skrach Uglogwee': { revision: 15381314, flow: {
+    consumes: [{ name: 'Raw chompy', count: 1 }, { name: 'Logs', count: 1 }, { name: 'Ball of wool', count: 1 }],
+    receives: [], unknownItems: ['Skewered chompy', 'Cooked chompy', 'Bloated toad', 'Balloon toad', 'Rock', 'Raw jubbly', 'Cooked jubbly'],
+    uncertainReceipts: ['Ball of wool', 'Ogre arrow'], partialDelivery: false, fromStartOnly: false,
+  } },
   'Ernest the Chicken': { revision: 15390916, flow: {
     // All puzzle parts are obtained within the manor; a spade is reused, not handed in.
     consumes: [], receives: [], unknownItems: ['Fish food', 'Poison', 'Poisoned fish food', 'Pressure gauge', 'Rubber tube', 'Oil can', 'Key'],
@@ -515,5 +539,7 @@ const REVIEWED_CLAUSES = new Set([
   "to enter the Champions' Guild",
   'Ability to defeat a level-69 [[Draugen]]',
   'The ability to defeat a level 100 monster',
+  'The ability to defeat 5 level 30 monsters.',
+  "The ability to defeat a level 13 [[icefiend]] if you don't have the [[ice gloves]].",
   'Ability to defeat a [[Koschei|fairly strong warrior]] without [[armour]], [[weapons]], or [[spells]]',
 ].map(clause => clause.toLowerCase()));

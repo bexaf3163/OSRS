@@ -11528,5 +11528,457 @@
         "questName": "In Aid of the Myreque"
       }
     }
+  },
+  {
+    "id": "S9-58",
+    "stage": 9,
+    "type": "quest",
+    "title": "Recipe for Disaster/Freeing the Goblin generals",
+    "qp": 1,
+    "requires": [
+      "S9-05",
+      "S2-12"
+    ],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Recipe_for_Disaster/Freeing_the_Goblin_generals",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Recipe_for_Disaster/Freeing_the_Goblin_generals/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3213,3221,0",
+    "mapLocation": {
+      "x": 3213,
+      "y": 3221,
+      "plane": 0,
+      "label": "The Lumbridge Castle dining room"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Bread",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from the Food Store in Port Sarim for 12 gp.",
+        "wikiItemId": 2309,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bread.png"
+      },
+      {
+        "nameEn": "Orange",
+        "amount": 1,
+        "howToGet": "Sliced with a knife and dyed. Buy on the Grand Exchange.",
+        "wikiItemId": 2108,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Orange.png"
+      },
+      {
+        "nameEn": "Knife",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from a general store.",
+        "wikiItemId": 946,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Knife.png"
+      },
+      {
+        "nameEn": "Blue dye",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Aggie in Draynor Village.",
+        "wikiItemId": 1767,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Blue_dye.png"
+      },
+      {
+        "nameEn": "Spice",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from the Ardougne spice stall.",
+        "wikiItemId": 2007,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Spice.png"
+      },
+      {
+        "nameEn": "Fishing bait",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Gerrant's Fishy Business in Port Sarim for 3 gp.",
+        "wikiItemId": 313,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Fishing_bait.png"
+      },
+      {
+        "nameEn": "Bucket of water",
+        "amount": 1,
+        "howToGet": "Fill a bucket at any sink or fountain.",
+        "wikiItemId": 1929,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bucket_of_water.png"
+      },
+      {
+        "nameEn": "Charcoal",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Obli's store in Shilo Village.",
+        "wikiItemId": 973,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Charcoal.png"
+      }
+    ],
+    "reward": "1 QP, 1,000 Cooking XP, 1,000 Farming XP, 1,000 Crafting XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [],
+      "dialogChoices": [],
+      "highlightItems": [
+        "Bread",
+        "Orange",
+        "Knife",
+        "Blue dye",
+        "Spice",
+        "Fishing bait",
+        "Bucket of water",
+        "Charcoal"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Recipe for Disaster - Wartface & Bentnoze"
+      }
+    }
+  },
+  {
+    "id": "S9-59",
+    "stage": 9,
+    "type": "quest",
+    "title": "Recipe for Disaster/Freeing the Mountain Dwarf",
+    "qp": 1,
+    "requires": [
+      "S9-05",
+      "S7-13"
+    ],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Recipe_for_Disaster/Freeing_the_Mountain_Dwarf",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Recipe_for_Disaster/Freeing_the_Mountain_Dwarf/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3213,3221,0",
+    "mapLocation": {
+      "x": 3213,
+      "y": 3221,
+      "plane": 0,
+      "label": "The Lumbridge Castle dining room"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Bucket of milk",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from the Culinaromancer's Chest.",
+        "wikiItemId": 1927,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bucket_of_milk.png"
+      },
+      {
+        "nameEn": "Pot of flour",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from the Culinaromancer's Chest.",
+        "wikiItemId": 1933,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Pot_of_flour.png"
+      },
+      {
+        "nameEn": "Egg",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from the Culinaromancer's Chest.",
+        "wikiItemId": 1944,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Egg.png"
+      },
+      {
+        "nameEn": "Bowl of water",
+        "amount": 1,
+        "howToGet": "Fill a bowl at a sink; the Lumbridge Castle kitchen has both.",
+        "wikiItemId": 1921,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bowl_of_water.png"
+      },
+      {
+        "nameEn": "Asgarnian ale",
+        "amount": 6,
+        "howToGet": "Four for Rohak and two spares in case he sobers up. Buy on the Grand Exchange or at the Rising Sun Inn in Falador.",
+        "wikiItemId": 1905,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Asgarnian_ale.png"
+      },
+      {
+        "nameEn": "Coins",
+        "amount": 306,
+        "howToGet": "300 for Rohak's ingredients and 1 coin per ale.",
+        "wikiItemId": 995,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Coins_1.png"
+      },
+      {
+        "nameEn": "Leather gloves",
+        "amount": 1,
+        "howToGet": "Any gloves let you pick up the hot rock cake. Buy on the Grand Exchange.",
+        "wikiItemId": 1059,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Leather_gloves.png"
+      },
+      {
+        "nameEn": "Trout",
+        "amount": 2,
+        "howToGet": "Buy on the Grand Exchange. Two trout cover the level-13 icefiend (hits up to 2) that cools the rock cake if you have no ice gloves.",
+        "wikiItemId": 333,
+        "heals": 7,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Trout.png"
+      }
+    ],
+    "reward": "1 QP, 1,000 Slayer XP, 1,000 Cooking XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [],
+      "dialogChoices": [],
+      "highlightItems": [
+        "Bucket of milk",
+        "Pot of flour",
+        "Egg",
+        "Bowl of water",
+        "Asgarnian ale",
+        "Coins",
+        "Leather gloves"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Recipe for Disaster - Mountain Dwarf"
+      }
+    },
+    "foes": [
+      "Icefiend"
+    ]
+  },
+  {
+    "id": "S9-60",
+    "stage": 9,
+    "type": "quest",
+    "title": "Recipe for Disaster/Freeing Pirate Pete",
+    "qp": 1,
+    "requires": [
+      "S9-05"
+    ],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Recipe_for_Disaster/Freeing_Pirate_Pete",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Recipe_for_Disaster/Freeing_Pirate_Pete/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3213,3221,0",
+    "mapLocation": {
+      "x": 3213,
+      "y": 3221,
+      "plane": 0,
+      "label": "The Lumbridge Castle dining room"
+    },
+    "npc": {
+      "nameEn": "Pirate Pete",
+      "location": "The Lumbridge Castle dining room",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Pirate_Pete"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Raw cod",
+        "amount": 3,
+        "howToGet": "Three in case the fishcake burns. Buy on the Grand Exchange.",
+        "wikiItemId": 341,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Raw_cod.png"
+      },
+      {
+        "nameEn": "Pestle and mortar",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from the Lighthouse store.",
+        "wikiItemId": 233,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Pestle_and_mortar.png"
+      },
+      {
+        "nameEn": "Bread",
+        "amount": 3,
+        "howToGet": "Three for breadcrumbs in case the fishcake burns. Buy on the Grand Exchange.",
+        "wikiItemId": 2309,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bread.png"
+      },
+      {
+        "nameEn": "Knife",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from a general store.",
+        "wikiItemId": 946,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Knife.png"
+      },
+      {
+        "nameEn": "Empty fishbowl",
+        "amount": 1,
+        "howToGet": "An empty fishbowl for Nung's diving helmet. Buy on the Grand Exchange.",
+        "wikiItemId": 6667,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Empty_fishbowl.png"
+      },
+      {
+        "nameEn": "Needle",
+        "amount": 1,
+        "howToGet": "Not a costume needle. Buy on the Grand Exchange, or from a crafting shop.",
+        "wikiItemId": 1733,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Needle.png"
+      },
+      {
+        "nameEn": "Bronze wire",
+        "amount": 3,
+        "howToGet": "Buy on the Grand Exchange.",
+        "wikiItemId": 1794,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_wire.png"
+      },
+      {
+        "nameEn": "Trout",
+        "amount": 5,
+        "howToGet": "Buy on the Grand Exchange. Five mudskippers (level 30 and 31) and the crabs (level 21 and 23) are fought underwater.",
+        "wikiItemId": 333,
+        "heals": 7,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Trout.png"
+      }
+    ],
+    "foes": [
+      "Mudskipper",
+      "Crab"
+    ],
+    "reward": "1 QP, 1,000 Cooking XP, 1,000 Crafting XP, 1,000 Fishing XP, 1,000 Smithing XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Pirate Pete"
+      ],
+      "dialogChoices": [
+        "Protecting the Pirate",
+        "Where do I get Ground Cod?",
+        "Where do I get Ground Kelp?",
+        "Where do I get Ground Giant Crab Meat?3",
+        "Where do I get Breadcrumbs?",
+        "What do I do with all of it?",
+        "Thanks!",
+        "Talk about Recipe for Disaster.",
+        "Yes, Let's go diving."
+      ],
+      "highlightItems": [
+        "Raw cod",
+        "Pestle and mortar",
+        "Bread",
+        "Knife",
+        "Empty fishbowl",
+        "Needle",
+        "Bronze wire",
+        "Trout"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Recipe for Disaster - Pirate Pete"
+      }
+    }
+  },
+  {
+    "id": "S9-61",
+    "stage": 9,
+    "type": "quest",
+    "title": "Recipe for Disaster/Freeing Skrach Uglogwee",
+    "qp": 1,
+    "requires": [
+      "S9-12",
+      "S9-05"
+    ],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Recipe_for_Disaster/Freeing_Skrach_Uglogwee",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Recipe_for_Disaster/Freeing_Skrach_Uglogwee/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3208,3225,0",
+    "mapLocation": {
+      "x": 3208,
+      "y": 3225,
+      "plane": 0,
+      "label": "The Lumbridge Castle dining room"
+    },
+    "npc": {
+      "nameEn": "Skrach Uglogwee",
+      "location": "The Lumbridge Castle dining room",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Skrach_Uglogwee"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Bronze axe",
+        "amount": 1,
+        "howToGet": "Any axe; buy on the Grand Exchange.",
+        "wikiItemId": 1351,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_axe.png"
+      },
+      {
+        "nameEn": "Bronze pickaxe",
+        "amount": 1,
+        "howToGet": "Any pickaxe from the bank; the bronze one from Tutorial Island will do.",
+        "wikiItemId": 1265,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_pickaxe.png"
+      },
+      {
+        "nameEn": "Raw chompy",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or hunt one with a bloated toad as in Big Chompy Bird Hunting.",
+        "wikiItemId": 2876,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Raw_chompy.png"
+      },
+      {
+        "nameEn": "Iron spit",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange.",
+        "wikiItemId": 7225,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Iron_spit.png"
+      },
+      {
+        "nameEn": "Logs",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or chop a tree.",
+        "wikiItemId": 1511,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Logs.png"
+      },
+      {
+        "nameEn": "Tinderbox",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from a general store for 1 gp.",
+        "wikiItemId": 590,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Tinderbox.png"
+      },
+      {
+        "nameEn": "Ogre bellows",
+        "amount": 1,
+        "howToGet": "Take one from Rantz's chest in his cave in the Feldip Hills (push the boulder off it), as in Big Chompy Bird Hunting.",
+        "wikiItemId": 2871,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Ogre_bellows.png"
+      },
+      {
+        "nameEn": "Ball of wool",
+        "amount": 3,
+        "howToGet": "Buy on the Grand Exchange. One makes the balloon toad; the others cover a burnt Jubbly.",
+        "wikiItemId": 1759,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Ball_of_wool.png"
+      },
+      {
+        "nameEn": "Ogre bow",
+        "amount": 1,
+        "howToGet": "Kept from Big Chompy Bird Hunting; Rantz sells another for 500 to 550 coins.",
+        "wikiItemId": 2883,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Ogre_bow.png"
+      },
+      {
+        "nameEn": "Ogre arrow",
+        "amount": 10,
+        "howToGet": "Buy on the Grand Exchange, or keep the ones left from Big Chompy Bird Hunting.",
+        "wikiItemId": 2866,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Ogre_arrow_1.png"
+      }
+    ],
+    "reward": "1 QP, 1,500 Woodcutting XP, 1,500 Cooking XP, 1,500 Crafting XP, 1,500 Ranged XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Skrach Uglogwee"
+      ],
+      "dialogChoices": [
+        "Yes, I'm sure I can get some Jubbly Chompy.",
+        "I'm trying to free Skrach, can you help?",
+        "Ok, I'll do it.",
+        "Ok, here I am... I guess this is the watery place? What now?",
+        "Ok, the boat's ready, now tell me how to get a Jubbly?",
+        "Ok, now tell me how to get Jubbly!"
+      ],
+      "highlightItems": [
+        "Bronze axe",
+        "Bronze pickaxe",
+        "Raw chompy",
+        "Iron spit",
+        "Logs",
+        "Tinderbox",
+        "Ogre bellows",
+        "Ball of wool",
+        "Ogre bow",
+        "Ogre arrow"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Recipe for Disaster - Skrach Uglogwee"
+      }
+    }
   }
 ]

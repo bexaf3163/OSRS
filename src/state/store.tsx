@@ -14,6 +14,7 @@ import { desktop } from '../services/desktop';
 import { readProgressText, restoreProgress, type RestoredProgress } from '../domain/persistence/progressStorage';
 import { sameFoodPicks, withFoodPlan, type FoodPick } from '../domain/combat/foodPlan';
 import { persistProgress } from '../domain/persistence/persistProgress';
+import { followModeChange } from './planningIntent';
 
 export interface Toast {
   id: number;
@@ -149,6 +150,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
 
   const setMode = useCallback((mode: GameMode) => {
     setProgress((p) => (gameModeOf(p) === mode ? p : withGameMode(p, mode)));
+    followModeChange(mode);
   }, []);
 
   const setSellRestrictions = useCallback((value: 'lifted' | 'active' | null) => {

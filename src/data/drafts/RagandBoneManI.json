@@ -1,332 +1,338 @@
 {
- "quest": "Rag and Bone Man I",
- "status": "draft",
- "sources": {
-  "questHelper": "b9b93706618a7b7fe7e5ea30e9a9ef35ba09673e",
-  "wiki": {
-   "title": "Rag and Bone Man I",
-   "revision": 15292348
+  "quest": "Rag and Bone Man I",
+  "status": "draft",
+  "sources": {
+    "questHelper": "b9b93706618a7b7fe7e5ea30e9a9ef35ba09673e",
+    "wiki": {
+      "title": "Rag and Bone Man I",
+      "revision": 15292348
+    },
+    "quickGuide": {
+      "title": "Rag and Bone Man I/Quick guide",
+      "revision": 15291858
+    }
   },
-  "quickGuide": {
-   "title": "Rag and Bone Man I/Quick guide",
-   "revision": 15291858
-  }
- },
- "step": {
-  "title": "Rag and Bone Man I",
-  "type": "quest",
-  "qp": 1,
-  "membersOnly": true,
-  "wikiUrl": "https://oldschool.runescape.wiki/w/Rag_and_Bone_Man_I",
-  "quickGuideUrl": "https://oldschool.runescape.wiki/w/Rag_and_Bone_Man_I/Quick_guide",
-  "mapLocation": {
-   "x": 3360,
-   "y": 3504,
-   "plane": 0,
-   "label": "Talk to the Odd Old Man in Silvarea north-east of Varrock, by the Limestone Mine."
+  "step": {
+    "title": "Rag and Bone Man I",
+    "type": "quest",
+    "qp": 1,
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Rag_and_Bone_Man_I",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Rag_and_Bone_Man_I/Quick_guide",
+    "mapLocation": {
+      "x": 3360,
+      "y": 3504,
+      "plane": 0,
+      "label": "Talk to the Odd Old Man in Silvarea north-east of Varrock, by the Limestone Mine."
+    },
+    "npc": {
+      "nameEn": "Odd Old Man"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Coins",
+        "amount": 68,
+        "wikiItemId": 995,
+        "howToGet": "8 coins buy 8 jugs of vinegar from Fortunato in Draynor Village; 60 coins pay the boats to and from Karamja.",
+        "note": "8 coins for 8 pots of vinegar (bring 68 coins if walking to and from Karamja for boat fare)"
+      },
+      {
+        "nameEn": "Pot",
+        "amount": 8,
+        "wikiItemId": 1931,
+        "howToGet": "Buy on the Grand Exchange, or from a general store for 1 gp each.",
+        "note": "8 pots"
+      },
+      {
+        "nameEn": "Logs",
+        "amount": 8,
+        "wikiItemId": 1511,
+        "howToGet": "Any logs; buy on the Grand Exchange or chop them. One log cleans one bone in the Odd Old Man's pot-boiler.",
+        "note": "8 logs of any type (or an axe to obtain them)"
+      },
+      {
+        "nameEn": "Tinderbox",
+        "amount": 1,
+        "wikiItemId": 590,
+        "howToGet": "Buy on the Grand Exchange, or from a general store for 1 gp."
+      },
+      {
+        "nameEn": "Trout",
+        "amount": 3,
+        "howToGet": "Buy on the Grand Exchange. Three trout cover the giant bat and grizzly bear, the strongest of the 8 kills.",
+        "wikiItemId": 333,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Trout.png",
+        "heals": 7,
+        "anyOf": [
+          "Salmon"
+        ]
+      }
+    ],
+    "foes": [
+      "Giant rat",
+      "Unicorn",
+      "Grizzly bear",
+      "Ram",
+      "Goblin",
+      "Big frog",
+      "Monkey",
+      "Giant bat"
+    ]
   },
-  "npc": {
-   "nameEn": "Odd Old Man"
+  "stages": {
+    "var": [
+      "varp",
+      714
+    ],
+    "route": [
+      {
+        "title": "Starting out",
+        "steps": [
+          "Talk to the Odd Old Man in Silvarea, north-east of Varrock, by the Limestone Mine. Dialogue: \"Anything I can do to help?\", \"Yes\"."
+        ]
+      },
+      {
+        "title": "Gathering the bones",
+        "steps": [
+          "Head to the south-east Varrock mine and kill a level 3 giant rat near or inside the mine, picking up the giant rat bone.",
+          "In the forest just south of the mine, kill a level 15 unicorn for the unicorn bone and a level 21 grizzly bear for the bear ribs.",
+          "In the sheep pen south-west of the mine, kill a level 2 ram for the ram skull.",
+          "Walk south towards Lumbridge and kill a level 2 goblin east of the River Lum for the goblin skull.",
+          "In the Lumbridge Swamp, kill a level 10 big frog for the big frog leg. Small frogs and giant frogs do not drop it.",
+          "Take the boat from Port Sarim to Musa Point (30 coins) and kill a level 3 monkey on the way to the Karamja Volcano for the monkey paw.",
+          "Enter the Crandor and Karamja Dungeon at the top of the Karamja Volcano and kill a level 27 giant bat for the giant bat wing."
+        ]
+      },
+      {
+        "title": "Polishing the bones",
+        "steps": [
+          "Talk to Fortunato in the Draynor Village market and buy 8 jugs of vinegar.",
+          "Use the jugs of vinegar on your 8 pots to make 8 pots of vinegar.",
+          "Use each bone on a pot of vinegar to get 8 bones in vinegar.",
+          "Back at the Odd Old Man, put a bone in vinegar in the pot-boiler, place logs under it, light them and wait for the bone to clean. Repeat for all 8 bones.",
+          "Give the Odd Old Man the bones and talk to him to finish the quest."
+        ]
+      }
+    ],
+    "stages": [
+      {
+        "at": 0,
+        "do": [
+          {
+            "t": "Talk to the Odd Old Man east of Varrock.",
+            "s": "Talk to the Odd Old Man east of Varrock.",
+            "k": "talkToOddOldMan",
+            "at": [
+              3362,
+              3502,
+              0
+            ],
+            "hl": {
+              "npc": [
+                1259
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 1,
+        "do": [
+          {
+            "t": "Talk to the Odd Old Man east of Varrock.",
+            "s": "Talk to the Odd Old Man east of Varrock.",
+            "k": "talkToOddOldMan",
+            "at": [
+              3362,
+              3502,
+              0
+            ],
+            "hl": {
+              "npc": [
+                1259
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 2,
+        "do": [
+          {
+            "t": "Pick up the bone the monster drops.",
+            "s": "Pick up the bone the monster drops.",
+            "k": "pickupBone"
+          },
+          {
+            "t": "Talk to Fortunato in Draynor Village, and then buy 8 jugs of vinegar from him.",
+            "s": "Buy 8 jugs of vinegar from Fortunato in Draynor Village.",
+            "k": "talkToFortunato",
+            "at": [
+              3085,
+              3251,
+              0
+            ],
+            "hl": {
+              "npc": [
+                1260
+              ]
+            }
+          },
+          {
+            "t": "Use the vinegar on pots for 8 pots of vinegar.",
+            "s": "Use the vinegar on pots for 8 pots of vinegar.",
+            "k": "makePotOfVinegar"
+          },
+          {
+            "t": "Use the bones on the pots of vinegar.",
+            "s": "Use the bones on the pots of vinegar.",
+            "k": "useBonesOnVinegar"
+          },
+          {
+            "t": "Place logs under the pot-boiler near the Odd Old Man. If you've already polished all the bones, hand them in to the Odd Old Man.",
+            "s": "Place logs under the pot-boiler near the Odd Old Man.",
+            "k": "placeLogs",
+            "at": [
+              3360,
+              3505,
+              0
+            ],
+            "hl": {
+              "obj": [
+                14004
+              ]
+            }
+          },
+          {
+            "t": "Add a bone to the pot boiler.",
+            "s": "Add a bone to the pot boiler.",
+            "k": "useBoneOnBoiler",
+            "at": [
+              3360,
+              3505,
+              0
+            ],
+            "hl": {
+              "obj": [
+                14004
+              ]
+            }
+          },
+          {
+            "t": "Light the logs under the pot-boiler.",
+            "s": "Light the logs under the pot-boiler.",
+            "k": "lightLogs",
+            "at": [
+              3360,
+              3505,
+              0
+            ],
+            "hl": {
+              "obj": [
+                14004
+              ]
+            }
+          },
+          {
+            "t": "Wait for the bones to be cleaned. You can hop worlds to make this happen instantly.",
+            "s": "Wait for the bones to be cleaned, or hop worlds.",
+            "k": "waitForCooking"
+          },
+          {
+            "t": "Take the pot from the pot-boiler.",
+            "s": "Take the pot from the pot-boiler.",
+            "k": "removePot",
+            "at": [
+              3360,
+              3505,
+              0
+            ],
+            "hl": {
+              "obj": [
+                14004
+              ]
+            }
+          },
+          {
+            "t": "Give the Odd Old Man the bones.",
+            "s": "Give the Odd Old Man the bones.",
+            "k": "giveBones",
+            "at": [
+              3362,
+              3502,
+              0
+            ],
+            "hl": {
+              "npc": [
+                1259
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 3,
+        "do": [
+          {
+            "t": "Talk to the Odd Old Man to finish.",
+            "s": "Talk to the Odd Old Man to finish.",
+            "k": "talkToFinish",
+            "at": [
+              3362,
+              3502,
+              0
+            ],
+            "hl": {
+              "npc": [
+                1259
+              ]
+            }
+          }
+        ]
+      }
+    ]
   },
-  "itemsRequired": [
-   {
-    "nameEn": "coins",
-    "amount": 8,
-    "wikiItemId": 995,
-    "howToGet": "Free spawn: Asgarnian Ice Dungeon.",
-    "note": "8 coins for 8 pots of vinegar (bring 68 coins if walking to and from Karamja for boat fare)"
-   },
-   {
-    "nameEn": "pot",
-    "amount": 8,
-    "wikiItemId": 1931,
-    "howToGet": "Buy on the Grand Exchange, or from Rimmington General Store in Rimmington for 1 gp.",
-    "note": "8 pots"
-   },
-   {
-    "nameEn": "logs",
-    "amount": 8,
-    "wikiItemId": 1511,
-    "howToGet": "Buy on the Grand Exchange.",
-    "note": "8 logs of any type (or an axe to obtain them)"
-   },
-   {
-    "nameEn": "Tinderbox",
-    "amount": 1,
-    "wikiItemId": 590,
-    "howToGet": "Buy on the Grand Exchange, or from Rimmington General Store in Rimmington for 1 gp."
-   }
-  ],
-  "foes": []
- },
- "stages": {
-  "var": [
-   "varp",
-   714
-  ],
-  "route": [
-   {
-    "title": "Starting out",
-    "steps": [
-     "Talk to the Odd Old Man in Silvarea, north-east of Varrock, north of the Digsite, during the conversation he will mention boiling the bones in vinegar.. Dialogue: \"Anything I can do to help?\", \"Yes\""
-    ]
-   },
-   {
-    "title": "Gathering the bones",
-    "steps": [
-     "Gather the following bones by killing the appropriate monsters and picking up the drop. Either pick your preferred locations from the table, or follow one of the suggested paths in the section below."
-    ]
-   },
-   {
-    "title": "=Suggested paths=",
-    "steps": [
-     "Head to the sheep pen north of Ardougne. Skills necklace to the Fishing Guild and run east or Combat bracelet to the Ranging Guild and run south, or Ardougne Teleport and run north.",
-     "Head to Musa Point/the Karamja Volcano. Amulet of glory to Musa Point or Minigame Teleport to TzHaar Fight Pit.",
-     "Head to Draynor Village using the Amulet of glory.",
-     "Head south past Varrock until you reach the south-east Varrock mine and kill a giant rat near or inside the mine, picking up the giant rat bone.",
-     "Head slightly south of the mine to the forest and kill a unicorn and black bear, picking up the unicorn bone and the bear ribs respectively.",
-     "Head into the sheep pen to the south-west of the mine and west of the forest and kill a ram to get a ram skull.",
-     "Walk south towards Lumbridge (or teleport to the city and walk east) and kill a goblin on the eastern side of the River Lum to get a goblin skull.",
-     "Head down to the Lumbridge Swamp and kill one of the big frogs for the big frog leg. The small frogs and giant frogs do NOT drop the big frog leg.",
-     "Retrieve 60 coins from the Draynor Village bank to pay for transportation in the next step. Consider retrieving an additional 8 coins and creating the required pots of vinegar before continuing (see the following section).",
-     "Head to Port Sarim. Talk to one of the Seamen just east of the Fishing shop and pay to travel to Musa Point.",
-     "Walk west towards the Karamja Volcano and kill a monkey on the way, picking up the monkey paw.",
-     "Head into the Crandor and Karamja Dungeon, which is located at the top of the Karamja Volcano (marked by a dungeon icon), and kill a giant bat, picking up the giant bat wing."
-    ]
-   },
-   {
-    "title": "Polishing the bones",
-    "steps": [
-     "Talk to Fortunato located in Draynor marketplace and buy 8 jug of vinegar.",
-     "Use all of the jugs of vinegar with all the pots to make 8 pots of vinegar. If intending to do Rag and Bone Man II, buy 27 more (35 total) jugs of vinegar to save time.",
-     "Use all of the bones with your pots of vinegar to get 8 bones in vinegar.",
-     "Withdraw a tinderbox and either 8 logs or an axe",
-     "With the logs in your inventory, return to the Odd Old Man",
-     "For each bone in vinegar do:",
-     "Talk to the Odd Old Man.",
-     "Congratulations, quest complete!"
-    ]
-   }
-  ],
-  "stages": [
-   {
-    "at": 0,
-    "do": [
-     {
-      "t": "Talk to the Odd Old Man east of Varrock.",
-      "s": "Talk to the Odd Old Man east of Varrock.",
-      "k": "talkToOddOldMan",
-      "at": [
-       3362,
-       3502,
-       0
-      ],
-      "hl": {
-       "npc": [
-        1259
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "at": 1,
-    "do": [
-     {
-      "t": "Talk to the Odd Old Man east of Varrock.",
-      "s": "Talk to the Odd Old Man east of Varrock.",
-      "k": "talkToOddOldMan",
-      "at": [
-       3362,
-       3502,
-       0
-      ],
-      "hl": {
-       "npc": [
-        1259
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "at": 2,
-    "do": [
-     {
-      "t": "Pickup the bone.",
-      "s": "Pickup the bone.",
-      "k": "pickupBone"
-     },
-     {
-      "t": "Talk to Fortunato in Draynor Village, and then buy 8 jugs of vinegar from him.",
-      "s": "Buy 8 jugs of vinegar from Fortunato in Draynor Village.",
-      "k": "talkToFortunato",
-      "at": [
-       3085,
-       3251,
-       0
-      ],
-      "hl": {
-       "npc": [
-        1260
-       ]
-      }
-     },
-     {
-      "t": "Use the vinegar on pots for 8 pots of vinegar.",
-      "s": "Use the vinegar on pots for 8 pots of vinegar.",
-      "k": "makePotOfVinegar"
-     },
-     {
-      "t": "Use the bones on the pots of vinegar.",
-      "s": "Use the bones on the pots of vinegar.",
-      "k": "useBonesOnVinegar"
-     },
-     {
-      "t": "Place logs under the pot-boiler near the Odd Old Man. If you've already polished all the bones, hand them in to the Odd Old Man.",
-      "s": "Place logs under the pot-boiler near the Odd Old Man.",
-      "k": "placeLogs",
-      "at": [
-       3360,
-       3505,
-       0
-      ],
-      "hl": {
-       "obj": [
-        14004
-       ]
-      }
-     },
-     {
-      "t": "Add a bone to the pot boiler.",
-      "s": "Add a bone to the pot boiler.",
-      "k": "useBoneOnBoiler",
-      "at": [
-       3360,
-       3505,
-       0
-      ],
-      "hl": {
-       "obj": [
-        14004
-       ]
-      }
-     },
-     {
-      "t": "Light the logs under the pot-boiler.",
-      "s": "Light the logs under the pot-boiler.",
-      "k": "lightLogs",
-      "at": [
-       3360,
-       3505,
-       0
-      ],
-      "hl": {
-       "obj": [
-        14004
-       ]
-      }
-     },
-     {
-      "t": "Wait for the bones to be cleaned. You can hop worlds to make this happen instantly.",
-      "s": "Wait for the bones to be cleaned, or hop worlds.",
-      "k": "waitForCooking"
-     },
-     {
-      "t": "Take the pot from the pot-boiler.",
-      "s": "Take the pot from the pot-boiler.",
-      "k": "removePot",
-      "at": [
-       3360,
-       3505,
-       0
-      ],
-      "hl": {
-       "obj": [
-        14004
-       ]
-      }
-     },
-     {
-      "t": "Give the Odd Old Man the bones.",
-      "s": "Give the Odd Old Man the bones.",
-      "k": "giveBones",
-      "at": [
-       3362,
-       3502,
-       0
-      ],
-      "hl": {
-       "npc": [
-        1259
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "at": 3,
-    "do": [
-     {
-      "t": "Talk to the Odd Old Man to finish.",
-      "s": "Talk to the Odd Old Man to finish.",
-      "k": "talkToFinish",
-      "at": [
-       3362,
-       3502,
-       0
-      ],
-      "hl": {
-       "npc": [
-        1259
-       ]
-      }
-     }
-    ]
-   }
+  "facts": {
+    "id": "Rag and Bone Man I",
+    "stepIds": [
+      "DRAFT"
+    ],
+    "members": false,
+    "requirements": {
+      "skills": {},
+      "questPoints": 0,
+      "quests": [],
+      "manual": [],
+      "capabilities": [],
+      "unparsed": null,
+      "text": "None"
+    },
+    "rewards": {
+      "questPoints": 1,
+      "xp": {
+        "cooking": 500,
+        "prayer": 500
+      },
+      "coins": 0
+    },
+    "resourceFlow": null,
+    "length": "Short",
+    "source": {
+      "url": "https://oldschool.runescape.wiki/w/Special:Redirect/revision/15292348",
+      "title": "Rag and Bone Man I",
+      "revision": 15292348,
+      "retrievedAt": "2026-11-15T07:32:15.962Z"
+    }
+  },
+  "unknown": [
+    "step \"pickupBone\": Quest Helper gives no tile",
+    "step \"makePotOfVinegar\": Quest Helper gives no tile",
+    "step \"useBonesOnVinegar\": Quest Helper gives no tile",
+    "step \"waitForCooking\": Quest Helper gives no tile",
+    "Quest Helper condition \"call allBonesPolished\" is not understood (1)",
+    "Quest Helper condition \"call allBonesAddedToVinegar\" is not understood (1)",
+    "Quest Helper condition \"call allBonesObtained\" is not understood (1)",
+    "Quest Helper condition \"call getBonesOnFloor\" is not understood (1)",
+    "what the quest uses up and hands out is not reviewed"
   ]
- },
- "facts": {
-  "id": "Rag and Bone Man I",
-  "stepIds": [
-   "DRAFT"
-  ],
-  "members": false,
-  "requirements": {
-   "skills": {},
-   "questPoints": 0,
-   "quests": [],
-   "manual": [],
-   "capabilities": [],
-   "unparsed": null,
-   "text": "None"
-  },
-  "rewards": {
-   "questPoints": 1,
-   "xp": {
-    "cooking": 500,
-    "prayer": 500
-   },
-   "coins": 0
-  },
-  "resourceFlow": null,
-  "length": "Short",
-  "source": {
-   "url": "https://oldschool.runescape.wiki/w/Special:Redirect/revision/15292348",
-   "title": "Rag and Bone Man I",
-   "revision": 15292348,
-   "retrievedAt": "2026-11-15T07:32:15.962Z"
-  }
- },
- "unknown": [
-  "step \"pickupBone\": Quest Helper gives no tile",
-  "step \"makePotOfVinegar\": Quest Helper gives no tile",
-  "step \"useBonesOnVinegar\": Quest Helper gives no tile",
-  "step \"waitForCooking\": Quest Helper gives no tile",
-  "Quest Helper condition \"call allBonesPolished\" is not understood (1)",
-  "Quest Helper condition \"call allBonesAddedToVinegar\" is not understood (1)",
-  "Quest Helper condition \"call allBonesObtained\" is not understood (1)",
-  "Quest Helper condition \"call getBonesOnFloor\" is not understood (1)",
-  "what the quest uses up and hands out is not reviewed"
- ]
 }

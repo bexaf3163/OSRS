@@ -115,6 +115,7 @@ function SkillView({ skill, selectedSkill, requestedGoal }: { skill: Skill; sele
         <p className="small muted">{f2p?.reason}</p>
         <button type="button" className="link-btn" onClick={() => setTab('calculator')}>Choose a custom goal</button>
       </section> : <TrainingCard skill={card.skill} target={card.target} followed={card.followed} advice={shared} view="summary" />}
+      {!defer && <p className="small muted">Want to train past level {card.target ?? level}? <button type="button" className="link-btn" onClick={() => setTab('calculator')}>Choose your own goal</button></p>}
       </>
       )}
 

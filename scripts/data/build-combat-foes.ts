@@ -95,7 +95,8 @@ for (const page of PAGES) {
       name: page, ...(version ? { version } : {}), combat: row.combat!, members, hitpoints: row.hitpoints!,
       attackLevel: row.attackLevel!, strengthLevel: row.strengthLevel!, defenceLevel: row.defenceLevel!, magicLevel: row.magicLevel!, attackBonus: row.attackBonus!,
       defence: { stab: row.stab!, slash: row.slash!, crush: row.crush!, magic: row.magic!, ...(ranged !== null ? { ranged } : {}) },
-      attackStyle: plain(at('attack style', i)).toLowerCase().split(/[,\s]+/)[0], maxHit: row.maxHit!, speedTicks: row.speedTicks!,
+      // The Icefiend's infobox says "Magical" for a magic attack.
+      attackStyle: plain(at('attack style', i)).toLowerCase().split(/[,\s]+/)[0].replace(/^magical$/, 'magic'), maxHit: row.maxHit!, speedTicks: row.speedTicks!,
       aggressive: /yes/i.test(at('aggressive', i) ?? ''),
       ...(xpBonus ? { xpBonus } : {}),
       ...(element && percent ? { weakness: { element, percent } } : {}),

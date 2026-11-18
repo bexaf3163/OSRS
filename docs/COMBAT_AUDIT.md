@@ -4,7 +4,7 @@ Written by `tests/combatAudit.test.ts` from `src/data/authored/combatAudit.json`
 
 Every stage of the route where the player fights or can be attacked, checked against the route text, the quest stage lines (Quest Helper), the OSRS Wiki infoboxes in combatFoes.json and the danger zones. The rule for a fight the quest cannot go on without: its food is a required item (readiness and the game check it before leaving), the app estimates it with the player's kit where it has the opponent's numbers, and an unread kit or bag is reported as not checked, never as ready.
 
-66 stages: 38 retained, 27 revised, 0 with a branch, 1 deferred.
+69 stages: 41 retained, 27 revised, 0 with a branch, 1 deferred.
 
 | Step | Kind | Mandatory | Opponents | Method | Estimate | Food in the item list | Decision |
 |---|---|---|---|---|---|---|---|
@@ -74,6 +74,9 @@ Every stage of the route where the player fights or can be attacked, checked aga
 | S9-55 The Fremennik Trials | quest-fight | yes | Draugen (69), Lanzig (48) | melee | Draugen, Lanzig | Lobster 20 | Retain |
 | S9-56 Olaf's Quest | quest-fight | yes | Skeleton fremennik (40), Ulfric (100) | safespot | Skeleton fremennik, Ulfric | Trout 3 | Retain |
 | S9-57 In Aid of the Myreque | quest-fight | yes | Gadderanks (35), Vampyre Juvinate (50) | melee | Gadderanks, Vampyre Juvinate | Salmon 15 | Retain |
+| S9-59 Recipe for Disaster/Freeing the Mountain Dwarf | quest-fight | no | Icefiend (13) | melee | Icefiend | Trout 2 | Retain |
+| S9-60 Recipe for Disaster/Freeing Pirate Pete | quest-fight | yes | Mudskipper (31), Crab (23) | melee | Mudskipper, Crab | Trout 5 | Retain |
+| S9-61 Recipe for Disaster/Freeing Skrach Uglogwee | incidental | yes | - | other | - | - | Retain |
 
 ## S1-06 The Restless Ghost
 
@@ -1566,4 +1569,68 @@ Changed:
 Evidence:
 
 - OSRS Wiki In Aid of the Myreque: kills and items fields, read 2026-11-18.
+
+## S9-59 Recipe for Disaster/Freeing the Mountain Dwarf
+
+**Retain.** Recipe for Disaster, Freeing the Mountain Dwarf: without ice gloves, kill an icefiend (level 13, hits up to 2) on Ice Mountain to cool the rock cake.
+
+Assumptions:
+
+- Two trout (heals 7) cover the fight; ice gloves skip it.
+
+Alternatives:
+
+- Ice gloves from the Fremennik Isles let you pick up the hot cake and skip the fight.
+
+Changed:
+
+- 2.148.0: new quest; Icefiend is in combatFoes.json.
+
+Evidence:
+
+- OSRS Wiki Recipe for Disaster/Freeing the Mountain Dwarf: requirements, read 2026-11-18.
+
+## S9-60 Recipe for Disaster/Freeing Pirate Pete
+
+**Retain.** Recipe for Disaster, Freeing Pirate Pete: underwater, kill 5 mudskippers (level 30/31, hits up to 4) for their hides and a crab (level 21/23, hits up to 3) for its meat.
+
+Quest stage lines: 1.4, 1.6.
+
+Assumptions:
+
+- Five trout (heals 7) cover the dives; the estimate uses the level-31 mudskipper and level-23 crab.
+
+Alternatives:
+
+- Any weapon works; the fights are short and the diving helmet keeps you breathing.
+
+Changed:
+
+- 2.148.0: new quest; mudskippers and crabs are in combatFoes.json.
+
+Evidence:
+
+- OSRS Wiki Recipe for Disaster/Freeing Pirate Pete: kills and items fields, read 2026-11-18.
+
+## S9-61 Recipe for Disaster/Freeing Skrach Uglogwee
+
+**Retain.** Recipe for Disaster, Freeing Skrach Uglogwee: kill the level-9 Jubbly that lands by the balloon toad, with the ogre bow and ogre arrows; it does not fight back.
+
+Quest stage lines: 2.3.
+
+Assumptions:
+
+- The Jubbly only lands to eat the toad and has no attack; the Wiki gives it no combat stats, so nothing is estimated.
+
+Alternatives:
+
+- Another balloon toad brings another Jubbly if the first is lost or burnt.
+
+Changed:
+
+- 2.148.0: new quest; the ogre bow is kept from Big Chompy Bird Hunting.
+
+Evidence:
+
+- OSRS Wiki Recipe for Disaster/Freeing Skrach Uglogwee quick guide, read 2026-11-18.
 

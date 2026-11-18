@@ -79259,6 +79259,1634 @@
      ]
     }
    ]
+  },
+  "S9-58": {
+   "var": [
+    "varbit",
+    1867
+   ],
+   "route": [],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Go inspect Wartface or Bentnoze.",
+       "s": "Go inspect Wartface or Bentnoze.",
+       "k": "enterDiningRoom",
+       "at": [
+        3213,
+        3221,
+        0
+       ],
+       "hl": {
+        "obj": [
+         12349
+        ]
+       }
+      },
+      {
+       "t": "Inspect Wartface or Bentnoze.",
+       "s": "Inspect Wartface or Bentnoze.",
+       "k": "inspectGoblin",
+       "at": [
+        1862,
+        5325,
+        0
+       ],
+       "hl": {
+        "obj": [
+         12332
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 5,
+     "do": [
+      {
+       "t": "Go down the ladder to the goblin cook's kitchen under Goblin Village.",
+       "s": "Go down to the goblin cook's kitchen under Goblin Village.",
+       "k": "goDownToKitchen",
+       "at": [
+        2960,
+        3507,
+        0
+       ],
+       "hl": {
+        "obj": [
+         12389
+        ]
+       }
+      },
+      {
+       "t": "Talk to the goblin cook in the kitchen under Goblin Village.",
+       "s": "Talk to the goblin cook under Goblin Village.",
+       "k": "talkToCook",
+       "at": [
+        2981,
+        9909,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4850
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 10,
+     "do": [
+      {
+       "t": "Go down the ladder to the goblin cook's kitchen under Goblin Village.",
+       "s": "Go down to the goblin cook's kitchen under Goblin Village.",
+       "k": "goDownToKitchen",
+       "at": [
+        2960,
+        3507,
+        0
+       ],
+       "hl": {
+        "obj": [
+         12389
+        ]
+       }
+      },
+      {
+       "t": "Talk to the goblin cook in the kitchen under Goblin Village.",
+       "s": "Talk to the goblin cook under Goblin Village.",
+       "k": "talkToCook",
+       "at": [
+        2981,
+        9909,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4850
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 15,
+     "do": [
+      {
+       "t": "Go down the ladder to the goblin cook's kitchen under Goblin Village.",
+       "s": "Go down to the goblin cook's kitchen under Goblin Village.",
+       "k": "goDownToKitchen",
+       "at": [
+        2960,
+        3507,
+        0
+       ],
+       "hl": {
+        "obj": [
+         12389
+        ]
+       }
+      },
+      {
+       "t": "Talk to the goblin cook again with the charcoal.",
+       "s": "Talk to the goblin cook again with the charcoal.",
+       "k": "talkToCookAfterChar",
+       "at": [
+        2981,
+        9868,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4851
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 30,
+     "do": [
+      {
+       "t": "Use a bucket of water on some bread.",
+       "s": "Use a bucket of water on some bread.",
+       "k": "useWaterOnBread"
+      },
+      {
+       "t": "Use a knife on an orange and SLICE it.",
+       "s": "Use a knife on an orange and SLICE it.",
+       "k": "sliceOrange"
+      },
+      {
+       "t": "Use a dye on the sliced orange.",
+       "s": "Use a dye on the sliced orange.",
+       "k": "dyeOrange"
+      },
+      {
+       "t": "Use spices on the fishing bait.",
+       "s": "Use spices on the fishing bait.",
+       "k": "spiceBait"
+      },
+      {
+       "t": "Go down the ladder to the goblin cook's kitchen under Goblin Village.",
+       "s": "Go down to the goblin cook's kitchen under Goblin Village.",
+       "k": "goDownToKitchen",
+       "at": [
+        2960,
+        3507,
+        0
+       ],
+       "hl": {
+        "obj": [
+         12389
+        ]
+       }
+      },
+      {
+       "t": "Talk to the goblin cook again with the charcoal.",
+       "s": "Talk to the goblin cook again with the charcoal.",
+       "k": "talkToCookAfterChar",
+       "at": [
+        2981,
+        9868,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4851
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 35,
+     "do": [
+      {
+       "t": "Go use the slop on Wartface or Bentnoze in the Lumbridge Banquet room.",
+       "s": "Go use the slop on Wartface or Bentnoze in the Lumbridge Banquet room.",
+       "k": "enterDiningRoomAgain",
+       "at": [
+        3213,
+        3221,
+        0
+       ],
+       "hl": {
+        "obj": [
+         12349
+        ]
+       }
+      },
+      {
+       "t": "Use the slop on Wartface or Bentnoze.",
+       "s": "Use the slop on Wartface or Bentnoze.",
+       "k": "useSlopOnGoblin",
+       "at": [
+        1862,
+        5325,
+        0
+       ],
+       "hl": {
+        "obj": [
+         12332
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  "S9-59": {
+   "var": [
+    "varbit",
+    1892
+   ],
+   "route": [],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Go inspect the dwarf.",
+       "s": "Go inspect the dwarf.",
+       "k": "enterDiningRoom",
+       "at": [
+        3213,
+        3221,
+        0
+       ],
+       "hl": {
+        "obj": [
+         12349
+        ]
+       }
+      },
+      {
+       "t": "Inspect the dwarf.",
+       "s": "Inspect the dwarf.",
+       "k": "inspectDwarf",
+       "at": [
+        1862,
+        5321,
+        0
+       ],
+       "hl": {
+        "obj": [
+         12330
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 10,
+     "do": [
+      {
+       "t": "Talk to Kaylee in the pub in Falador.",
+       "s": "Talk to Kaylee in the pub in Falador.",
+       "k": "talkToKaylee",
+       "at": [
+        2957,
+        3371,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1316
+        ]
+       }
+      },
+      {
+       "t": "Add coins to asgarnian ale to make 4 asgoldian ale. You can buy ale from Kaylee for 3gp each.",
+       "s": "Use coins on Asgarnian ale to make 4 Asgoldian ales.",
+       "k": "makeAle"
+      },
+      {
+       "t": "Enter the tunnel under White Wolf Mountain.",
+       "s": "Enter the tunnel under White Wolf Mountain.",
+       "k": "enterTunnels",
+       "at": [
+        2877,
+        3481,
+        0
+       ],
+       "hl": {
+        "obj": [
+         57
+        ]
+       }
+      },
+      {
+       "t": "Talk to Rohak in the tunnel under White Wolf Mountain.",
+       "s": "Talk to Rohak under White Wolf Mountain.",
+       "k": "talkToOldDwarf",
+       "at": [
+        2865,
+        9876,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4812
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 20,
+     "do": [
+      {
+       "t": "Talk to Kaylee in the pub in Falador.",
+       "s": "Talk to Kaylee in the pub in Falador.",
+       "k": "talkToKaylee",
+       "at": [
+        2957,
+        3371,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1316
+        ]
+       }
+      },
+      {
+       "t": "Add coins to asgarnian ale to make 4 asgoldian ale. You can buy ale from Kaylee for 3gp each.",
+       "s": "Use coins on Asgarnian ale to make 4 Asgoldian ales.",
+       "k": "makeAle"
+      },
+      {
+       "t": "Enter the tunnel under White Wolf Mountain.",
+       "s": "Enter the tunnel under White Wolf Mountain.",
+       "k": "enterTunnels",
+       "at": [
+        2877,
+        3481,
+        0
+       ],
+       "hl": {
+        "obj": [
+         57
+        ]
+       }
+      },
+      {
+       "t": "Talk to Rohak in the tunnel under White Wolf Mountain.",
+       "s": "Talk to Rohak under White Wolf Mountain.",
+       "k": "talkToOldDwarf",
+       "at": [
+        2865,
+        9876,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4812
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 30,
+     "do": [
+      {
+       "t": "Enter the tunnel under White Wolf Mountain.",
+       "s": "Enter the tunnel under White Wolf Mountain.",
+       "k": "enterTunnels",
+       "at": [
+        2877,
+        3481,
+        0
+       ],
+       "hl": {
+        "obj": [
+         57
+        ]
+       }
+      },
+      {
+       "t": "Talk to Rohak more.",
+       "s": "Talk to Rohak more.",
+       "k": "talkToOldDwarfMore",
+       "at": [
+        2865,
+        9876,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4812
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 40,
+     "do": [
+      {
+       "t": "Enter the tunnel under White Wolf Mountain.",
+       "s": "Enter the tunnel under White Wolf Mountain.",
+       "k": "enterTunnels",
+       "at": [
+        2877,
+        3481,
+        0
+       ],
+       "hl": {
+        "obj": [
+         57
+        ]
+       }
+      },
+      {
+       "t": "Talk to Rohak more.",
+       "s": "Talk to Rohak more.",
+       "k": "talkToOldDwarfWithIngredients",
+       "at": [
+        2865,
+        9876,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4812
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 50,
+     "do": [
+      {
+       "t": "Pick up the dwarven rock cake. If you have ice gloves, wear them to pick it up. Otherwise, wear other gloves or telegrab it. If it despawns you'll need to bring Rohak more ingredients.",
+       "s": "Pick up the dwarven rock cake wearing gloves.",
+       "k": "pickUpRockCake",
+       "at": [
+        2865,
+        9876,
+        0
+       ]
+      },
+      {
+       "t": "Kill an icefiend to cool the rock cake.",
+       "s": "Kill an icefiend to cool the rock cake.",
+       "k": "coolRockCake",
+       "at": [
+        3008,
+        3471,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3140
+        ]
+       }
+      },
+      {
+       "t": "Go use the dwarven rock cake on the dwarf.",
+       "s": "Go use the dwarven rock cake on the dwarf.",
+       "k": "enterDiningRoomAgain",
+       "at": [
+        3213,
+        3221,
+        0
+       ],
+       "hl": {
+        "obj": [
+         12349
+        ]
+       }
+      },
+      {
+       "t": "Use the dwarven rock cake on the dwarf.",
+       "s": "Use the dwarven rock cake on the dwarf.",
+       "k": "useRockCakeOnDwarf",
+       "at": [
+        1862,
+        5321,
+        0
+       ],
+       "hl": {
+        "obj": [
+         12330
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  "S9-60": {
+   "var": [
+    "varbit",
+    1895
+   ],
+   "route": [
+    {
+     "title": "Starting off",
+     "steps": [
+      "Inspect Pirate Pete.",
+      "Talk to the cook in the next room about protecting the pirate. Dialogue: \"Protecting the Pirate\"",
+      "Go through all 5 chat options. Dialogue: \"Where do I get Ground Cod?\", \"Where do I get Ground Kelp?\", \"Where do I get Ground Giant Crab Meat?3\", \"Where do I get Breadcrumbs?\", \"What do I do with all of it?\", \"Thanks!\"",
+      "Use your pestle and mortar on the raw cod.",
+      "Use your knife on the bread to make breadcrumbs.",
+      "Talk to Murphy in Port Khazard. Dialogue: \"Talk about Recipe for Disaster.\" (Fishing Trawler minigame teleport is the easiest way to get there - requires 15 Fishing)",
+      "Talk to Murphy again. Dialogue: \"Yes, Let's go diving.\""
+     ]
+    },
+    {
+     "title": "Under the Sea",
+     "steps": [
+      "Equip your fishbowl helmet and diving apparatus, Bring the needle and three bronze wire. Agree to go diving.",
+      "Pick some kelp. (It's highly recommended to pick at least 3 kelp as the fishcake can burn).",
+      "Go north and talk to Nung.",
+      "Go west and pick up 5 rocks, then enter the cave.",
+      "Kill 5 mudskippers (level 30/31) for 5 hides.",
+      "Talk to Nung twice.",
+      "Enter the crab pen, kill a crab and take its meat. (It's highly recommended to get at least 3 Crab meat as the fishcake can burn).",
+      "Grind the kelp and crab meat with a pestle and mortar.",
+      "Teleport away, or go south and climb the anchor",
+      "Talk to the Cook in Lumbridge about freeing the pirate again. Dialogue: \"Protecting the Pirate\"",
+      "Use the ingredients on each other then cook the fishcake.",
+      "Give the fishcake to Pirate Pete in Lumbridge.",
+      "Congratulations, section complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Go inspect Pirate Pete.",
+       "s": "Go inspect Pirate Pete.",
+       "k": "enterDiningRoom",
+       "at": [
+        3213,
+        3221,
+        0
+       ],
+       "hl": {
+        "obj": [
+         12349
+        ]
+       }
+      },
+      {
+       "t": "Inspect Pirate Pete.",
+       "s": "Inspect Pirate Pete.",
+       "k": "inspectPete",
+       "at": [
+        1862,
+        5323,
+        0
+       ],
+       "hl": {
+        "obj": [
+         12337
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 10,
+     "do": [
+      {
+       "t": "Talk to the Lumbridge Cook about Pirate Pete.",
+       "s": "Talk to the Lumbridge Cook about Pirate Pete.",
+       "k": "talkToCook",
+       "at": [
+        3209,
+        3215,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4626
+        ]
+       }
+      },
+      {
+       "t": "Talk to Murphy in Port Khazard.",
+       "s": "Talk to Murphy in Port Khazard.",
+       "k": "talkToMurphy",
+       "at": [
+        2664,
+        3160,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5607
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 20,
+     "do": [
+      {
+       "t": "Talk to the Lumbridge Cook about Pirate Pete.",
+       "s": "Talk to the Lumbridge Cook about Pirate Pete.",
+       "k": "talkToCook",
+       "at": [
+        3209,
+        3215,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4626
+        ]
+       }
+      },
+      {
+       "t": "Talk to Murphy in Port Khazard.",
+       "s": "Talk to Murphy in Port Khazard.",
+       "k": "talkToMurphy",
+       "at": [
+        2664,
+        3160,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5607
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 30,
+     "do": [
+      {
+       "t": "Talk to Murphy again.",
+       "s": "Talk to Murphy again.",
+       "k": "talkToMurphyAgain",
+       "at": [
+        2664,
+        3160,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5607
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 40,
+     "do": [
+      {
+       "t": "Talk to Murphy again to go diving.",
+       "s": "Talk to Murphy again to go diving.",
+       "k": "goDiving",
+       "at": [
+        2664,
+        3160,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5607
+        ]
+       }
+      },
+      {
+       "t": "Pick some kelp. Get 3 or so in case you burn a fishcake or two.",
+       "s": "Pick some kelp. Get 3 or so in case you burn a fishcake or two.",
+       "k": "pickKelp",
+       "at": [
+        2966,
+        9490,
+        1
+       ],
+       "hl": {
+        "obj": [
+         12478
+        ]
+       }
+      },
+      {
+       "t": "Talk to Nung in the north of the area.",
+       "s": "Talk to Nung in the north of the area.",
+       "k": "talkToNung",
+       "at": [
+        2971,
+        9513,
+        1
+       ],
+       "hl": {
+        "npc": [
+         4818
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 50,
+     "do": [
+      {
+       "t": "Talk to Murphy again to go diving.",
+       "s": "Talk to Murphy again to go diving.",
+       "k": "goDiving",
+       "at": [
+        2664,
+        3160,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5607
+        ]
+       }
+      },
+      {
+       "t": "Pick some kelp. Get 3 or so in case you burn a fishcake or two.",
+       "s": "Pick some kelp. Get 3 or so in case you burn a fishcake or two.",
+       "k": "pickKelp",
+       "at": [
+        2966,
+        9490,
+        1
+       ],
+       "hl": {
+        "obj": [
+         12478
+        ]
+       }
+      },
+      {
+       "t": "Pick up 5 rocks in the west of the area.",
+       "s": "Pick up 5 rocks in the west of the area.",
+       "k": "pickUpRocks",
+       "at": [
+        2950,
+        9511,
+        1
+       ]
+      },
+      {
+       "t": "Enter the underwater cave entrance.",
+       "s": "Enter the underwater cave entrance.",
+       "k": "enterCave",
+       "at": [
+        2950,
+        9516,
+        1
+       ],
+       "hl": {
+        "obj": [
+         12461
+        ]
+       }
+      },
+      {
+       "t": "Kill mudskippers for 5 hides.",
+       "s": "Kill mudskippers for 5 hides.",
+       "k": "killMudksippers5",
+       "at": [
+        2951,
+        9526,
+        1
+       ],
+       "hl": {
+        "npc": [
+         4820
+        ]
+       }
+      },
+      {
+       "t": "Bring the hides to Nung.",
+       "s": "Bring the hides to Nung.",
+       "k": "returnToNung",
+       "at": [
+        2971,
+        9513,
+        1
+       ],
+       "hl": {
+        "npc": [
+         4818
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 60,
+     "do": [
+      {
+       "t": "Talk to Murphy again to go diving.",
+       "s": "Talk to Murphy again to go diving.",
+       "k": "goDiving",
+       "at": [
+        2664,
+        3160,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5607
+        ]
+       }
+      },
+      {
+       "t": "Pick some kelp. Get 3 or so in case you burn a fishcake or two.",
+       "s": "Pick some kelp. Get 3 or so in case you burn a fishcake or two.",
+       "k": "pickKelp",
+       "at": [
+        2966,
+        9490,
+        1
+       ],
+       "hl": {
+        "obj": [
+         12478
+        ]
+       }
+      },
+      {
+       "t": "Talk to Nung again.",
+       "s": "Talk to Nung again.",
+       "k": "talkToNungAgain",
+       "at": [
+        2971,
+        9513,
+        1
+       ],
+       "hl": {
+        "npc": [
+         4818
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 70,
+     "do": [
+      {
+       "t": "Talk to Murphy again to go diving.",
+       "s": "Talk to Murphy again to go diving.",
+       "k": "goDiving",
+       "at": [
+        2664,
+        3160,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5607
+        ]
+       }
+      },
+      {
+       "t": "Pick some kelp. Get 3 or so in case you burn a fishcake or two.",
+       "s": "Pick some kelp. Get 3 or so in case you burn a fishcake or two.",
+       "k": "pickKelp",
+       "at": [
+        2966,
+        9490,
+        1
+       ],
+       "hl": {
+        "obj": [
+         12478
+        ]
+       }
+      },
+      {
+       "t": "Bring bronze wire and a needle to Nung.",
+       "s": "Bring bronze wire and a needle to Nung.",
+       "k": "giveNungWire",
+       "need": "Needle",
+       "at": [
+        2971,
+        9513,
+        1
+       ],
+       "hl": {
+        "npc": [
+         4818
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 80,
+     "do": [
+      {
+       "t": "Talk to Murphy again to go diving.",
+       "s": "Talk to Murphy again to go diving.",
+       "k": "goDivingAgain",
+       "at": [
+        2664,
+        3160,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5607
+        ]
+       }
+      },
+      {
+       "t": "Pick some kelp. Get 3 or so in case you burn a fishcake or two.",
+       "s": "Pick some kelp. Get 3 or so in case you burn a fishcake or two.",
+       "k": "pickKelp",
+       "at": [
+        2966,
+        9490,
+        1
+       ],
+       "hl": {
+        "obj": [
+         12478
+        ]
+       }
+      },
+      {
+       "t": "Use a pestle and mortar on the crab.",
+       "s": "Use a pestle and mortar on the crab.",
+       "k": "grindCrab"
+      },
+      {
+       "t": "Use a pestle and mortar on the kelp.",
+       "s": "Use a pestle and mortar on the kelp.",
+       "k": "grindKelp"
+      },
+      {
+       "t": "Use a pestle and mortar on a raw cod.",
+       "s": "Use a pestle and mortar on a raw cod.",
+       "k": "usePestleOnCod"
+      },
+      {
+       "t": "Use a knife on some bread and make BREADCRUMBS.",
+       "s": "Use a knife on some bread and make BREADCRUMBS.",
+       "k": "useKnifeOnBread"
+      },
+      {
+       "t": "Talk to the Lumbridge Cook about Pirate Pete again.",
+       "s": "Talk to the Lumbridge Cook about Pirate Pete again.",
+       "k": "talkToCookAgain",
+       "at": [
+        3209,
+        3215,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4626
+        ]
+       }
+      },
+      {
+       "t": "Pick up 5 rocks so you can kill the crabs.",
+       "s": "Pick up 5 rocks so you can kill the crabs.",
+       "k": "pickUpRocksAgain",
+       "at": [
+        2950,
+        9511,
+        1
+       ]
+      },
+      {
+       "t": "Kill the crabs for some crab meat. Get 2-3 to be safe.",
+       "s": "Kill the crabs for some crab meat. Get 2-3 to be safe.",
+       "k": "killCrab",
+       "at": [
+        2977,
+        9518,
+        1
+       ],
+       "hl": {
+        "npc": [
+         4819
+        ]
+       }
+      },
+      {
+       "t": "Climb the anchor to the south to return to the surface.",
+       "s": "Climb the anchor to the south to return to the surface.",
+       "k": "climbAnchor",
+       "at": [
+        2963,
+        9477,
+        1
+       ],
+       "hl": {
+        "obj": [
+         12475
+        ]
+       }
+      },
+      {
+       "t": "Cook the fishcake. It's possible to burn it.",
+       "s": "Cook the fishcake. It's possible to burn it.",
+       "k": "cookCake"
+      },
+      {
+       "t": "Go give the fishcake to Pirate Pete to finish the quest.",
+       "s": "Go give the fishcake to Pirate Pete to finish the quest.",
+       "k": "enterDiningRoomAgain",
+       "at": [
+        3207,
+        3217,
+        0
+       ],
+       "hl": {
+        "obj": [
+         12348
+        ]
+       }
+      },
+      {
+       "t": "Give the fishcake to Pirate Pete to finish the quest. BE CAREFUL NOT TO EAT IT.",
+       "s": "Give the fishcake to Pirate Pete to finish; do not eat it.",
+       "k": "useCakeOnPete",
+       "at": [
+        1862,
+        5323,
+        0
+       ],
+       "hl": {
+        "obj": [
+         12337
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 90,
+     "do": [
+      {
+       "t": "Talk to Murphy again to go diving.",
+       "s": "Talk to Murphy again to go diving.",
+       "k": "goDivingAgain",
+       "at": [
+        2664,
+        3160,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5607
+        ]
+       }
+      },
+      {
+       "t": "Pick some kelp. Get 3 or so in case you burn a fishcake or two.",
+       "s": "Pick some kelp. Get 3 or so in case you burn a fishcake or two.",
+       "k": "pickKelp",
+       "at": [
+        2966,
+        9490,
+        1
+       ],
+       "hl": {
+        "obj": [
+         12478
+        ]
+       }
+      },
+      {
+       "t": "Use a pestle and mortar on the crab.",
+       "s": "Use a pestle and mortar on the crab.",
+       "k": "grindCrab"
+      },
+      {
+       "t": "Use a pestle and mortar on the kelp.",
+       "s": "Use a pestle and mortar on the kelp.",
+       "k": "grindKelp"
+      },
+      {
+       "t": "Use a pestle and mortar on a raw cod.",
+       "s": "Use a pestle and mortar on a raw cod.",
+       "k": "usePestleOnCod"
+      },
+      {
+       "t": "Use a knife on some bread and make BREADCRUMBS.",
+       "s": "Use a knife on some bread and make BREADCRUMBS.",
+       "k": "useKnifeOnBread"
+      },
+      {
+       "t": "Talk to the Lumbridge Cook about Pirate Pete again.",
+       "s": "Talk to the Lumbridge Cook about Pirate Pete again.",
+       "k": "talkToCookAgain",
+       "at": [
+        3209,
+        3215,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4626
+        ]
+       }
+      },
+      {
+       "t": "Pick up 5 rocks so you can kill the crabs.",
+       "s": "Pick up 5 rocks so you can kill the crabs.",
+       "k": "pickUpRocksAgain",
+       "at": [
+        2950,
+        9511,
+        1
+       ]
+      },
+      {
+       "t": "Kill the crabs for some crab meat. Get 2-3 to be safe.",
+       "s": "Kill the crabs for some crab meat. Get 2-3 to be safe.",
+       "k": "killCrab",
+       "at": [
+        2977,
+        9518,
+        1
+       ],
+       "hl": {
+        "npc": [
+         4819
+        ]
+       }
+      },
+      {
+       "t": "Climb the anchor to the south to return to the surface.",
+       "s": "Climb the anchor to the south to return to the surface.",
+       "k": "climbAnchor",
+       "at": [
+        2963,
+        9477,
+        1
+       ],
+       "hl": {
+        "obj": [
+         12475
+        ]
+       }
+      },
+      {
+       "t": "Cook the fishcake. It's possible to burn it.",
+       "s": "Cook the fishcake. It's possible to burn it.",
+       "k": "cookCake"
+      },
+      {
+       "t": "Go give the fishcake to Pirate Pete to finish the quest.",
+       "s": "Go give the fishcake to Pirate Pete to finish the quest.",
+       "k": "enterDiningRoomAgain",
+       "at": [
+        3207,
+        3217,
+        0
+       ],
+       "hl": {
+        "obj": [
+         12348
+        ]
+       }
+      },
+      {
+       "t": "Give the fishcake to Pirate Pete to finish the quest. BE CAREFUL NOT TO EAT IT.",
+       "s": "Give the fishcake to Pirate Pete to finish; do not eat it.",
+       "k": "useCakeOnPete",
+       "at": [
+        1862,
+        5323,
+        0
+       ],
+       "hl": {
+        "obj": [
+         12337
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 100,
+     "do": [
+      {
+       "t": "Use the ingredients together to make the cake.",
+       "s": "Use the ingredients together to make the cake.",
+       "k": "useCrabOnKelp"
+      },
+      {
+       "t": "Cook the fishcake. It's possible to burn it.",
+       "s": "Cook the fishcake. It's possible to burn it.",
+       "k": "cookCake"
+      },
+      {
+       "t": "Go give the fishcake to Pirate Pete to finish the quest.",
+       "s": "Go give the fishcake to Pirate Pete to finish the quest.",
+       "k": "enterDiningRoomAgain",
+       "at": [
+        3207,
+        3217,
+        0
+       ],
+       "hl": {
+        "obj": [
+         12348
+        ]
+       }
+      },
+      {
+       "t": "Give the fishcake to Pirate Pete to finish the quest. BE CAREFUL NOT TO EAT IT.",
+       "s": "Give the fishcake to Pirate Pete to finish; do not eat it.",
+       "k": "useCakeOnPete",
+       "at": [
+        1862,
+        5323,
+        0
+       ],
+       "hl": {
+        "obj": [
+         12337
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  "S9-61": {
+   "var": [
+    "varbit",
+    1904
+   ],
+   "route": [
+    {
+     "title": "Starting out",
+     "steps": [
+      "Inspect Skrach Uglogwee in the Lumbridge Castle dining room. Dialogue: \"Yes, I'm sure I can get some Jubbly Chompy.\"",
+      "Talk to Rantz in the Feldip Hills (fairy ring AKS, then east). Dialogue: \"I'm trying to free Skrach, can you help?\", \"Ok, I'll do it.\"",
+      "Go south-east to the coast and talk to Rantz again. Dialogue: \"Ok, here I am... I guess this is the watery place? What now?\"",
+      "Use your axe on the fallen tree twice, then talk to Rantz again. Dialogue: \"Ok, the boat's ready, now tell me how to get a Jubbly?\""
+     ]
+    },
+    {
+     "title": "The cooked chompy",
+     "steps": [
+      "Board the ogre boat to Karamja and find the tree with an arrow in it on the west coast, west of Tai Bwo Wannai.",
+      "Light a fire next to the tree, use your iron spit on the raw chompy, then cook it on the fire.",
+      "Board the ogre boat back and talk to Rantz on the coast. Dialogue: \"Ok, now tell me how to get Jubbly!\""
+     ]
+    },
+    {
+     "title": "The Jubbly",
+     "steps": [
+      "Fill your ogre bellows at the swamp bubbles and inflate a toad in the nearby swamp.",
+      "Mine a rock from the pile of rocks east of Rantz's cave.",
+      "Use the ogre bellows on the bloated toad with a ball of wool in your inventory to make a balloon toad.",
+      "Drop the balloon toad in the dark area south of Rantz's cave and kill the level 9 Jubbly with your ogre bow and ogre arrows.",
+      "Pluck the Jubbly, pick up the raw jubbly and cook it on Rantz's spit-roast. If you burn it, make another balloon toad.",
+      "Give the cooked jubbly to Skrach Uglogwee in Lumbridge Castle to finish."
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Go inspect Skrach Uglogwee in Lumbridge Castle.",
+       "s": "Go inspect Skrach Uglogwee in Lumbridge Castle.",
+       "k": "enterDiningRoom",
+       "at": [
+        3213,
+        3221,
+        0
+       ],
+       "hl": {
+        "obj": [
+         12349
+        ]
+       }
+      },
+      {
+       "t": "Inspect Skrach Uglogwee.",
+       "s": "Inspect Skrach Uglogwee.",
+       "k": "inspectSkrach",
+       "at": [
+        1864,
+        5329,
+        0
+       ],
+       "hl": {
+        "obj": [
+         12343
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 10,
+     "do": [
+      {
+       "t": "Talk to Rantz in Feldip Hills.",
+       "s": "Talk to Rantz in Feldip Hills.",
+       "k": "talkToRantz",
+       "at": [
+        2630,
+        2984,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1470
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 30,
+     "do": [
+      {
+       "t": "Talk to Rantz on the east coast of Feldip Hills.",
+       "s": "Talk to Rantz on the east coast of Feldip Hills.",
+       "k": "talkToRantzOnCoast",
+       "at": [
+        2649,
+        2964,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4855
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 50,
+     "do": [
+      {
+       "t": "Use an axe on the old tree near Rantz.",
+       "s": "Use an axe on the old tree near Rantz.",
+       "k": "useAxeOnTree",
+       "at": [
+        2655,
+        2963,
+        0
+       ],
+       "hl": {
+        "obj": [
+         12549
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 60,
+     "do": [
+      {
+       "t": "Use an axe on the old tree near Rantz again.",
+       "s": "Use an axe on the old tree near Rantz again.",
+       "k": "useAxeOnTreeAgain",
+       "at": [
+        2655,
+        2963,
+        0
+       ],
+       "hl": {
+        "obj": [
+         12549
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 70,
+     "do": [
+      {
+       "t": "Talk to Rantz again on the east coast of Feldip Hills.",
+       "s": "Talk to Rantz again on the east coast of Feldip Hills.",
+       "k": "talkToRantzOnCoastAgain",
+       "at": [
+        2649,
+        2964,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4855
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 80,
+     "do": [
+      {
+       "t": "Use an iron spit on a chompy.",
+       "s": "Use an iron spit on a chompy.",
+       "k": "useSpitOnChompy"
+      },
+      {
+       "t": "Light a fire on Karamja's west coast. Afterwards, use your skewered chompy on it.",
+       "s": "Light a fire on Karamja's west coast and cook the skewered chompy.",
+       "k": "lightFire",
+       "at": [
+        2760,
+        3080,
+        0
+       ]
+      },
+      {
+       "t": "Cook the skewered chompy on the fire.",
+       "s": "Cook the skewered chompy on the fire.",
+       "k": "cookChompy",
+       "hl": {
+        "obj": [
+         26185
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 90,
+     "do": [
+      {
+       "t": "Travel back with Rantz's kids and talk to Rantz again.",
+       "s": "Travel back with Rantz's kids and talk to Rantz again.",
+       "k": "talkToRantzAfterReturn",
+       "at": [
+        2649,
+        2964,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4855
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 110,
+     "do": [
+      {
+       "t": "Fill some ogre bellows on some swamp bubbles.",
+       "s": "Fill some ogre bellows on some swamp bubbles.",
+       "k": "fillUpBellows",
+       "has": "Ogre bellows",
+       "at": [
+        2601,
+        2967,
+        0
+       ],
+       "hl": {
+        "obj": [
+         684
+        ]
+       }
+      },
+      {
+       "t": "Blow up a toad with the bellows.",
+       "s": "Blow up a toad with the bellows.",
+       "k": "getToad",
+       "at": [
+        2601,
+        2967,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1473
+        ]
+       }
+      },
+      {
+       "t": "Mine a pile of rocks near the Feldip Hills Fairy Ring for a rock.",
+       "s": "Mine a pile of rocks near the Feldip Hills Fairy Ring for a rock.",
+       "k": "getRock",
+       "at": [
+        2567,
+        2960,
+        0
+       ],
+       "hl": {
+        "obj": [
+         12564
+        ]
+       }
+      },
+      {
+       "t": "Use the bellows on your toad with a ball of wool in your inventory.",
+       "s": "Use the bellows on your toad with a ball of wool in your inventory.",
+       "k": "useBellowOnToadInInv"
+      },
+      {
+       "t": "Drop the balloon toad in the dark area south of Rantz's cave and wait for a Jubbly to arrive.",
+       "s": "Drop the balloon toad south of Rantz's cave and wait for a Jubbly.",
+       "k": "dropBalloonToad",
+       "at": [
+        2635,
+        2965,
+        0
+       ]
+      },
+      {
+       "t": "Kill then pluck jubbly.",
+       "s": "Kill then pluck jubbly.",
+       "k": "killJubbly",
+       "hl": {
+        "npc": [
+         4863
+        ]
+       }
+      },
+      {
+       "t": "Pluck the jubbly's carcass.",
+       "s": "Pluck the jubbly's carcass.",
+       "k": "lootJubbly",
+       "hl": {
+        "npc": [
+         4864
+        ]
+       }
+      },
+      {
+       "t": "Pick up the raw jubbly.",
+       "s": "Pick up the raw jubbly.",
+       "k": "pickUpRawJubbly"
+      },
+      {
+       "t": "Cook the raw jubbly on Rantz's spit.",
+       "s": "Cook the raw jubbly on Rantz's spit.",
+       "k": "cookJubbly",
+       "at": [
+        2631,
+        2990,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6895
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 160,
+     "do": [
+      {
+       "t": "Go give the jubbly to Skrach Uglogwee to finish the quest.",
+       "s": "Go give the jubbly to Skrach Uglogwee to finish the quest.",
+       "k": "enterDiningRoomAgain",
+       "at": [
+        3207,
+        3217,
+        0
+       ],
+       "hl": {
+        "obj": [
+         12348
+        ]
+       }
+      },
+      {
+       "t": "Give the jubbly to Skrach Uglogwee to finish the quest.",
+       "s": "Give the jubbly to Skrach Uglogwee to finish the quest.",
+       "k": "useJubblyOnSkrach",
+       "at": [
+        1864,
+        5329,
+        0
+       ],
+       "hl": {
+        "obj": [
+         12343
+        ]
+       }
+      }
+     ]
+    }
+   ]
   }
  }
 }

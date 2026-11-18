@@ -2329,6 +2329,100 @@
       "evidence": [
         "OSRS Wiki In Aid of the Myreque: kills and items fields, read 2026-11-18."
       ]
+    },
+    {
+      "stepId": "S9-59",
+      "kind": "quest-fight",
+      "mandatory": false,
+      "method": "melee",
+      "objective": "Recipe for Disaster, Freeing the Mountain Dwarf: without ice gloves, kill an icefiend (level 13, hits up to 2) on Ice Mountain to cool the rock cake.",
+      "enemies": [
+        {
+          "name": "Icefiend",
+          "level": 13,
+          "maxHit": 2,
+          "table": true
+        }
+      ],
+      "lines": [],
+      "assumptions": [
+        "Two trout (heals 7) cover the fight; ice gloves skip it."
+      ],
+      "problems": [],
+      "alternatives": [
+        "Ice gloves from the Fremennik Isles let you pick up the hot cake and skip the fight."
+      ],
+      "decision": "retain",
+      "changed": [
+        "2.148.0: new quest; Icefiend is in combatFoes.json."
+      ],
+      "evidence": [
+        "OSRS Wiki Recipe for Disaster/Freeing the Mountain Dwarf: requirements, read 2026-11-18."
+      ]
+    },
+    {
+      "stepId": "S9-60",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "melee",
+      "objective": "Recipe for Disaster, Freeing Pirate Pete: underwater, kill 5 mudskippers (level 30/31, hits up to 4) for their hides and a crab (level 21/23, hits up to 3) for its meat.",
+      "enemies": [
+        {
+          "name": "Mudskipper",
+          "level": 31,
+          "maxHit": 4,
+          "table": true
+        },
+        {
+          "name": "Crab",
+          "level": 23,
+          "maxHit": 3,
+          "table": true
+        }
+      ],
+      "lines": [
+        "1.4",
+        "1.6"
+      ],
+      "assumptions": [
+        "Five trout (heals 7) cover the dives; the estimate uses the level-31 mudskipper and level-23 crab."
+      ],
+      "problems": [],
+      "alternatives": [
+        "Any weapon works; the fights are short and the diving helmet keeps you breathing."
+      ],
+      "decision": "retain",
+      "changed": [
+        "2.148.0: new quest; mudskippers and crabs are in combatFoes.json."
+      ],
+      "evidence": [
+        "OSRS Wiki Recipe for Disaster/Freeing Pirate Pete: kills and items fields, read 2026-11-18."
+      ]
+    },
+    {
+      "stepId": "S9-61",
+      "kind": "incidental",
+      "mandatory": true,
+      "method": "other",
+      "objective": "Recipe for Disaster, Freeing Skrach Uglogwee: kill the level-9 Jubbly that lands by the balloon toad, with the ogre bow and ogre arrows; it does not fight back.",
+      "enemies": [],
+      "lines": [
+        "2.3"
+      ],
+      "assumptions": [
+        "The Jubbly only lands to eat the toad and has no attack; the Wiki gives it no combat stats, so nothing is estimated."
+      ],
+      "problems": [],
+      "alternatives": [
+        "Another balloon toad brings another Jubbly if the first is lost or burnt."
+      ],
+      "decision": "retain",
+      "changed": [
+        "2.148.0: new quest; the ogre bow is kept from Big Chompy Bird Hunting."
+      ],
+      "evidence": [
+        "OSRS Wiki Recipe for Disaster/Freeing Skrach Uglogwee quick guide, read 2026-11-18."
+      ]
     }
   ]
 }

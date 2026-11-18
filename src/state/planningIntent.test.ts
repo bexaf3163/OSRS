@@ -36,6 +36,14 @@ describe('one durable profile-scoped owner intent', () => {
     vi.resetModules();
     expect((await import('./planningIntent')).getPlanningIntent().intent).toEqual({ kind: 'auto' });
   });
+  it('a followed skill plan takes the header mode when it changes', async () => {
+    const store = await import('./planningIntent');
+    store.setPlanningIntent({ kind: 'training', training: { skill: 'firemaking', mode: 'fast', freeOnly: true, target: 70 } });
+    store.followModeChange('members');
+    expect(store.getPlanningIntent().intent).toEqual({ kind: 'training', training: { skill: 'firemaking', mode: 'fast', freeOnly: false, target: 70 } });
+    store.followModeChange('f2p');
+    expect(store.getPlanningIntent().intent).toMatchObject({ training: { freeOnly: true } });
+  });
   it('keeps future/damaged sources and protected profiles immutable', async () => {
     const future = '{"version":99,"important":"retained"}';
     texts.set(STORAGE_KEYS.planningIntent, future);

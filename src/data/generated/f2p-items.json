@@ -2075,6 +2075,65 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Bowl"
   },
   {
+    "id": 1921,
+    "nameEn": "Bowl of water",
+    "examine": "It's a bowl of water.",
+    "members": false,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Bowl_of_water.png",
+    "value": 4,
+    "highAlch": 2,
+    "lowAlch": 1,
+    "buyLocations": [
+      {
+        "shopName": "Pollnivneach general store.",
+        "location": "Pollnivneach",
+        "owner": "Market seller",
+        "price": 4,
+        "stock": 7,
+        "members": true
+      },
+      {
+        "shopName": "Shantay Pass Shop",
+        "location": "Shantay Pass",
+        "owner": "Shantay",
+        "price": 4,
+        "stock": 10,
+        "members": true
+      },
+      {
+        "shopName": "Bedabin Village Bartering",
+        "location": "Bedabin Camp",
+        "owner": "Bedabin Nomad",
+        "price": 4,
+        "stock": 5,
+        "members": true
+      },
+      {
+        "shopName": "Bandit Bargains",
+        "location": "Bandit Camp",
+        "owner": "Bandit shopkeeper",
+        "price": 4,
+        "stock": 5,
+        "members": true
+      }
+    ],
+    "freeSpawns": [
+      "Hosidius - Watson's house (members only)",
+      "Darkmeyer - middle tier (members only)",
+      "Desert Mining Camp (members only)",
+      "Slepe - eastern and western houses (1st floor) (members only)",
+      "Civitas illa Fortis (members only)"
+    ],
+    "dropSources": [
+      {
+        "monster": "Zombie (Tarn's Lair)#Low level",
+        "combatLevel": null,
+        "rate": "5/128"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Bowl_of_water"
+  },
+  {
     "id": 10008,
     "nameEn": "Box trap",
     "examine": "If a creature goes inside, the box should then slam shut.",
@@ -5860,6 +5919,17 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Egg"
   },
   {
+    "id": 6667,
+    "nameEn": "Empty fishbowl",
+    "examine": "An empty fishbowl.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Empty_fishbowl.png",
+    "value": 1,
+    "highAlch": 1,
+    "lowAlch": 1,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Fishbowl"
+  },
+  {
     "id": 5418,
     "nameEn": "Empty sack",
     "examine": "An empty vegetable sack.",
@@ -8848,6 +8918,20 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Iron_scimitar"
   },
   {
+    "id": 7225,
+    "nameEn": "Iron spit",
+    "examine": "An iron spit.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Iron_spit.png",
+    "value": 64,
+    "highAlch": 38,
+    "lowAlch": 25,
+    "freeSpawns": [
+      "Weiss (members only)"
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Iron_spit"
+  },
+  {
     "id": 247,
     "nameEn": "Jangerberries",
     "examine": "They don't look very ripe.",
@@ -11470,6 +11554,36 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Oak_shortbow"
   },
   {
+    "id": 2866,
+    "nameEn": "Ogre arrow",
+    "examine": "A large ogre arrow with a bone tip.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Ogre_arrow_1.png",
+    "value": 25,
+    "highAlch": 15,
+    "lowAlch": 10,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Ogre_arrow"
+  },
+  {
+    "id": 2871,
+    "nameEn": "Ogre bellows",
+    "examine": "A large pair of ogre bellows.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Ogre_bellows.png",
+    "value": 1,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Ogre_bellows"
+  },
+  {
+    "id": 2883,
+    "nameEn": "Ogre bow",
+    "examine": "More powerful than a normal bow, useful against large game birds.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Ogre_bow.png",
+    "value": 500,
+    "highAlch": 300,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Ogre_bow"
+  },
+  {
     "id": 13190,
     "nameEn": "Old school bond",
     "examine": "This bond can be redeemed for membership.",
@@ -11597,6 +11711,77 @@
     "highAlch": 60,
     "lowAlch": 40,
     "wikiUrl": "https://oldschool.runescape.wiki/w/Opal"
+  },
+  {
+    "id": 2108,
+    "nameEn": "Orange",
+    "examine": "A fresh orange.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Orange.png",
+    "value": 2,
+    "highAlch": 1,
+    "lowAlch": 1,
+    "buyLocations": [
+      {
+        "shopName": "Barman (Blurberry Bar)",
+        "location": "",
+        "price": 20,
+        "stock": "∞",
+        "members": false
+      },
+      {
+        "shopName": "Funch's Fine Groceries",
+        "location": "Grand Tree",
+        "owner": "Heckel Funch",
+        "price": 2,
+        "stock": 20,
+        "members": true
+      },
+      {
+        "shopName": "Grand Tree Groceries",
+        "location": "Grand Tree",
+        "owner": "Hudo",
+        "price": 2,
+        "stock": 10,
+        "members": true
+      },
+      {
+        "shopName": "Pollnivneach general store.",
+        "location": "Pollnivneach",
+        "owner": "Market seller",
+        "price": 2,
+        "stock": 5,
+        "members": true
+      },
+      {
+        "shopName": "Cobado's Groceries",
+        "location": "Civitas illa Fortis",
+        "owner": "Cobado",
+        "price": 2,
+        "stock": 2,
+        "members": true
+      },
+      {
+        "shopName": "Faustus' Fruit and Veg",
+        "location": "Aldarin",
+        "owner": "Faustus",
+        "price": 2,
+        "stock": 10,
+        "members": true
+      },
+      {
+        "shopName": "Trader Stan's Trading Post",
+        "location": "Port Piscarilius",
+        "owner": "Trader Crewmember",
+        "price": 5,
+        "stock": 10,
+        "members": true
+      }
+    ],
+    "freeSpawns": [
+      "Varlamore - On an island east of Kastori (members only)"
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Orange"
   },
   {
     "id": 1769,
@@ -12797,6 +12982,127 @@
       }
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Raw_chicken"
+  },
+  {
+    "id": 2876,
+    "nameEn": "Raw chompy",
+    "examine": "I need to cook this first.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Raw_chompy.png",
+    "value": 85,
+    "highAlch": 51,
+    "lowAlch": 34,
+    "buyLocations": [
+      {
+        "shopName": "~ Uglug's stuffsies ~",
+        "location": "Jiggig",
+        "owner": "Uglug Nar",
+        "price": 85,
+        "stock": 0,
+        "members": true
+      }
+    ],
+    "dropSources": [
+      {
+        "monster": "Chompy bird",
+        "combatLevel": 6,
+        "rate": "Always"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Raw_chompy"
+  },
+  {
+    "id": 341,
+    "nameEn": "Raw cod",
+    "examine": "I should try cooking this.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Raw_cod.png",
+    "value": 10,
+    "highAlch": 6,
+    "lowAlch": 4,
+    "buyLocations": [
+      {
+        "shopName": "Harry's Fishing Shop.",
+        "location": "Catherby",
+        "owner": "Harry",
+        "price": 10,
+        "stock": 0,
+        "members": true
+      },
+      {
+        "shopName": "Two Feet Charley's Fish Shop.",
+        "location": "Mos Le'Harmless",
+        "owner": "Charley",
+        "price": 10,
+        "stock": 6,
+        "members": true
+      },
+      {
+        "shopName": "Fishing Guild Shop.",
+        "location": "Fishing Guild",
+        "owner": "Roachey",
+        "price": 10,
+        "stock": 0,
+        "members": true
+      },
+      {
+        "shopName": "Frankie's Fishing Emporium",
+        "location": "Port Piscarilius",
+        "owner": "Frankie",
+        "price": 10,
+        "stock": 100,
+        "members": true
+      },
+      {
+        "shopName": "Picaria's Fishing Shop",
+        "location": "Sunset Coast",
+        "owner": "Picaria",
+        "price": 10,
+        "stock": 10,
+        "members": true
+      },
+      {
+        "shopName": "Cobado's Groceries",
+        "location": "Civitas illa Fortis",
+        "owner": "Cobado",
+        "price": 10,
+        "stock": 5,
+        "members": true
+      },
+      {
+        "shopName": "Henderson's Catch of the Day",
+        "location": "The Pandemonium",
+        "owner": "Henderson",
+        "price": 10,
+        "stock": 6,
+        "members": true
+      },
+      {
+        "shopName": "Sulisal's Superb Fishing Store",
+        "location": "Kastori",
+        "owner": "Sulisal",
+        "price": 10,
+        "stock": 10,
+        "members": true
+      },
+      {
+        "shopName": "Elder Krill's Fishing Stall",
+        "location": "The Summer Shore",
+        "owner": "Elder Krill",
+        "price": 10,
+        "stock": 10,
+        "members": true
+      },
+      {
+        "shopName": "Port Roberts Fish Stall",
+        "location": "Port Roberts",
+        "owner": "Gregory",
+        "price": 10,
+        "stock": 10,
+        "members": true
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Raw_cod"
   },
   {
     "id": 3150,
@@ -16757,6 +17063,67 @@
       }
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Spade"
+  },
+  {
+    "id": 2007,
+    "nameEn": "Spice",
+    "examine": "This could liven up an otherwise bland stew.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Spice.png",
+    "value": 230,
+    "highAlch": 138,
+    "lowAlch": 92,
+    "buyLocations": [
+      {
+        "shopName": "Ardougne Spice Stall.",
+        "location": "East Ardougne",
+        "owner": "Spice seller",
+        "price": 230,
+        "stock": 1,
+        "members": true
+      },
+      {
+        "shopName": "Prifddinas Spice Stall",
+        "location": "Prifddinas",
+        "owner": "Caerwyn",
+        "price": 230,
+        "stock": 1,
+        "members": true
+      },
+      {
+        "shopName": "Fortis Spice Stall",
+        "location": "Civitas illa Fortis",
+        "owner": "Spice Merchant",
+        "price": 230,
+        "stock": 20,
+        "members": true
+      },
+      {
+        "shopName": "Port Roberts Spice Stall",
+        "location": "Port Roberts",
+        "owner": "Samir",
+        "price": 230,
+        "stock": 20,
+        "members": true
+      },
+      {
+        "shopName": "Culinaromancer's Chest",
+        "location": "Lumbridge Castle basement",
+        "owner": "None",
+        "price": 239,
+        "stock": 50,
+        "members": true
+      },
+      {
+        "shopName": "Durrik's Goods",
+        "location": "Deepfin Mine",
+        "owner": "Durrik",
+        "price": 575,
+        "stock": 10,
+        "members": true
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Spice"
   },
   {
     "id": 1379,

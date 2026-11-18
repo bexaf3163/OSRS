@@ -26,7 +26,8 @@ const steps = JSON.parse(read('src/data/authored/steps.json')) as { id: string; 
 if (steps.some((s) => s.id === id) || read('src/domain/persistence/progress.ts').includes(`'${id}'`)) throw new Error(`${id} is taken or retired`);
 if (steps.some((s) => s.title === draft.quest)) throw new Error(`${draft.quest} is already on the route`);
 const requires = draft.facts.requirements.quests.map((quest) => {
-  const step = steps.find((s) => s.title === quest);
+  // Recipe for Disaster parts are titled "Recipe for Disaster — X" on the route and "Recipe for Disaster/X" on the Wiki.
+  const step = steps.find((s) => s.title === quest || s.title === quest.replace('/', ' — '));
   if (!step) throw new Error(`${draft.quest} needs ${quest}, which is not on the route`);
   return step.id;
 });
@@ -53,7 +54,8 @@ const shipped = {
   inGame: {
     npcNames: step.npc ? [step.npc.nameEn] : [], dialogChoices: dialogue,
     highlightItems: step.itemsRequired.map((item) => item.nameEn),
-    completionTrigger: { type: 'QUEST_COMPLETED', questName: step.title },
+    // RuneLite names Recipe for Disaster parts "Recipe for Disaster - Skrach Uglogwee"; RouteTargetsTest checks every name.
+    completionTrigger: { type: 'QUEST_COMPLETED', questName: step.title.replace(/^Recipe for Disaster\/(Freeing (the )?)?/, 'Recipe for Disaster - ') },
   },
 };
 // The route keeps its stage order: the new step goes after the last one of its stage or an earlier one.

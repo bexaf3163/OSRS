@@ -1,5 +1,5 @@
 {
- "source": "OSRS Wiki real-time prices API /latest (high = buy, low = sell), F2P route items and gear, read 2026-11-10; Members route items added 2026-11-14 and 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-17; Members route items added 2026-11-17; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18",
+ "source": "OSRS Wiki real-time prices API /latest (high = buy, low = sell), F2P route items and gear, read 2026-11-10; Members route items added 2026-11-14 and 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-17; Members route items added 2026-11-17; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18",
  "prices": {
   "Adamant 2h sword": {
    "buy": 3670,
@@ -3000,6 +3000,34 @@
   "Raw mackerel": {
    "buy": 9,
    "sell": 8
+  },
+  "Bowl of water": {
+   "buy": 20,
+   "sell": 7
+  },
+  "Orange": {
+   "buy": 149,
+   "sell": 140
+  },
+  "Raw cod": {
+   "buy": 50,
+   "sell": 26
+  },
+  "Spice": {
+   "buy": 82,
+   "sell": 45
+  },
+  "Empty fishbowl": {
+   "buy": 72,
+   "sell": 60
+  },
+  "Iron spit": {
+   "buy": 106,
+   "sell": 30
+  },
+  "Ogre arrow": {
+   "buy": 152,
+   "sell": 136
   }
  }
 }

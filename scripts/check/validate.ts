@@ -312,7 +312,9 @@ export function validate(d: GuideData | null, route: Route): Report {
   const TRIGGERS = new Set(['QUEST_COMPLETED', 'SKILL_LEVEL', 'ITEM_OWNED', 'CHAT_MESSAGE', 'VARBIT_CHANGED']);
   // The quest name in RuneLite: like the step (a dash in the name is a hyphen) or like the step's wiki article
   // ("Triumph at Oziach" — the last stage of Dragon Slayer I). Whether it exists in RuneLite is checked by RouteTargetsTest.
+  // RuneLite drops "Freeing" from Recipe for Disaster parts and calls the Goblin generals Wartface & Bentnoze.
   const questNamesOf = (s: Step) => [s.title.replace(/ — /g, ' - '),
+    s.title.replace(/^Recipe for Disaster\/(Freeing (the )?)?/, 'Recipe for Disaster - ').replace('Goblin generals', 'Wartface & Bentnoze'),
     ...(s.wikiUrl ? [decodeURIComponent(s.wikiUrl.replace(/^.*\/w\//, '')).replace(/_/g, ' ')] : [])];
   const triggerQuests = new Map<string, string>();
   const badGame: string[] = [];

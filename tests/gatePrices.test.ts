@@ -5,7 +5,7 @@ import { allSteps } from '../src/data';
 // Items a quest itself hands out or the player gathers on the way: the route never buys them.
 const QUEST_GIVEN = new Set(['Ghostspeak amulet', "Rat's tail", 'Burnt meat', 'Research package', 'Blurite ore', 'Stake', 'Karamjan rum',
   'Maze key', "Glarial's pebble", 'Khazard helmet', 'Khazard armour', 'Hangover cure', 'Picture', 'Red vine worm', 'Excalibur', 'Ecto-token',
-  'Druid pouch', 'Silver sickle (b)', 'Dramen staff', 'Rotten tomato', 'Asgarnian ale', 'Raw karambwanji', 'Phoenix feather', 'Dusty key', 'Pet kitten', 'Bucket of slime', 'Nettle tea']);
+  'Druid pouch', 'Silver sickle (b)', 'Dramen staff', 'Rotten tomato', 'Asgarnian ale', 'Raw karambwanji', 'Phoenix feather', 'Dusty key', 'Pet kitten', 'Bucket of slime', 'Nettle tea', 'Ogre bow', 'Ogre bellows']);
 
 describe('route gate prices', () => {
   it('every item a route step or a training method asks for has a fixed gate price, so the route gate does not stop 25 minutes in', () => {

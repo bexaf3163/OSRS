@@ -2331,6 +2331,168 @@
       "aggressive": true
     },
     {
+      "name": "Icefiend",
+      "version": "Level 13",
+      "combat": 13,
+      "members": true,
+      "hitpoints": 15,
+      "attackLevel": 10,
+      "strengthLevel": 10,
+      "defenceLevel": 12,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "magic",
+      "maxHit": 2,
+      "speedTicks": 4,
+      "aggressive": false,
+      "weakness": {
+        "element": "fire",
+        "percent": 100
+      }
+    },
+    {
+      "name": "Icefiend",
+      "version": "Level 18",
+      "combat": 18,
+      "members": true,
+      "hitpoints": 20,
+      "attackLevel": 12,
+      "strengthLevel": 16,
+      "defenceLevel": 19,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "magic",
+      "maxHit": 3,
+      "speedTicks": 4,
+      "aggressive": true,
+      "weakness": {
+        "element": "fire",
+        "percent": 100
+      }
+    },
+    {
+      "name": "Mudskipper",
+      "version": "Level 30",
+      "combat": 30,
+      "members": true,
+      "hitpoints": 20,
+      "attackLevel": 29,
+      "strengthLevel": 29,
+      "defenceLevel": 26,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "crush",
+      "maxHit": 4,
+      "speedTicks": 4,
+      "aggressive": false,
+      "weakness": {
+        "element": "earth",
+        "percent": 20
+      }
+    },
+    {
+      "name": "Mudskipper",
+      "version": "Level 31",
+      "combat": 31,
+      "members": true,
+      "hitpoints": 20,
+      "attackLevel": 30,
+      "strengthLevel": 30,
+      "defenceLevel": 29,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "crush",
+      "maxHit": 4,
+      "speedTicks": 4,
+      "aggressive": false,
+      "weakness": {
+        "element": "earth",
+        "percent": 20
+      }
+    },
+    {
+      "name": "Crab",
+      "version": "Level 21",
+      "combat": 21,
+      "members": true,
+      "hitpoints": 18,
+      "attackLevel": 17,
+      "strengthLevel": 17,
+      "defenceLevel": 22,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "crush",
+      "maxHit": 3,
+      "speedTicks": 4,
+      "aggressive": false,
+      "weakness": {
+        "element": "earth",
+        "percent": 20
+      }
+    },
+    {
+      "name": "Crab",
+      "version": "Level 23",
+      "combat": 23,
+      "members": true,
+      "hitpoints": 19,
+      "attackLevel": 19,
+      "strengthLevel": 20,
+      "defenceLevel": 26,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "crush",
+      "maxHit": 3,
+      "speedTicks": 4,
+      "aggressive": false,
+      "weakness": {
+        "element": "earth",
+        "percent": 20
+      }
+    },
+    {
       "name": "Cow",
       "version": "1",
       "combat": 2,
