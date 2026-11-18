@@ -286,6 +286,58 @@ const REVIEWED_FLOWS: Record<string, { revision: number; flow: NonNullable<Quest
     unknownItems: ['Generator crank', '5-gallon jug', '8-gallon jug', 'Old notes', 'Unknown fluid', 'Energy disk', "Dinh's hammer"],
     partialDelivery: false, fromStartOnly: true,
   } },
+  // Melina keeps the sapphire amulet; the spade and the ghostspeak amulet are kept, the key, journal, scroll and letter are quest items.
+  'Making History': { revision: 15315243, flow: {
+    consumes: [{ name: 'Sapphire amulet', count: 1 }], receives: [],
+    unknownItems: ['Ecto-token', 'Enchanted key', 'Chest', 'Journal', 'Scroll', 'Letter'],
+    partialDelivery: true, fromStartOnly: true,
+  } },
+  // The pot is filled with flour and kept; the thread, flypaper, prints and items of the suspects are quest items.
+  'Murder Mystery': { revision: 15365419, flow: {
+    consumes: [], receives: [],
+    unknownItems: ['Pungent pot', "Criminal's dagger", 'Flypaper', "Criminal's thread", 'Silver cup', 'Silver pot', 'Silver book', 'Silver bottle', 'Silver necklace', 'Silver needle', 'Killers print'],
+    partialDelivery: false, fromStartOnly: true,
+  } },
+  // The oak logs, wool and nails repair the foundry; the hammer and chisel are kept, the bars and the sword are the foundry's.
+  'Sleeping Giants': { revision: 15241064, flow: {
+    consumes: [{ name: 'Oak logs', count: 3 }, { name: 'Wool', count: 1 }, { name: 'Steel nails', count: 10 }], receives: [],
+    unknownItems: ['Preform', 'Bucket'],
+    partialDelivery: true, fromStartOnly: true,
+  } },
+  // One H.A.M. set is worn by the player, the other goes to Zanik (counted as used up); the lantern and pickaxe are kept.
+  'Death to the Dorgeshuun': { revision: 15396862, flow: {
+    consumes: ['Ham hood', 'Ham shirt', 'Ham robe', 'Ham gloves', 'Ham boots', 'Ham cloak', 'Ham logo'].map((name) => ({ name, count: 1 })), receives: [],
+    unknownItems: ['Zanik'],
+    uncertainReceipts: ['Trout'],
+    partialDelivery: false, fromStartOnly: true,
+  } },
+  // Coins, gold bar and death rune go to the guards, the bones to Toban, a rope to the tree and the potion parts into the ogre potion.
+  Watchtower: { revision: 15367228, flow: {
+    consumes: [{ name: 'Coins', count: 20 }, { name: 'Gold bar', count: 1 }, { name: 'Death rune', count: 1 }, { name: 'Dragon bones', count: 1 },
+      { name: 'Rope', count: 1 }, { name: 'Guam potion (unf)', count: 1 }, { name: 'Jangerberries', count: 1 }, { name: 'Bat bones', count: 1 }],
+    receives: [],
+    unknownItems: ['Fingernails', 'Ogre tooth', 'Relic part 1', 'Relic part 2', 'Relic part 3', 'Ogre relic', 'Rock cake', 'Skavid map', 'Cave nightshade', 'Magic ogre potion', 'Crystal'],
+    uncertainReceipts: ['Rope'],
+    partialDelivery: true, fromStartOnly: true,
+  } },
+  // Sandstone and granite become the statue, the logs, candle and coal go on the braziers, the bread to Pentyn and the runes into
+  // three spells; the chisel and tinderbox are kept, the spare granite piece too.
+  "Enakhra's Lament": { revision: 15404551, flow: {
+    consumes: [{ name: 'Sandstone (10kg)', count: 5 }, { name: 'Sandstone (2kg)', count: 1 }, { name: 'Granite (5kg)', count: 1 }, { name: 'Soft clay', count: 1 },
+      { name: 'Bread', count: 1 }, { name: 'Candle', count: 1 }, { name: 'Logs', count: 1 }, { name: 'Oak logs', count: 1 }, { name: 'Willow logs', count: 1 },
+      { name: 'Maple logs', count: 1 }, { name: 'Coal', count: 1 }, { name: 'Air rune', count: 7 }, { name: 'Fire rune', count: 4 }, { name: 'Earth rune', count: 2 },
+      { name: 'Chaos rune', count: 3 }],
+    receives: [],
+    unknownItems: ['Camel mould', 'Stone head', 'Base', 'Body', 'Statue', 'M sigil', 'Z sigil', 'K sigil', 'R sigil', 'Sandstone base', 'Sandstone body'],
+    partialDelivery: true, fromStartOnly: true,
+  } },
+  // The coal smelts the two elemental ores; the hammer and pickaxe are kept, the ore, bars, cogs, pipe and books are quest items.
+  'Elemental Workshop II': { revision: 15271178, flow: {
+    consumes: [{ name: 'Coal', count: 8 }], receives: [],
+    unknownItems: ['Battered key', 'Elemental ore', 'Elemental metal', 'Primed bar', 'Primed mind bar', 'Mind bar', 'Claw', 'Cog', 'Pipe', 'Beaten book', 'Slashed book'],
+    uncertainReceipts: ['Trout'],
+    partialDelivery: true, fromStartOnly: true,
+  } },
   'Ernest the Chicken': { revision: 15390916, flow: {
     // All puzzle parts are obtained within the manor; a spade is reused, not handed in.
     consumes: [], receives: [], unknownItems: ['Fish food', 'Poison', 'Poisoned fish food', 'Pressure gauge', 'Rubber tube', 'Oil can', 'Key'],
@@ -333,6 +385,15 @@ const REVIEWED_CLAUSES = new Set([
   '<ref>Entering the Mountain Camp initially requires 10 Agility.</ref>',
   'The ability to defeat a level 70 [[The Kendal|monster]] (can be [[safespot|safespotted]])',
   'The ability to defeat a level 112 [[Khazard warlord]]',
+  // Watchtower: Gorad is in the step foes and the combat ledger; the blue dragons of the enclave are walked past (ledger runPast).
+  'The ability to defeat a level 68 [[Ogre]] and run past level 111 [[Blue dragons]]',
+  // Watchtower: the route asks for Agility 25, above the trellis's 18.
+  '<ref name="Note">Climbing the trellis to begin the quest requires 18 Agility.</ref>',
+  // Enakhra's Lament: the route still reaches Firemaking 45 (the skill line), and the planned account stays on the standard spellbook.
+  '- bypassable {{Refn|Although Firemaking is listed as a requirement, it is only used during the quest to identify what item needs to go in what brazier. Investigating the braziers is not required, meaning that it is possible to just guess and check which item goes in what brazier, so the Firemaking level is not actually required.|group=q}}',
+  'Must be on the [[standard spellbook]]',
+  // Death to the Dorgeshuun: Sigmund is in the step foes and the combat ledger, fought in melee.
+  'The ability to defeat a level 50 enemy with [[Melee]] or [[Magic]]',
   'The ability to defeat a level 172 [[Black demon (The Grand Tree)|Black demon]] (safespottable for Ranged and Magic or melee using a [[halberd]]).',
   'Ability to kill a level 101 [[Tree spirit (Lost City)|Tree spirit]] with limited [[armour]] and [[weapons]].',
   'The ability to defeat a level 27 [[Delrith|demon]] aided by three level 20 [[Dark wizard]]s and two level 7 Dark wizards using the [[Silverlight]] in melee.',

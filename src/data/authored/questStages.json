@@ -51614,6 +51614,2828 @@
      ]
     }
    ]
+  },
+  "S9-35": {
+   "var": [
+    "varbit",
+    1383
+   ],
+   "route": [
+    {
+     "title": "Starting out",
+     "steps": [
+      "Walk to or use the necklace of passage to teleport to the outpost north-west of Ardougne.",
+      "Talk to Jorral. Dialogue: \"Tell me more.\", \"Ok, I'll make a stand for history!\"",
+      "Complete the next 3 segments in any order."
+     ]
+    },
+    {
+     "title": "Erin the silver merchant",
+     "steps": [
+      "Talk to the Silver merchant in the East Ardougne market. Dialogue: \"Ask about the outpost.\"",
+      "With the enchanted key in your inventory, dig with your spade to find the chest buried north of Castle Wars.",
+      "Open the chest with the enchanted key to get a journal."
+     ]
+    },
+    {
+     "title": "Droalak the Ghost",
+     "steps": [
+      "Equip your Ghostspeak amulet and talk to Droalak outside the Port Phasmatys general store.",
+      "In the building east of the general store, directly south of the pub, give Melina a strung sapphire amulet.",
+      "Talk to Droalak to receive a scroll."
+     ]
+    },
+    {
+     "title": "Dron the Warrior",
+     "steps": [
+      "Go to Rellekka and talk to Blanin east of the longhall.",
+      "Talk to Dron north of the longhall. Dialogue: \"I'm after important answers.\", \"Why, you're the famous warrior Dron!\" Answers:"
+     ]
+    },
+    {
+     "title": "Reporting back",
+     "steps": [
+      "Talk to Jorral, back at the outpost, with the scroll and journal.",
+      "Talk to King Lathas, located on the of the Ardougne Castle. Dialogue: \"F\"",
+      "Talk to Jorral, back at the outpost.",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Talk to Jorral at the outpost south of the Tree Gnome Stronghold. You can teleport there with a Necklace of Passage.",
+       "s": "Talk to Jorral at the outpost south of the Tree Gnome Stronghold.",
+       "k": "talkToJorral",
+       "at": [
+        2436,
+        3346,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3490
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 1,
+     "do": [
+      {
+       "t": "Talk to the Silver Merchant in the East Ardougne Market.",
+       "s": "Talk to the Silver Merchant in the East Ardougne Market.",
+       "k": "talkToSilverMerchant",
+       "at": [
+        2658,
+        3316,
+        0
+       ],
+       "hl": {
+        "npc": [
+         8722
+        ]
+       }
+      },
+      {
+       "t": "Dig at the marked spot north of Castle Wars.",
+       "s": "Dig at the marked spot north of Castle Wars.",
+       "k": "dig",
+       "at": [
+        2442,
+        3140,
+        0
+       ]
+      },
+      {
+       "t": "Use the enchanted key on the chest.",
+       "s": "Use the enchanted key on the chest.",
+       "k": "openChest"
+      },
+      {
+       "t": "Talk to Blanin in south east Rellekka.",
+       "s": "Talk to Blanin in south east Rellekka.",
+       "k": "talkToBlanin",
+       "at": [
+        2673,
+        3670,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3496
+        ]
+       }
+      },
+      {
+       "t": "Talk to Dron in north Rellekka.",
+       "s": "Talk to Dron in north Rellekka.",
+       "k": "talkToDron",
+       "at": [
+        2661,
+        3698,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3495
+        ]
+       }
+      },
+      {
+       "t": "Enter Port Phasmatys and talk to Droalak outside the general store.",
+       "s": "Enter Port Phasmatys and talk to Droalak outside the general store.",
+       "k": "talkToDroalak",
+       "at": [
+        3659,
+        3468,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3494
+        ]
+       }
+      },
+      {
+       "t": "Give Melina a sapphire amulet in the house north east of the general store.",
+       "s": "Give Melina a sapphire amulet north-east of the general store.",
+       "need": "Sapphire amulet",
+       "k": "talkToMelina",
+       "at": [
+        3674,
+        3479,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3492
+        ]
+       }
+      },
+      {
+       "t": "Return to Droalak outside the general store.",
+       "s": "Return to Droalak outside the general store.",
+       "k": "returnToDroalak",
+       "at": [
+        3659,
+        3468,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3494
+        ]
+       }
+      },
+      {
+       "t": "Return to Jorral north of West Ardougne with the scroll and journal.",
+       "s": "Return to Jorral north of West Ardougne with the scroll and journal.",
+       "k": "returnToJorral",
+       "at": [
+        2436,
+        3346,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3490
+        ]
+       }
+      },
+      {
+       "t": "Return to Jorral north of West Ardougne.",
+       "s": "Return to Jorral north of West Ardougne.",
+       "k": "continueTalkingToJorral",
+       "at": [
+        2436,
+        3346,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3490
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 2,
+     "do": [
+      {
+       "t": "Talk to King Lathas in East Ardougne castle.",
+       "s": "Talk to King Lathas in East Ardougne castle.",
+       "k": "goUpToLathas",
+       "at": [
+        2572,
+        3296,
+        0
+       ],
+       "hl": {
+        "obj": [
+         15645
+        ]
+       }
+      },
+      {
+       "t": "Talk to King Lathas in East Ardougne castle.",
+       "s": "Talk to King Lathas in East Ardougne castle.",
+       "k": "talkToLathas",
+       "at": [
+        2578,
+        3293,
+        1
+       ],
+       "hl": {
+        "npc": [
+         9005
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 3,
+     "do": [
+      {
+       "t": "Return to Jorral north of West Ardougne with the letter to finish the quest.",
+       "s": "Bring Jorral north of West Ardougne the letter to finish.",
+       "k": "finishQuest",
+       "at": [
+        2436,
+        3346,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3490
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  "S9-36": {
+   "var": [
+    "varp",
+    192
+   ],
+   "route": [
+    {
+     "title": "Walkthrough",
+     "steps": [
+      "Talk to the guard out front of Sinclair Mansion and agree to help. Dialogue: \"Sure, I'll help.\"",
+      "Go north-west and investigate the sacks in the shed, take 4 flypapers.",
+      "Go inside the mansion and take the pungent pot and criminal's dagger.",
+      "Investigate the smashed window on the eastern side for the criminal's thread.",
+      "Search the barrels in the bedroom owned by the following two suspects to get 2 silver items.",
+      "Go to the kitchen and fill your pot with flour from the barrel.",
+      "Use flour and flypaper to dust each silver item and the dagger.",
+      "Use the silver items' prints on the dagger's print until you get a match. Remember who it is.",
+      "Talk to Gossip outside the front gate of the mansion and ask who he thinks is responsible. Dialogue: \"Who do you think was responsible?\"",
+      "Talk to the poison salesman in the Seers' Village pub, ask who he sold poison to. (Select Murder Mystery quest) (Be sure to not select the Fremennik Trials option.) Dialogue: \"Who did you sell Poison to at the house?\"",
+      "Talk to the person whose prints matched, ask why they bought poison. Dialogue: \"Why'd you buy poison the other day?\"",
+      "Search the item they say they used the poison on.",
+      "Drop the silver necklace (if you took it from Anna's barrel) before talking to the guard if you want to keep it, you can't get it back afterward.",
+      "Talk to a guard. Dialogue: \"I know who did it!\"",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Talk to the Guard in the Sinclair Manor north of Camelot.",
+       "s": "Talk to the Guard in the Sinclair Manor north of Camelot.",
+       "k": "talkToGuard",
+       "at": [
+        2741,
+        3561,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4218
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 1,
+     "do": [
+      {
+       "t": "Search the window for a clothing thread. The colour of the thread will match the killer's trousers.",
+       "s": "Search the window for a thread matching the killer's trousers.",
+       "k": "searchWindowForThread",
+       "at": [
+        2748,
+        3577,
+        0
+       ],
+       "hl": {
+        "obj": [
+         26123
+        ]
+       }
+      },
+      {
+       "t": "Enter the mansion and pick up the pungent pot inside the east room.",
+       "s": "Enter the mansion and pick up the pungent pot inside the east room.",
+       "k": "pickUpPungentPot",
+       "at": [
+        2747,
+        3579,
+        0
+       ]
+      },
+      {
+       "t": "Pick up the criminal's dagger.",
+       "s": "Pick up the criminal's dagger.",
+       "k": "pickUpDagger",
+       "at": [
+        2746,
+        3578,
+        0
+       ]
+      },
+      {
+       "t": "Investigate the sacks in the shed for flypaper. Get 2 pieces.",
+       "s": "Investigate the sacks in the shed for flypaper. Get 2 pieces.",
+       "k": "collectTwoFlypaper",
+       "at": [
+        2731,
+        3582,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2663
+        ]
+       }
+      },
+      {
+       "t": "Search the suspect's barrel.",
+       "s": "Search the suspect's barrel.",
+       "k": "searchBarrelFallback"
+      },
+      {
+       "t": "Search Bob's barrel on the ground floor.",
+       "s": "Search Bob's barrel on the ground floor.",
+       "k": "searchBobsBarrel",
+       "at": [
+        2735,
+        3579,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2657
+        ]
+       }
+      },
+      {
+       "t": "Climb up the mansion staircase.",
+       "s": "Climb up the mansion staircase.",
+       "k": "goUpstairs",
+       "at": [
+        2736,
+        3581,
+        0
+       ],
+       "hl": {
+        "obj": [
+         25682
+        ]
+       }
+      },
+      {
+       "t": "Search Frank's barrel upstairs in the mansion.",
+       "s": "Search Frank's barrel upstairs.",
+       "k": "searchFranksBarrel",
+       "at": [
+        2747,
+        3577,
+        1
+       ],
+       "hl": {
+        "obj": [
+         2661
+        ]
+       }
+      },
+      {
+       "t": "Search David's barrel upstairs in the mansion.",
+       "s": "Search David's barrel upstairs.",
+       "k": "searchDavidsBarrel",
+       "at": [
+        2733,
+        3577,
+        1
+       ],
+       "hl": {
+        "obj": [
+         2659
+        ]
+       }
+      },
+      {
+       "t": "Search Carol's barrel upstairs in the mansion.",
+       "s": "Search Carol's barrel upstairs.",
+       "k": "searchCarolsBarrel",
+       "at": [
+        2733,
+        3580,
+        1
+       ],
+       "hl": {
+        "obj": [
+         2658
+        ]
+       }
+      },
+      {
+       "t": "Search Anna's barrel on the ground floor.",
+       "s": "Search Anna's barrel on the ground floor.",
+       "k": "searchAnnasBarrel",
+       "at": [
+        2733,
+        3575,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2656
+        ]
+       }
+      },
+      {
+       "t": "Search Elizabeth's barrel upstairs in the mansion.",
+       "s": "Search Elizabeth's barrel upstairs.",
+       "k": "searchElizabethsBarrel",
+       "at": [
+        2747,
+        3581,
+        1
+       ],
+       "hl": {
+        "obj": [
+         2660
+        ]
+       }
+      },
+      {
+       "t": "Fill the pot with flour from the barrel in the Sinclair Mansion kitchen.",
+       "s": "Fill the pot with flour from the mansion's flour barrel.",
+       "has": "Pot",
+       "k": "actuallyFillPotWithFlour",
+       "at": [
+        2733,
+        3582,
+        0
+       ],
+       "hl": {
+        "obj": [
+         26122
+        ]
+       }
+      },
+      {
+       "t": "Head downstairs to the ground floor.",
+       "s": "Head downstairs to the ground floor.",
+       "k": "goDownstairs",
+       "at": [
+        2736,
+        3581,
+        1
+       ],
+       "hl": {
+        "obj": [
+         25683
+        ]
+       }
+      },
+      {
+       "t": "Use the pot of flour on the Criminal's dagger.",
+       "s": "Use the pot of flour on the Criminal's dagger.",
+       "k": "useFlourOnDagger"
+      },
+      {
+       "t": "Use the flypaper on the dagger.",
+       "s": "Use the flypaper on the dagger.",
+       "k": "useFlypaperOnDagger"
+      },
+      {
+       "t": "Investigate the sacks in the shed for 1 flypaper.",
+       "s": "Investigate the sacks in the shed for 1 flypaper.",
+       "k": "collectFlypaper",
+       "at": [
+        2731,
+        3582,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2663
+        ]
+       }
+      },
+      {
+       "t": "Fill your pot with flour from the barrel in the mansion's kitchen.",
+       "s": "Fill your pot with flour from the barrel in the mansion's kitchen.",
+       "has": "Pot",
+       "k": "fillPotWithFlourForSilver",
+       "at": [
+        2733,
+        3582,
+        0
+       ],
+       "hl": {
+        "obj": [
+         26122
+        ]
+       }
+      },
+      {
+       "t": "Use flour on the suspect's item.",
+       "s": "Use flour on the suspect's item.",
+       "k": "useFlourFallback"
+      },
+      {
+       "t": "Use flour on the silver cup.",
+       "s": "Use flour on the silver cup.",
+       "k": "useFlourOnCup"
+      },
+      {
+       "t": "Use flour on the silver pot.",
+       "s": "Use flour on the silver pot.",
+       "k": "useFlourOnPot"
+      },
+      {
+       "t": "Use flour on the silver book.",
+       "s": "Use flour on the silver book.",
+       "k": "useFlourOnBook"
+      },
+      {
+       "t": "Use flour on the silver bottle.",
+       "s": "Use flour on the silver bottle.",
+       "k": "useFlourOnBottle"
+      },
+      {
+       "t": "Use flour on the silver necklace.",
+       "s": "Use flour on the silver necklace.",
+       "k": "useFlourOnNecklace"
+      },
+      {
+       "t": "Use flour on the silver needle.",
+       "s": "Use flour on the silver needle.",
+       "k": "useFlourOnNeedle"
+      },
+      {
+       "t": "Use flypaper on the suspect's item.",
+       "s": "Use flypaper on the suspect's item.",
+       "k": "useFlypaperFallback"
+      },
+      {
+       "t": "Use flypaper on the silver cup.",
+       "s": "Use flypaper on the silver cup.",
+       "k": "useFlypaperOnCup"
+      },
+      {
+       "t": "Use flypaper on the silver pot.",
+       "s": "Use flypaper on the silver pot.",
+       "k": "useFlypaperOnPot"
+      },
+      {
+       "t": "Use flypaper on the silver book.",
+       "s": "Use flypaper on the silver book.",
+       "k": "useFlypaperOnBook"
+      },
+      {
+       "t": "Use flypaper on the silver bottle.",
+       "s": "Use flypaper on the silver bottle.",
+       "k": "useFlypaperOnBottle"
+      },
+      {
+       "t": "Use flypaper on the silver necklace.",
+       "s": "Use flypaper on the silver necklace.",
+       "k": "useFlypaperOnNecklace"
+      },
+      {
+       "t": "Use flypaper on the silver needle.",
+       "s": "Use flypaper on the silver needle.",
+       "k": "useFlypaperOnNeedle"
+      },
+      {
+       "t": "Compare prints with the suspect.",
+       "s": "Compare prints with the suspect.",
+       "k": "comparePrintsFallback"
+      },
+      {
+       "t": "Use Frank's prints on the killer's print to compare them.",
+       "s": "Use Frank's prints on the killer's print to compare them.",
+       "k": "compareFrank"
+      },
+      {
+       "t": "Use Elizabeth's prints on the killer's print to compare them.",
+       "s": "Use Elizabeth's prints on the killer's print to compare them.",
+       "k": "compareElizabeth"
+      },
+      {
+       "t": "Use David's prints on the killer's print to compare them.",
+       "s": "Use David's prints on the killer's print to compare them.",
+       "k": "compareDavid"
+      },
+      {
+       "t": "Use Carol's prints on the killer's print to compare them.",
+       "s": "Use Carol's prints on the killer's print to compare them.",
+       "k": "compareCarol"
+      },
+      {
+       "t": "Use Bob's prints on the killer's print to compare them.",
+       "s": "Use Bob's prints on the killer's print to compare them.",
+       "k": "compareBob"
+      },
+      {
+       "t": "Use Anna's prints on the killer's print to compare them.",
+       "s": "Use Anna's prints on the killer's print to compare them.",
+       "k": "compareAnna"
+      },
+      {
+       "t": "Talk to Gossip, just south of the Sinclair Mansion.",
+       "s": "Talk to Gossip, just south of the Sinclair Mansion.",
+       "k": "talkToGossip",
+       "at": [
+        2741,
+        3557,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4219
+        ]
+       }
+      },
+      {
+       "t": "Talk to the Poison Salesman in the Seers' Village pub about his customers.",
+       "s": "Ask the Poison Salesman in the Seers' Village pub about his customers.",
+       "k": "talkToPoisonSalesman",
+       "at": [
+        2694,
+        3493,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4227
+        ]
+       }
+      },
+      {
+       "t": "Talk to the Poison Salesman in the Seers' Village pub about the pungent pot.",
+       "s": "Ask the Poison Salesman in the Seers' pub about the pungent pot.",
+       "k": "talkToPoisonSalesman2",
+       "at": [
+        2694,
+        3493,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4227
+        ]
+       }
+      },
+      {
+       "t": "Talk to the suspect.",
+       "s": "Talk to the suspect.",
+       "k": "talkToSuspectFallback"
+      },
+      {
+       "t": "Talk to Anna in the mansion about what she used the poison for. Make sure to finish the dialog.",
+       "s": "Ask Anna in the mansion what she used the poison for.",
+       "k": "talkToAnna",
+       "at": [
+        2734,
+        3575,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4220
+        ]
+       }
+      },
+      {
+       "t": "Talk to Bob south of the mansion about what he used the poison for. Make sure to finish the dialog.",
+       "s": "Ask Bob, south of the mansion, what he used the poison for.",
+       "k": "talkToBob",
+       "at": [
+        2748,
+        3559,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4221
+        ]
+       }
+      },
+      {
+       "t": "Talk to Frank in the mansion about what he used the poison for. Make sure to finish the dialog.",
+       "s": "Ask Frank in the mansion what he used the poison for.",
+       "k": "talkToFrank",
+       "at": [
+        2742,
+        3577,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4225
+        ]
+       }
+      },
+      {
+       "t": "Talk to David in the mansion about what he used the poison for. Make sure to finish the dialog.",
+       "s": "Ask David in the mansion what he used the poison for.",
+       "k": "talkToDavid",
+       "at": [
+        2739,
+        3581,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4223
+        ]
+       }
+      },
+      {
+       "t": "Talk to Carol upstairs in the mansion about what she used her poison for. Make sure to finish the dialog.",
+       "s": "Ask Carol upstairs what she used the poison for.",
+       "k": "talkToCarol",
+       "at": [
+        2734,
+        3581,
+        1
+       ],
+       "hl": {
+        "npc": [
+         4222
+        ]
+       }
+      },
+      {
+       "t": "Talk to Elizabeth upstairs in the mansion about what she used her poison for.",
+       "s": "Ask Elizabeth upstairs what she used the poison for.",
+       "k": "talkToElizabeth",
+       "at": [
+        2746,
+        3581,
+        1
+       ],
+       "hl": {
+        "npc": [
+         4224
+        ]
+       }
+      },
+      {
+       "t": "Disprove the suspect's alibi by checking the thing they claimed to clean.",
+       "s": "Check the thing the suspect claimed to clean to disprove the alibi.",
+       "k": "searchSuspectItemFallback"
+      },
+      {
+       "t": "Search the compost heap south west of the mansion. If a dialog box doesn't come up, go back to Anna to ask about poison, and COMPLETE THE DIALOG.",
+       "s": "Search the compost heap south-west of the mansion.",
+       "k": "searchAnna",
+       "at": [
+        2730,
+        3572,
+        0
+       ],
+       "hl": {
+        "obj": [
+         26120
+        ]
+       }
+      },
+      {
+       "t": "Search the beehive south west of the mansion. If a dialog box doesn't come up, go back to Bob to ask about poison, and COMPLETE THE DIALOG.",
+       "s": "Search the beehive south-west of the mansion.",
+       "k": "searchBob",
+       "at": [
+        2730,
+        3559,
+        0
+       ],
+       "hl": {
+        "obj": [
+         26121
+        ]
+       }
+      },
+      {
+       "t": "Search the family crest attached to the south side of the mansion to the east. If a dialog box doesn't come up, go back to Frank to ask about poison, and COMPLETE THE DIALOG.",
+       "s": "Search the family crest on the south side of the mansion.",
+       "k": "searchFrank",
+       "at": [
+        2746,
+        3573,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2655
+        ]
+       }
+      },
+      {
+       "t": "Search the spider's nest upstairs in the mansion to the south. If no dialog box comes up, ask David about the poison again and finish the dialog.",
+       "s": "Search the spider's nest upstairs, south side of the mansion.",
+       "k": "searchDavid",
+       "at": [
+        2740,
+        3574,
+        1
+       ],
+       "hl": {
+        "obj": [
+         26109
+        ]
+       }
+      },
+      {
+       "t": "Search the drain south of the mansion. If a dialog box doesn't come up, go back to Carol to ask about poison, and COMPLETE THE DIALOG.",
+       "s": "Search the drain south of the mansion.",
+       "k": "searchCarol",
+       "at": [
+        2736,
+        3573,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2652
+        ]
+       }
+      },
+      {
+       "t": "Search the fountain south east of the mansion. If a dialog box doesn't come up, go back to Elizabeth to ask about poison, and COMPLETE THE DIALOG.",
+       "s": "Search the fountain south-east of the mansion.",
+       "k": "searchElizabeth",
+       "at": [
+        2747,
+        3563,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2654
+        ]
+       }
+      },
+      {
+       "t": "Return to the guard outside the Sinclair Mansion and tell him your findings.",
+       "s": "Tell the guard outside the Sinclair Mansion your findings.",
+       "k": "finishQuest",
+       "at": [
+        2741,
+        3561,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4218
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  "S9-37": {
+   "var": [
+    "varbit",
+    13902
+   ],
+   "route": [
+    {
+     "title": "What is this? A workshop for giants?",
+     "steps": [
+      "Minigame Teleport to \"Giants' Foundry\"",
+      "Speak to Kovac (strike the Hill Giant) in the Giants' Plateau. Dialogue: \"Yes.\"",
+      "Once inside, repair the polishing wheel, grindstone, and trip hammer using the required items.",
+      "Speak to Kovac twice.",
+      "Search the crate for items.",
+      "Deposit all the items into the crucible (large bucket) hanging to the east by the bank. Different items are input separately."
+     ]
+    },
+    {
+     "title": "Make-A-Sword",
+     "steps": [
+      "Speak to Kovac to learn how to select the moulds (in red text).",
+      "Select the fitting mould Kovac described for the forte, blade and tip at the mould jig.",
+      "Speak to Kovac again. He will tell you to pour the metal.",
+      "Pour the metal from the crucible into the mould.",
+      "Get a bucket of water (grab a bucket from the pile of buckets and use it on the waterfall), and pour it on the sword. You can also use ice gloves for this step. Your hands must be free to pick up the preform.",
+      "Heat the preform to maximum by using it on the lava pool. The \"Heat-preform\" option will increase the heat by small increments, while the \"Dunk-preform\" option will heat it faster. The temperature should be red.",
+      "Hit the preform with the Trip Hammer repaired earlier, repeating until progress bar is onto the yellow section. Be sure to keep the temperature in the red while doing this, otherwise the quality of the sword will decrease. Using the Trip Hammer will cool the preform.",
+      "Cool the preform using the waterfall until its temperature is almost green. The \"Cool-preform\" option will cool the preform slowly, while the \"Quench-preform\" option cools is more quickly.",
+      "Use the preform on Grindstone repaired earlier, repeating until progress is onto green section. Be sure to watch the temperature as the Grindstone will heat the preform during use.",
+      "Cool the preform in the waterfall until its temperature is high green.",
+      "Use the preform on the Polishing Wheel, repeating until the sword is complete. The Polishing Wheel will cool the preform during use, so be sure to watch the temperature.",
+      "Speak to Kovac.",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Attempt to Strike the Hill Giant at the entrance of the cave to start the quest.",
+       "s": "Strike the Hill Giant at the cave entrance to start the quest.",
+       "k": "strikeHillGiant",
+       "at": [
+        3361,
+        3147,
+        0
+       ],
+       "hl": {
+        "npc": [
+         11467
+        ]
+       }
+      },
+      {
+       "t": "Take a hammer from the crate north of the Giants' Foundry.",
+       "s": "Take a hammer from the crate north of the Giants' Foundry.",
+       "has": "Hammer",
+       "k": "takeHammer",
+       "at": [
+        3350,
+        3162,
+        0
+       ]
+      },
+      {
+       "t": "Go to the Desert Plateau east of Al Kharid to start the quest. Minigame teleport to Giant's Foundry.",
+       "s": "Go to the Desert Plateau east of Al Kharid (Giants' Foundry teleport).",
+       "k": "goToDesertPlateau",
+       "at": [
+        3362,
+        3148,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "at": 5,
+     "do": [
+      {
+       "t": "Speak to Kovac.",
+       "s": "Speak to Kovac.",
+       "k": "speakToKovac",
+       "at": [
+        3361,
+        3147,
+        0
+       ],
+       "hl": {
+        "npc": [
+         11468
+        ]
+       }
+      },
+      {
+       "t": "Go to the Desert Plateau east of Al Kharid to start the quest. Minigame teleport to Giant's Foundry.",
+       "s": "Go to the Desert Plateau east of Al Kharid (Giants' Foundry teleport).",
+       "k": "goToDesertPlateau",
+       "at": [
+        3362,
+        3148,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "at": 10,
+     "do": [
+      {
+       "t": "Speak to Kovac to continue.",
+       "s": "Speak to Kovac to continue.",
+       "k": "speakToKovacAfterRepairs",
+       "hl": {
+        "npc": [
+         11468
+        ]
+       }
+      },
+      {
+       "t": "Fix the Broken trip hammer.",
+       "s": "Fix the Broken trip hammer.",
+       "k": "fixHammer",
+       "at": [
+        3364,
+        11497,
+        0
+       ],
+       "hl": {
+        "obj": [
+         44773
+        ]
+       }
+      },
+      {
+       "t": "Fix the Broken grindstone.",
+       "s": "Fix the Broken grindstone.",
+       "k": "fixGrindstone",
+       "at": [
+        3362,
+        11492,
+        0
+       ],
+       "hl": {
+        "obj": [
+         44774
+        ]
+       }
+      },
+      {
+       "t": "Fix the Broken polishing wheel.",
+       "s": "Fix the Broken polishing wheel.",
+       "k": "fixPolishingStone",
+       "at": [
+        3363,
+        11485,
+        0
+       ],
+       "hl": {
+        "obj": [
+         44775
+        ]
+       }
+      },
+      {
+       "t": "Enter the Giants' Foundry.",
+       "s": "Enter the Giants' Foundry.",
+       "k": "enterFoundry",
+       "at": [
+        3361,
+        3150,
+        0
+       ],
+       "hl": {
+        "obj": [
+         44635
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 15,
+     "do": [
+      {
+       "t": "Speak to Kovac to continue.",
+       "s": "Speak to Kovac to continue.",
+       "k": "speakToKovacAfterRepairs",
+       "hl": {
+        "npc": [
+         11468
+        ]
+       }
+      },
+      {
+       "t": "Fix the Broken trip hammer.",
+       "s": "Fix the Broken trip hammer.",
+       "k": "fixHammer",
+       "at": [
+        3364,
+        11497,
+        0
+       ],
+       "hl": {
+        "obj": [
+         44773
+        ]
+       }
+      },
+      {
+       "t": "Fix the Broken grindstone.",
+       "s": "Fix the Broken grindstone.",
+       "k": "fixGrindstone",
+       "at": [
+        3362,
+        11492,
+        0
+       ],
+       "hl": {
+        "obj": [
+         44774
+        ]
+       }
+      },
+      {
+       "t": "Fix the Broken polishing wheel.",
+       "s": "Fix the Broken polishing wheel.",
+       "k": "fixPolishingStone",
+       "at": [
+        3363,
+        11485,
+        0
+       ],
+       "hl": {
+        "obj": [
+         44775
+        ]
+       }
+      },
+      {
+       "t": "Enter the Giants' Foundry.",
+       "s": "Enter the Giants' Foundry.",
+       "k": "enterFoundry",
+       "at": [
+        3361,
+        3150,
+        0
+       ],
+       "hl": {
+        "obj": [
+         44635
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 20,
+     "do": [
+      {
+       "t": "Speak to Kovac to continue.",
+       "s": "Speak to Kovac to continue.",
+       "k": "speakToKovacAfterRepairs",
+       "hl": {
+        "npc": [
+         11468
+        ]
+       }
+      },
+      {
+       "t": "Enter the Giants' Foundry.",
+       "s": "Enter the Giants' Foundry.",
+       "k": "enterFoundry",
+       "at": [
+        3361,
+        3150,
+        0
+       ],
+       "hl": {
+        "obj": [
+         44635
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 25,
+     "do": [
+      {
+       "t": "Give the finished sword to Kovac to complete the quest.",
+       "s": "Give the finished sword to Kovac to complete the quest.",
+       "k": "handInPreform",
+       "hl": {
+        "npc": [
+         11470
+        ]
+       }
+      },
+      {
+       "t": "Dunk the preform in the lava pool until it's at max heat.",
+       "s": "Dunk the preform in the lava pool until it's at max heat.",
+       "k": "dunkPreform",
+       "at": [
+        3372,
+        11497,
+        0
+       ],
+       "hl": {
+        "obj": [
+         44631
+        ]
+       }
+      },
+      {
+       "t": "Use the trip hammer while the heat bar is in the red, and re-heat it in the lava whenever it's close to yellow.",
+       "s": "Use the trip hammer in the red heat; reheat in the lava near yellow.",
+       "k": "hitPreformWhileRed",
+       "at": [
+        3364,
+        11497,
+        0
+       ],
+       "hl": {
+        "obj": [
+         44619
+        ]
+       }
+      },
+      {
+       "t": "Grindstone the preform whilst in the yellow heat section.",
+       "s": "Grindstone the preform whilst in the yellow heat section.",
+       "k": "grindstonePreform",
+       "at": [
+        3362,
+        11492,
+        0
+       ],
+       "hl": {
+        "obj": [
+         44620
+        ]
+       }
+      },
+      {
+       "t": "Cool the preform to the lower range of the yellow heat section on the waterfall.",
+       "s": "Cool the preform on the waterfall to the low yellow heat.",
+       "k": "coolPreformToGrindstone",
+       "hl": {
+        "obj": [
+         44632
+        ]
+       }
+      },
+      {
+       "t": "Dunk the preform in the lava pool until it's at the bottom of the yellow heat section.",
+       "s": "Dunk the preform in the lava up to the bottom of the yellow heat.",
+       "k": "dunkPreformToGrindstone",
+       "at": [
+        3372,
+        11497,
+        0
+       ],
+       "hl": {
+        "obj": [
+         44631
+        ]
+       }
+      },
+      {
+       "t": "Use the polishing wheel whilst in the green heat range, heating it in the lava when needed.",
+       "s": "Use the polishing wheel in the green heat; reheat in the lava.",
+       "k": "polishPreform",
+       "at": [
+        3363,
+        11485,
+        0
+       ],
+       "hl": {
+        "obj": [
+         44621
+        ]
+       }
+      },
+      {
+       "t": "Cool the preform to the top of the range of the green heat section on the waterfall.",
+       "s": "Cool the preform on the waterfall to the top of the green heat.",
+       "k": "coolPreformToPolish",
+       "hl": {
+        "obj": [
+         44632
+        ]
+       }
+      },
+      {
+       "t": "Dunk the preform in the lava pool until it's at the top of the green heat section.",
+       "s": "Dunk the preform in the lava up to the top of the green heat.",
+       "k": "heatPreformToPolish",
+       "at": [
+        3372,
+        11497,
+        0
+       ],
+       "hl": {
+        "obj": [
+         44631
+        ]
+       }
+      },
+      {
+       "t": "Get your preform from the preform storage in the north of the room.",
+       "s": "Get your preform from the preform storage in the north of the room.",
+       "k": "getPreform",
+       "at": [
+        3369,
+        11501,
+        0
+       ],
+       "hl": {
+        "obj": [
+         44778
+        ]
+       }
+      },
+      {
+       "t": "Take a Bucket from the Pile of Buckets",
+       "s": "Take a Bucket from the Pile of Buckets",
+       "k": "takeBucket",
+       "hl": {
+        "obj": [
+         33309
+        ]
+       }
+      },
+      {
+       "t": "Fill the bucket with water by using it on the Waterfall.",
+       "s": "Fill the bucket with water by using it on the Waterfall.",
+       "k": "fillBucketWaterfall",
+       "hl": {
+        "obj": [
+         44632
+        ]
+       }
+      },
+      {
+       "t": "Pick up the sword from the mould with a bucket of water or ice gloves equipped.",
+       "s": "Pick the sword from the mould with a bucket of water or ice gloves.",
+       "k": "coolDownSword",
+       "hl": {
+        "obj": [
+         44777
+        ]
+       }
+      },
+      {
+       "t": "Pour the full Crucible into the mould.",
+       "s": "Pour the full Crucible into the mould.",
+       "k": "pourMetal",
+       "hl": {
+        "obj": [
+         44776
+        ]
+       }
+      },
+      {
+       "t": "Speak to Kovac about pouring the metal.",
+       "s": "Speak to Kovac about pouring the metal.",
+       "k": "talkToKovakAfterMould",
+       "hl": {
+        "npc": [
+         11470
+        ]
+       }
+      },
+      {
+       "t": "Select the mould for the forte, blade and tip.",
+       "s": "Select the mould for the forte, blade and tip.",
+       "k": "interactWithMould",
+       "hl": {
+        "obj": [
+         44777
+        ]
+       }
+      },
+      {
+       "t": "Set the Mould.",
+       "s": "Set the Mould.",
+       "k": "setMould"
+      },
+      {
+       "t": "Select the Tips tab.",
+       "s": "Select the Tips tab.",
+       "k": "selectTipsTab"
+      },
+      {
+       "t": "Select the Tip that matches your commission best.",
+       "s": "Select the Tip that matches your commission best.",
+       "k": "selectTip"
+      },
+      {
+       "t": "Select the Blades tab.",
+       "s": "Select the Blades tab.",
+       "k": "selectBladesTab"
+      },
+      {
+       "t": "Select the Blade that matches your commission best.",
+       "s": "Select the Blade that matches your commission best.",
+       "k": "selectBlade"
+      },
+      {
+       "t": "Select the Forte tab.",
+       "s": "Select the Forte tab.",
+       "k": "selectForteTab"
+      },
+      {
+       "t": "Select the Forte that matches your commission best.",
+       "s": "Select the Forte that matches your commission best.",
+       "k": "selectForte"
+      },
+      {
+       "t": "Speak to Kovac about the mould.",
+       "s": "Speak to Kovac about the mould.",
+       "k": "speakToKovacAboutMould",
+       "hl": {
+        "npc": [
+         11470
+        ]
+       }
+      },
+      {
+       "t": "Fill the Crucible with items & bars until it is full.",
+       "s": "Fill the Crucible with items & bars until it is full.",
+       "k": "fillCrucible",
+       "hl": {
+        "obj": [
+         44776
+        ]
+       }
+      },
+      {
+       "t": "Take some bars & weapons from the Crate.",
+       "s": "Take some bars & weapons from the Crate.",
+       "k": "searchCrate",
+       "at": [
+        3370,
+        11483,
+        0
+       ],
+       "hl": {
+        "obj": [
+         44779
+        ]
+       }
+      },
+      {
+       "t": "Speak to Kovac for a commission.",
+       "s": "Speak to Kovac for a commission.",
+       "k": "speakToKovacContinue",
+       "hl": {
+        "npc": [
+         11470
+        ]
+       }
+      },
+      {
+       "t": "Enter the Giants' Foundry again.",
+       "s": "Enter the Giants' Foundry again.",
+       "k": "enterFoundryToMakeWeapon",
+       "at": [
+        3361,
+        3150,
+        0
+       ],
+       "hl": {
+        "obj": [
+         44635
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  "S9-38": {
+   "var": [
+    "varbit",
+    2258
+   ],
+   "route": [
+    {
+     "title": "Walkthrough",
+     "steps": [
+      "Follow Kazgar, who is through the hole in the wall under Lumbridge kitchen",
+      "Talk to Mistag at the Dorgeshuun mines to start the quest. Dialogue: \"What is this favour?\", \"Yes.\"",
+      "Bring two sets of H.A.M. robes to Zanik in Lumbridge cellar. (Can be purchased from the G.E.) Dialogue: \"Yes, I'm [player name]!\", \"Yes, I have two sets of robes!\"",
+      "Zanik will follow you, if you lose her go back to the cellar. Talk to the townspeople with her following.",
+      "# Talk to the Cook",
+      "# Talk to the Duke",
+      "# Talk to Hans",
+      "# Talk to any Man or Woman (Zanik must engage in the conversation. Try another if she does not.)",
+      "# Talk to Bob",
+      "# Talk to Father Aereck",
+      "# Talk to Lumbridge Guide",
+      "# Walk near a goblin. Zanik will talk to one.",
+      "# Talk to the shopkeeper",
+      "Ask Zanik, \"Have you seen enough of Lumbridge yet?\" Dialogue: \"Have you seen enough of Lumbridge yet?\", \"Yes\"",
+      "Put on your set of H.A.M. robes, and go to the H.A.M. Hideout (west of the general store) and pick the lock to the entrance trapdoor.",
+      "Talk to Johanhus Ulsbrecht south-east of the stage. Dialogue: \"Are you planning to do anything about the cave goblins?\", \"That's good.\"",
+      "Wander around the south of the stage, Zanik will spot a trapdoor.",
+      "Pick the trapdoor and go down. You'll need Zanik to kill the guards in this room to continue:",
+      "#Walk west past the first guard and talk to him, then Zanik will shoot him.",
+      "#Squeeze through the crack in the wall. Wait for the guard in the central corridor to walk by, then squeeze through the next crack in the wall. Run west behind the guard by the door and talk to him, then Zanik will shoot him.",
+      "#When the guard in the corridor starts walking east, talk to Zanik and say \"Now!\", and Zanik will snipe him.",
+      "#Move to the east side of the central corridor but stop with Zanik as far east as possible without joining the eastern corridor (this can be easily done by moving into that square and then walking one square west but be careful not to walk into the Eastern corridor). Talk to Zanik again and tell her to wait. Then, run west, south then east to the end of the corridor So the north eastern guard sees you and walks towards you. Zanik will shoot him as he passes the central corridor.",
+      "#For the final guard, again position Zanik as far north on as you can without the guard seeing you. Tell her to wait here and then head to the opposite position (top of the east/west corridors). Walk northward, causing the guard to walk towards you and Zanik will shoot him.",
+      "Listen at the door. A senior guard will appear and arrest you.",
+      "Pick the lock to escape the cell, then climb up the ladder and leave the hideout to find Zanik, dead. Take her body.",
+      "Go to Juna in the Chasm of Tears.",
+      "Talk to Juna and collect 20 Tears of Guthix to start the cutscene. Remember to have both hands free. Dialogue: \"Yes.\"",
+      "With your full H.A.M. robes and gear for the fight, return to the castle cellar and talk to Zanik. Dialogue: \"Let's go!\"",
+      "Go to the chicken farm near the water wheel (File:Dairy churn icon.png icon on the east side of the river) and go through the southern gate.",
+      "With both hands free, search one of the southern empty crates and Zanik will hide in it. Dialogue: \"I don't know, what are you thinking?\", \"Good idea.\"",
+      "While wearing the full H.A.M. robes, climb down the nearby trapdoor, and head to the western room. You will see Sigmund (level 50) and three Senior Guards (level 22).",
+      "Kill the guards first, then Sigmund. He will use protection prayers, but will use only protect from missiles in the second phase. You can safespot the guards using Zanik, and you can safespot Sigmund using the boxes. Make sure Zanik hits Sigmund before you do. This way, you will be able to damage him.",
+      "Smash the nearby drilling machine, then head down the southern tunnel to the exit. A cutscene will appear.",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Enter the Lumbridge Castle basement.",
+       "s": "Enter the Lumbridge Castle basement.",
+       "k": "goDownIntoBasement",
+       "at": [
+        3209,
+        3216,
+        0
+       ],
+       "hl": {
+        "obj": [
+         14880
+        ]
+       }
+      },
+      {
+       "t": "Go down the staircase.",
+       "s": "Go down the staircase.",
+       "k": "goDownFromF1",
+       "at": [
+        3205,
+        3208,
+        1
+       ],
+       "hl": {
+        "obj": [
+         16672
+        ]
+       }
+      },
+      {
+       "t": "Go downstairs.",
+       "s": "Go downstairs.",
+       "k": "goDownFromF2",
+       "at": [
+        3205,
+        3208,
+        2
+       ],
+       "hl": {
+        "obj": [
+         16673
+        ]
+       }
+      },
+      {
+       "t": "Climb through the hole in the Lumbridge cellar wall.",
+       "s": "Climb through the hole in the Lumbridge cellar wall.",
+       "k": "climbThroughHole",
+       "at": [
+        3219,
+        9618,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6898
+        ]
+       }
+      },
+      {
+       "t": "Travel with Kazgar to shortcut to Mistag.",
+       "s": "Travel with Kazgar to shortcut to Mistag.",
+       "k": "talkToKazgar",
+       "at": [
+        3230,
+        9610,
+        0
+       ],
+       "hl": {
+        "npc": [
+         7300
+        ]
+       }
+      },
+      {
+       "t": "Talk to Mistag in the Dorgesh-Kaan mines.",
+       "s": "Talk to Mistag in the Dorgesh-Kaan mines.",
+       "k": "talkToMistag",
+       "at": [
+        3319,
+        9615,
+        0
+       ],
+       "hl": {
+        "npc": [
+         7298
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 1,
+     "do": [
+      {
+       "t": "Enter the Lumbridge Castle basement.",
+       "s": "Enter the Lumbridge Castle basement.",
+       "k": "goDownIntoBasement",
+       "at": [
+        3209,
+        3216,
+        0
+       ],
+       "hl": {
+        "obj": [
+         14880
+        ]
+       }
+      },
+      {
+       "t": "Go down the staircase.",
+       "s": "Go down the staircase.",
+       "k": "goDownFromF1",
+       "at": [
+        3205,
+        3208,
+        1
+       ],
+       "hl": {
+        "obj": [
+         16672
+        ]
+       }
+      },
+      {
+       "t": "Go downstairs.",
+       "s": "Go downstairs.",
+       "k": "goDownFromF2",
+       "at": [
+        3205,
+        3208,
+        2
+       ],
+       "hl": {
+        "obj": [
+         16673
+        ]
+       }
+      },
+      {
+       "t": "Talk to Zanik in the Lumbridge cellar.",
+       "s": "Talk to Zanik in the Lumbridge cellar.",
+       "k": "talkToZanik",
+       "at": [
+        3212,
+        9620,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4506
+        ]
+       }
+      },
+      {
+       "t": "Climb through the hole in the Lumbridge cellar wall.",
+       "s": "Climb through the hole in the Lumbridge cellar wall.",
+       "k": "climbThroughHole",
+       "at": [
+        3219,
+        9618,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6898
+        ]
+       }
+      },
+      {
+       "t": "Travel with Mistag back to Lumbridge.",
+       "s": "Travel with Mistag back to Lumbridge.",
+       "k": "talkToMistagToTravel",
+       "at": [
+        3319,
+        9615,
+        0
+       ],
+       "hl": {
+        "npc": [
+         7298
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 2,
+     "do": [
+      {
+       "t": "Enter the Lumbridge Castle basement.",
+       "s": "Enter the Lumbridge Castle basement.",
+       "k": "goDownIntoBasement",
+       "at": [
+        3209,
+        3216,
+        0
+       ],
+       "hl": {
+        "obj": [
+         14880
+        ]
+       }
+      },
+      {
+       "t": "Go down the staircase.",
+       "s": "Go down the staircase.",
+       "k": "goDownFromF1",
+       "at": [
+        3205,
+        3208,
+        1
+       ],
+       "hl": {
+        "obj": [
+         16672
+        ]
+       }
+      },
+      {
+       "t": "Go downstairs.",
+       "s": "Go downstairs.",
+       "k": "goDownFromF2",
+       "at": [
+        3205,
+        3208,
+        2
+       ],
+       "hl": {
+        "obj": [
+         16673
+        ]
+       }
+      },
+      {
+       "t": "Talk to Zanik in the Lumbridge cellar.",
+       "s": "Talk to Zanik in the Lumbridge cellar.",
+       "k": "talkToZanik",
+       "at": [
+        3212,
+        9620,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4506
+        ]
+       }
+      },
+      {
+       "t": "Climb through the hole in the Lumbridge cellar wall.",
+       "s": "Climb through the hole in the Lumbridge cellar wall.",
+       "k": "climbThroughHole",
+       "at": [
+        3219,
+        9618,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6898
+        ]
+       }
+      },
+      {
+       "t": "Travel with Mistag back to Lumbridge.",
+       "s": "Travel with Mistag back to Lumbridge.",
+       "k": "talkToMistagToTravel",
+       "at": [
+        3319,
+        9615,
+        0
+       ],
+       "hl": {
+        "npc": [
+         7298
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 3,
+     "do": [
+      {
+       "t": "Enter the Lumbridge Castle basement.",
+       "s": "Enter the Lumbridge Castle basement.",
+       "k": "goDownIntoBasement",
+       "at": [
+        3209,
+        3216,
+        0
+       ],
+       "hl": {
+        "obj": [
+         14880
+        ]
+       }
+      },
+      {
+       "t": "Go down the staircase.",
+       "s": "Go down the staircase.",
+       "k": "goDownFromF1",
+       "at": [
+        3205,
+        3208,
+        1
+       ],
+       "hl": {
+        "obj": [
+         16672
+        ]
+       }
+      },
+      {
+       "t": "Go downstairs.",
+       "s": "Go downstairs.",
+       "k": "goDownFromF2",
+       "at": [
+        3205,
+        3208,
+        2
+       ],
+       "hl": {
+        "obj": [
+         16673
+        ]
+       }
+      },
+      {
+       "t": "Talk to Zanik in the Lumbridge cellar.",
+       "s": "Talk to Zanik in the Lumbridge cellar.",
+       "k": "talkToZanik",
+       "at": [
+        3212,
+        9620,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4506
+        ]
+       }
+      },
+      {
+       "t": "Go up to the first floor of Lumbridge Castle.",
+       "s": "Go up to the first floor of Lumbridge Castle.",
+       "k": "goUpToF1",
+       "at": [
+        3205,
+        3208,
+        0
+       ],
+       "hl": {
+        "obj": [
+         16671
+        ]
+       }
+      },
+      {
+       "t": "Show Zanik the Duke of Lumbridge on the castle's first floor.",
+       "s": "Show Zanik the Duke of Lumbridge on the castle's first floor.",
+       "k": "talkToDuke",
+       "at": [
+        3210,
+        3222,
+        1
+       ],
+       "hl": {
+        "npc": [
+         815
+        ]
+       }
+      },
+      {
+       "t": "Take Zanik outside Lumbridge Castle.",
+       "s": "Take Zanik outside Lumbridge Castle.",
+       "k": "goOutside",
+       "at": [
+        3217,
+        3219,
+        0
+       ]
+      },
+      {
+       "t": "Go up to the surface.",
+       "s": "Go up to the surface.",
+       "k": "goUpFromBasement",
+       "at": [
+        3209,
+        9616,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17385
+        ]
+       }
+      },
+      {
+       "t": "Show Zanik a citizen of Lumbridge near the castle.",
+       "s": "Show Zanik a citizen of Lumbridge near the castle.",
+       "k": "talkToWoman",
+       "at": [
+        3224,
+        3218,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1119
+        ]
+       }
+      },
+      {
+       "t": "Show Zanik Father Aereck in the Lumbridge church.",
+       "s": "Show Zanik Father Aereck in the Lumbridge church.",
+       "k": "talkToAereck",
+       "at": [
+        3244,
+        3210,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2812
+        ]
+       }
+      },
+      {
+       "t": "Take Zanik to the goblins north-east of Lumbridge Castle.",
+       "s": "Take Zanik to the goblins north-east of Lumbridge Castle.",
+       "k": "approachGoblins",
+       "at": [
+        3247,
+        3235,
+        0
+       ]
+      },
+      {
+       "t": "Show Zanik the Lumbridge general store keeper.",
+       "s": "Show Zanik the Lumbridge general store keeper.",
+       "k": "talkToShopkeeper",
+       "at": [
+        3211,
+        3247,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2813
+        ]
+       }
+      },
+      {
+       "t": "Talk to Zanik about her head sign.",
+       "s": "Talk to Zanik about her head sign.",
+       "k": "talkToZanikAboutOrigin",
+       "hl": {
+        "npc": [
+         4508
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 4,
+     "do": [
+      {
+       "t": "Enter the Lumbridge Castle basement.",
+       "s": "Enter the Lumbridge Castle basement.",
+       "k": "goDownIntoBasement",
+       "at": [
+        3209,
+        3216,
+        0
+       ],
+       "hl": {
+        "obj": [
+         14880
+        ]
+       }
+      },
+      {
+       "t": "Go down the staircase.",
+       "s": "Go down the staircase.",
+       "k": "goDownFromF1",
+       "at": [
+        3205,
+        3208,
+        1
+       ],
+       "hl": {
+        "obj": [
+         16672
+        ]
+       }
+      },
+      {
+       "t": "Go downstairs.",
+       "s": "Go downstairs.",
+       "k": "goDownFromF2",
+       "at": [
+        3205,
+        3208,
+        2
+       ],
+       "hl": {
+        "obj": [
+         16673
+        ]
+       }
+      },
+      {
+       "t": "Talk to Zanik in the Lumbridge cellar.",
+       "s": "Talk to Zanik in the Lumbridge cellar.",
+       "k": "talkToZanik",
+       "at": [
+        3212,
+        9620,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4506
+        ]
+       }
+      },
+      {
+       "t": "Enter the H.A.M. hideout trapdoor north-west of Lumbridge.",
+       "s": "Enter the H.A.M. hideout trapdoor north-west of Lumbridge.",
+       "k": "enterHamLair",
+       "at": [
+        3166,
+        3252,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5492
+        ]
+       }
+      },
+      {
+       "t": "Go up to the surface.",
+       "s": "Go up to the surface.",
+       "k": "goUpFromBasement",
+       "at": [
+        3209,
+        9616,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17385
+        ]
+       }
+      },
+      {
+       "t": "Talk to Johanhus in the south east of the base.",
+       "s": "Talk to Johanhus in the south east of the base.",
+       "k": "talkToJohanhus",
+       "at": [
+        3173,
+        9619,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2535
+        ]
+       }
+      },
+      {
+       "t": "Go stand at the south of the stage until Zanik talks about the speaker. Don't skip the dialog.",
+       "s": "Stand south of the stage until Zanik talks about the speaker.",
+       "k": "listenToSpeaker",
+       "at": [
+        3166,
+        9623,
+        0
+       ]
+      },
+      {
+       "t": "Go stand next to the rubble south of the stage until Zanik notices it.",
+       "s": "Go stand next to the rubble south of the stage until Zanik notices it.",
+       "k": "standNearTrapdoor",
+       "at": [
+        3166,
+        9623,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "at": 5,
+     "do": [
+      {
+       "t": "Enter the Lumbridge Castle basement.",
+       "s": "Enter the Lumbridge Castle basement.",
+       "k": "goDownIntoBasement",
+       "at": [
+        3209,
+        3216,
+        0
+       ],
+       "hl": {
+        "obj": [
+         14880
+        ]
+       }
+      },
+      {
+       "t": "Go down the staircase.",
+       "s": "Go down the staircase.",
+       "k": "goDownFromF1",
+       "at": [
+        3205,
+        3208,
+        1
+       ],
+       "hl": {
+        "obj": [
+         16672
+        ]
+       }
+      },
+      {
+       "t": "Go downstairs.",
+       "s": "Go downstairs.",
+       "k": "goDownFromF2",
+       "at": [
+        3205,
+        3208,
+        2
+       ],
+       "hl": {
+        "obj": [
+         16673
+        ]
+       }
+      },
+      {
+       "t": "Talk to Zanik in the Lumbridge cellar.",
+       "s": "Talk to Zanik in the Lumbridge cellar.",
+       "k": "talkToZanik",
+       "at": [
+        3212,
+        9620,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4506
+        ]
+       }
+      },
+      {
+       "t": "Enter the H.A.M. hideout trapdoor north-west of Lumbridge.",
+       "s": "Enter the H.A.M. hideout trapdoor north-west of Lumbridge.",
+       "k": "enterHamLair",
+       "at": [
+        3166,
+        3252,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5492
+        ]
+       }
+      },
+      {
+       "t": "Go up to the surface.",
+       "s": "Go up to the surface.",
+       "k": "goUpFromBasement",
+       "at": [
+        3209,
+        9616,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17385
+        ]
+       }
+      },
+      {
+       "t": "Picklock the trapdoor south of the stage and go down it.",
+       "s": "Picklock the trapdoor south of the stage and go down it.",
+       "k": "goDownTrapdoor",
+       "at": [
+        3166,
+        9622,
+        0
+       ],
+       "hl": {
+        "obj": [
+         15766
+        ]
+       }
+      },
+      {
+       "t": "Stand behind the guard and talk to them so they turn their back to Zanik.",
+       "s": "Stand behind the guard and talk so they turn their back to Zanik.",
+       "k": "standBehindGuard1",
+       "at": [
+        2569,
+        5189,
+        0
+       ]
+      },
+      {
+       "t": "Talk to them so they turn their back to Zanik.",
+       "s": "Talk to them so they turn their back to Zanik.",
+       "k": "talkToGuard1",
+       "at": [
+        2570,
+        5189,
+        0
+       ]
+      },
+      {
+       "t": "Go through the nearby crack, then out the other side. Talk to the second guard to turn them around so Zanik can kill them.",
+       "s": "Through the crack, talk to the second guard so Zanik can kill them.",
+       "k": "talkToGuard2",
+       "at": [
+        2566,
+        5192,
+        0
+       ]
+      },
+      {
+       "t": "Sneak your way to the end of the secret area.",
+       "s": "Sneak your way to the end of the secret area.",
+       "k": "tellZanikToKillGuard3"
+      },
+      {
+       "t": "Stand near to the next guard, then tell Zanik to wait there.",
+       "s": "Stand near to the next guard, then tell Zanik to wait there.",
+       "k": "standNearGuard4",
+       "at": [
+        2576,
+        5195,
+        0
+       ]
+      },
+      {
+       "t": "Sneak your way to the end of the secret area.",
+       "s": "Sneak your way to the end of the secret area.",
+       "k": "tellZanikToWaitForGuard4"
+      },
+      {
+       "t": "Run east then south to lure the guard past Zanik.",
+       "s": "Run east then south to lure the guard past Zanik.",
+       "k": "runSouthToLureGuard4",
+       "at": [
+        2577,
+        5191,
+        0
+       ]
+      },
+      {
+       "t": "Stand in the north east, just out of sight of the last guard, and tell Zanik to wait there.",
+       "s": "Stand north-east, out of the last guard's sight; tell Zanik to wait.",
+       "k": "standNearGuard5",
+       "at": [
+        2577,
+        5200,
+        0
+       ]
+      },
+      {
+       "t": "Sneak your way to the end of the secret area.",
+       "s": "Sneak your way to the end of the secret area.",
+       "k": "tellZanikToWaitForGuard5"
+      },
+      {
+       "t": "Approach the final guard from the west so Zanik can kill them.",
+       "s": "Approach the final guard from the west so Zanik can kill them.",
+       "k": "lureGuard5",
+       "at": [
+        2566,
+        5201,
+        0
+       ]
+      },
+      {
+       "t": "Listen to the large door.",
+       "s": "Listen to the large door.",
+       "k": "listenToDoor",
+       "at": [
+        2571,
+        5204,
+        0
+       ],
+       "hl": {
+        "obj": [
+         15757
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 6,
+     "do": [
+      {
+       "t": "Inspect Zanik outside the H.A.M base.",
+       "s": "Inspect Zanik outside the H.A.M base.",
+       "k": "checkZanikCorpse",
+       "at": [
+        3161,
+        3246,
+        0
+       ],
+       "hl": {
+        "obj": [
+         15712
+        ]
+       }
+      },
+      {
+       "t": "Leave the H.A.M base and inspect Zanik just outside it.",
+       "s": "Leave the H.A.M base and inspect Zanik just outside it.",
+       "k": "leaveHamBase",
+       "at": [
+        3149,
+        9653,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5493
+        ]
+       }
+      },
+      {
+       "t": "Enter the Lumbridge Castle basement.",
+       "s": "Enter the Lumbridge Castle basement.",
+       "k": "goDownIntoBasement",
+       "at": [
+        3209,
+        3216,
+        0
+       ],
+       "hl": {
+        "obj": [
+         14880
+        ]
+       }
+      },
+      {
+       "t": "Go down the staircase.",
+       "s": "Go down the staircase.",
+       "k": "goDownFromF1",
+       "at": [
+        3205,
+        3208,
+        1
+       ],
+       "hl": {
+        "obj": [
+         16672
+        ]
+       }
+      },
+      {
+       "t": "Go downstairs.",
+       "s": "Go downstairs.",
+       "k": "goDownFromF2",
+       "at": [
+        3205,
+        3208,
+        2
+       ],
+       "hl": {
+        "obj": [
+         16673
+        ]
+       }
+      },
+      {
+       "t": "Climb through the hole in the Lumbridge cellar wall.",
+       "s": "Climb through the hole in the Lumbridge cellar wall.",
+       "k": "climbThroughHole",
+       "at": [
+        3219,
+        9618,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6898
+        ]
+       }
+      },
+      {
+       "t": "Use a pickaxe on the rocks to the south.",
+       "s": "Use a pickaxe on the rocks to the south.",
+       "k": "mineRocks",
+       "at": [
+        3224,
+        9602,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6912
+        ]
+       }
+      },
+      {
+       "t": "Climb into the Lumbridge Swamp.",
+       "s": "Climb into the Lumbridge Swamp.",
+       "k": "climbIntoSwamp",
+       "at": [
+        3224,
+        9602,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6912
+        ]
+       }
+      },
+      {
+       "t": "Enter the cave in the south east corner of the swamp.",
+       "s": "Enter the cave in the south east corner of the swamp.",
+       "k": "enterJunaArea",
+       "at": [
+        3226,
+        9540,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6659
+        ]
+       }
+      },
+      {
+       "t": "Talk to Juna.",
+       "s": "Talk to Juna.",
+       "k": "talkToJuna",
+       "at": [
+        3252,
+        9517,
+        2
+       ],
+       "hl": {
+        "obj": [
+         3193
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 7,
+     "do": [
+      {
+       "t": "Talk to Juna with both hands free. Collect 20 tears of Guthix.",
+       "s": "Talk to Juna with both hands free. Collect 20 tears of Guthix.",
+       "k": "talkToJunaMore",
+       "at": [
+        3252,
+        9517,
+        2
+       ],
+       "hl": {
+        "obj": [
+         3193
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 8,
+     "do": [
+      {
+       "t": "Enter the Lumbridge Castle basement.",
+       "s": "Enter the Lumbridge Castle basement.",
+       "k": "goDownIntoBasement",
+       "at": [
+        3209,
+        3216,
+        0
+       ],
+       "hl": {
+        "obj": [
+         14880
+        ]
+       }
+      },
+      {
+       "t": "Go down the staircase.",
+       "s": "Go down the staircase.",
+       "k": "goDownFromF1",
+       "at": [
+        3205,
+        3208,
+        1
+       ],
+       "hl": {
+        "obj": [
+         16672
+        ]
+       }
+      },
+      {
+       "t": "Go downstairs.",
+       "s": "Go downstairs.",
+       "k": "goDownFromF2",
+       "at": [
+        3205,
+        3208,
+        2
+       ],
+       "hl": {
+        "obj": [
+         16673
+        ]
+       }
+      },
+      {
+       "t": "Talk to Zanik in the Lumbridge cellar.",
+       "s": "Talk to Zanik in the Lumbridge cellar.",
+       "k": "talkToZanik",
+       "at": [
+        3212,
+        9620,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4506
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 9,
+     "do": [
+      {
+       "t": "Enter the Lumbridge Castle basement.",
+       "s": "Enter the Lumbridge Castle basement.",
+       "k": "goDownIntoBasement",
+       "at": [
+        3209,
+        3216,
+        0
+       ],
+       "hl": {
+        "obj": [
+         14880
+        ]
+       }
+      },
+      {
+       "t": "Go down the staircase.",
+       "s": "Go down the staircase.",
+       "k": "goDownFromF1",
+       "at": [
+        3205,
+        3208,
+        1
+       ],
+       "hl": {
+        "obj": [
+         16672
+        ]
+       }
+      },
+      {
+       "t": "Go downstairs.",
+       "s": "Go downstairs.",
+       "k": "goDownFromF2",
+       "at": [
+        3205,
+        3208,
+        2
+       ],
+       "hl": {
+        "obj": [
+         16673
+        ]
+       }
+      },
+      {
+       "t": "Talk to Zanik in the Lumbridge cellar.",
+       "s": "Talk to Zanik in the Lumbridge cellar.",
+       "k": "talkToZanik",
+       "at": [
+        3212,
+        9620,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4506
+        ]
+       }
+      },
+      {
+       "t": "Search a crate south of the farm east of Lumbridge. If Zanik isn't appearing when doing so, call her in the 'Worn equipment' tab with the 'Call follower' button with a whistle icon.",
+       "s": "Search the crate south of the farm east of Lumbridge.",
+       "k": "searchCrate",
+       "at": [
+        3228,
+        3280,
+        0
+       ],
+       "hl": {
+        "obj": [
+         15704
+        ]
+       }
+      },
+      {
+       "t": "Enter the trapdoor outside the farm.",
+       "s": "Enter the trapdoor outside the farm.",
+       "k": "enterMill",
+       "at": [
+        3230,
+        3286,
+        0
+       ],
+       "hl": {
+        "obj": [
+         15765
+        ]
+       }
+      },
+      {
+       "t": "Kill the guards to the west.",
+       "s": "Kill the guards to the west.",
+       "k": "killGuards",
+       "at": [
+        2000,
+        5087,
+        0
+       ],
+       "hl": {
+        "npc": [
+         397
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 10,
+     "do": [
+      {
+       "t": "Enter the trapdoor outside the farm.",
+       "s": "Enter the trapdoor outside the farm.",
+       "k": "enterMill",
+       "at": [
+        3230,
+        3286,
+        0
+       ],
+       "hl": {
+        "obj": [
+         15765
+        ]
+       }
+      },
+      {
+       "t": "Kill the guards to the west.",
+       "s": "Kill the guards to the west.",
+       "k": "killGuards",
+       "at": [
+        2000,
+        5087,
+        0
+       ],
+       "hl": {
+        "npc": [
+         397
+        ]
+       }
+      },
+      {
+       "t": "Defeat Sigmund. You need to use magic or melee to hurt him.",
+       "s": "Defeat Sigmund. You need to use magic or melee to hurt him.",
+       "k": "killSigmund",
+       "at": [
+        2000,
+        5087,
+        0
+       ],
+       "hl": {
+        "npc": [
+         991
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 11,
+     "do": [
+      {
+       "t": "Enter the trapdoor outside the farm.",
+       "s": "Enter the trapdoor outside the farm.",
+       "k": "enterMill",
+       "at": [
+        3230,
+        3286,
+        0
+       ],
+       "hl": {
+        "obj": [
+         15765
+        ]
+       }
+      },
+      {
+       "t": "Destroy the drilling machine.",
+       "s": "Destroy the drilling machine.",
+       "k": "smashDrill",
+       "at": [
+        1998,
+        5088,
+        0
+       ],
+       "hl": {
+        "obj": [
+         15713
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 12,
+     "do": [
+      {
+       "t": "Enter the trapdoor outside the farm.",
+       "s": "Enter the trapdoor outside the farm.",
+       "k": "enterMill",
+       "at": [
+        3230,
+        3286,
+        0
+       ],
+       "hl": {
+        "obj": [
+         15765
+        ]
+       }
+      },
+      {
+       "t": "Leave the area via the exit to the south to finish the quest.",
+       "s": "Leave the area via the exit to the south to finish the quest.",
+       "k": "enterExit",
+       "at": [
+        3245,
+        9661,
+        0
+       ],
+       "hl": {
+        "obj": [
+         15764
+        ]
+       }
+      }
+     ]
+    }
+   ]
   }
  }
 }

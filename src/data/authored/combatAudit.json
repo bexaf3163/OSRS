@@ -1748,6 +1748,46 @@
       "evidence": [
         "OSRS Wiki Giant lobster (Ghosts Ahoy): level 32, 32 hitpoints, max hit 4, read 2026-11-17."
       ]
+    },
+    {
+      "stepId": "S9-38",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "melee",
+      "objective": "Death to the Dorgeshuun: kill the three level 22 H.A.M. guards (30 hitpoints, hit up to 3) beside Zanik, then Sigmund (level 50, 60 hitpoints, hits up to 5) in the mill.",
+      "enemies": [
+        {
+          "name": "H.A.M. Guard",
+          "level": 22,
+          "maxHit": 3,
+          "table": true
+        },
+        {
+          "name": "Sigmund",
+          "level": 50,
+          "maxHit": 5,
+          "table": true
+        }
+      ],
+      "lines": [
+        "0.17",
+        "0.27",
+        "0.31"
+      ],
+      "assumptions": [
+        "Zanik hits Sigmund first; he mostly prays against missiles, so melee lands."
+      ],
+      "problems": [],
+      "alternatives": [
+        "Magic also works (the wiki names melee or magic)."
+      ],
+      "decision": "retain",
+      "changed": [
+        "2.138.0: new quest; Sigmund and the guards are in combatFoes.json."
+      ],
+      "evidence": [
+        "OSRS Wiki Sigmund (level 50, 60 hitpoints, max hit 5) and H.A.M. Guard level 22, read 2026-11-18."
+      ]
     }
   ]
 }

@@ -881,6 +881,9 @@ class Interp:
             cond, step = args[0], args[1]
             if not isinstance(step, Step):
                 return None
+            # An inline step (Murder Mystery: addStep(isUpstairs, new ObjectStep(..., ""))) is the wrapper's own action: its line.
+            if step.kind == 'leaf' and not getattr(step, 'name', None) and getattr(st, 'name', None):
+                step.name = st.name
             # Quest Helper keys a ConditionalStep's default step by null: addStep(null, x) replaces the default.
             if cond is None:
                 st.default = step

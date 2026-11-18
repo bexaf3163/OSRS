@@ -4,7 +4,7 @@ Written by `tests/combatAudit.test.ts` from `src/data/authored/combatAudit.json`
 
 Every stage of the route where the player fights or can be attacked, checked against the route text, the quest stage lines (Quest Helper), the OSRS Wiki infoboxes in combatFoes.json and the danger zones. The rule for a fight the quest cannot go on without: its food is a required item (readiness and the game check it before leaving), the app estimates it with the player's kit where it has the opponent's numbers, and an unread kit or bag is reported as not checked, never as ready.
 
-50 stages: 22 retained, 27 revised, 0 with a branch, 1 deferred.
+51 stages: 23 retained, 27 revised, 0 with a branch, 1 deferred.
 
 | Step | Kind | Mandatory | Opponents | Method | Estimate | Food in the item list | Decision |
 |---|---|---|---|---|---|---|---|
@@ -58,6 +58,7 @@ Every stage of the route where the player fights or can be attacked, checked aga
 | S9-28 Troll Stronghold | quest-fight | yes | Dad (101), Troll General (113) | safespot | Dad, Troll General | - | Retain |
 | S9-30 Eadgar's Ruse | not-combat | no | - | none | - | - | Retain |
 | S9-33 Ghosts Ahoy | quest-fight | yes | Giant lobster (Ghosts Ahoy) (32) | melee | Giant lobster (Ghosts Ahoy) | Trout 5 | Retain |
+| S9-38 Death to the Dorgeshuun | quest-fight | yes | H.A.M. Guard (22), Sigmund (50) | melee | Sigmund, H.A.M. Guard | Trout 5 | Retain |
 
 ## S1-06 The Restless Ghost
 
@@ -1215,4 +1216,26 @@ Changed:
 Evidence:
 
 - OSRS Wiki Giant lobster (Ghosts Ahoy): level 32, 32 hitpoints, max hit 4, read 2026-11-17.
+
+## S9-38 Death to the Dorgeshuun
+
+**Retain.** Death to the Dorgeshuun: kill the three level 22 H.A.M. guards (30 hitpoints, hit up to 3) beside Zanik, then Sigmund (level 50, 60 hitpoints, hits up to 5) in the mill.
+
+Quest stage lines: 0.17, 0.27, 0.31.
+
+Assumptions:
+
+- Zanik hits Sigmund first; he mostly prays against missiles, so melee lands.
+
+Alternatives:
+
+- Magic also works (the wiki names melee or magic).
+
+Changed:
+
+- 2.138.0: new quest; Sigmund and the guards are in combatFoes.json.
+
+Evidence:
+
+- OSRS Wiki Sigmund (level 50, 60 hitpoints, max hit 5) and H.A.M. Guard level 22, read 2026-11-18.
 

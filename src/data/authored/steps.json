@@ -9235,5 +9235,390 @@
         "questName": "The Forsaken Tower"
       }
     }
+  },
+  {
+    "id": "S9-35",
+    "stage": 9,
+    "type": "quest",
+    "title": "Making History",
+    "qp": 3,
+    "requires": [
+      "S8-01",
+      "S1-06"
+    ],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Making_History",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Making_History/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2435,3346,0",
+    "mapLocation": {
+      "x": 2435,
+      "y": 3346,
+      "plane": 0,
+      "label": "The outpost north-west of West Ardougne"
+    },
+    "npc": {
+      "nameEn": "Jorral",
+      "location": "The outpost north-west of West Ardougne",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Jorral"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Spade",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Lumbridge General Store in Lumbridge for 3 gp.",
+        "wikiItemId": 952,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Spade.png"
+      },
+      {
+        "nameEn": "Sapphire amulet",
+        "amount": 1,
+        "howToGet": "Melina keeps it. Buy on the Grand Exchange.",
+        "wikiItemId": 1694,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Sapphire_amulet.png"
+      },
+      {
+        "nameEn": "Ghostspeak amulet",
+        "amount": 1,
+        "howToGet": "The Restless Ghost reward; Father Urhney in Lumbridge Swamp gives a new one.",
+        "wikiItemId": 552,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Ghostspeak_amulet.png"
+      },
+      {
+        "nameEn": "Ecto-token",
+        "amount": 2,
+        "howToGet": "Entry toll to Port Phasmatys before Ghosts Ahoy. Made at the Ectofuntus (5 a worship).",
+        "wikiItemId": 4278,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Ecto-token_1.png"
+      }
+    ],
+    "reward": "3 QP, 1,000 Crafting XP, 1,000 Prayer XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Jorral"
+      ],
+      "dialogChoices": [
+        "Tell me more.",
+        "Ok, I'll make a stand for history!",
+        "Ask about the outpost.",
+        "I'm after important answers.",
+        "Why, you're the famous warrior Dron!",
+        "F"
+      ],
+      "highlightItems": [
+        "Spade",
+        "Sapphire amulet",
+        "Ghostspeak amulet",
+        "Ecto-token"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Making History"
+      }
+    }
+  },
+  {
+    "id": "S9-36",
+    "stage": 9,
+    "type": "quest",
+    "title": "Murder Mystery",
+    "qp": 3,
+    "requires": [],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Murder_Mystery",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Murder_Mystery/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2741,3562,0",
+    "mapLocation": {
+      "x": 2741,
+      "y": 3562,
+      "plane": 0,
+      "label": "Guard (Sinclair Mansion)"
+    },
+    "npc": {
+      "nameEn": "Guard (Sinclair Mansion)",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Guard_(Sinclair_Mansion)"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Pot",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Rimmington General Store in Rimmington for 1 gp.",
+        "wikiItemId": 1931,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Pot.png"
+      }
+    ],
+    "reward": "3 QP, 1,406 Crafting XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Guard (Sinclair Mansion)"
+      ],
+      "dialogChoices": [
+        "Sure, I'll help.",
+        "Who do you think was responsible?",
+        "Who did you sell Poison to at the house?",
+        "Why'd you buy poison the other day?",
+        "I know who did it!"
+      ],
+      "highlightItems": [
+        "Pot"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Murder Mystery"
+      }
+    }
+  },
+  {
+    "id": "S9-37",
+    "stage": 9,
+    "type": "quest",
+    "title": "Sleeping Giants",
+    "qp": 1,
+    "requires": [],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Sleeping_Giants",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Sleeping_Giants/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3362,3146,0",
+    "mapLocation": {
+      "x": 3362,
+      "y": 3146,
+      "plane": 0,
+      "label": "The Giants' Plateau, east of Al Kharid"
+    },
+    "npc": {
+      "nameEn": "Kovac",
+      "location": "The Giants' Plateau, east of Al Kharid",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Kovac"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Hammer",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Drogo's Mining Emporium in Dwarven Mines for 1 gp.",
+        "wikiItemId": 2347,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Hammer.png"
+      },
+      {
+        "nameEn": "Chisel",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Dommik's Crafting Store in Al Kharid for 1 gp.",
+        "wikiItemId": 1755,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Chisel.png"
+      },
+      {
+        "nameEn": "Oak logs",
+        "amount": 3,
+        "howToGet": "Repair the trip hammer. Buy on the Grand Exchange or cut oak trees.",
+        "wikiItemId": 1521,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Oak_logs.png"
+      },
+      {
+        "nameEn": "Wool",
+        "amount": 1,
+        "howToGet": "Repair the polishing wheel. Buy on the Grand Exchange or spin sheep's wool.",
+        "wikiItemId": 1737,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Wool.png"
+      },
+      {
+        "nameEn": "Steel nails",
+        "amount": 10,
+        "howToGet": "Any nails work for the repairs. Buy on the Grand Exchange.",
+        "wikiItemId": 1539,
+        "anyOf": [
+          "Bronze nails",
+          "Iron nails",
+          "Mithril nails",
+          "Adamantite nails",
+          "Rune nails"
+        ],
+        "iconUrl": "https://oldschool.runescape.wiki/images/Steel_nails.png"
+      }
+    ],
+    "reward": "1 QP, 6,000 Smithing XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Kovac"
+      ],
+      "dialogChoices": [
+        "Yes."
+      ],
+      "highlightItems": [
+        "Hammer",
+        "Chisel",
+        "Oak logs",
+        "Wool",
+        "Steel nails"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Sleeping Giants"
+      }
+    }
+  },
+  {
+    "id": "S9-38",
+    "stage": 9,
+    "type": "quest",
+    "title": "Death to the Dorgeshuun",
+    "qp": 1,
+    "requires": [
+      "S9-20"
+    ],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Death_to_the_Dorgeshuun",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Death_to_the_Dorgeshuun/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3317,9613,0",
+    "mapLocation": {
+      "x": 3210,
+      "y": 3216,
+      "plane": 0,
+      "label": "The trapdoor to the Lumbridge Castle cellar"
+    },
+    "npc": {
+      "nameEn": "Mistag",
+      "location": "The Dorgesh-Kaan mine",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Mistag"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Bullseye lantern",
+        "amount": 1,
+        "howToGet": "A closed light: the swamp caves on the way to Juna have explosive gas. Buy on the Grand Exchange and light it with a tinderbox.",
+        "wikiItemId": 4548,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bullseye_lantern.png"
+      },
+      {
+        "nameEn": "Tinderbox",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Rimmington General Store in Rimmington for 1 gp.",
+        "wikiItemId": 590,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Tinderbox.png"
+      },
+      {
+        "nameEn": "Bronze pickaxe",
+        "amount": 1,
+        "howToGet": "Mines the rocks south of the Lumbridge cellar on the way to Juna. Any pickaxe works.",
+        "wikiItemId": 1265,
+        "anyOf": [
+          "Iron pickaxe",
+          "Steel pickaxe",
+          "Black pickaxe",
+          "Mithril pickaxe",
+          "Adamant pickaxe",
+          "Rune pickaxe"
+        ],
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_pickaxe.png"
+      },
+      {
+        "nameEn": "Ham hood",
+        "amount": 2,
+        "howToGet": "Two full H.A.M. sets: one for you, one for Zanik. Buy on the Grand Exchange or pickpocket H.A.M. members.",
+        "wikiItemId": 4302,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Ham_hood.png"
+      },
+      {
+        "nameEn": "Ham shirt",
+        "amount": 2,
+        "howToGet": "Two full H.A.M. sets: one for you, one for Zanik. Buy on the Grand Exchange or pickpocket H.A.M. members.",
+        "wikiItemId": 4298,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Ham_shirt.png"
+      },
+      {
+        "nameEn": "Ham robe",
+        "amount": 2,
+        "howToGet": "Two full H.A.M. sets: one for you, one for Zanik. Buy on the Grand Exchange or pickpocket H.A.M. members.",
+        "wikiItemId": 4300,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Ham_robe.png"
+      },
+      {
+        "nameEn": "Ham gloves",
+        "amount": 2,
+        "howToGet": "Two full H.A.M. sets: one for you, one for Zanik. Buy on the Grand Exchange or pickpocket H.A.M. members.",
+        "wikiItemId": 4308,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Ham_gloves.png"
+      },
+      {
+        "nameEn": "Ham boots",
+        "amount": 2,
+        "howToGet": "Two full H.A.M. sets: one for you, one for Zanik. Buy on the Grand Exchange or pickpocket H.A.M. members.",
+        "wikiItemId": 4310,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Ham_boots.png"
+      },
+      {
+        "nameEn": "Ham cloak",
+        "amount": 2,
+        "howToGet": "Two full H.A.M. sets: one for you, one for Zanik. Buy on the Grand Exchange or pickpocket H.A.M. members.",
+        "wikiItemId": 4304,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Ham_cloak.png"
+      },
+      {
+        "nameEn": "Ham logo",
+        "amount": 2,
+        "howToGet": "Two full H.A.M. sets: one for you, one for Zanik. Buy on the Grand Exchange or pickpocket H.A.M. members.",
+        "wikiItemId": 4306,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Ham_logo.png"
+      },
+      {
+        "nameEn": "Trout",
+        "amount": 5,
+        "howToGet": "Buy on the Grand Exchange; Salmon, Tuna, Lobster or Swordfish count too. Sigmund (level 50) hits up to 5, the H.A.M. guards less.",
+        "wikiItemId": 333,
+        "heals": 7,
+        "anyOf": [
+          "Salmon",
+          "Tuna",
+          "Lobster",
+          "Swordfish"
+        ],
+        "iconUrl": "https://oldschool.runescape.wiki/images/Trout.png"
+      }
+    ],
+    "foes": [
+      "Sigmund",
+      "H.A.M. Guard"
+    ],
+    "reward": "1 QP, 2,000 Thieving XP, 2,000 Ranged XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Mistag"
+      ],
+      "dialogChoices": [
+        "What is this favour?",
+        "Yes.",
+        "Yes, I'm [player name]!",
+        "Yes, I have two sets of robes!",
+        "Have you seen enough of Lumbridge yet?",
+        "Yes",
+        "Are you planning to do anything about the cave goblins?",
+        "That's good.",
+        "Let's go!",
+        "I don't know, what are you thinking?",
+        "Good idea."
+      ],
+      "highlightItems": [
+        "Bullseye lantern",
+        "Tinderbox",
+        "Bronze pickaxe",
+        "Ham hood",
+        "Ham shirt",
+        "Ham robe",
+        "Ham gloves",
+        "Ham boots",
+        "Ham cloak",
+        "Ham logo",
+        "Trout"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Death to the Dorgeshuun"
+      }
+    }
   }
 ]

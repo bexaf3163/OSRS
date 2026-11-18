@@ -16,7 +16,13 @@ const OUT = `${root}src/data/generated/portals.json`;
 const res = await fetch(URL_TSV, { headers: { 'User-Agent': 'osrs-route-money-builder' }, signal: AbortSignal.timeout(30_000) });
 if (!res.ok) throw new Error(`transports.tsv: HTTP ${res.status}`);
 const { portals, floors, skipped } = parseTransports(await res.text());
-const rows = dedupePortals(portals).map(toRow);
+// Areas the pinned table lacks, from Quest Helper's objects. shortcut: the arrival tile is the corner of Quest Helper's zone, not a
+// measured tile; replace these rows when the transport table gains the area.
+const AUTHORED: (number | string)[][] = [
+  [3361, 3150, 0, 3361, 11482, 0, 44635, 'Enter Cave', ''], // Giants' Foundry (Sleeping Giants)
+  [3361, 11482, 0, 3361, 3150, 0, 44636, 'Exit Cave', ''],
+];
+const rows = [...dedupePortals(portals).map(toRow), ...AUTHORED];
 const floorRows = dedupePortals(floors).map(toRow);
 const file = {
   source: `Skretzo/shortest-path, src/main/resources/transports/transports.tsv at ${COMMIT} (BSD 2-Clause, see THIRD_PARTY_NOTICES.md)`,

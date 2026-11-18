@@ -1,6 +1,6 @@
 {
   "source": "OSRS Wiki: Infobox Monster of each article, every version (scripts/data/build-combat-foes.ts)",
-  "generatedAt": "2026-11-17",
+  "generatedAt": "2026-11-18",
   "foes": [
     {
       "name": "Count Draynor",
@@ -1566,6 +1566,97 @@
       "maxHit": 4,
       "speedTicks": 4,
       "aggressive": true
+    },
+    {
+      "name": "Sigmund",
+      "combat": 50,
+      "members": true,
+      "hitpoints": 60,
+      "attackLevel": 45,
+      "strengthLevel": 45,
+      "defenceLevel": 24,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "crush",
+      "maxHit": 5,
+      "speedTicks": 4,
+      "aggressive": true
+    },
+    {
+      "name": "H.A.M. Guard",
+      "version": "Level 12",
+      "combat": 12,
+      "members": true,
+      "hitpoints": 15,
+      "attackLevel": 8,
+      "strengthLevel": 12,
+      "defenceLevel": 8,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 5,
+        "slash": 5,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 5
+      },
+      "attackStyle": "crush",
+      "maxHit": 2,
+      "speedTicks": 7,
+      "aggressive": false
+    },
+    {
+      "name": "H.A.M. Guard",
+      "version": "Level 18",
+      "combat": 18,
+      "members": true,
+      "hitpoints": 20,
+      "attackLevel": 14,
+      "strengthLevel": 18,
+      "defenceLevel": 12,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 6,
+        "slash": 6,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 6
+      },
+      "attackStyle": "crush",
+      "maxHit": 3,
+      "speedTicks": 6,
+      "aggressive": false
+    },
+    {
+      "name": "H.A.M. Guard",
+      "version": "Level 22",
+      "combat": 22,
+      "members": true,
+      "hitpoints": 30,
+      "attackLevel": 16,
+      "strengthLevel": 20,
+      "defenceLevel": 12,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 7,
+        "slash": 7,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 7
+      },
+      "attackStyle": "crush",
+      "maxHit": 3,
+      "speedTicks": 5,
+      "aggressive": false
     },
     {
       "name": "Cow",

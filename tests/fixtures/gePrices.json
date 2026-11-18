@@ -1,5 +1,5 @@
 {
- "source": "OSRS Wiki real-time prices API /latest (high = buy, low = sell), F2P route items and gear, read 2026-11-10; Members route items added 2026-11-14 and 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-17; Members route items added 2026-11-17",
+ "source": "OSRS Wiki real-time prices API /latest (high = buy, low = sell), F2P route items and gear, read 2026-11-10; Members route items added 2026-11-14 and 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-17; Members route items added 2026-11-17; Members route items added 2026-11-18",
  "prices": {
   "Adamant 2h sword": {
    "buy": 3670,
@@ -2896,6 +2896,54 @@
   "Asgarnian ale": {
    "buy": 340,
    "sell": 117
+  },
+  "Adamantite nails": {
+   "buy": 115,
+   "sell": 114
+  },
+  "Bronze nails": {
+   "buy": 6,
+   "sell": 6
+  },
+  "Ham boots": {
+   "buy": 3948,
+   "sell": 2002
+  },
+  "Ham cloak": {
+   "buy": 2225,
+   "sell": 800
+  },
+  "Ham gloves": {
+   "buy": 1901,
+   "sell": 1600
+  },
+  "Ham hood": {
+   "buy": 1,
+   "sell": 20
+  },
+  "Ham logo": {
+   "buy": 814,
+   "sell": 1
+  },
+  "Ham robe": {
+   "buy": 309,
+   "sell": 201
+  },
+  "Ham shirt": {
+   "buy": 42,
+   "sell": 10
+  },
+  "Mithril nails": {
+   "buy": 65,
+   "sell": 59
+  },
+  "Rune nails": {
+   "buy": 774,
+   "sell": 761
+  },
+  "Wool": {
+   "buy": 28,
+   "sell": 25
   }
  }
 }

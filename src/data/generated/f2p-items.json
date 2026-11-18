@@ -7243,6 +7243,132 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Greenman's_ale"
   },
   {
+    "id": 4310,
+    "nameEn": "Ham boots",
+    "examine": "HAM boots as worn by the Humans Against Monsters group.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Ham_boots.png",
+    "value": 75,
+    "highAlch": 45,
+    "lowAlch": 30,
+    "dropSources": [
+      {
+        "monster": "H.A.M. Guard",
+        "combatLevel": 22,
+        "rate": "2/110"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Ham_boots"
+  },
+  {
+    "id": 4304,
+    "nameEn": "Ham cloak",
+    "examine": "A HAM cape.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Ham_cloak.png",
+    "value": 75,
+    "highAlch": 45,
+    "lowAlch": 30,
+    "dropSources": [
+      {
+        "monster": "H.A.M. Guard",
+        "combatLevel": 22,
+        "rate": "1/110"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Ham_cloak"
+  },
+  {
+    "id": 4308,
+    "nameEn": "Ham gloves",
+    "examine": "HAM gloves as worn by the Humans Against Monsters group.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Ham_gloves.png",
+    "value": 75,
+    "highAlch": 45,
+    "lowAlch": 30,
+    "dropSources": [
+      {
+        "monster": "H.A.M. Guard",
+        "combatLevel": 22,
+        "rate": "2.5/110"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Ham_gloves"
+  },
+  {
+    "id": 4302,
+    "nameEn": "Ham hood",
+    "examine": "Light-weight head protection and eye shield.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Ham_hood.png",
+    "value": 75,
+    "highAlch": 45,
+    "lowAlch": 30,
+    "dropSources": [
+      {
+        "monster": "H.A.M. Guard",
+        "combatLevel": 22,
+        "rate": "1/110"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Ham_hood"
+  },
+  {
+    "id": 4306,
+    "nameEn": "Ham logo",
+    "examine": "A badge for the HAM cult.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Ham_logo.png",
+    "value": 75,
+    "highAlch": 45,
+    "lowAlch": 30,
+    "dropSources": [
+      {
+        "monster": "H.A.M. Guard",
+        "combatLevel": 22,
+        "rate": "1.33/110"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Ham_logo"
+  },
+  {
+    "id": 4300,
+    "nameEn": "Ham robe",
+    "examine": "The label says 'Vivid Crimson', but it looks pink to me!",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Ham_robe.png",
+    "value": 75,
+    "highAlch": 45,
+    "lowAlch": 30,
+    "dropSources": [
+      {
+        "monster": "H.A.M. Guard",
+        "combatLevel": 22,
+        "rate": "1.33/110"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Ham_robe"
+  },
+  {
+    "id": 4298,
+    "nameEn": "Ham shirt",
+    "examine": "The label says 'Vivid Crimson', but it looks pink to me!",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Ham_shirt.png",
+    "value": 75,
+    "highAlch": 45,
+    "lowAlch": 30,
+    "dropSources": [
+      {
+        "monster": "H.A.M. Guard",
+        "combatLevel": 22,
+        "rate": "1.33/110"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Ham_shirt"
+  },
+  {
     "id": 2347,
     "nameEn": "Hammer",
     "examine": "Good for hitting things!",
@@ -19407,6 +19533,17 @@
       }
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Wolf_bones"
+  },
+  {
+    "id": 1737,
+    "nameEn": "Wool",
+    "examine": "Nice and fluffy.",
+    "members": false,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Wool.png",
+    "value": 1,
+    "highAlch": 1,
+    "lowAlch": 1,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Wool"
   },
   {
     "id": 1472,
