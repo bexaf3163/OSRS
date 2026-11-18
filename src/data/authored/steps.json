@@ -9472,7 +9472,7 @@
     "membersOnly": true,
     "wikiUrl": "https://oldschool.runescape.wiki/w/Death_to_the_Dorgeshuun",
     "quickGuideUrl": "https://oldschool.runescape.wiki/w/Death_to_the_Dorgeshuun/Quick_guide",
-    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3317,9613,0",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3210,3216,0",
     "mapLocation": {
       "x": 3210,
       "y": 3216,
@@ -9618,6 +9618,438 @@
       "completionTrigger": {
         "type": "QUEST_COMPLETED",
         "questName": "Death to the Dorgeshuun"
+      }
+    }
+  },
+  {
+    "id": "S9-39",
+    "stage": 9,
+    "type": "quest",
+    "title": "Watchtower",
+    "qp": 4,
+    "requires": [],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Watchtower",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Watchtower/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2546,3116,0",
+    "mapLocation": {
+      "x": 2546,
+      "y": 3116,
+      "plane": 0,
+      "label": "The Watchtower north of Yanille; you must climb the trellis on the north side of the tower"
+    },
+    "npc": {
+      "nameEn": "Watchtower Wizard",
+      "location": "The Watchtower north of Yanille; you must climb the trellis on the north side of the tower",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Watchtower_Wizard"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Trout",
+        "amount": 5,
+        "howToGet": "Buy on the Grand Exchange; Salmon, Tuna, Lobster or Swordfish count too. Gorad (level 68) hits up to 7.",
+        "wikiItemId": 333,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Trout.png",
+        "heals": 7,
+        "anyOf": [
+          "Salmon",
+          "Tuna",
+          "Lobster",
+          "Swordfish"
+        ],
+        "phase": "fight"
+      },
+      {
+        "nameEn": "Coins",
+        "amount": 20,
+        "howToGet": "The city guards take 20 coins to let you cross the bridge in Gu'Tanoth.",
+        "wikiItemId": 995,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Coins_1.png"
+      },
+      {
+        "nameEn": "Gold bar",
+        "amount": 1,
+        "howToGet": "The guard at the eastern city gate of Gu'Tanoth takes it. Buy on the Grand Exchange.",
+        "wikiItemId": 2357,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Gold_bar.png"
+      },
+      {
+        "nameEn": "Death rune",
+        "amount": 1,
+        "howToGet": "A city guard takes it for the skavid map. Buy on the Grand Exchange or at a rune shop.",
+        "wikiItemId": 560,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Death_rune.png"
+      },
+      {
+        "nameEn": "Bronze pickaxe",
+        "amount": 1,
+        "howToGet": "Mines the Rock of Dalgroth in the Ogre Enclave. Any pickaxe works.",
+        "wikiItemId": 1265,
+        "anyOf": [
+          "Iron pickaxe",
+          "Steel pickaxe",
+          "Black pickaxe",
+          "Mithril pickaxe",
+          "Adamant pickaxe",
+          "Rune pickaxe"
+        ],
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_pickaxe.png"
+      },
+      {
+        "nameEn": "Dragon bones",
+        "amount": 1,
+        "howToGet": "Toban takes them for a relic part; baby dragon bones do not work. Buy on the Grand Exchange.",
+        "wikiItemId": 536,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Dragon_bones.png"
+      },
+      {
+        "nameEn": "Rope",
+        "amount": 2,
+        "howToGet": "One ties to the long-branched tree to reach the island. Buy on the Grand Exchange.",
+        "wikiItemId": 954,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Rope.png"
+      },
+      {
+        "nameEn": "Guam potion (unf)",
+        "amount": 1,
+        "howToGet": "The base of the magic ogre potion. Buy on the Grand Exchange, or use a guam leaf on a vial of water.",
+        "wikiItemId": 91,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Guam_potion_(unf).png"
+      },
+      {
+        "nameEn": "Jangerberries",
+        "amount": 1,
+        "howToGet": "Goes into the magic ogre potion. Buy on the Grand Exchange.",
+        "wikiItemId": 247,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Jangerberries.png"
+      },
+      {
+        "nameEn": "Bat bones",
+        "amount": 1,
+        "howToGet": "Ground into the magic ogre potion. Buy on the Grand Exchange, or kill a giant bat in the Yanille dungeon.",
+        "wikiItemId": 530,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bat_bones.png"
+      },
+      {
+        "nameEn": "Pestle and mortar",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from The Lighthouse Store in Lighthouse for 4 gp.",
+        "wikiItemId": 233,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Pestle_and_mortar.png"
+      }
+    ],
+    "foes": [
+      "Gorad"
+    ],
+    "reward": "4 QP, 15,250 Magic XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Watchtower Wizard"
+      ],
+      "dialogChoices": [
+        "What's the matter?",
+        "So how come the spell doesn't work?",
+        "Can I be of help?",
+        "What do you suggest I do?",
+        "So what do I do?",
+        "I seek entrance to the city of ogres.",
+        "Don't eat me; I can help you.",
+        "I could do something for you...",
+        "But I am a friend to ogres...",
+        "Okay, I'll pay it.",
+        "I seek passage into the skavid caves.",
+        "Okay, okay, I'm not going to hurt you."
+      ],
+      "highlightItems": [
+        "Coins",
+        "Gold bar",
+        "Death rune",
+        "Bronze pickaxe",
+        "Dragon bones",
+        "Rope",
+        "Guam potion (unf)",
+        "Jangerberries",
+        "Bat bones",
+        "Pestle and mortar"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Watchtower"
+      }
+    }
+  },
+  {
+    "id": "S9-40",
+    "stage": 9,
+    "type": "quest",
+    "title": "Enakhra's Lament",
+    "qp": 2,
+    "requires": [],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Enakhra's_Lament",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Enakhra's_Lament/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3191,2926,0",
+    "mapLocation": {
+      "x": 3191,
+      "y": 2926,
+      "plane": 0,
+      "label": "Lazim"
+    },
+    "npc": {
+      "nameEn": "Lazim",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Lazim"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Chisel",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Dommik's Crafting Store in Al Kharid for 1 gp.",
+        "wikiItemId": 1755,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Chisel.png"
+      },
+      {
+        "nameEn": "Sandstone (10kg)",
+        "amount": 5,
+        "howToGet": "Lazim takes 32kg and 20kg of sandstone, in batches. Buy on the Grand Exchange or mine it in the quarry.",
+        "wikiItemId": 6977,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Sandstone_(10kg).png"
+      },
+      {
+        "nameEn": "Sandstone (2kg)",
+        "amount": 1,
+        "howToGet": "Makes up the 32kg with three 10kg pieces. Buy on the Grand Exchange or mine it in the quarry.",
+        "wikiItemId": 6973,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Sandstone_(2kg).png"
+      },
+      {
+        "nameEn": "Granite (5kg)",
+        "amount": 2,
+        "howToGet": "One is carved into the statue head. Buy on the Grand Exchange or mine it in the quarry.",
+        "wikiItemId": 6983,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Granite_(5kg).png"
+      },
+      {
+        "nameEn": "Soft clay",
+        "amount": 1,
+        "howToGet": "Goes on the pedestal for the camel head. Buy on the Grand Exchange.",
+        "wikiItemId": 1761,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Soft_clay.png"
+      },
+      {
+        "nameEn": "Bread",
+        "amount": 1,
+        "howToGet": "Pentyn in the temple takes it. Buy on the Grand Exchange.",
+        "wikiItemId": 2309,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bread.png"
+      },
+      {
+        "nameEn": "Tinderbox",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Rimmington General Store in Rimmington for 1 gp.",
+        "wikiItemId": 590,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Tinderbox.png"
+      },
+      {
+        "nameEn": "Candle",
+        "amount": 1,
+        "howToGet": "Goes on the north-west brazier. Buy on the Grand Exchange.",
+        "wikiItemId": 36,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Candle.png"
+      },
+      {
+        "nameEn": "Logs",
+        "amount": 1,
+        "howToGet": "Goes on the south-west brazier. Buy on the Grand Exchange.",
+        "wikiItemId": 1511,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Logs.png"
+      },
+      {
+        "nameEn": "Oak logs",
+        "amount": 1,
+        "howToGet": "Goes on the south brazier. Buy on the Grand Exchange.",
+        "wikiItemId": 1521,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Oak_logs.png"
+      },
+      {
+        "nameEn": "Willow logs",
+        "amount": 1,
+        "howToGet": "Goes on the south-east brazier. Buy on the Grand Exchange.",
+        "wikiItemId": 1519,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Willow_logs.png"
+      },
+      {
+        "nameEn": "Maple logs",
+        "amount": 1,
+        "howToGet": "Goes on the north-west brazier. Buy on the Grand Exchange.",
+        "wikiItemId": 1517,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Maple_logs.png"
+      },
+      {
+        "nameEn": "Coal",
+        "amount": 1,
+        "howToGet": "Goes on the north-east brazier. Buy on the Grand Exchange.",
+        "wikiItemId": 453,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Coal.png"
+      },
+      {
+        "nameEn": "Air rune",
+        "amount": 7,
+        "howToGet": "Fire Bolt (3), Wind Bolt (2) and Crumble Undead (2). Buy on the Grand Exchange or at a rune shop.",
+        "wikiItemId": 556,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Air_rune.png"
+      },
+      {
+        "nameEn": "Fire rune",
+        "amount": 4,
+        "howToGet": "Fire Bolt on the frozen fountain. Buy on the Grand Exchange or at a rune shop.",
+        "wikiItemId": 554,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Fire_rune.png"
+      },
+      {
+        "nameEn": "Earth rune",
+        "amount": 2,
+        "howToGet": "Crumble Undead on the Boneguard. Buy on the Grand Exchange or at a rune shop.",
+        "wikiItemId": 557,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Earth_rune.png"
+      },
+      {
+        "nameEn": "Chaos rune",
+        "amount": 3,
+        "howToGet": "One for each bolt spell and for Crumble Undead. Buy on the Grand Exchange or at a rune shop.",
+        "wikiItemId": 562,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Chaos_rune.png"
+      }
+    ],
+    "reward": "2 QP, 7,000 Crafting XP, 7,000 Mining XP, 7,000 Firemaking XP, 7,000 Magic XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Lazim"
+      ],
+      "dialogChoices": [
+        "Of course!",
+        "Okay, I'll get on with it.",
+        "It's okay, I don't need any help.",
+        "Of course, I'll help you out.",
+        "Okay, I'll start building."
+      ],
+      "highlightItems": [
+        "Chisel",
+        "Sandstone (10kg)",
+        "Sandstone (2kg)",
+        "Granite (5kg)",
+        "Soft clay",
+        "Bread",
+        "Tinderbox",
+        "Candle",
+        "Logs",
+        "Oak logs",
+        "Willow logs",
+        "Maple logs",
+        "Coal",
+        "Air rune",
+        "Fire rune",
+        "Earth rune",
+        "Chaos rune"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Enakhra's Lament"
+      }
+    }
+  },
+  {
+    "id": "S9-41",
+    "stage": 9,
+    "type": "quest",
+    "title": "Elemental Workshop II",
+    "qp": 1,
+    "requires": [
+      "S9-11"
+    ],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Elemental_Workshop_II",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Elemental_Workshop_II/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3366,3335,0",
+    "mapLocation": {
+      "x": 3366,
+      "y": 3335,
+      "plane": 0,
+      "label": "The Exam Centre's library"
+    },
+    "npc": {
+      "nameEn": "Exam Centre",
+      "location": "The Exam Centre's library",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Exam_Centre"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Hammer",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Drogo's Mining Emporium in Dwarven Mines for 1 gp.",
+        "wikiItemId": 2347,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Hammer.png"
+      },
+      {
+        "nameEn": "Bronze pickaxe",
+        "amount": 1,
+        "howToGet": "Mines the elemental rock, which wakes an earth elemental. Any pickaxe works.",
+        "wikiItemId": 1265,
+        "anyOf": [
+          "Iron pickaxe",
+          "Steel pickaxe",
+          "Black pickaxe",
+          "Mithril pickaxe",
+          "Adamant pickaxe",
+          "Rune pickaxe"
+        ],
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_pickaxe.png"
+      },
+      {
+        "nameEn": "Coal",
+        "amount": 8,
+        "howToGet": "Smelts the 2 elemental ores (4 coal each) at the workshop furnace. Buy on the Grand Exchange.",
+        "wikiItemId": 453,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Coal.png"
+      },
+      {
+        "nameEn": "Trout",
+        "amount": 3,
+        "howToGet": "Buy on the Grand Exchange; Salmon, Tuna, Lobster or Swordfish count too. The two level 35 earth elementals hit up to 4.",
+        "wikiItemId": 333,
+        "heals": 7,
+        "anyOf": [
+          "Salmon",
+          "Tuna",
+          "Lobster",
+          "Swordfish"
+        ],
+        "iconUrl": "https://oldschool.runescape.wiki/images/Trout.png"
+      }
+    ],
+    "foes": [
+      "Earth elemental"
+    ],
+    "reward": "1 QP, 7,500 Smithing XP, 7,500 Crafting XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Exam Centre"
+      ],
+      "dialogChoices": [],
+      "highlightItems": [
+        "Hammer",
+        "Bronze pickaxe",
+        "Coal",
+        "Trout"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Elemental Workshop II"
       }
     }
   }

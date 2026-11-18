@@ -4,7 +4,7 @@ Written by `tests/combatAudit.test.ts` from `src/data/authored/combatAudit.json`
 
 Every stage of the route where the player fights or can be attacked, checked against the route text, the quest stage lines (Quest Helper), the OSRS Wiki infoboxes in combatFoes.json and the danger zones. The rule for a fight the quest cannot go on without: its food is a required item (readiness and the game check it before leaving), the app estimates it with the player's kit where it has the opponent's numbers, and an unread kit or bag is reported as not checked, never as ready.
 
-51 stages: 23 retained, 27 revised, 0 with a branch, 1 deferred.
+53 stages: 25 retained, 27 revised, 0 with a branch, 1 deferred.
 
 | Step | Kind | Mandatory | Opponents | Method | Estimate | Food in the item list | Decision |
 |---|---|---|---|---|---|---|---|
@@ -59,6 +59,8 @@ Every stage of the route where the player fights or can be attacked, checked aga
 | S9-30 Eadgar's Ruse | not-combat | no | - | none | - | - | Retain |
 | S9-33 Ghosts Ahoy | quest-fight | yes | Giant lobster (Ghosts Ahoy) (32) | melee | Giant lobster (Ghosts Ahoy) | Trout 5 | Retain |
 | S9-38 Death to the Dorgeshuun | quest-fight | yes | H.A.M. Guard (22), Sigmund (50) | melee | Sigmund, H.A.M. Guard | Trout 5 | Retain |
+| S9-39 Watchtower | quest-fight | yes | Gorad (68), Blue dragon (111) | melee | Gorad | Trout 5 | Retain |
+| S9-41 Elemental Workshop II | quest-fight | yes | Earth elemental (35) | melee | Earth elemental | Trout 3 | Retain |
 
 ## S1-06 The Restless Ghost
 
@@ -1238,4 +1240,47 @@ Changed:
 Evidence:
 
 - OSRS Wiki Sigmund (level 50, 60 hitpoints, max hit 5) and H.A.M. Guard level 22, read 2026-11-18.
+
+## S9-39 Watchtower
+
+**Retain.** Watchtower: kill Gorad (level 68, 80 hitpoints, hits up to 7) on the island west of Yanille for his tooth; the level 111 blue dragons of the Ogre Enclave are walked past.
+
+Quest stage lines: 1.4.
+
+Assumptions:
+
+- Gorad can be safespotted; the route fights him in melee with food.
+- The blue dragons are not fought: the route walks past them to the Rock of Dalgroth.
+
+Alternatives:
+
+- Safespot Gorad with Ranged or Magic (wiki).
+
+Changed:
+
+- 2.139.0: new quest; Gorad is in combatFoes.json.
+
+Evidence:
+
+- OSRS Wiki Gorad: level 68, 80 hitpoints, max hit 7, read 2026-11-18.
+
+## S9-41 Elemental Workshop II
+
+**Retain.** Elemental Workshop II: mining an elemental rock wakes an earth elemental (level 35, 35 hitpoints, hits up to 4); two are killed for the ore.
+
+Assumptions:
+
+- Three fish cover two earth elementals at the route's Members combat levels.
+
+Alternatives:
+
+- Two elemental bars from an earlier visit skip the fights.
+
+Changed:
+
+- 2.139.0: new quest; the Earth elemental is in combatFoes.json.
+
+Evidence:
+
+- OSRS Wiki Elemental Workshop II: kill 2 earth elementals for the ore, read 2026-11-18.
 

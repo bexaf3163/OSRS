@@ -338,6 +338,25 @@ const REVIEWED_FLOWS: Record<string, { revision: number; flow: NonNullable<Quest
     uncertainReceipts: ['Trout'],
     partialDelivery: true, fromStartOnly: true,
   } },
+  // The coins pay the camels, beers, urchin and snake pot; headpiece and beard become the kept desert disguise, the bucket of dung
+  // goes to the Hag; the gloves are kept, the blackjack, jewels, charm and basket are quest items.
+  'The Feud': { revision: 15376145, flow: {
+    consumes: [{ name: 'Coins', count: 517 }, { name: 'Kharidian headpiece', count: 1 }, { name: 'Fake beard', count: 1 }, { name: 'Bucket', count: 1 }],
+    receives: [],
+    unknownItems: ['Desert disguise', 'Oak blackjack', 'Willow blackjack', 'Jewels', 'Snake charm', 'Snake basket', 'Beer', 'Ugthanki dung', 'Poison'],
+    uncertainReceipts: ['Trout'],
+    partialDelivery: true, fromStartOnly: true,
+  } },
+  // The steel weapons go to the Myreque, nails and planks into the bridge, the fungus into the druid pouch and the runes into Fire Bolt;
+  // the hammer, staff, pouch and sickle are kept.
+  'In Search of the Myreque': { revision: 15399379, flow: {
+    consumes: [{ name: 'Steel longsword', count: 1 }, { name: 'Steel shortsword', count: 2 }, { name: 'Steel mace', count: 1 }, { name: 'Steel warhammer', count: 1 },
+      { name: 'Steel dagger', count: 1 }, { name: 'Steel nails', count: 225 }, { name: 'Plank', count: 6 }, { name: 'Mort myre fungus', count: 6 }, { name: 'Coins', count: 10 }],
+    receives: [],
+    unknownItems: [],
+    uncertainReceipts: ['Chaos rune', 'Air rune'],
+    partialDelivery: true, fromStartOnly: true,
+  } },
   'Ernest the Chicken': { revision: 15390916, flow: {
     // All puzzle parts are obtained within the manor; a spade is reused, not handed in.
     consumes: [], receives: [], unknownItems: ['Fish food', 'Poison', 'Poisoned fish food', 'Pressure gauge', 'Rubber tube', 'Oil can', 'Key'],
@@ -392,6 +411,8 @@ const REVIEWED_CLAUSES = new Set([
   // Enakhra's Lament: the route still reaches Firemaking 45 (the skill line), and the planned account stays on the standard spellbook.
   '- bypassable {{Refn|Although Firemaking is listed as a requirement, it is only used during the quest to identify what item needs to go in what brazier. Investigating the braziers is not required, meaning that it is possible to just guess and check which item goes in what brazier, so the Firemaking level is not actually required.|group=q}}',
   'Must be on the [[standard spellbook]]',
+  // The Feud: the Tough Guy and the Bandit champion are in the step foes and the combat ledger.
+  'The ability to kill a level 70 [[Bandit champion|bandit]] and a level 75 [[Tough Guy|Menaphite]] (both can be safespotted).',
   // Death to the Dorgeshuun: Sigmund is in the step foes and the combat ledger, fought in melee.
   'The ability to defeat a level 50 enemy with [[Melee]] or [[Magic]]',
   'The ability to defeat a level 172 [[Black demon (The Grand Tree)|Black demon]] (safespottable for Ranged and Magic or melee using a [[halberd]]).',

@@ -1659,6 +1659,28 @@
       "aggressive": false
     },
     {
+      "name": "Gorad",
+      "combat": 68,
+      "members": true,
+      "hitpoints": 80,
+      "attackLevel": 54,
+      "strengthLevel": 54,
+      "defenceLevel": 54,
+      "magicLevel": 1,
+      "attackBonus": 8,
+      "defence": {
+        "stab": 15,
+        "slash": 27,
+        "crush": 21,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "crush",
+      "maxHit": 7,
+      "speedTicks": 4,
+      "aggressive": false
+    },
+    {
       "name": "Cow",
       "version": "1",
       "combat": 2,

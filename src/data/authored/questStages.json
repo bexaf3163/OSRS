@@ -54436,6 +54436,7771 @@
      ]
     }
    ]
+  },
+  "S9-39": {
+   "var": [
+    "varp",
+    212
+   ],
+   "route": [
+    {
+     "title": "Starting out",
+     "steps": [
+      "Enter the top floor of the Watchtower.",
+      "Talk to the Watchtower Wizard. Dialogue: \"What's the matter?\", \"So how come the spell doesn't work?\", \"Can I be of help?\"",
+      "Climb down 2 ladders and search the far north-west bush to find fingernails.",
+      "Talk to the Watchtower Wizard. Dialogue: \"What do you suggest I do?\", \"So what do I do?\""
+     ]
+    },
+    {
+     "title": "Getting the relic pieces and the first crystal",
+     "steps": [
+      "Talk to Og north-west of Yanille to receive Toban's key. Dialogue: \"I seek entrance to the city of ogres.\"",
+      "Head south and get onto the island by using a rope with the branch (not the tree) of the long-branched tree that is west of the island.",
+      "Talk to Grew. Dialogue: \"Don't eat me; I can help you.\"",
+      "Enter the hole south of Gu'Tanoth (the \"Tunnel to Toban\" on map above, dungeon icon south of Jiggig, and north-west of some ruins).",
+      "Kill Gorad and take his tooth (be sure to have room in your inventory or you won't receive the tooth).",
+      "Talk to Toban. Dialogue: \"I seek entrance to the city of ogres.\", \"I could do something for you...\"",
+      "Talk to Toban again with dragon bones in your inventory to receive Relic part 3.",
+      "Search the chest and take Toban's stolen gold.",
+      "Talk to Grew back on the Jangerberry island.",
+      "Go back and talk to Og.",
+      "Talk to the Watchtower Wizard, who will put the three relics together and give you an ogre relic."
+     ]
+    },
+    {
+     "title": "The Skavids and the second crystal",
+     "steps": [
+      "Enter Gu'Tanoth via the path on the north-east corner of the hills, then head west towards the gate. Enter by talking to the Ogre Guard with the ogre relic in your inventory.",
+      "Go south-east to the market in the central area and steal a rock cake from the counter on the southern side.",
+      "Go back to the upper walkway, then head around south until you encounter guards at a battlement. Climb the battlement. Dialogue: \"But I am a friend to ogres...\"",
+      "Talk to the guard again with the rock cake in your inventory.",
+      "Head north-east and attempt to jump the bridge, then agree to give the guards 20 coins. Dialogue: \"Okay, I'll pay it.\"",
+      "Talk to a City guard. Dialogue: \"I seek passage into the skavid caves.\"",
+      "Talk to a City guard again with a death rune in your inventory to receive a skavid map.",
+      "Return back across the bridges, over the battlement, and through the north-west gate where you entered the city.",
+      "Walk east, then turn south towards the second city gate.",
+      "Enter the Skavid caves just north of the gate.",
+      "Speak with the scared skavid. Dialogue: \"Okay, okay, I'm not going to hurt you.\"",
+      "Exit the cave, and speak with each regular Skavid inside the following 4 caves:",
+      "The following responses should work. The first part is what the Skavid says. You must respond with the second part:",
+      "Exit the cave and go south to the Eastern City gate. Click on the gate to give a gold bar to the guard and gain access to the gate.",
+      "Continue past the gate and across the bridge into the cave. Speak to the Mad Skavid, who will say one of these options. Repeat with the second part again.",
+      "Take another cave nightshade. Make sure you have two of them. You can hop worlds for the second one.",
+      "Leave the way you came in (do <u>not</u> climb down the hole).",
+      "Return to the Gu'Tanoth market.",
+      "Use one nightshade on one of the Enclave guards (be sure to complete the dialogue).",
+      "Enter the cave and watch the cutscene.",
+      "Teleport out or run north to the exit."
+     ]
+    },
+    {
+     "title": "The magic ogre potion",
+     "steps": [
+      "Go back to the Watchtower wizard and talk to him.",
+      "To create a vial of water add in the <u>following order</u> (do not use the ground bat bones first or the water will evaporate and you will need more bones):",
+      "Talk to the Watchtower wizard again, with the unfinished potion in your inventory."
+     ]
+    },
+    {
+     "title": "Getting the other crystals",
+     "steps": [
+      "Prepare to defend yourself against the various ogres and a blue dragon in the Ogre Enclave. Don't forget your anti-dragon shield.",
+      "Return to the market square of Gu'Tanoth.",
+      "Use your nightshade on an Enclave guard to enter the cave again.",
+      "Use the magic ogre potion on all 6 ogre shamans to get the 3rd crystal.",
+      "Right-click mine the Rock of Dalgroth in the centre of the Enclave for the 4th crystal.",
+      "Talk to the Watchtower wizard and return the crystals. (Leave the room and return if crystals remain on pillars before you have placed them.)",
+      "Pull the lever to the west.",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Go to the top floor of the Watchtower north of Yanille and talk to the Watchtower Wizard.",
+       "s": "Go up the Watchtower north of Yanille to the Watchtower Wizard.",
+       "k": "goUpTrellis",
+       "at": [
+        2548,
+        3119,
+        0
+       ],
+       "hl": {
+        "obj": [
+         20056
+        ]
+       }
+      },
+      {
+       "t": "Go to the top floor of the Watchtower north of Yanille and talk to the Watchtower Wizard.",
+       "s": "Go up the Watchtower north of Yanille to the Watchtower Wizard.",
+       "k": "goUpLadderToWizard",
+       "at": [
+        2549,
+        3111,
+        1
+       ],
+       "hl": {
+        "obj": [
+         2796
+        ]
+       }
+      },
+      {
+       "t": "Go to the top floor of the Watchtower north of Yanille and talk to the Watchtower Wizard.",
+       "s": "Go up the Watchtower north of Yanille to the Watchtower Wizard.",
+       "k": "talkToWizard",
+       "at": [
+        2546,
+        3114,
+        2
+       ],
+       "hl": {
+        "npc": [
+         4397
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 1,
+     "do": [
+      {
+       "t": "Search the bushes north of the Watchtower.",
+       "s": "Search the bushes north of the Watchtower.",
+       "k": "searchBush",
+       "at": [
+        2544,
+        3134,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2799
+        ]
+       }
+      },
+      {
+       "t": "Search the bushes north of the Watchtower.",
+       "s": "Search the bushes north of the Watchtower.",
+       "k": "goDownFromFirstFloor",
+       "at": [
+        2544,
+        3111,
+        1
+       ],
+       "hl": {
+        "obj": [
+         17122
+        ]
+       }
+      },
+      {
+       "t": "Search the bushes north of the Watchtower.",
+       "s": "Search the bushes north of the Watchtower.",
+       "k": "goDownFromWizard",
+       "at": [
+        2549,
+        3111,
+        2
+       ],
+       "hl": {
+        "obj": [
+         2797
+        ]
+       }
+      },
+      {
+       "t": "Return to the Watchtower Wizard with the fingernails.",
+       "s": "Return to the Watchtower Wizard with the fingernails.",
+       "k": "goBackUpToFirstFloor",
+       "at": [
+        2544,
+        3111,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2833
+        ]
+       }
+      },
+      {
+       "t": "Return to the Watchtower Wizard with the fingernails.",
+       "s": "Return to the Watchtower Wizard with the fingernails.",
+       "k": "goBackUpToWizard",
+       "at": [
+        2549,
+        3111,
+        1
+       ],
+       "hl": {
+        "obj": [
+         2796
+        ]
+       }
+      },
+      {
+       "t": "Return to the Watchtower Wizard with the fingernails.",
+       "s": "Return to the Watchtower Wizard with the fingernails.",
+       "k": "talkToWizardAgain",
+       "at": [
+        2546,
+        3114,
+        2
+       ],
+       "hl": {
+        "npc": [
+         4397
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 2,
+     "do": [
+      {
+       "t": "Please open the Watchtower quest journal to sync your state.",
+       "s": "Please open the Watchtower quest journal to sync your state.",
+       "k": "syncStep"
+      },
+      {
+       "t": "Talk to Og north west of Yanille.",
+       "s": "Talk to Og north west of Yanille.",
+       "k": "talkToOg",
+       "at": [
+        2506,
+        3115,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4364
+        ]
+       }
+      },
+      {
+       "t": "Use your rope on a branch to swing to the island west of Yanille.",
+       "s": "Use your rope on a branch to swing to the island west of Yanille.",
+       "k": "useRopeOnBranch",
+       "at": [
+        2502,
+        3087,
+        0
+       ],
+       "hl": {
+        "obj": [
+         23638
+        ]
+       }
+      },
+      {
+       "t": "Talk to Grew on the island west of Yanille.",
+       "s": "Talk to Grew on the island west of Yanille.",
+       "k": "talkToGrew",
+       "at": [
+        2511,
+        3086,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4365
+        ]
+       }
+      },
+      {
+       "t": "Enter the hole south of Gu'Tanoth.",
+       "s": "Enter the hole south of Gu'Tanoth.",
+       "k": "enterHoleSouthOfGuTanoth",
+       "at": [
+        2500,
+        2990,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2811
+        ]
+       }
+      },
+      {
+       "t": "Leave Grew's island.",
+       "s": "Leave Grew's island.",
+       "k": "leaveGrewIsland",
+       "at": [
+        2511,
+        3093,
+        0
+       ],
+       "hl": {
+        "obj": [
+         23570
+        ]
+       }
+      },
+      {
+       "t": "Kill Gorad and pick up his tooth.",
+       "s": "Kill Gorad and pick up his tooth.",
+       "k": "killGorad",
+       "at": [
+        2578,
+        3022,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4367
+        ]
+       }
+      },
+      {
+       "t": "Talk to Toban on the island east of Gu'Tanoth.",
+       "s": "Talk to Toban on the island east of Gu'Tanoth.",
+       "k": "talkToToban",
+       "at": [
+        2574,
+        3027,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4366
+        ]
+       }
+      },
+      {
+       "t": "Talk to Toban on the island east of Gu'Tanoth with the dragon bones.",
+       "s": "Talk to Toban on the island east of Gu'Tanoth with the dragon bones.",
+              "k": "giveTobanDragonBones",
+       "at": [
+        2574,
+        3027,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4366
+        ]
+       }
+      },
+      {
+       "t": "Open the chest on the island east of Gu'Tanoth using Toban's Key.",
+       "s": "Open the chest on the island east of Gu'Tanoth using Toban's Key.",
+       "k": "searchChestForTobansGold",
+       "at": [
+        2575,
+        3031,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2790
+        ]
+       }
+      },
+      {
+       "t": "Return to Og with his stolen gold north west of Yanille.",
+       "s": "Return to Og with his stolen gold north west of Yanille.",
+       "k": "talkToOgAgain",
+       "at": [
+        2506,
+        3115,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4364
+        ]
+       }
+      },
+      {
+       "t": "Return to Grew with Gorad's teeth on the island west of Yanille.",
+       "s": "Return to Grew with Gorad's teeth on the island west of Yanille.",
+       "k": "useRopeOnBranchAgain",
+       "at": [
+        2502,
+        3087,
+        0
+       ],
+       "hl": {
+        "obj": [
+         23638
+        ]
+       }
+      },
+      {
+       "t": "Return to Grew with Gorad's teeth on the island west of Yanille.",
+       "s": "Return to Grew with Gorad's teeth on the island west of Yanille.",
+       "k": "talkToGrewAgain",
+       "at": [
+        2511,
+        3086,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4365
+        ]
+       }
+      },
+      {
+       "t": "Return to the Watchtower Wizard with the relic pieces.",
+       "s": "Return to the Watchtower Wizard with the relic pieces.",
+       "k": "bringRelicUpToFirstFloor",
+       "at": [
+        2544,
+        3111,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2833
+        ]
+       }
+      },
+      {
+       "t": "Return to the Watchtower Wizard with the relic pieces.",
+       "s": "Return to the Watchtower Wizard with the relic pieces.",
+       "k": "bringRelicUpToWizard",
+       "at": [
+        2549,
+        3111,
+        1
+       ],
+       "hl": {
+        "obj": [
+         2796
+        ]
+       }
+      },
+      {
+       "t": "Return to the Watchtower Wizard with the relic pieces.",
+       "s": "Return to the Watchtower Wizard with the relic pieces.",
+       "k": "talkToWizardWithRelic",
+       "at": [
+        2546,
+        3114,
+        2
+       ],
+       "hl": {
+        "npc": [
+         4397
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 3,
+     "do": [
+      {
+       "t": "Talk to the Ogre Guard at the entrance of Gu'Tanoth and give them the ogre relic.",
+       "s": "Give the ogre relic to the Ogre Guard at the entrance of Gu'Tanoth.",
+       "k": "enterGuTanoth",
+       "at": [
+        2504,
+        3063,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4370
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 4,
+     "do": [
+      {
+       "t": "Steal a rock cake from Gu'Tanoth's market.",
+       "s": "Steal a rock cake from Gu'Tanoth's market.",
+       "k": "stealRockCake",
+       "at": [
+        2514,
+        3036,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2793
+        ]
+       }
+      },
+      {
+       "t": "Talk to an Ogre Guard next to the battlement.",
+       "s": "Talk to an Ogre Guard next to the battlement.",
+       "k": "talkToGuardBattlement",
+       "at": [
+        2503,
+        3012,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4371
+        ]
+       }
+      },
+      {
+       "t": "Attempt to cross the battlement again with a rock cake.",
+       "s": "Attempt to cross the battlement again with a rock cake.",
+       "k": "talkToGuardWithRockCake",
+       "at": [
+        2507,
+        3012,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4371
+        ]
+       }
+      },
+      {
+       "t": "Jump over the broken bridge.",
+       "s": "Jump over the broken bridge.",
+       "k": "jumpGap",
+       "at": [
+        2530,
+        3026,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2830
+        ]
+       }
+      },
+      {
+       "t": "Talk to the City Guard.",
+       "s": "Talk to the City Guard.",
+       "k": "talkToCityGuard",
+       "at": [
+        2543,
+        3032,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4373
+        ]
+       }
+      },
+      {
+       "t": "Talk to the City Guard again.",
+       "s": "Talk to the City Guard again.",
+       "k": "talkToCityGuardAgain",
+       "at": [
+        2543,
+        3032,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4373
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 5,
+     "do": [
+      {
+       "t": "Steal a rock cake from Gu'Tanoth's market.",
+       "s": "Steal a rock cake from Gu'Tanoth's market.",
+       "k": "stealRockCake",
+       "at": [
+        2514,
+        3036,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2793
+        ]
+       }
+      },
+      {
+       "t": "Talk to an Ogre Guard next to the battlement.",
+       "s": "Talk to an Ogre Guard next to the battlement.",
+       "k": "talkToGuardBattlement",
+       "at": [
+        2503,
+        3012,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4371
+        ]
+       }
+      },
+      {
+       "t": "Attempt to cross the battlement again with a rock cake.",
+       "s": "Attempt to cross the battlement again with a rock cake.",
+       "k": "talkToGuardWithRockCake",
+       "at": [
+        2507,
+        3012,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4371
+        ]
+       }
+      },
+      {
+       "t": "Jump over the broken bridge.",
+       "s": "Jump over the broken bridge.",
+       "k": "jumpGap",
+       "at": [
+        2530,
+        3026,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2830
+        ]
+       }
+      },
+      {
+       "t": "Talk to the City Guard.",
+       "s": "Talk to the City Guard.",
+       "k": "talkToCityGuard",
+       "at": [
+        2543,
+        3032,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4373
+        ]
+       }
+      },
+      {
+       "t": "Talk to the City Guard again.",
+       "s": "Talk to the City Guard again.",
+       "k": "talkToCityGuardAgain",
+       "at": [
+        2543,
+        3032,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4373
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 6,
+     "do": [
+      {
+       "t": "Enter the skavid cave entrance in east Gu'Tanoth.",
+       "s": "Enter the skavid cave entrance in east Gu'Tanoth.",
+       "k": "enterScaredSkavidCave",
+       "at": [
+        2554,
+        3035,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2809
+        ]
+       }
+      },
+      {
+       "t": "Talk to the scared skavid.",
+       "s": "Talk to the scared skavid.",
+       "k": "talkToScaredSkavid",
+       "at": [
+        2502,
+        9433,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4374
+        ]
+       }
+      },
+      {
+       "t": "Talk to four other skavids in their caves.",
+       "s": "Talk to four other skavids in their caves.",
+       "k": "enterSkavid1Cave",
+       "at": [
+        2554,
+        3053,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2808
+        ]
+       }
+      },
+      {
+       "t": "Talk to four other skavids in their caves.",
+       "s": "Talk to four other skavids in their caves.",
+       "k": "enterSkavid2Cave",
+       "at": [
+        2541,
+        3053,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2807
+        ]
+       }
+      },
+      {
+       "t": "Talk to four other skavids in their caves.",
+       "s": "Talk to four other skavids in their caves.",
+       "k": "enterSkavid3Cave",
+       "at": [
+        2524,
+        3069,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2806
+        ]
+       }
+      },
+      {
+       "t": "Talk to four other skavids in their caves.",
+       "s": "Talk to four other skavids in their caves.",
+       "k": "enterSkavid4Cave",
+       "at": [
+        2561,
+        3024,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2805
+        ]
+       }
+      },
+      {
+       "t": "Talk to four other skavids in their caves.",
+       "s": "Talk to four other skavids in their caves.",
+       "k": "leaveScaredSkavidRoom",
+       "at": [
+        2504,
+        9442,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2821
+        ]
+       }
+      },
+      {
+       "t": "Talk to the skavid.",
+       "s": "Talk to the skavid.",
+       "k": "talkToSkavid1",
+       "at": [
+        2503,
+        9449,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4378
+        ]
+       }
+      },
+      {
+       "t": "Talk to four other skavids in their caves.",
+       "s": "Talk to four other skavids in their caves.",
+       "k": "leaveSkavid1",
+       "at": [
+        2497,
+        9451,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2820
+        ]
+       }
+      },
+      {
+       "t": "Talk to the skavid.",
+       "s": "Talk to the skavid.",
+       "k": "talkToSkavid2",
+       "at": [
+        2516,
+        9451,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4377
+        ]
+       }
+      },
+      {
+       "t": "Talk to four other skavids in their caves.",
+       "s": "Talk to four other skavids in their caves.",
+       "k": "leaveSkavid2",
+       "at": [
+        2518,
+        9456,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2819
+        ]
+       }
+      },
+      {
+       "t": "Talk to the skavid.",
+       "s": "Talk to the skavid.",
+       "k": "talkToSkavid3",
+       "at": [
+        2531,
+        9465,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4376
+        ]
+       }
+      },
+      {
+       "t": "Talk to four other skavids in their caves.",
+       "s": "Talk to four other skavids in their caves.",
+       "k": "leaveSkavid3",
+       "at": [
+        2532,
+        9470,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2818
+        ]
+       }
+      },
+      {
+       "t": "Talk to the skavid.",
+       "s": "Talk to the skavid.",
+       "k": "talkToSkavid4",
+       "at": [
+        2503,
+        9449,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4379
+        ]
+       }
+      },
+      {
+       "t": "Go talk to the mad skavid.",
+       "s": "Go talk to the mad skavid.",
+       "k": "leaveSkavid4",
+       "at": [
+        2497,
+        9418,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2817
+        ]
+       }
+      },
+      {
+       "t": "Try to go through the gate to the south east cave of Gu'Tanoth. Give the guard a gold bar and go through.",
+       "s": "Give the guard a gold bar at the south-east cave gate of Gu'Tanoth.",
+       "need": "Gold bar",
+       "k": "tryToGoThroughToInsaneSkavid",
+       "at": [
+        2550,
+        3028,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2786
+        ]
+       }
+      },
+      {
+       "t": "Enter the mad skavid's cave.",
+       "s": "Enter the mad skavid's cave.",
+       "k": "enterInsaneSkavidCave",
+       "at": [
+        2528,
+        3013,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2810
+        ]
+       }
+      },
+      {
+       "t": "Talk to the mad skavid in his cave.",
+       "s": "Talk to the mad skavid in his cave.",
+       "k": "talkToInsaneSkavid"
+      }
+     ]
+    },
+    {
+     "at": 7,
+     "do": [
+      {
+       "t": "Use a nightshade on an Enclave Guard in the Gu'Tanoth market.",
+       "s": "Use a nightshade on an Enclave Guard in the Gu'Tanoth market.",
+       "k": "useNightshadeOnGuard",
+       "at": [
+        2507,
+        3036,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4381
+        ]
+       }
+      },
+      {
+       "t": "Pick up 2 cave nightshade. You can world hop to get a second one.",
+       "s": "Pick up 2 cave nightshade. You can world hop to get a second one.",
+       "k": "pickUp2Nightshade",
+       "at": [
+        2528,
+        9415,
+        0
+       ]
+      },
+      {
+       "t": "Leave the mad skavid's cave.",
+       "s": "Leave the mad skavid's cave.",
+       "k": "leaveMadSkavid",
+       "at": [
+        2521,
+        9411,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2822
+        ]
+       }
+      },
+      {
+       "t": "Return to the Watchtower Wizard.",
+       "s": "Return to the Watchtower Wizard.",
+       "k": "goBackUpToFirstFloorAfterEnclave",
+       "at": [
+        2544,
+        3111,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2833
+        ]
+       }
+      },
+      {
+       "t": "Leave the enclave and return to the Watchtower Wizard.",
+       "s": "Leave the enclave and return to the Watchtower Wizard.",
+       "k": "leaveEnclave",
+       "at": [
+        2600,
+        9469,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2813
+        ]
+       }
+      },
+      {
+       "t": "Return to the Watchtower Wizard.",
+       "s": "Return to the Watchtower Wizard.",
+       "k": "goBackUpToWizardAfterEnclave",
+       "at": [
+        2549,
+        3111,
+        1
+       ],
+       "hl": {
+        "obj": [
+         2796
+        ]
+       }
+      },
+      {
+       "t": "Return to the Watchtower Wizard.",
+       "s": "Return to the Watchtower Wizard.",
+       "k": "talkToWizardAgainEnclave",
+       "at": [
+        2546,
+        3114,
+        2
+       ],
+       "hl": {
+        "npc": [
+         4397
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 8,
+     "do": [
+      {
+       "t": "Use a nightshade on an Enclave Guard in the Gu'Tanoth market.",
+       "s": "Use a nightshade on an Enclave Guard in the Gu'Tanoth market.",
+       "k": "useNightshadeOnGuard",
+       "at": [
+        2507,
+        3036,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4381
+        ]
+       }
+      },
+      {
+       "t": "Pick up 2 cave nightshade. You can world hop to get a second one.",
+       "s": "Pick up 2 cave nightshade. You can world hop to get a second one.",
+       "k": "pickUp2Nightshade",
+       "at": [
+        2528,
+        9415,
+        0
+       ]
+      },
+      {
+       "t": "Leave the mad skavid's cave.",
+       "s": "Leave the mad skavid's cave.",
+       "k": "leaveMadSkavid",
+       "at": [
+        2521,
+        9411,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2822
+        ]
+       }
+      },
+      {
+       "t": "Return to the Watchtower Wizard.",
+       "s": "Return to the Watchtower Wizard.",
+       "k": "goBackUpToFirstFloorAfterEnclave",
+       "at": [
+        2544,
+        3111,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2833
+        ]
+       }
+      },
+      {
+       "t": "Leave the enclave and return to the Watchtower Wizard.",
+       "s": "Leave the enclave and return to the Watchtower Wizard.",
+       "k": "leaveEnclave",
+       "at": [
+        2600,
+        9469,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2813
+        ]
+       }
+      },
+      {
+       "t": "Return to the Watchtower Wizard.",
+       "s": "Return to the Watchtower Wizard.",
+       "k": "goBackUpToWizardAfterEnclave",
+       "at": [
+        2549,
+        3111,
+        1
+       ],
+       "hl": {
+        "obj": [
+         2796
+        ]
+       }
+      },
+      {
+       "t": "Return to the Watchtower Wizard.",
+       "s": "Return to the Watchtower Wizard.",
+       "k": "talkToWizardAgainEnclave",
+       "at": [
+        2546,
+        3114,
+        2
+       ],
+       "hl": {
+        "npc": [
+         4397
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 9,
+     "do": [
+      {
+       "t": "Use some jangerberries on a guam potion (unf)",
+       "s": "Use some jangerberries on a guam potion (unf)",
+       "k": "useJangerberriesOnGuam"
+      },
+      {
+       "t": "Use a pestle and mortar on some bat bones.",
+       "s": "Use a pestle and mortar on some bat bones.",
+       "k": "grindBatBones"
+      },
+      {
+       "t": "Use the ground bat bones on the potion",
+       "s": "Use the ground bat bones on the potion",
+       "k": "useBonesOnPotion"
+      },
+      {
+       "t": "Return to the Watchtower Wizard with the potion.",
+       "s": "Return to the Watchtower Wizard with the potion.",
+       "k": "goUpToFirstFloorWithPotion",
+       "at": [
+        2544,
+        3111,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2833
+        ]
+       }
+      },
+      {
+       "t": "Return to the Watchtower Wizard with the potion.",
+       "s": "Return to the Watchtower Wizard with the potion.",
+       "k": "goUpToWizardWithPotion",
+       "at": [
+        2549,
+        3111,
+        1
+       ],
+       "hl": {
+        "obj": [
+         2796
+        ]
+       }
+      },
+      {
+       "t": "Return to the Watchtower Wizard with the potion.",
+       "s": "Return to the Watchtower Wizard with the potion.",
+       "k": "talkToWizardWithPotion",
+       "at": [
+        2546,
+        3114,
+        2
+       ],
+       "hl": {
+        "npc": [
+         4397
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 10,
+     "do": [
+      {
+       "t": "Use a nightshade on an Enclave Guard in the Gu'Tanoth market to enter the enclave again.",
+       "s": "Use a nightshade on an Enclave Guard in the market to enter again.",
+       "k": "useNightshadeOnGuardAgain",
+       "at": [
+        2507,
+        3036,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4381
+        ]
+       }
+      },
+      {
+       "t": "Use the magic ogre potion on all the ogre shamans.",
+       "s": "Use the magic ogre potion on all the ogre shamans.",
+       "k": "usePotionOnOgre1",
+       "at": [
+        2590,
+        9438,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4383
+        ]
+       }
+      },
+      {
+       "t": "Use the magic ogre potion on all the ogre shamans.",
+       "s": "Use the magic ogre potion on all the ogre shamans.",
+       "k": "usePotionOnOgre2",
+       "at": [
+        2579,
+        9436,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4387
+        ]
+       }
+      },
+      {
+       "t": "Use the magic ogre potion on all the ogre shamans.",
+       "s": "Use the magic ogre potion on all the ogre shamans.",
+       "k": "usePotionOnOgre3",
+       "at": [
+        2578,
+        9450,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4389
+        ]
+       }
+      },
+      {
+       "t": "Use the magic ogre potion on all the ogre shamans.",
+       "s": "Use the magic ogre potion on all the ogre shamans.",
+       "k": "usePotionOnOgre4",
+       "at": [
+        2600,
+        9461,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4391
+        ]
+       }
+      },
+      {
+       "t": "Use the magic ogre potion on all the ogre shamans.",
+       "s": "Use the magic ogre potion on all the ogre shamans.",
+       "k": "usePotionOnOgre5",
+       "at": [
+        2608,
+        9450,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4393
+        ]
+       }
+      },
+      {
+       "t": "Use the magic ogre potion on all the ogre shamans.",
+       "s": "Use the magic ogre potion on all the ogre shamans.",
+       "k": "usePotionOnOgre6",
+       "at": [
+        2610,
+        9435,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4395
+        ]
+       }
+      },
+      {
+       "t": "Mine the Rock of Dalgorth in the enclave.",
+       "s": "Mine the Rock of Dalgorth in the enclave.",
+       "k": "mineRock",
+       "at": [
+        2591,
+        9450,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2816
+        ]
+       }
+      },
+      {
+       "t": "Return to the Watchtower Wizard with the crystals.",
+       "s": "Return to the Watchtower Wizard with the crystals.",
+       "k": "goUpToFirstFloorWithCrystals",
+       "at": [
+        2544,
+        3111,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2833
+        ]
+       }
+      },
+      {
+       "t": "Leave the enclave and return to the Watchtower Wizard with the crystals.",
+       "s": "Leave the enclave and bring the crystals to the Watchtower Wizard.",
+       "k": "leaveEnclaveWithCrystals",
+       "at": [
+        2600,
+        9469,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2813
+        ]
+       }
+      },
+      {
+       "t": "Return to the Watchtower Wizard with the crystals.",
+       "s": "Return to the Watchtower Wizard with the crystals.",
+       "k": "goUpToWizardWithCrystals",
+       "at": [
+        2549,
+        3111,
+        1
+       ],
+       "hl": {
+        "obj": [
+         2796
+        ]
+       }
+      },
+      {
+       "t": "Return to the Watchtower Wizard with the crystals.",
+       "s": "Return to the Watchtower Wizard with the crystals.",
+       "k": "talkToWizardWithCrystals",
+       "at": [
+        2546,
+        3114,
+        2
+       ],
+       "hl": {
+        "npc": [
+         4397
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 11,
+     "do": [
+      {
+       "t": "Return to the Watchtower Wizard with the crystals.",
+       "s": "Return to the Watchtower Wizard with the crystals.",
+       "k": "goUpToFirstFloorWithCrystals",
+       "at": [
+        2544,
+        3111,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2833
+        ]
+       }
+      },
+      {
+       "t": "Return to the Watchtower Wizard with the crystals.",
+       "s": "Return to the Watchtower Wizard with the crystals.",
+       "k": "goUpToWizardWithCrystals",
+       "at": [
+        2549,
+        3111,
+        1
+       ],
+       "hl": {
+        "obj": [
+         2796
+        ]
+       }
+      },
+      {
+       "t": "Use the crystals on the pillars.",
+       "s": "Use the crystals on the pillars.",
+       "k": "useCrystal1",
+       "at": [
+        2545,
+        3113,
+        2
+       ],
+       "hl": {
+        "obj": [
+         20029
+        ]
+       }
+      },
+      {
+       "t": "Use the crystals on the pillars.",
+       "s": "Use the crystals on the pillars.",
+       "k": "useCrystal2",
+       "at": [
+        2548,
+        3116,
+        2
+       ],
+       "hl": {
+        "obj": [
+         20033
+        ]
+       }
+      },
+      {
+       "t": "Use the crystals on the pillars.",
+       "s": "Use the crystals on the pillars.",
+       "k": "useCrystal3",
+       "at": [
+        2545,
+        3116,
+        2
+       ],
+       "hl": {
+        "obj": [
+         20025
+        ]
+       }
+      },
+      {
+       "t": "Use the crystals on the pillars.",
+       "s": "Use the crystals on the pillars.",
+       "k": "useCrystal4",
+       "at": [
+        2548,
+        3113,
+        2
+       ],
+       "hl": {
+        "obj": [
+         20037
+        ]
+       }
+      },
+      {
+       "t": "Pull the lever to finish the quest.",
+       "s": "Pull the lever to finish the quest.",
+       "k": "pullLever",
+       "at": [
+        2543,
+        3115,
+        2
+       ],
+       "hl": {
+        "obj": [
+         2794
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 12,
+     "do": [
+      {
+       "t": "Return to the Watchtower Wizard with the crystals.",
+       "s": "Return to the Watchtower Wizard with the crystals.",
+       "k": "goUpToFirstFloorWithCrystals",
+       "at": [
+        2544,
+        3111,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2833
+        ]
+       }
+      },
+      {
+       "t": "Return to the Watchtower Wizard with the crystals.",
+       "s": "Return to the Watchtower Wizard with the crystals.",
+       "k": "goUpToWizardWithCrystals",
+       "at": [
+        2549,
+        3111,
+        1
+       ],
+       "hl": {
+        "obj": [
+         2796
+        ]
+       }
+      },
+      {
+       "t": "Use the crystals on the pillars.",
+       "s": "Use the crystals on the pillars.",
+       "k": "useCrystal1",
+       "at": [
+        2545,
+        3113,
+        2
+       ],
+       "hl": {
+        "obj": [
+         20029
+        ]
+       }
+      },
+      {
+       "t": "Use the crystals on the pillars.",
+       "s": "Use the crystals on the pillars.",
+       "k": "useCrystal2",
+       "at": [
+        2548,
+        3116,
+        2
+       ],
+       "hl": {
+        "obj": [
+         20033
+        ]
+       }
+      },
+      {
+       "t": "Use the crystals on the pillars.",
+       "s": "Use the crystals on the pillars.",
+       "k": "useCrystal3",
+       "at": [
+        2545,
+        3116,
+        2
+       ],
+       "hl": {
+        "obj": [
+         20025
+        ]
+       }
+      },
+      {
+       "t": "Use the crystals on the pillars.",
+       "s": "Use the crystals on the pillars.",
+       "k": "useCrystal4",
+       "at": [
+        2548,
+        3113,
+        2
+       ],
+       "hl": {
+        "obj": [
+         20037
+        ]
+       }
+      },
+      {
+       "t": "Pull the lever to finish the quest.",
+       "s": "Pull the lever to finish the quest.",
+       "k": "pullLever",
+       "at": [
+        2543,
+        3115,
+        2
+       ],
+       "hl": {
+        "obj": [
+         2794
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  "S9-40": {
+   "var": [
+    "varbit",
+    1560
+   ],
+   "route": [
+    {
+     "title": "Building the statue",
+     "steps": [
+      "Talk to Lazim north-east of the quarry. Dialogue: \"Of course!\", \"Okay, I'll get on with it.\"",
+      "Bring him 32&nbsp;kg of sandstone, it doesn't have to be all at once. You can break down big pieces with a chisel.",
+      "Use your chisel on the sandstone (32&nbsp;kg).",
+      "Place the base on the flat ground.",
+      "Repeat the process for a 20&nbsp;kg body.",
+      "Use your chisel on the statue.",
+      "Talk to Lazim and pick any head (remember which head you picked).",
+      "Mine two 5&nbsp;kg pieces of granite (not sandstone!). (Ironmen: Mine a 3rd piece of any size for King's Ransom)",
+      "Make the head you chose (if you don't make the head you chose, you will have to make another head). The other 5&nbsp;kg granite piece is used later.",
+      "If you did not bring clay or coal, mine some now.",
+      "Talk to him and you'll fall into a temple."
+     ]
+    },
+    {
+     "title": "=Bottom floor=",
+     "steps": [
+      "Talk to Lazim.",
+      "Use your chisel on the fallen statue four times to get all its limbs.",
+      "Talk to Lazim again to retrieve the statue head.",
+      "Take-sigil from the pedestal south of Lazim to get the M sigil.",
+      "Go around all the rooms through the outer hallways and pick up the R, K and Z sigils. The matching limbs are automatically used and consumed to open the doors.",
+      "Go to the centre room after collecting all four sigils",
+      "Try to open the doors to place the sigils. Make sure to complete each dialogue.",
+      "Climb the ladder."
+     ]
+    },
+    {
+     "title": "=Middle floor=",
+     "steps": [
+      "Use soft clay on the pedestal. (Cast a fire spell on the frozen fountain if you still need a water source.)",
+      "Use a chisel on the 5&nbsp;kg granite.",
+      "Place the new stone head in the pedestal. The original head will be slightly too small. The new head should fit perfectly and trigger a cutscene (Make sure to finish dialogue).",
+      "North-west: use your bread or cake or pie on Pentyn. You may have to right-click again on Pentyn to make sure you are using the food on him and not on the magic spell. Dialogue: \"It's okay, I don't need any help.\"",
+      "North-east: cast wind bolt, blast, wave, or surge on the furnace.",
+      "South-east: light the 6 braziers with the appropriate fuels.",
+      "South-west: cast fire bolt, blast, wave, or surge on the fountain.",
+      "Pass through the magic barrier and climb the ladder. (If you can't pass through barrier, talk to Lazim)"
+     ]
+    },
+    {
+     "title": "=Top floor=",
+     "steps": [
+      "Cast crumble undead on the boneguard.",
+      "Climb down the stone ladder to the south.",
+      "Turn on Protect from Melee and talk to the new boneguard. Dialogue: \"Of course, I'll help you out.\", \"Okay, I'll start building.\"",
+      "Take 3 sandstones from the rubble pile.",
+      "Use a sandstone on the southern wall, then use your chisel on the wall. Repeat to completion.",
+      "Talk to the boneguard again.",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Before you begin, ensure that you have enough prayer points to use Protect from Melee for around five seconds (you will need this later in the temple). Talk to Lazim in the quarry south of the Bandit Camp.",
+       "s": "Keep prayer for Protect from Melee; talk to Lazim in the quarry.",
+       "k": "talkToLazim",
+       "at": [
+        3190,
+        2925,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3580
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 10,
+     "do": [
+      {
+       "t": "Get 32kg of sandstone and give it to Lazim. This can be done in batches, and you can mine some nearby.",
+       "s": "Give Lazim 32kg of sandstone, in batches if needed.",
+       "need": "Sandstone (10kg)",
+       "k": "bringLazim32Sandstone",
+       "at": [
+        3190,
+        2925,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3580
+        ]
+       }
+      },
+      {
+       "t": "Use a chisel on the sandstone 32kg.",
+       "s": "Use a chisel on the sandstone 32kg.",
+       "k": "useChiselOn32Sandstone"
+      },
+      {
+       "t": "Place the base on the flat ground nearby.",
+       "s": "Place the base on the flat ground nearby.",
+       "k": "placeBase",
+       "at": [
+        3190,
+        2926,
+        0
+       ],
+       "hl": {
+        "obj": [
+         10952
+        ]
+       }
+      },
+      {
+       "t": "Talk to Lazim again.",
+       "s": "Talk to Lazim again.",
+       "k": "talkToLazimAboutBody",
+       "at": [
+        3190,
+        2925,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3580
+        ]
+       }
+      },
+      {
+       "t": "Talk to Lazim with 20kg of sandstone. Batches work, and you can mine some nearby.",
+       "s": "Talk to Lazim with 20kg of sandstone, in batches if needed.",
+       "k": "bringLazim20Sandstone",
+       "at": [
+        3190,
+        2925,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3580
+        ]
+       }
+      },
+      {
+       "t": "Use a chisel on the sandstone 20kg.",
+       "s": "Use a chisel on the sandstone 20kg.",
+       "k": "useChiselOn20Sandstone"
+      },
+      {
+       "t": "Place the body on the sandstone base.",
+       "s": "Place the body on the sandstone base.",
+       "k": "placeBody",
+       "at": [
+        3190,
+        2926,
+        0
+       ],
+       "hl": {
+        "obj": [
+         10952
+        ]
+       }
+      },
+      {
+       "t": "Use a chisel on the headless statue.",
+       "s": "Use a chisel on the headless statue.",
+       "k": "chiselStatue",
+       "at": [
+        3190,
+        2926,
+        0
+       ],
+       "hl": {
+        "obj": [
+         10952
+        ]
+       }
+      },
+      {
+       "t": "Talk to Lazim and choose the head you'd like the statue to have.",
+       "s": "Talk to Lazim and choose the head you'd like the statue to have.",
+       "k": "talkToLazimToChooseHead",
+       "at": [
+        3190,
+        2925,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3580
+        ]
+       }
+      },
+      {
+       "t": "Get 2 x granite (5kg). You can mine some nearby.",
+       "s": "Get 2 x granite (5kg). You can mine some nearby.",
+       "has": "Granite (5kg)",
+       "k": "getGranite",
+       "at": [
+        3190,
+        2925,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3580
+        ]
+       }
+      },
+      {
+       "t": "Use a chisel on a piece of granite 5kg, and choose the head you decided on to craft.",
+       "s": "Chisel a 5kg granite piece into the head you chose.",
+       "k": "craftHead"
+      },
+      {
+       "t": "Give Lazim the head.",
+       "s": "Give Lazim the head.",
+       "k": "giveLazimHead",
+       "at": [
+        3190,
+        2925,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3580
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 20,
+     "do": [
+      {
+       "t": "Enter the temple south of the Bandit's Camp.",
+       "s": "Enter the temple south of the Bandit's Camp.",
+       "k": "enterTemple",
+       "at": [
+        3194,
+        2925,
+        0
+       ],
+       "hl": {
+        "obj": [
+         11046
+        ]
+       }
+      },
+      {
+       "t": "Enter the temple south of the Bandit's Camp.",
+       "s": "Enter the temple south of the Bandit's Camp.",
+       "k": "enterTempleDownLadder",
+       "at": [
+        3127,
+        9329,
+        1
+       ],
+       "hl": {
+        "obj": [
+         11042
+        ]
+       }
+      },
+      {
+       "t": "Talk to Lazim in the temple.",
+       "s": "Talk to Lazim in the temple.",
+       "k": "talkToLazimInTemple",
+       "at": [
+        3127,
+        9324,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3580
+        ]
+       }
+      },
+      {
+       "t": "Use a chisel on the fallen statue to get all its limbs.",
+       "s": "Use a chisel on the fallen statue to get all its limbs.",
+       "k": "cutOffLimb",
+       "at": [
+        3130,
+        9326,
+        0
+       ],
+       "hl": {
+        "obj": [
+         10970
+        ]
+       }
+      },
+      {
+       "t": "Take the M sigil from the pedestal in the room.",
+       "s": "Take the M sigil from the pedestal in the room.",
+       "k": "takeM",
+       "at": [
+        3128,
+        9319,
+        0
+       ],
+       "hl": {
+        "obj": [
+         11061
+        ]
+       }
+      },
+      {
+       "t": "Enter the right arm door.",
+       "s": "Enter the right arm door.",
+       "k": "enterDoor1",
+       "at": [
+        3126,
+        9337,
+        0
+       ],
+       "hl": {
+        "obj": [
+         11066
+        ]
+       }
+      },
+      {
+       "t": "Take the Z sigil from the pedestal in the north room.",
+       "s": "Take the Z sigil from the pedestal in the north room.",
+       "k": "takeZ",
+       "at": [
+        3097,
+        9336,
+        0
+       ],
+       "hl": {
+        "obj": [
+         11060
+        ]
+       }
+      },
+      {
+       "t": "Enter the left leg door.",
+       "s": "Enter the left leg door.",
+       "k": "enterDoor2",
+       "at": [
+        3079,
+        9334,
+        0
+       ],
+       "hl": {
+        "obj": [
+         11068
+        ]
+       }
+      },
+      {
+       "t": "Take the K sigil from the pedestal in the west room.",
+       "s": "Take the K sigil from the pedestal in the west room.",
+       "k": "takeK",
+       "at": [
+        3080,
+        9305,
+        0
+       ],
+       "hl": {
+        "obj": [
+         11063
+        ]
+       }
+      },
+      {
+       "t": "Enter the left arm door.",
+       "s": "Enter the left arm door.",
+       "k": "enterDoor3",
+       "at": [
+        3082,
+        9287,
+        0
+       ],
+       "hl": {
+        "obj": [
+         11064
+        ]
+       }
+      },
+      {
+       "t": "Take the R sigil from the pedestal in the south room.",
+       "s": "Take the R sigil from the pedestal in the south room.",
+       "k": "takeR",
+       "at": [
+        3111,
+        9288,
+        0
+       ],
+       "hl": {
+        "obj": [
+         11062
+        ]
+       }
+      },
+      {
+       "t": "Enter the right leg door.",
+       "s": "Enter the right leg door.",
+       "k": "enterDoor4",
+       "at": [
+        3129,
+        9290,
+        0
+       ],
+       "hl": {
+        "obj": [
+         11070
+        ]
+       }
+      },
+      {
+       "t": "Open the central room's doors using the metal letters. Go up the ladder in the central room.",
+       "s": "Open the central doors with the metal letters and climb the ladder.",
+       "k": "goUpToPuzzles",
+       "at": [
+        3104,
+        9309,
+        0
+       ],
+       "hl": {
+        "obj": [
+         11041
+        ]
+       }
+      },
+      {
+       "t": "Use soft clay on the pedestal.",
+       "s": "Use soft clay on the pedestal.",
+       "k": "useSoftClayOnPedestal",
+       "at": [
+        3104,
+        9312,
+        1
+       ],
+       "hl": {
+        "obj": [
+         10987
+        ]
+       }
+      },
+      {
+       "t": "Use a chisel on granite (5kg).",
+       "s": "Use a chisel on granite (5kg).",
+       "k": "useChiselOnGranite"
+      },
+      {
+       "t": "Use the camel stone head on the pedestal.",
+       "s": "Use the camel stone head on the pedestal.",
+       "k": "useStoneHeadOnPedestal",
+       "at": [
+        3104,
+        9312,
+        1
+       ],
+       "hl": {
+        "obj": [
+         10987
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 30,
+     "do": [
+      {
+       "t": "Enter the temple south of the Bandit's Camp.",
+       "s": "Enter the temple south of the Bandit's Camp.",
+       "k": "enterTemple",
+       "at": [
+        3194,
+        2925,
+        0
+       ],
+       "hl": {
+        "obj": [
+         11046
+        ]
+       }
+      },
+      {
+       "t": "Enter the temple south of the Bandit's Camp.",
+       "s": "Enter the temple south of the Bandit's Camp.",
+       "k": "enterTempleDownLadder",
+       "at": [
+        3127,
+        9329,
+        1
+       ],
+       "hl": {
+        "obj": [
+         11042
+        ]
+       }
+      },
+      {
+       "t": "Open the central room's doors using the metal letters. Go up the ladder in the central room.",
+       "s": "Open the central doors with the metal letters and climb the ladder.",
+       "k": "goUpToPuzzles",
+       "at": [
+        3104,
+        9309,
+        0
+       ],
+       "hl": {
+        "obj": [
+         11041
+        ]
+       }
+      },
+      {
+       "t": "Right-click use bread or cake on Pentyn.",
+       "s": "Right-click use bread or cake on Pentyn.",
+       "k": "useBread",
+       "at": [
+        3091,
+        9324,
+        1
+       ],
+       "hl": {
+        "npc": [
+         3568
+        ]
+       }
+      },
+      {
+       "t": "Cast a fire spell on the frozen fountain.",
+       "s": "Cast a fire spell on the frozen fountain.",
+       "k": "castFireSpell",
+       "at": [
+        3092,
+        9308,
+        1
+       ],
+       "hl": {
+        "npc": [
+         3573
+        ]
+       }
+      },
+      {
+       "t": "Cast an air spell on the furnace.",
+       "s": "Cast an air spell on the furnace.",
+       "k": "castAirSpell",
+       "at": [
+        3116,
+        9323,
+        1
+       ],
+       "hl": {
+        "npc": [
+         3574
+        ]
+       }
+      },
+      {
+       "t": "Use a normal log on the south west brazier.",
+       "s": "Use a normal log on the south west brazier.",
+       "k": "useLog",
+       "at": [
+        3114,
+        9306,
+        1
+       ],
+       "hl": {
+        "obj": [
+         11011
+        ]
+       }
+      },
+      {
+       "t": "Use an oak log on the south brazier.",
+       "s": "Use an oak log on the south brazier.",
+       "k": "useOakLog",
+       "at": [
+        3116,
+        9306,
+        1
+       ],
+       "hl": {
+        "obj": [
+         11012
+        ]
+       }
+      },
+      {
+       "t": "Use a willow log on the south east brazier.",
+       "s": "Use a willow log on the south east brazier.",
+       "k": "useWillowLog",
+       "at": [
+        3118,
+        9306,
+        1
+       ],
+       "hl": {
+        "obj": [
+         11013
+        ]
+       }
+      },
+      {
+       "t": "Use a maple log on the north west brazier.",
+       "s": "Use a maple log on the north west brazier.",
+       "k": "useMapleLog",
+       "at": [
+        3114,
+        9309,
+        1
+       ],
+       "hl": {
+        "obj": [
+         11014
+        ]
+       }
+      },
+      {
+       "t": "Use a candle on the north brazier.",
+       "s": "Use a candle on the north brazier.",
+       "k": "useCandle",
+       "at": [
+        3116,
+        9309,
+        1
+       ],
+       "hl": {
+        "obj": [
+         11015
+        ]
+       }
+      },
+      {
+       "t": "Use coal on the north east brazier.",
+       "s": "Use coal on the north east brazier.",
+       "k": "useCoal",
+       "at": [
+        3118,
+        9309,
+        1
+       ],
+       "hl": {
+        "obj": [
+         11016
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 40,
+     "do": [
+      {
+       "t": "Enter the temple south of the Bandit's Camp.",
+       "s": "Enter the temple south of the Bandit's Camp.",
+       "k": "enterTemple",
+       "at": [
+        3194,
+        2925,
+        0
+       ],
+       "hl": {
+        "obj": [
+         11046
+        ]
+       }
+      },
+      {
+       "t": "Enter the temple south of the Bandit's Camp.",
+       "s": "Enter the temple south of the Bandit's Camp.",
+       "k": "enterTempleDownLadder",
+       "at": [
+        3127,
+        9329,
+        1
+       ],
+       "hl": {
+        "obj": [
+         11042
+        ]
+       }
+      },
+      {
+       "t": "Open the central room's doors using the metal letters. Go up the ladder in the central room.",
+       "s": "Open the central doors with the metal letters and climb the ladder.",
+       "k": "goUpToPuzzles",
+       "at": [
+        3104,
+        9309,
+        0
+       ],
+       "hl": {
+        "obj": [
+         11041
+        ]
+       }
+      },
+      {
+       "t": "Pass through the magic barrier and go up the ladder.",
+       "s": "Pass through the magic barrier and go up the ladder.",
+       "k": "passBarrier",
+       "at": [
+        3104,
+        9319,
+        1
+       ],
+       "hl": {
+        "obj": [
+         11005
+        ]
+       }
+      },
+      {
+       "t": "Go up the ladder.",
+       "s": "Go up the ladder.",
+       "k": "goUpFromPuzzleRoom",
+       "at": [
+        3104,
+        9332,
+        1
+       ],
+       "hl": {
+        "obj": [
+         11041
+        ]
+       }
+      },
+      {
+       "t": "Cast crumble undead on the Boneguard. Make sure you take off any armour or weapons which give you a negative magic attack bonus or else you might splash.",
+       "s": "Cast Crumble Undead on the Boneguard, without negative magic bonus.",
+       "k": "castCrumbleUndead",
+       "at": [
+        3104,
+        9307,
+        2
+       ],
+       "hl": {
+        "npc": [
+         3570
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 50,
+     "do": [
+      {
+       "t": "Enter the temple south of the Bandit's Camp.",
+       "s": "Enter the temple south of the Bandit's Camp.",
+       "k": "enterTemple",
+       "at": [
+        3194,
+        2925,
+        0
+       ],
+       "hl": {
+        "obj": [
+         11046
+        ]
+       }
+      },
+      {
+       "t": "Enter the temple south of the Bandit's Camp.",
+       "s": "Enter the temple south of the Bandit's Camp.",
+       "k": "enterTempleDownLadder",
+       "at": [
+        3127,
+        9329,
+        1
+       ],
+       "hl": {
+        "obj": [
+         11042
+        ]
+       }
+      },
+      {
+       "t": "Open the central room's doors using the metal letters. Go up the ladder in the central room.",
+       "s": "Open the central doors with the metal letters and climb the ladder.",
+       "k": "goUpToPuzzles",
+       "at": [
+        3104,
+        9309,
+        0
+       ],
+       "hl": {
+        "obj": [
+         11041
+        ]
+       }
+      },
+      {
+       "t": "Pass through the magic barrier and go up the ladder.",
+       "s": "Pass through the magic barrier and go up the ladder.",
+       "k": "passBarrier",
+       "at": [
+        3104,
+        9319,
+        1
+       ],
+       "hl": {
+        "obj": [
+         11005
+        ]
+       }
+      },
+      {
+       "t": "Go up the ladder.",
+       "s": "Go up the ladder.",
+       "k": "goUpFromPuzzleRoom",
+       "at": [
+        3104,
+        9332,
+        1
+       ],
+       "hl": {
+        "obj": [
+         11041
+        ]
+       }
+      },
+      {
+       "t": "Climb down the stone ladder past the Boneguard.",
+       "s": "Climb down the stone ladder past the Boneguard.",
+       "k": "goDownToFinalRoom",
+       "at": [
+        3105,
+        9300,
+        2
+       ],
+       "hl": {
+        "obj": [
+         11044
+        ]
+       }
+      },
+      {
+       "t": "Put on Protect from Melee, then talk to the Boneguard.",
+       "s": "Put on Protect from Melee, then talk to the Boneguard.",
+       "k": "protectThenTalk",
+       "at": [
+        3105,
+        9297,
+        1
+       ],
+       "hl": {
+        "npc": [
+         3577
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 60,
+     "do": [
+      {
+       "t": "Enter the temple south of the Bandit's Camp.",
+       "s": "Enter the temple south of the Bandit's Camp.",
+       "k": "enterTemple",
+       "at": [
+        3194,
+        2925,
+        0
+       ],
+       "hl": {
+        "obj": [
+         11046
+        ]
+       }
+      },
+      {
+       "t": "Enter the temple south of the Bandit's Camp.",
+       "s": "Enter the temple south of the Bandit's Camp.",
+       "k": "enterTempleDownLadder",
+       "at": [
+        3127,
+        9329,
+        1
+       ],
+       "hl": {
+        "obj": [
+         11042
+        ]
+       }
+      },
+      {
+       "t": "Open the central room's doors using the metal letters. Go up the ladder in the central room.",
+       "s": "Open the central doors with the metal letters and climb the ladder.",
+       "k": "goUpToPuzzles",
+       "at": [
+        3104,
+        9309,
+        0
+       ],
+       "hl": {
+        "obj": [
+         11041
+        ]
+       }
+      },
+      {
+       "t": "Pass through the magic barrier and go up the ladder.",
+       "s": "Pass through the magic barrier and go up the ladder.",
+       "k": "passBarrier",
+       "at": [
+        3104,
+        9319,
+        1
+       ],
+       "hl": {
+        "obj": [
+         11005
+        ]
+       }
+      },
+      {
+       "t": "Go up the ladder.",
+       "s": "Go up the ladder.",
+       "k": "goUpFromPuzzleRoom",
+       "at": [
+        3104,
+        9332,
+        1
+       ],
+       "hl": {
+        "obj": [
+         11041
+        ]
+       }
+      },
+      {
+       "t": "Climb down the stone ladder past the Boneguard.",
+       "s": "Climb down the stone ladder past the Boneguard.",
+       "k": "goDownToFinalRoom",
+       "at": [
+        3105,
+        9300,
+        2
+       ],
+       "hl": {
+        "obj": [
+         11044
+        ]
+       }
+      },
+      {
+       "t": "Take sandstone from the nearby rubble, and use it to repair the south wall. For each piece added, use a chisel on the wall.",
+       "s": "Repair the south wall with sandstone from the rubble and a chisel.",
+       "need": "Chisel",
+       "k": "repairWall",
+       "at": [
+        3107,
+        9291,
+        1
+       ],
+       "hl": {
+        "obj": [
+         11027
+        ]
+       }
+      },
+      {
+       "t": "Talk to the Boneguard to finish the quest.",
+       "s": "Talk to the Boneguard to finish the quest.",
+       "k": "talkToAkthankos",
+       "at": [
+        3105,
+        9297,
+        1
+       ],
+       "hl": {
+        "npc": [
+         3577
+        ]
+       }
+      },
+      {
+       "t": "Use a chisel on the wall.",
+       "s": "Use a chisel on the wall.",
+       "k": "useChiselOnWall",
+       "at": [
+        3107,
+        9291,
+        1
+       ],
+       "hl": {
+        "obj": [
+         11027
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  "S9-41": {
+   "var": [
+    "varbit",
+    2639
+   ],
+   "route": [
+    {
+     "title": "Starting out",
+     "steps": [
+      "Go to the Exam Centre south of the Digsite. (Varrock teleport then run east; or use a Digsite pendant/ teleport and walk south towards the exam centre; the Senntisten teleport from the Ancient Spellbook is quite close, and can be used from a Portal Nexus in a POH)",
+      "Search the most north-eastern of the south-eastern bookcases to find a beaten book.",
+      "Read the beaten book, then read the scroll.",
+      "Keep the book."
+     ]
+    },
+    {
+     "title": "The second key",
+     "steps": [
+      "Head back to the Anvil building in Seers Village and enter the odd-looking wall and down the staircase to the workshop.",
+      "Go north to the water elemental room and search the machinery to the west to get a key.",
+      "If you didn't bring 2 elemental ores with you, go west and get them by killing 2 Earth elementals (Mine the Elemental Rock for them to spawn).",
+      "Go south from the centre room and smelt your ores into bars, at the furnace.",
+      "Go down the hatch in the centre room with the key in your inventory."
+     ]
+    },
+    {
+     "title": "=The crane=",
+     "steps": [
+      "Take-from the schematic crate to the south, take both schematics.",
+      "Go back upstairs and use one bar on the workbench to make a crane claw. Note: Don't accidentally let it create more than one.",
+      "Return downstairs to the two crane levers and pull the western one to lower the crane.",
+      "Use your claw on the old crane."
+     ]
+    },
+    {
+     "title": "=The junction box=",
+     "steps": [
+      "Climb the stairs to the south-west to get on the catwalk.",
+      "Open the junction box to the west.",
+      "Click the pipe ends, not the pipe, to connect them as shown."
+     ]
+    },
+    {
+     "title": "=Pipes and cogs=",
+     "steps": [
+      "Search all crates on the ground floor and the catwalk of the workshop until you find the following. IMPORTANT: Be sure to read the Crane schematic and Lever schematic, or you will be unable to find all the pieces.",
+      "On the north side of the catwalk use the Pipe on the broken piping.",
+      "On the east side of the Ground floor use the cogs on the pins on the side of the machine that looks like a wind tunnel as shown.",
+      "Pull the old lever to the right."
+     ]
+    },
+    {
+     "title": "=The crane=",
+     "steps": [
+      "On the south side place an elemental bar on the jig cart. (under the elemental claw)",
+      "First, use the western lever (by the schematics crate) to raise the crane.",
+      "Use the eastern lever to rotate the crane.",
+      "Use the western lever twice to lower the crane into the lava and back up again.",
+      "Use the eastern lever to rotate the crane over the cart.",
+      "Use the western lever twice to lower the bar onto the cart and release it.",
+      "Pull the lever just north of the claw controls to move the cart."
+     ]
+    },
+    {
+     "title": "=The press=",
+     "steps": [
+      "Pull the western-most lever - in front of the press station - to flatten the bar once the cart has stopped.",
+      "Pull the yellow sign lever again to move the cart to the next station."
+     ]
+    },
+    {
+     "title": "=The water tank=",
+     "steps": [
+      "Pull the northern-most lever.",
+      "Turn the corkscrew lever twice.",
+      "Pull the northern-most lever again.",
+      "Turn the west water valve twice so that the valve opens and closes. The tank will fill.",
+      "Turn the east water valve twice so that the valve opens and closes. The tank will empty.",
+      "Pull the northern-most lever.",
+      "Turn the corkscrew lever twice.",
+      "Pull the northern-most lever to close the door.",
+      "Pull the yellow sign lever again."
+     ]
+    },
+    {
+     "title": "=Drying=",
+     "steps": [
+      "Pull the east lever",
+      "Pull the east lever again to stop the fan.",
+      "Pull the yellow sign lever again."
+     ]
+    },
+    {
+     "title": "Finishing up",
+     "steps": [
+      "Take-from the jig to get a primed bar.",
+      "Head down the stairs to the north-west.",
+      "Go through the east door.",
+      "Use your primed bar with the extractor gun.",
+      "Operate the Extractor hat with the bar placed under the gun.",
+      "Take-from the extractor gun to get a primed mind bar.",
+      "Go up both spiral stairs",
+      "Use your primed mind bar on the workbench to smith a mind helmet.",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Search the marked bookcase in the Exam Centre in the Dig Site.",
+       "s": "Search the marked bookcase in the Exam Centre in the Dig Site.",
+       "k": "searchBookcase",
+       "at": [
+        3367,
+        3335,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17382
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 1,
+     "do": [
+      {
+       "t": "Read the beaten book.",
+       "s": "Read the beaten book.",
+       "k": "readBook"
+      }
+     ]
+    },
+    {
+     "at": 2,
+     "do": [
+      {
+       "t": "Read the scroll.",
+       "s": "Read the scroll.",
+       "k": "readScroll"
+      }
+     ]
+    },
+    {
+     "at": 3,
+     "do": [
+      {
+       "t": "Enter the elemental workshop.",
+       "s": "Enter the elemental workshop.",
+       "k": "enterWorkshop",
+       "at": [
+        2711,
+        3498,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3415
+        ]
+       }
+      },
+      {
+       "t": "Go up the stairs.",
+       "s": "Go up the stairs.",
+       "k": "goUpHatch",
+       "at": [
+        1954,
+        5155,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18598
+        ]
+       }
+      },
+      {
+       "t": "Climb down from the catwalk.",
+       "s": "Climb down from the catwalk.",
+       "k": "climbDownStairs",
+       "at": [
+        1949,
+        5149,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18611
+        ]
+       }
+      },
+      {
+       "t": "Go up the stairs.",
+       "s": "Go up the stairs.",
+       "k": "goUpFromBasement",
+       "at": [
+        1949,
+        5160,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18599
+        ]
+       }
+      },
+      {
+       "t": "Search the boiler machinery in the Elemental Workshop.",
+       "s": "Search the boiler machinery in the workshop.",
+       "k": "searchMachinery",
+       "at": [
+        2715,
+        9903,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18593
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 4,
+     "do": [
+      {
+       "t": "Enter the elemental workshop.",
+       "s": "Enter the elemental workshop.",
+       "k": "enterWorkshop",
+       "at": [
+        2711,
+        3498,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3415
+        ]
+       }
+      },
+      {
+       "t": "Go up the stairs.",
+       "s": "Go up the stairs.",
+       "k": "goUpHatch",
+       "at": [
+        1954,
+        5155,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18598
+        ]
+       }
+      },
+      {
+       "t": "Climb down from the catwalk.",
+       "s": "Climb down from the catwalk.",
+       "k": "climbDownStairs",
+       "at": [
+        1949,
+        5149,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18611
+        ]
+       }
+      },
+      {
+       "t": "Go up the stairs.",
+       "s": "Go up the stairs.",
+       "k": "goUpFromBasement",
+       "at": [
+        1949,
+        5160,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18599
+        ]
+       }
+      },
+      {
+       "t": "Open the hatch to go down into the workshop's lower level.",
+       "s": "Open the hatch to the workshop's lower level.",
+       "k": "openHatch",
+       "at": [
+        2720,
+        9891,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3413
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 5,
+     "do": [
+      {
+       "t": "Enter the elemental workshop.",
+       "s": "Enter the elemental workshop.",
+       "k": "enterWorkshop",
+       "at": [
+        2711,
+        3498,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3415
+        ]
+       }
+      },
+      {
+       "t": "Enter the hatch the middle of the workshop.",
+       "s": "Enter the hatch the middle of the workshop.",
+       "k": "enterHatch",
+       "at": [
+        2720,
+        9891,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3413
+        ]
+       }
+      },
+      {
+       "t": "Climb down from the catwalk.",
+       "s": "Climb down from the catwalk.",
+       "k": "climbDownStairs",
+       "at": [
+        1949,
+        5149,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18611
+        ]
+       }
+      },
+      {
+       "t": "Go up the stairs.",
+       "s": "Go up the stairs.",
+       "k": "goUpFromBasement",
+       "at": [
+        1949,
+        5160,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18599
+        ]
+       }
+      },
+      {
+       "t": "Take crane schematics from the crate to the south.",
+       "s": "Take crane schematics from the crate to the south.",
+       "k": "takeSchematics",
+       "at": [
+        1952,
+        5148,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18711
+        ]
+       }
+      },
+      {
+       "t": "Go up the stairs.",
+       "s": "Go up the stairs.",
+       "k": "goUpHatch",
+       "at": [
+        1954,
+        5155,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18598
+        ]
+       }
+      },
+      {
+       "t": "You need 2 elemental bars. Mine one of the elemental rocks in the west room, ready to fight a level 35.",
+       "s": "Mine an elemental rock in the west room, ready to fight a level 35.",
+       "k": "mineRock",
+       "at": [
+        2703,
+        9894,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1368
+        ]
+       }
+      },
+      {
+       "t": "Kill the rock elemental that appeared.",
+       "s": "Kill the rock elemental that appeared.",
+       "k": "killRock",
+       "at": [
+        2703,
+        9897,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1367
+        ]
+       }
+      },
+      {
+       "t": "Pick up the elemental ore.",
+       "s": "Pick up the elemental ore.",
+       "k": "pickUpOre"
+      },
+      {
+       "t": "Use the elemental ores on the furnace in the south room.",
+       "s": "Use the elemental ores on the furnace in the south room.",
+       "k": "forgeBars",
+       "at": [
+        2726,
+        9875,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3410
+        ]
+       }
+      },
+      {
+       "t": "Use the bar on one of the workbenches in the central room to make a claw.",
+       "s": "Use the bar on a workbench in the central room to make a claw.",
+       "k": "makeClaw",
+       "at": [
+        2717,
+        9888,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3402
+        ]
+       }
+      },
+      {
+       "t": "Pull the south west lever to lower the claw.",
+       "s": "Pull the south west lever to lower the claw.",
+       "k": "lowerClaw",
+       "at": [
+        1953,
+        5148,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18622
+        ]
+       }
+      },
+      {
+       "t": "Use the claw on the crane to the south.",
+       "s": "Use the claw on the crane to the south.",
+       "k": "repairClaw",
+       "at": [
+        1954,
+        5145,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18623
+        ]
+       }
+      },
+      {
+       "t": "Climb up to the catwalk.",
+       "s": "Climb up to the catwalk.",
+       "k": "climbStairs",
+       "at": [
+        1949,
+        5149,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18610
+        ]
+       }
+      },
+      {
+       "t": "Open the junction box.",
+       "s": "Open the junction box.",
+       "k": "openJunctionBox",
+       "at": [
+        1943,
+        5154,
+        3
+       ],
+       "hl": {
+        "obj": [
+         18641
+        ]
+       }
+      },
+      {
+       "t": "Connect the pipes so the water flows to the machine.",
+       "s": "Connect the pipes so the water reaches the machine.",
+       "k": "connectPipes"
+      },
+      {
+       "t": "Search the marked crates on the catwalk AND DOWN THE STAIRS for 3 cogs and a pipe.",
+       "s": "Search the marked crates up and down for 3 cogs and a pipe.",
+       "k": "getCogsAndPipe",
+       "hl": {
+        "obj": [
+         18612
+        ]
+       }
+      },
+      {
+       "t": "Use the pipe on the broken blue pipe to repair it.",
+       "s": "Use the pipe on the broken blue pipe.",
+       "k": "repairPipe",
+       "at": [
+        1953,
+        5168,
+        3
+       ],
+       "hl": {
+        "obj": [
+         3414
+        ]
+       }
+      },
+      {
+       "t": "Place the small cog on the top left peg.",
+       "s": "Place the small cog on the top left peg.",
+       "k": "placeSmallCog",
+       "at": [
+        1959,
+        5157,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18665
+        ]
+       }
+      },
+      {
+       "t": "Place the medium cog on the bottom left peg.",
+       "s": "Place the medium cog on the bottom left peg.",
+       "k": "placeMediumCog",
+       "at": [
+        1959,
+        5157,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18664
+        ]
+       }
+      },
+      {
+       "t": "Place the large cog on the right peg.",
+       "s": "Place the large cog on the right peg.",
+       "k": "placeLargeCog",
+       "at": [
+        1959,
+        5157,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18666
+        ]
+       }
+      },
+      {
+       "t": "Place the elemental bar on the jig cart.",
+       "s": "Place the elemental bar on the jig cart.",
+       "k": "placeBar",
+       "at": [
+        1954,
+        5147,
+        2
+       ],
+       "hl": {
+        "npc": [
+         5221
+        ]
+       }
+      },
+      {
+       "t": "Pull the south west lever to lower the claw.",
+       "s": "Pull the south west lever to lower the claw.",
+       "k": "lowerCraneOntoBar",
+       "at": [
+        1953,
+        5148,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18622
+        ]
+       }
+      },
+      {
+       "t": "Pull the south west lever to raise the claw.",
+       "s": "Pull the south west lever to raise the claw.",
+       "k": "raiseCraneWithBar",
+       "at": [
+        1953,
+        5148,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18622
+        ]
+       }
+      },
+      {
+       "t": "Pull the south east lever to rotate the claw.",
+       "s": "Pull the south east lever to rotate the claw.",
+       "k": "rotateCraneToLava",
+       "at": [
+        1955,
+        5148,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18621
+        ]
+       }
+      },
+      {
+       "t": "Pull the south west lever to lower the claw into the lava.",
+       "s": "Pull the south west lever to lower the claw into the lava.",
+       "k": "lowerBarIntoLava",
+       "at": [
+        1953,
+        5148,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18622
+        ]
+       }
+      },
+      {
+       "t": "Pull the south west lever to raise the claw out of the lava.",
+       "s": "Pull the south west lever to raise the claw out of the lava.",
+       "k": "raiseBarOutOfLava",
+       "at": [
+        1953,
+        5148,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18622
+        ]
+       }
+      },
+      {
+       "t": "Pull the south east lever to rotate the claw back.",
+       "s": "Pull the south east lever to rotate the claw back.",
+       "k": "rotateCraneFromLava",
+       "at": [
+        1955,
+        5148,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18621
+        ]
+       }
+      },
+      {
+       "t": "Pull the south west lever to lower the bar back onto the jig.",
+       "s": "Pull the south west lever to lower the bar back onto the jig.",
+       "k": "lowerCraneWithBar",
+       "at": [
+        1953,
+        5148,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18622
+        ]
+       }
+      },
+      {
+       "t": "Pull the south west lever to raise the claw once more.",
+       "s": "Pull the south west lever to raise the claw once more.",
+       "k": "raiseCraneFromBar",
+       "at": [
+        1953,
+        5148,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18622
+        ]
+       }
+      },
+      {
+       "t": "Pull the central lever to move the jig to the water tank.",
+       "s": "Pull the central lever to move the jig to the water tank.",
+       "k": "pullLeverToMoveToTank",
+       "at": [
+        1953,
+        5151,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18620
+        ]
+       }
+      },
+      {
+       "t": "Pull the central lever to move the jig to the wind tunnel.",
+       "s": "Pull the central lever to move the jig to the wind tunnel.",
+       "k": "pullLeverToMoveToFan",
+       "at": [
+        1953,
+        5151,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18620
+        ]
+       }
+      },
+      {
+       "t": "Pull the north lever to close the water tank.",
+       "s": "Pull the north lever to close the water tank.",
+       "k": "pullLeverToCloseTankDoor",
+       "at": [
+        1953,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18648
+        ]
+       }
+      },
+      {
+       "t": "Turn the corkscrew.",
+       "s": "Turn the corkscrew.",
+       "k": "turnCorkscrew",
+       "at": [
+        1955,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18649
+        ]
+       }
+      },
+      {
+       "t": "Pull the central lever to move the jig back to the start.",
+       "s": "Pull the central lever to move the jig back to the start.",
+       "k": "pullLeverToMoveToLava",
+       "at": [
+        1953,
+        5151,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18620
+        ]
+       }
+      },
+      {
+       "t": "Pull the east lever to stop the wind tunnel.",
+       "s": "Pull the east lever to stop the wind tunnel.",
+       "k": "pullFanLeverAgain",
+       "at": [
+        1959,
+        5154,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18663
+        ]
+       }
+      },
+      {
+       "t": "Pull the central lever to activate the press.",
+       "s": "Pull the central lever to activate the press.",
+       "k": "pullLeverToMoveToPress",
+       "at": [
+        1953,
+        5151,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18620
+        ]
+       }
+      },
+      {
+       "t": "Pull the west lever to move the jig to the press.",
+       "s": "Pull the west lever to move the jig to the press.",
+       "k": "lowerPress",
+       "at": [
+        1950,
+        5153,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18640
+        ]
+       }
+      },
+      {
+       "t": "Pull the north lever to open the water tank.",
+       "s": "Pull the north lever to open the water tank.",
+       "k": "pullLeverToOpenTankDoor",
+       "at": [
+        1953,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18648
+        ]
+       }
+      },
+      {
+       "t": "Turn the north west water valve.",
+       "s": "Turn the north west water valve.",
+       "k": "turnWestValve",
+       "at": [
+        1949,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18646
+        ]
+       }
+      },
+      {
+       "t": "Turn the north east water valve.",
+       "s": "Turn the north east water valve.",
+       "k": "turnEastValve",
+       "at": [
+        1957,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18647
+        ]
+       }
+      },
+      {
+       "t": "Turn the corkscrew again.",
+       "s": "Turn the corkscrew again.",
+       "k": "turnCorkscrewAgain",
+       "at": [
+        1955,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18649
+        ]
+       }
+      },
+      {
+       "t": "Turn the north east water valve again.",
+       "s": "Turn the north east water valve again.",
+       "k": "turnEastValveAgain",
+       "at": [
+        1957,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18647
+        ]
+       }
+      },
+      {
+       "t": "Turn the north west water valve again.",
+       "s": "Turn the north west water valve again.",
+       "k": "turnWestValveAgain",
+       "at": [
+        1949,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18646
+        ]
+       }
+      },
+      {
+       "t": "Pull the north lever to open the water tank again.",
+       "s": "Pull the north lever to open the water tank again.",
+       "k": "pullLeverToOpenTankDoorAgain",
+       "at": [
+        1953,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18648
+        ]
+       }
+      },
+      {
+       "t": "Turn the corkscrew.",
+       "s": "Turn the corkscrew.",
+       "k": "turnCorkscrewToRetrieve",
+       "at": [
+        1955,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18649
+        ]
+       }
+      },
+      {
+       "t": "Turn the corkscrew once more.",
+       "s": "Turn the corkscrew once more.",
+       "k": "turnCorkscrewToRetrieveAgain",
+       "at": [
+        1955,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18649
+        ]
+       }
+      },
+      {
+       "t": "Pull the north lever to close the water tank.",
+       "s": "Pull the north lever to close the water tank.",
+       "k": "pullLeverToCloseTankDoorAgain",
+       "at": [
+        1953,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18648
+        ]
+       }
+      },
+      {
+       "t": "Pull the east lever to start the wind tunnel.",
+       "s": "Pull the east lever to start the wind tunnel.",
+       "k": "pullFanLever",
+       "at": [
+        1959,
+        5154,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18663
+        ]
+       }
+      },
+      {
+       "t": "Pick up the primed bar.",
+       "s": "Pick up the primed bar.",
+       "k": "pickUpBar",
+       "at": [
+        1954,
+        5147,
+        2
+       ],
+       "hl": {
+        "npc": [
+         5226
+        ]
+       }
+      },
+      {
+       "t": "Go down from the priming room.",
+       "s": "Go down from the priming room.",
+       "k": "goDownToBasement",
+       "at": [
+        1949,
+        5159,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18597
+        ]
+       }
+      },
+      {
+       "t": "Use the primed bar on the extractor gun in the east room.",
+       "s": "Use the primed bar on the extractor gun in the east room.",
+       "k": "useBarOnGun",
+       "at": [
+        1962,
+        5148,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18725
+        ]
+       }
+      },
+      {
+       "t": "Sit in the extractor chair.",
+       "s": "Sit in the extractor chair.",
+       "k": "operateHat",
+       "at": [
+        1962,
+        5150,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18690
+        ]
+       }
+      },
+      {
+       "t": "Take the mind bar.",
+       "s": "Take the mind bar.",
+       "k": "takeMindBar",
+       "at": [
+        1962,
+        5148,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18725
+        ]
+       }
+      },
+      {
+       "t": "Use the mind bar on one of the workbenches in the central room with the beaten book in your inventory.",
+       "s": "Use the mind bar on a central workbench with the beaten book carried.",
+       "k": "makeMindHelmet",
+       "at": [
+        2717,
+        9888,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3402
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 6,
+     "do": [
+      {
+       "t": "Enter the elemental workshop.",
+       "s": "Enter the elemental workshop.",
+       "k": "enterWorkshop",
+       "at": [
+        2711,
+        3498,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3415
+        ]
+       }
+      },
+      {
+       "t": "Enter the hatch the middle of the workshop.",
+       "s": "Enter the hatch the middle of the workshop.",
+       "k": "enterHatch",
+       "at": [
+        2720,
+        9891,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3413
+        ]
+       }
+      },
+      {
+       "t": "Climb down from the catwalk.",
+       "s": "Climb down from the catwalk.",
+       "k": "climbDownStairs",
+       "at": [
+        1949,
+        5149,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18611
+        ]
+       }
+      },
+      {
+       "t": "Go up the stairs.",
+       "s": "Go up the stairs.",
+       "k": "goUpFromBasement",
+       "at": [
+        1949,
+        5160,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18599
+        ]
+       }
+      },
+      {
+       "t": "Take crane schematics from the crate to the south.",
+       "s": "Take crane schematics from the crate to the south.",
+       "k": "takeSchematics",
+       "at": [
+        1952,
+        5148,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18711
+        ]
+       }
+      },
+      {
+       "t": "Go up the stairs.",
+       "s": "Go up the stairs.",
+       "k": "goUpHatch",
+       "at": [
+        1954,
+        5155,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18598
+        ]
+       }
+      },
+      {
+       "t": "You need 2 elemental bars. Mine one of the elemental rocks in the west room, ready to fight a level 35.",
+       "s": "Mine an elemental rock in the west room, ready to fight a level 35.",
+       "k": "mineRock",
+       "at": [
+        2703,
+        9894,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1368
+        ]
+       }
+      },
+      {
+       "t": "Kill the rock elemental that appeared.",
+       "s": "Kill the rock elemental that appeared.",
+       "k": "killRock",
+       "at": [
+        2703,
+        9897,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1367
+        ]
+       }
+      },
+      {
+       "t": "Pick up the elemental ore.",
+       "s": "Pick up the elemental ore.",
+       "k": "pickUpOre"
+      },
+      {
+       "t": "Use the elemental ores on the furnace in the south room.",
+       "s": "Use the elemental ores on the furnace in the south room.",
+       "k": "forgeBars",
+       "at": [
+        2726,
+        9875,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3410
+        ]
+       }
+      },
+      {
+       "t": "Use the bar on one of the workbenches in the central room to make a claw.",
+       "s": "Use the bar on a workbench in the central room to make a claw.",
+       "k": "makeClaw",
+       "at": [
+        2717,
+        9888,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3402
+        ]
+       }
+      },
+      {
+       "t": "Pull the south west lever to lower the claw.",
+       "s": "Pull the south west lever to lower the claw.",
+       "k": "lowerClaw",
+       "at": [
+        1953,
+        5148,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18622
+        ]
+       }
+      },
+      {
+       "t": "Use the claw on the crane to the south.",
+       "s": "Use the claw on the crane to the south.",
+       "k": "repairClaw",
+       "at": [
+        1954,
+        5145,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18623
+        ]
+       }
+      },
+      {
+       "t": "Climb up to the catwalk.",
+       "s": "Climb up to the catwalk.",
+       "k": "climbStairs",
+       "at": [
+        1949,
+        5149,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18610
+        ]
+       }
+      },
+      {
+       "t": "Open the junction box.",
+       "s": "Open the junction box.",
+       "k": "openJunctionBox",
+       "at": [
+        1943,
+        5154,
+        3
+       ],
+       "hl": {
+        "obj": [
+         18641
+        ]
+       }
+      },
+      {
+       "t": "Connect the pipes so the water flows to the machine.",
+       "s": "Connect the pipes so the water reaches the machine.",
+       "k": "connectPipes"
+      },
+      {
+       "t": "Search the marked crates on the catwalk AND DOWN THE STAIRS for 3 cogs and a pipe.",
+       "s": "Search the marked crates up and down for 3 cogs and a pipe.",
+       "k": "getCogsAndPipe",
+       "hl": {
+        "obj": [
+         18612
+        ]
+       }
+      },
+      {
+       "t": "Use the pipe on the broken blue pipe to repair it.",
+       "s": "Use the pipe on the broken blue pipe.",
+       "k": "repairPipe",
+       "at": [
+        1953,
+        5168,
+        3
+       ],
+       "hl": {
+        "obj": [
+         3414
+        ]
+       }
+      },
+      {
+       "t": "Place the small cog on the top left peg.",
+       "s": "Place the small cog on the top left peg.",
+       "k": "placeSmallCog",
+       "at": [
+        1959,
+        5157,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18665
+        ]
+       }
+      },
+      {
+       "t": "Place the medium cog on the bottom left peg.",
+       "s": "Place the medium cog on the bottom left peg.",
+       "k": "placeMediumCog",
+       "at": [
+        1959,
+        5157,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18664
+        ]
+       }
+      },
+      {
+       "t": "Place the large cog on the right peg.",
+       "s": "Place the large cog on the right peg.",
+       "k": "placeLargeCog",
+       "at": [
+        1959,
+        5157,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18666
+        ]
+       }
+      },
+      {
+       "t": "Place the elemental bar on the jig cart.",
+       "s": "Place the elemental bar on the jig cart.",
+       "k": "placeBar",
+       "at": [
+        1954,
+        5147,
+        2
+       ],
+       "hl": {
+        "npc": [
+         5221
+        ]
+       }
+      },
+      {
+       "t": "Pull the south west lever to lower the claw.",
+       "s": "Pull the south west lever to lower the claw.",
+       "k": "lowerCraneOntoBar",
+       "at": [
+        1953,
+        5148,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18622
+        ]
+       }
+      },
+      {
+       "t": "Pull the south west lever to raise the claw.",
+       "s": "Pull the south west lever to raise the claw.",
+       "k": "raiseCraneWithBar",
+       "at": [
+        1953,
+        5148,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18622
+        ]
+       }
+      },
+      {
+       "t": "Pull the south east lever to rotate the claw.",
+       "s": "Pull the south east lever to rotate the claw.",
+       "k": "rotateCraneToLava",
+       "at": [
+        1955,
+        5148,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18621
+        ]
+       }
+      },
+      {
+       "t": "Pull the south west lever to lower the claw into the lava.",
+       "s": "Pull the south west lever to lower the claw into the lava.",
+       "k": "lowerBarIntoLava",
+       "at": [
+        1953,
+        5148,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18622
+        ]
+       }
+      },
+      {
+       "t": "Pull the south west lever to raise the claw out of the lava.",
+       "s": "Pull the south west lever to raise the claw out of the lava.",
+       "k": "raiseBarOutOfLava",
+       "at": [
+        1953,
+        5148,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18622
+        ]
+       }
+      },
+      {
+       "t": "Pull the south east lever to rotate the claw back.",
+       "s": "Pull the south east lever to rotate the claw back.",
+       "k": "rotateCraneFromLava",
+       "at": [
+        1955,
+        5148,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18621
+        ]
+       }
+      },
+      {
+       "t": "Pull the south west lever to lower the bar back onto the jig.",
+       "s": "Pull the south west lever to lower the bar back onto the jig.",
+       "k": "lowerCraneWithBar",
+       "at": [
+        1953,
+        5148,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18622
+        ]
+       }
+      },
+      {
+       "t": "Pull the south west lever to raise the claw once more.",
+       "s": "Pull the south west lever to raise the claw once more.",
+       "k": "raiseCraneFromBar",
+       "at": [
+        1953,
+        5148,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18622
+        ]
+       }
+      },
+      {
+       "t": "Pull the central lever to move the jig to the water tank.",
+       "s": "Pull the central lever to move the jig to the water tank.",
+       "k": "pullLeverToMoveToTank",
+       "at": [
+        1953,
+        5151,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18620
+        ]
+       }
+      },
+      {
+       "t": "Pull the central lever to move the jig to the wind tunnel.",
+       "s": "Pull the central lever to move the jig to the wind tunnel.",
+       "k": "pullLeverToMoveToFan",
+       "at": [
+        1953,
+        5151,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18620
+        ]
+       }
+      },
+      {
+       "t": "Pull the north lever to close the water tank.",
+       "s": "Pull the north lever to close the water tank.",
+       "k": "pullLeverToCloseTankDoor",
+       "at": [
+        1953,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18648
+        ]
+       }
+      },
+      {
+       "t": "Turn the corkscrew.",
+       "s": "Turn the corkscrew.",
+       "k": "turnCorkscrew",
+       "at": [
+        1955,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18649
+        ]
+       }
+      },
+      {
+       "t": "Pull the central lever to move the jig back to the start.",
+       "s": "Pull the central lever to move the jig back to the start.",
+       "k": "pullLeverToMoveToLava",
+       "at": [
+        1953,
+        5151,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18620
+        ]
+       }
+      },
+      {
+       "t": "Pull the east lever to stop the wind tunnel.",
+       "s": "Pull the east lever to stop the wind tunnel.",
+       "k": "pullFanLeverAgain",
+       "at": [
+        1959,
+        5154,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18663
+        ]
+       }
+      },
+      {
+       "t": "Pull the central lever to activate the press.",
+       "s": "Pull the central lever to activate the press.",
+       "k": "pullLeverToMoveToPress",
+       "at": [
+        1953,
+        5151,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18620
+        ]
+       }
+      },
+      {
+       "t": "Pull the west lever to move the jig to the press.",
+       "s": "Pull the west lever to move the jig to the press.",
+       "k": "lowerPress",
+       "at": [
+        1950,
+        5153,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18640
+        ]
+       }
+      },
+      {
+       "t": "Pull the north lever to open the water tank.",
+       "s": "Pull the north lever to open the water tank.",
+       "k": "pullLeverToOpenTankDoor",
+       "at": [
+        1953,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18648
+        ]
+       }
+      },
+      {
+       "t": "Turn the north west water valve.",
+       "s": "Turn the north west water valve.",
+       "k": "turnWestValve",
+       "at": [
+        1949,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18646
+        ]
+       }
+      },
+      {
+       "t": "Turn the north east water valve.",
+       "s": "Turn the north east water valve.",
+       "k": "turnEastValve",
+       "at": [
+        1957,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18647
+        ]
+       }
+      },
+      {
+       "t": "Turn the corkscrew again.",
+       "s": "Turn the corkscrew again.",
+       "k": "turnCorkscrewAgain",
+       "at": [
+        1955,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18649
+        ]
+       }
+      },
+      {
+       "t": "Turn the north east water valve again.",
+       "s": "Turn the north east water valve again.",
+       "k": "turnEastValveAgain",
+       "at": [
+        1957,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18647
+        ]
+       }
+      },
+      {
+       "t": "Turn the north west water valve again.",
+       "s": "Turn the north west water valve again.",
+       "k": "turnWestValveAgain",
+       "at": [
+        1949,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18646
+        ]
+       }
+      },
+      {
+       "t": "Pull the north lever to open the water tank again.",
+       "s": "Pull the north lever to open the water tank again.",
+       "k": "pullLeverToOpenTankDoorAgain",
+       "at": [
+        1953,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18648
+        ]
+       }
+      },
+      {
+       "t": "Turn the corkscrew.",
+       "s": "Turn the corkscrew.",
+       "k": "turnCorkscrewToRetrieve",
+       "at": [
+        1955,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18649
+        ]
+       }
+      },
+      {
+       "t": "Turn the corkscrew once more.",
+       "s": "Turn the corkscrew once more.",
+       "k": "turnCorkscrewToRetrieveAgain",
+       "at": [
+        1955,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18649
+        ]
+       }
+      },
+      {
+       "t": "Pull the north lever to close the water tank.",
+       "s": "Pull the north lever to close the water tank.",
+       "k": "pullLeverToCloseTankDoorAgain",
+       "at": [
+        1953,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18648
+        ]
+       }
+      },
+      {
+       "t": "Pull the east lever to start the wind tunnel.",
+       "s": "Pull the east lever to start the wind tunnel.",
+       "k": "pullFanLever",
+       "at": [
+        1959,
+        5154,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18663
+        ]
+       }
+      },
+      {
+       "t": "Pick up the primed bar.",
+       "s": "Pick up the primed bar.",
+       "k": "pickUpBar",
+       "at": [
+        1954,
+        5147,
+        2
+       ],
+       "hl": {
+        "npc": [
+         5226
+        ]
+       }
+      },
+      {
+       "t": "Go down from the priming room.",
+       "s": "Go down from the priming room.",
+       "k": "goDownToBasement",
+       "at": [
+        1949,
+        5159,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18597
+        ]
+       }
+      },
+      {
+       "t": "Use the primed bar on the extractor gun in the east room.",
+       "s": "Use the primed bar on the extractor gun in the east room.",
+       "k": "useBarOnGun",
+       "at": [
+        1962,
+        5148,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18725
+        ]
+       }
+      },
+      {
+       "t": "Sit in the extractor chair.",
+       "s": "Sit in the extractor chair.",
+       "k": "operateHat",
+       "at": [
+        1962,
+        5150,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18690
+        ]
+       }
+      },
+      {
+       "t": "Take the mind bar.",
+       "s": "Take the mind bar.",
+       "k": "takeMindBar",
+       "at": [
+        1962,
+        5148,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18725
+        ]
+       }
+      },
+      {
+       "t": "Use the mind bar on one of the workbenches in the central room with the beaten book in your inventory.",
+       "s": "Use the mind bar on a central workbench with the beaten book carried.",
+       "k": "makeMindHelmet",
+       "at": [
+        2717,
+        9888,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3402
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 7,
+     "do": [
+      {
+       "t": "Enter the elemental workshop.",
+       "s": "Enter the elemental workshop.",
+       "k": "enterWorkshop",
+       "at": [
+        2711,
+        3498,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3415
+        ]
+       }
+      },
+      {
+       "t": "Enter the hatch the middle of the workshop.",
+       "s": "Enter the hatch the middle of the workshop.",
+       "k": "enterHatch",
+       "at": [
+        2720,
+        9891,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3413
+        ]
+       }
+      },
+      {
+       "t": "Climb down from the catwalk.",
+       "s": "Climb down from the catwalk.",
+       "k": "climbDownStairs",
+       "at": [
+        1949,
+        5149,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18611
+        ]
+       }
+      },
+      {
+       "t": "Go up the stairs.",
+       "s": "Go up the stairs.",
+       "k": "goUpFromBasement",
+       "at": [
+        1949,
+        5160,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18599
+        ]
+       }
+      },
+      {
+       "t": "Take crane schematics from the crate to the south.",
+       "s": "Take crane schematics from the crate to the south.",
+       "k": "takeSchematics",
+       "at": [
+        1952,
+        5148,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18711
+        ]
+       }
+      },
+      {
+       "t": "Go up the stairs.",
+       "s": "Go up the stairs.",
+       "k": "goUpHatch",
+       "at": [
+        1954,
+        5155,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18598
+        ]
+       }
+      },
+      {
+       "t": "You need 2 elemental bars. Mine one of the elemental rocks in the west room, ready to fight a level 35.",
+       "s": "Mine an elemental rock in the west room, ready to fight a level 35.",
+       "k": "mineRock",
+       "at": [
+        2703,
+        9894,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1368
+        ]
+       }
+      },
+      {
+       "t": "Kill the rock elemental that appeared.",
+       "s": "Kill the rock elemental that appeared.",
+       "k": "killRock",
+       "at": [
+        2703,
+        9897,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1367
+        ]
+       }
+      },
+      {
+       "t": "Pick up the elemental ore.",
+       "s": "Pick up the elemental ore.",
+       "k": "pickUpOre"
+      },
+      {
+       "t": "Use the elemental ores on the furnace in the south room.",
+       "s": "Use the elemental ores on the furnace in the south room.",
+       "k": "forgeBars",
+       "at": [
+        2726,
+        9875,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3410
+        ]
+       }
+      },
+      {
+       "t": "Use the bar on one of the workbenches in the central room to make a claw.",
+       "s": "Use the bar on a workbench in the central room to make a claw.",
+       "k": "makeClaw",
+       "at": [
+        2717,
+        9888,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3402
+        ]
+       }
+      },
+      {
+       "t": "Pull the south west lever to lower the claw.",
+       "s": "Pull the south west lever to lower the claw.",
+       "k": "lowerClaw",
+       "at": [
+        1953,
+        5148,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18622
+        ]
+       }
+      },
+      {
+       "t": "Use the claw on the crane to the south.",
+       "s": "Use the claw on the crane to the south.",
+       "k": "repairClaw",
+       "at": [
+        1954,
+        5145,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18623
+        ]
+       }
+      },
+      {
+       "t": "Climb up to the catwalk.",
+       "s": "Climb up to the catwalk.",
+       "k": "climbStairs",
+       "at": [
+        1949,
+        5149,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18610
+        ]
+       }
+      },
+      {
+       "t": "Open the junction box.",
+       "s": "Open the junction box.",
+       "k": "openJunctionBox",
+       "at": [
+        1943,
+        5154,
+        3
+       ],
+       "hl": {
+        "obj": [
+         18641
+        ]
+       }
+      },
+      {
+       "t": "Connect the pipes so the water flows to the machine.",
+       "s": "Connect the pipes so the water reaches the machine.",
+       "k": "connectPipes"
+      },
+      {
+       "t": "Search the marked crates on the catwalk AND DOWN THE STAIRS for 3 cogs and a pipe.",
+       "s": "Search the marked crates up and down for 3 cogs and a pipe.",
+       "k": "getCogsAndPipe",
+       "hl": {
+        "obj": [
+         18612
+        ]
+       }
+      },
+      {
+       "t": "Use the pipe on the broken blue pipe to repair it.",
+       "s": "Use the pipe on the broken blue pipe.",
+       "k": "repairPipe",
+       "at": [
+        1953,
+        5168,
+        3
+       ],
+       "hl": {
+        "obj": [
+         3414
+        ]
+       }
+      },
+      {
+       "t": "Place the small cog on the top left peg.",
+       "s": "Place the small cog on the top left peg.",
+       "k": "placeSmallCog",
+       "at": [
+        1959,
+        5157,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18665
+        ]
+       }
+      },
+      {
+       "t": "Place the medium cog on the bottom left peg.",
+       "s": "Place the medium cog on the bottom left peg.",
+       "k": "placeMediumCog",
+       "at": [
+        1959,
+        5157,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18664
+        ]
+       }
+      },
+      {
+       "t": "Place the large cog on the right peg.",
+       "s": "Place the large cog on the right peg.",
+       "k": "placeLargeCog",
+       "at": [
+        1959,
+        5157,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18666
+        ]
+       }
+      },
+      {
+       "t": "Place the elemental bar on the jig cart.",
+       "s": "Place the elemental bar on the jig cart.",
+       "k": "placeBar",
+       "at": [
+        1954,
+        5147,
+        2
+       ],
+       "hl": {
+        "npc": [
+         5221
+        ]
+       }
+      },
+      {
+       "t": "Pull the south west lever to lower the claw.",
+       "s": "Pull the south west lever to lower the claw.",
+       "k": "lowerCraneOntoBar",
+       "at": [
+        1953,
+        5148,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18622
+        ]
+       }
+      },
+      {
+       "t": "Pull the south west lever to raise the claw.",
+       "s": "Pull the south west lever to raise the claw.",
+       "k": "raiseCraneWithBar",
+       "at": [
+        1953,
+        5148,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18622
+        ]
+       }
+      },
+      {
+       "t": "Pull the south east lever to rotate the claw.",
+       "s": "Pull the south east lever to rotate the claw.",
+       "k": "rotateCraneToLava",
+       "at": [
+        1955,
+        5148,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18621
+        ]
+       }
+      },
+      {
+       "t": "Pull the south west lever to lower the claw into the lava.",
+       "s": "Pull the south west lever to lower the claw into the lava.",
+       "k": "lowerBarIntoLava",
+       "at": [
+        1953,
+        5148,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18622
+        ]
+       }
+      },
+      {
+       "t": "Pull the south west lever to raise the claw out of the lava.",
+       "s": "Pull the south west lever to raise the claw out of the lava.",
+       "k": "raiseBarOutOfLava",
+       "at": [
+        1953,
+        5148,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18622
+        ]
+       }
+      },
+      {
+       "t": "Pull the south east lever to rotate the claw back.",
+       "s": "Pull the south east lever to rotate the claw back.",
+       "k": "rotateCraneFromLava",
+       "at": [
+        1955,
+        5148,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18621
+        ]
+       }
+      },
+      {
+       "t": "Pull the south west lever to lower the bar back onto the jig.",
+       "s": "Pull the south west lever to lower the bar back onto the jig.",
+       "k": "lowerCraneWithBar",
+       "at": [
+        1953,
+        5148,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18622
+        ]
+       }
+      },
+      {
+       "t": "Pull the south west lever to raise the claw once more.",
+       "s": "Pull the south west lever to raise the claw once more.",
+       "k": "raiseCraneFromBar",
+       "at": [
+        1953,
+        5148,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18622
+        ]
+       }
+      },
+      {
+       "t": "Pull the central lever to move the jig to the water tank.",
+       "s": "Pull the central lever to move the jig to the water tank.",
+       "k": "pullLeverToMoveToTank",
+       "at": [
+        1953,
+        5151,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18620
+        ]
+       }
+      },
+      {
+       "t": "Pull the central lever to move the jig to the wind tunnel.",
+       "s": "Pull the central lever to move the jig to the wind tunnel.",
+       "k": "pullLeverToMoveToFan",
+       "at": [
+        1953,
+        5151,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18620
+        ]
+       }
+      },
+      {
+       "t": "Pull the north lever to close the water tank.",
+       "s": "Pull the north lever to close the water tank.",
+       "k": "pullLeverToCloseTankDoor",
+       "at": [
+        1953,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18648
+        ]
+       }
+      },
+      {
+       "t": "Turn the corkscrew.",
+       "s": "Turn the corkscrew.",
+       "k": "turnCorkscrew",
+       "at": [
+        1955,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18649
+        ]
+       }
+      },
+      {
+       "t": "Pull the central lever to move the jig back to the start.",
+       "s": "Pull the central lever to move the jig back to the start.",
+       "k": "pullLeverToMoveToLava",
+       "at": [
+        1953,
+        5151,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18620
+        ]
+       }
+      },
+      {
+       "t": "Pull the east lever to stop the wind tunnel.",
+       "s": "Pull the east lever to stop the wind tunnel.",
+       "k": "pullFanLeverAgain",
+       "at": [
+        1959,
+        5154,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18663
+        ]
+       }
+      },
+      {
+       "t": "Pull the central lever to activate the press.",
+       "s": "Pull the central lever to activate the press.",
+       "k": "pullLeverToMoveToPress",
+       "at": [
+        1953,
+        5151,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18620
+        ]
+       }
+      },
+      {
+       "t": "Pull the west lever to move the jig to the press.",
+       "s": "Pull the west lever to move the jig to the press.",
+       "k": "lowerPress",
+       "at": [
+        1950,
+        5153,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18640
+        ]
+       }
+      },
+      {
+       "t": "Pull the north lever to open the water tank.",
+       "s": "Pull the north lever to open the water tank.",
+       "k": "pullLeverToOpenTankDoor",
+       "at": [
+        1953,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18648
+        ]
+       }
+      },
+      {
+       "t": "Turn the north west water valve.",
+       "s": "Turn the north west water valve.",
+       "k": "turnWestValve",
+       "at": [
+        1949,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18646
+        ]
+       }
+      },
+      {
+       "t": "Turn the north east water valve.",
+       "s": "Turn the north east water valve.",
+       "k": "turnEastValve",
+       "at": [
+        1957,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18647
+        ]
+       }
+      },
+      {
+       "t": "Turn the corkscrew again.",
+       "s": "Turn the corkscrew again.",
+       "k": "turnCorkscrewAgain",
+       "at": [
+        1955,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18649
+        ]
+       }
+      },
+      {
+       "t": "Turn the north east water valve again.",
+       "s": "Turn the north east water valve again.",
+       "k": "turnEastValveAgain",
+       "at": [
+        1957,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18647
+        ]
+       }
+      },
+      {
+       "t": "Turn the north west water valve again.",
+       "s": "Turn the north west water valve again.",
+       "k": "turnWestValveAgain",
+       "at": [
+        1949,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18646
+        ]
+       }
+      },
+      {
+       "t": "Pull the north lever to open the water tank again.",
+       "s": "Pull the north lever to open the water tank again.",
+       "k": "pullLeverToOpenTankDoorAgain",
+       "at": [
+        1953,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18648
+        ]
+       }
+      },
+      {
+       "t": "Turn the corkscrew.",
+       "s": "Turn the corkscrew.",
+       "k": "turnCorkscrewToRetrieve",
+       "at": [
+        1955,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18649
+        ]
+       }
+      },
+      {
+       "t": "Turn the corkscrew once more.",
+       "s": "Turn the corkscrew once more.",
+       "k": "turnCorkscrewToRetrieveAgain",
+       "at": [
+        1955,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18649
+        ]
+       }
+      },
+      {
+       "t": "Pull the north lever to close the water tank.",
+       "s": "Pull the north lever to close the water tank.",
+       "k": "pullLeverToCloseTankDoorAgain",
+       "at": [
+        1953,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18648
+        ]
+       }
+      },
+      {
+       "t": "Pull the east lever to start the wind tunnel.",
+       "s": "Pull the east lever to start the wind tunnel.",
+       "k": "pullFanLever",
+       "at": [
+        1959,
+        5154,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18663
+        ]
+       }
+      },
+      {
+       "t": "Pick up the primed bar.",
+       "s": "Pick up the primed bar.",
+       "k": "pickUpBar",
+       "at": [
+        1954,
+        5147,
+        2
+       ],
+       "hl": {
+        "npc": [
+         5226
+        ]
+       }
+      },
+      {
+       "t": "Go down from the priming room.",
+       "s": "Go down from the priming room.",
+       "k": "goDownToBasement",
+       "at": [
+        1949,
+        5159,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18597
+        ]
+       }
+      },
+      {
+       "t": "Use the primed bar on the extractor gun in the east room.",
+       "s": "Use the primed bar on the extractor gun in the east room.",
+       "k": "useBarOnGun",
+       "at": [
+        1962,
+        5148,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18725
+        ]
+       }
+      },
+      {
+       "t": "Sit in the extractor chair.",
+       "s": "Sit in the extractor chair.",
+       "k": "operateHat",
+       "at": [
+        1962,
+        5150,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18690
+        ]
+       }
+      },
+      {
+       "t": "Take the mind bar.",
+       "s": "Take the mind bar.",
+       "k": "takeMindBar",
+       "at": [
+        1962,
+        5148,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18725
+        ]
+       }
+      },
+      {
+       "t": "Use the mind bar on one of the workbenches in the central room with the beaten book in your inventory.",
+       "s": "Use the mind bar on a central workbench with the beaten book carried.",
+       "k": "makeMindHelmet",
+       "at": [
+        2717,
+        9888,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3402
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 8,
+     "do": [
+      {
+       "t": "Enter the elemental workshop.",
+       "s": "Enter the elemental workshop.",
+       "k": "enterWorkshop",
+       "at": [
+        2711,
+        3498,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3415
+        ]
+       }
+      },
+      {
+       "t": "Enter the hatch the middle of the workshop.",
+       "s": "Enter the hatch the middle of the workshop.",
+       "k": "enterHatch",
+       "at": [
+        2720,
+        9891,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3413
+        ]
+       }
+      },
+      {
+       "t": "Climb down from the catwalk.",
+       "s": "Climb down from the catwalk.",
+       "k": "climbDownStairs",
+       "at": [
+        1949,
+        5149,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18611
+        ]
+       }
+      },
+      {
+       "t": "Go up the stairs.",
+       "s": "Go up the stairs.",
+       "k": "goUpFromBasement",
+       "at": [
+        1949,
+        5160,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18599
+        ]
+       }
+      },
+      {
+       "t": "Take crane schematics from the crate to the south.",
+       "s": "Take crane schematics from the crate to the south.",
+       "k": "takeSchematics",
+       "at": [
+        1952,
+        5148,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18711
+        ]
+       }
+      },
+      {
+       "t": "Go up the stairs.",
+       "s": "Go up the stairs.",
+       "k": "goUpHatch",
+       "at": [
+        1954,
+        5155,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18598
+        ]
+       }
+      },
+      {
+       "t": "You need 2 elemental bars. Mine one of the elemental rocks in the west room, ready to fight a level 35.",
+       "s": "Mine an elemental rock in the west room, ready to fight a level 35.",
+       "k": "mineRock",
+       "at": [
+        2703,
+        9894,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1368
+        ]
+       }
+      },
+      {
+       "t": "Kill the rock elemental that appeared.",
+       "s": "Kill the rock elemental that appeared.",
+       "k": "killRock",
+       "at": [
+        2703,
+        9897,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1367
+        ]
+       }
+      },
+      {
+       "t": "Pick up the elemental ore.",
+       "s": "Pick up the elemental ore.",
+       "k": "pickUpOre"
+      },
+      {
+       "t": "Use the elemental ores on the furnace in the south room.",
+       "s": "Use the elemental ores on the furnace in the south room.",
+       "k": "forgeBars",
+       "at": [
+        2726,
+        9875,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3410
+        ]
+       }
+      },
+      {
+       "t": "Use the bar on one of the workbenches in the central room to make a claw.",
+       "s": "Use the bar on a workbench in the central room to make a claw.",
+       "k": "makeClaw",
+       "at": [
+        2717,
+        9888,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3402
+        ]
+       }
+      },
+      {
+       "t": "Pull the south west lever to lower the claw.",
+       "s": "Pull the south west lever to lower the claw.",
+       "k": "lowerClaw",
+       "at": [
+        1953,
+        5148,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18622
+        ]
+       }
+      },
+      {
+       "t": "Use the claw on the crane to the south.",
+       "s": "Use the claw on the crane to the south.",
+       "k": "repairClaw",
+       "at": [
+        1954,
+        5145,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18623
+        ]
+       }
+      },
+      {
+       "t": "Climb up to the catwalk.",
+       "s": "Climb up to the catwalk.",
+       "k": "climbStairs",
+       "at": [
+        1949,
+        5149,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18610
+        ]
+       }
+      },
+      {
+       "t": "Open the junction box.",
+       "s": "Open the junction box.",
+       "k": "openJunctionBox",
+       "at": [
+        1943,
+        5154,
+        3
+       ],
+       "hl": {
+        "obj": [
+         18641
+        ]
+       }
+      },
+      {
+       "t": "Connect the pipes so the water flows to the machine.",
+       "s": "Connect the pipes so the water reaches the machine.",
+       "k": "connectPipes"
+      },
+      {
+       "t": "Search the marked crates on the catwalk AND DOWN THE STAIRS for 3 cogs and a pipe.",
+       "s": "Search the marked crates up and down for 3 cogs and a pipe.",
+       "k": "getCogsAndPipe",
+       "hl": {
+        "obj": [
+         18612
+        ]
+       }
+      },
+      {
+       "t": "Use the pipe on the broken blue pipe to repair it.",
+       "s": "Use the pipe on the broken blue pipe.",
+       "k": "repairPipe",
+       "at": [
+        1953,
+        5168,
+        3
+       ],
+       "hl": {
+        "obj": [
+         3414
+        ]
+       }
+      },
+      {
+       "t": "Place the small cog on the top left peg.",
+       "s": "Place the small cog on the top left peg.",
+       "k": "placeSmallCog",
+       "at": [
+        1959,
+        5157,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18665
+        ]
+       }
+      },
+      {
+       "t": "Place the medium cog on the bottom left peg.",
+       "s": "Place the medium cog on the bottom left peg.",
+       "k": "placeMediumCog",
+       "at": [
+        1959,
+        5157,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18664
+        ]
+       }
+      },
+      {
+       "t": "Place the large cog on the right peg.",
+       "s": "Place the large cog on the right peg.",
+       "k": "placeLargeCog",
+       "at": [
+        1959,
+        5157,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18666
+        ]
+       }
+      },
+      {
+       "t": "Place the elemental bar on the jig cart.",
+       "s": "Place the elemental bar on the jig cart.",
+       "k": "placeBar",
+       "at": [
+        1954,
+        5147,
+        2
+       ],
+       "hl": {
+        "npc": [
+         5221
+        ]
+       }
+      },
+      {
+       "t": "Pull the south west lever to lower the claw.",
+       "s": "Pull the south west lever to lower the claw.",
+       "k": "lowerCraneOntoBar",
+       "at": [
+        1953,
+        5148,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18622
+        ]
+       }
+      },
+      {
+       "t": "Pull the south west lever to raise the claw.",
+       "s": "Pull the south west lever to raise the claw.",
+       "k": "raiseCraneWithBar",
+       "at": [
+        1953,
+        5148,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18622
+        ]
+       }
+      },
+      {
+       "t": "Pull the south east lever to rotate the claw.",
+       "s": "Pull the south east lever to rotate the claw.",
+       "k": "rotateCraneToLava",
+       "at": [
+        1955,
+        5148,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18621
+        ]
+       }
+      },
+      {
+       "t": "Pull the south west lever to lower the claw into the lava.",
+       "s": "Pull the south west lever to lower the claw into the lava.",
+       "k": "lowerBarIntoLava",
+       "at": [
+        1953,
+        5148,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18622
+        ]
+       }
+      },
+      {
+       "t": "Pull the south west lever to raise the claw out of the lava.",
+       "s": "Pull the south west lever to raise the claw out of the lava.",
+       "k": "raiseBarOutOfLava",
+       "at": [
+        1953,
+        5148,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18622
+        ]
+       }
+      },
+      {
+       "t": "Pull the south east lever to rotate the claw back.",
+       "s": "Pull the south east lever to rotate the claw back.",
+       "k": "rotateCraneFromLava",
+       "at": [
+        1955,
+        5148,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18621
+        ]
+       }
+      },
+      {
+       "t": "Pull the south west lever to lower the bar back onto the jig.",
+       "s": "Pull the south west lever to lower the bar back onto the jig.",
+       "k": "lowerCraneWithBar",
+       "at": [
+        1953,
+        5148,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18622
+        ]
+       }
+      },
+      {
+       "t": "Pull the south west lever to raise the claw once more.",
+       "s": "Pull the south west lever to raise the claw once more.",
+       "k": "raiseCraneFromBar",
+       "at": [
+        1953,
+        5148,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18622
+        ]
+       }
+      },
+      {
+       "t": "Pull the central lever to move the jig to the water tank.",
+       "s": "Pull the central lever to move the jig to the water tank.",
+       "k": "pullLeverToMoveToTank",
+       "at": [
+        1953,
+        5151,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18620
+        ]
+       }
+      },
+      {
+       "t": "Pull the central lever to move the jig to the wind tunnel.",
+       "s": "Pull the central lever to move the jig to the wind tunnel.",
+       "k": "pullLeverToMoveToFan",
+       "at": [
+        1953,
+        5151,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18620
+        ]
+       }
+      },
+      {
+       "t": "Pull the north lever to close the water tank.",
+       "s": "Pull the north lever to close the water tank.",
+       "k": "pullLeverToCloseTankDoor",
+       "at": [
+        1953,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18648
+        ]
+       }
+      },
+      {
+       "t": "Turn the corkscrew.",
+       "s": "Turn the corkscrew.",
+       "k": "turnCorkscrew",
+       "at": [
+        1955,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18649
+        ]
+       }
+      },
+      {
+       "t": "Pull the central lever to move the jig back to the start.",
+       "s": "Pull the central lever to move the jig back to the start.",
+       "k": "pullLeverToMoveToLava",
+       "at": [
+        1953,
+        5151,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18620
+        ]
+       }
+      },
+      {
+       "t": "Pull the east lever to stop the wind tunnel.",
+       "s": "Pull the east lever to stop the wind tunnel.",
+       "k": "pullFanLeverAgain",
+       "at": [
+        1959,
+        5154,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18663
+        ]
+       }
+      },
+      {
+       "t": "Pull the central lever to activate the press.",
+       "s": "Pull the central lever to activate the press.",
+       "k": "pullLeverToMoveToPress",
+       "at": [
+        1953,
+        5151,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18620
+        ]
+       }
+      },
+      {
+       "t": "Pull the west lever to move the jig to the press.",
+       "s": "Pull the west lever to move the jig to the press.",
+       "k": "lowerPress",
+       "at": [
+        1950,
+        5153,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18640
+        ]
+       }
+      },
+      {
+       "t": "Pull the north lever to open the water tank.",
+       "s": "Pull the north lever to open the water tank.",
+       "k": "pullLeverToOpenTankDoor",
+       "at": [
+        1953,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18648
+        ]
+       }
+      },
+      {
+       "t": "Turn the north west water valve.",
+       "s": "Turn the north west water valve.",
+       "k": "turnWestValve",
+       "at": [
+        1949,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18646
+        ]
+       }
+      },
+      {
+       "t": "Turn the north east water valve.",
+       "s": "Turn the north east water valve.",
+       "k": "turnEastValve",
+       "at": [
+        1957,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18647
+        ]
+       }
+      },
+      {
+       "t": "Turn the corkscrew again.",
+       "s": "Turn the corkscrew again.",
+       "k": "turnCorkscrewAgain",
+       "at": [
+        1955,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18649
+        ]
+       }
+      },
+      {
+       "t": "Turn the north east water valve again.",
+       "s": "Turn the north east water valve again.",
+       "k": "turnEastValveAgain",
+       "at": [
+        1957,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18647
+        ]
+       }
+      },
+      {
+       "t": "Turn the north west water valve again.",
+       "s": "Turn the north west water valve again.",
+       "k": "turnWestValveAgain",
+       "at": [
+        1949,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18646
+        ]
+       }
+      },
+      {
+       "t": "Pull the north lever to open the water tank again.",
+       "s": "Pull the north lever to open the water tank again.",
+       "k": "pullLeverToOpenTankDoorAgain",
+       "at": [
+        1953,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18648
+        ]
+       }
+      },
+      {
+       "t": "Turn the corkscrew.",
+       "s": "Turn the corkscrew.",
+       "k": "turnCorkscrewToRetrieve",
+       "at": [
+        1955,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18649
+        ]
+       }
+      },
+      {
+       "t": "Turn the corkscrew once more.",
+       "s": "Turn the corkscrew once more.",
+       "k": "turnCorkscrewToRetrieveAgain",
+       "at": [
+        1955,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18649
+        ]
+       }
+      },
+      {
+       "t": "Pull the north lever to close the water tank.",
+       "s": "Pull the north lever to close the water tank.",
+       "k": "pullLeverToCloseTankDoorAgain",
+       "at": [
+        1953,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18648
+        ]
+       }
+      },
+      {
+       "t": "Pull the east lever to start the wind tunnel.",
+       "s": "Pull the east lever to start the wind tunnel.",
+       "k": "pullFanLever",
+       "at": [
+        1959,
+        5154,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18663
+        ]
+       }
+      },
+      {
+       "t": "Pick up the primed bar.",
+       "s": "Pick up the primed bar.",
+       "k": "pickUpBar",
+       "at": [
+        1954,
+        5147,
+        2
+       ],
+       "hl": {
+        "npc": [
+         5226
+        ]
+       }
+      },
+      {
+       "t": "Go down from the priming room.",
+       "s": "Go down from the priming room.",
+       "k": "goDownToBasement",
+       "at": [
+        1949,
+        5159,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18597
+        ]
+       }
+      },
+      {
+       "t": "Use the primed bar on the extractor gun in the east room.",
+       "s": "Use the primed bar on the extractor gun in the east room.",
+       "k": "useBarOnGun",
+       "at": [
+        1962,
+        5148,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18725
+        ]
+       }
+      },
+      {
+       "t": "Sit in the extractor chair.",
+       "s": "Sit in the extractor chair.",
+       "k": "operateHat",
+       "at": [
+        1962,
+        5150,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18690
+        ]
+       }
+      },
+      {
+       "t": "Take the mind bar.",
+       "s": "Take the mind bar.",
+       "k": "takeMindBar",
+       "at": [
+        1962,
+        5148,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18725
+        ]
+       }
+      },
+      {
+       "t": "Use the mind bar on one of the workbenches in the central room with the beaten book in your inventory.",
+       "s": "Use the mind bar on a central workbench with the beaten book carried.",
+       "k": "makeMindHelmet",
+       "at": [
+        2717,
+        9888,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3402
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 9,
+     "do": [
+      {
+       "t": "Enter the elemental workshop.",
+       "s": "Enter the elemental workshop.",
+       "k": "enterWorkshop",
+       "at": [
+        2711,
+        3498,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3415
+        ]
+       }
+      },
+      {
+       "t": "Enter the hatch the middle of the workshop.",
+       "s": "Enter the hatch the middle of the workshop.",
+       "k": "enterHatch",
+       "at": [
+        2720,
+        9891,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3413
+        ]
+       }
+      },
+      {
+       "t": "Climb down from the catwalk.",
+       "s": "Climb down from the catwalk.",
+       "k": "climbDownStairs",
+       "at": [
+        1949,
+        5149,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18611
+        ]
+       }
+      },
+      {
+       "t": "Go up the stairs.",
+       "s": "Go up the stairs.",
+       "k": "goUpFromBasement",
+       "at": [
+        1949,
+        5160,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18599
+        ]
+       }
+      },
+      {
+       "t": "Take crane schematics from the crate to the south.",
+       "s": "Take crane schematics from the crate to the south.",
+       "k": "takeSchematics",
+       "at": [
+        1952,
+        5148,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18711
+        ]
+       }
+      },
+      {
+       "t": "Go up the stairs.",
+       "s": "Go up the stairs.",
+       "k": "goUpHatch",
+       "at": [
+        1954,
+        5155,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18598
+        ]
+       }
+      },
+      {
+       "t": "You need 2 elemental bars. Mine one of the elemental rocks in the west room, ready to fight a level 35.",
+       "s": "Mine an elemental rock in the west room, ready to fight a level 35.",
+       "k": "mineRock",
+       "at": [
+        2703,
+        9894,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1368
+        ]
+       }
+      },
+      {
+       "t": "Kill the rock elemental that appeared.",
+       "s": "Kill the rock elemental that appeared.",
+       "k": "killRock",
+       "at": [
+        2703,
+        9897,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1367
+        ]
+       }
+      },
+      {
+       "t": "Pick up the elemental ore.",
+       "s": "Pick up the elemental ore.",
+       "k": "pickUpOre"
+      },
+      {
+       "t": "Use the elemental ores on the furnace in the south room.",
+       "s": "Use the elemental ores on the furnace in the south room.",
+       "k": "forgeBars",
+       "at": [
+        2726,
+        9875,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3410
+        ]
+       }
+      },
+      {
+       "t": "Use the bar on one of the workbenches in the central room to make a claw.",
+       "s": "Use the bar on a workbench in the central room to make a claw.",
+       "k": "makeClaw",
+       "at": [
+        2717,
+        9888,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3402
+        ]
+       }
+      },
+      {
+       "t": "Pull the south west lever to lower the claw.",
+       "s": "Pull the south west lever to lower the claw.",
+       "k": "lowerClaw",
+       "at": [
+        1953,
+        5148,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18622
+        ]
+       }
+      },
+      {
+       "t": "Use the claw on the crane to the south.",
+       "s": "Use the claw on the crane to the south.",
+       "k": "repairClaw",
+       "at": [
+        1954,
+        5145,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18623
+        ]
+       }
+      },
+      {
+       "t": "Climb up to the catwalk.",
+       "s": "Climb up to the catwalk.",
+       "k": "climbStairs",
+       "at": [
+        1949,
+        5149,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18610
+        ]
+       }
+      },
+      {
+       "t": "Open the junction box.",
+       "s": "Open the junction box.",
+       "k": "openJunctionBox",
+       "at": [
+        1943,
+        5154,
+        3
+       ],
+       "hl": {
+        "obj": [
+         18641
+        ]
+       }
+      },
+      {
+       "t": "Connect the pipes so the water flows to the machine.",
+       "s": "Connect the pipes so the water reaches the machine.",
+       "k": "connectPipes"
+      },
+      {
+       "t": "Search the marked crates on the catwalk AND DOWN THE STAIRS for 3 cogs and a pipe.",
+       "s": "Search the marked crates up and down for 3 cogs and a pipe.",
+       "k": "getCogsAndPipe",
+       "hl": {
+        "obj": [
+         18612
+        ]
+       }
+      },
+      {
+       "t": "Use the pipe on the broken blue pipe to repair it.",
+       "s": "Use the pipe on the broken blue pipe.",
+       "k": "repairPipe",
+       "at": [
+        1953,
+        5168,
+        3
+       ],
+       "hl": {
+        "obj": [
+         3414
+        ]
+       }
+      },
+      {
+       "t": "Place the small cog on the top left peg.",
+       "s": "Place the small cog on the top left peg.",
+       "k": "placeSmallCog",
+       "at": [
+        1959,
+        5157,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18665
+        ]
+       }
+      },
+      {
+       "t": "Place the medium cog on the bottom left peg.",
+       "s": "Place the medium cog on the bottom left peg.",
+       "k": "placeMediumCog",
+       "at": [
+        1959,
+        5157,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18664
+        ]
+       }
+      },
+      {
+       "t": "Place the large cog on the right peg.",
+       "s": "Place the large cog on the right peg.",
+       "k": "placeLargeCog",
+       "at": [
+        1959,
+        5157,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18666
+        ]
+       }
+      },
+      {
+       "t": "Place the elemental bar on the jig cart.",
+       "s": "Place the elemental bar on the jig cart.",
+       "k": "placeBar",
+       "at": [
+        1954,
+        5147,
+        2
+       ],
+       "hl": {
+        "npc": [
+         5221
+        ]
+       }
+      },
+      {
+       "t": "Pull the south west lever to lower the claw.",
+       "s": "Pull the south west lever to lower the claw.",
+       "k": "lowerCraneOntoBar",
+       "at": [
+        1953,
+        5148,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18622
+        ]
+       }
+      },
+      {
+       "t": "Pull the south west lever to raise the claw.",
+       "s": "Pull the south west lever to raise the claw.",
+       "k": "raiseCraneWithBar",
+       "at": [
+        1953,
+        5148,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18622
+        ]
+       }
+      },
+      {
+       "t": "Pull the south east lever to rotate the claw.",
+       "s": "Pull the south east lever to rotate the claw.",
+       "k": "rotateCraneToLava",
+       "at": [
+        1955,
+        5148,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18621
+        ]
+       }
+      },
+      {
+       "t": "Pull the south west lever to lower the claw into the lava.",
+       "s": "Pull the south west lever to lower the claw into the lava.",
+       "k": "lowerBarIntoLava",
+       "at": [
+        1953,
+        5148,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18622
+        ]
+       }
+      },
+      {
+       "t": "Pull the south west lever to raise the claw out of the lava.",
+       "s": "Pull the south west lever to raise the claw out of the lava.",
+       "k": "raiseBarOutOfLava",
+       "at": [
+        1953,
+        5148,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18622
+        ]
+       }
+      },
+      {
+       "t": "Pull the south east lever to rotate the claw back.",
+       "s": "Pull the south east lever to rotate the claw back.",
+       "k": "rotateCraneFromLava",
+       "at": [
+        1955,
+        5148,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18621
+        ]
+       }
+      },
+      {
+       "t": "Pull the south west lever to lower the bar back onto the jig.",
+       "s": "Pull the south west lever to lower the bar back onto the jig.",
+       "k": "lowerCraneWithBar",
+       "at": [
+        1953,
+        5148,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18622
+        ]
+       }
+      },
+      {
+       "t": "Pull the south west lever to raise the claw once more.",
+       "s": "Pull the south west lever to raise the claw once more.",
+       "k": "raiseCraneFromBar",
+       "at": [
+        1953,
+        5148,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18622
+        ]
+       }
+      },
+      {
+       "t": "Pull the central lever to move the jig to the water tank.",
+       "s": "Pull the central lever to move the jig to the water tank.",
+       "k": "pullLeverToMoveToTank",
+       "at": [
+        1953,
+        5151,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18620
+        ]
+       }
+      },
+      {
+       "t": "Pull the central lever to move the jig to the wind tunnel.",
+       "s": "Pull the central lever to move the jig to the wind tunnel.",
+       "k": "pullLeverToMoveToFan",
+       "at": [
+        1953,
+        5151,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18620
+        ]
+       }
+      },
+      {
+       "t": "Pull the north lever to close the water tank.",
+       "s": "Pull the north lever to close the water tank.",
+       "k": "pullLeverToCloseTankDoor",
+       "at": [
+        1953,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18648
+        ]
+       }
+      },
+      {
+       "t": "Turn the corkscrew.",
+       "s": "Turn the corkscrew.",
+       "k": "turnCorkscrew",
+       "at": [
+        1955,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18649
+        ]
+       }
+      },
+      {
+       "t": "Pull the central lever to move the jig back to the start.",
+       "s": "Pull the central lever to move the jig back to the start.",
+       "k": "pullLeverToMoveToLava",
+       "at": [
+        1953,
+        5151,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18620
+        ]
+       }
+      },
+      {
+       "t": "Pull the east lever to stop the wind tunnel.",
+       "s": "Pull the east lever to stop the wind tunnel.",
+       "k": "pullFanLeverAgain",
+       "at": [
+        1959,
+        5154,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18663
+        ]
+       }
+      },
+      {
+       "t": "Pull the central lever to activate the press.",
+       "s": "Pull the central lever to activate the press.",
+       "k": "pullLeverToMoveToPress",
+       "at": [
+        1953,
+        5151,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18620
+        ]
+       }
+      },
+      {
+       "t": "Pull the west lever to move the jig to the press.",
+       "s": "Pull the west lever to move the jig to the press.",
+       "k": "lowerPress",
+       "at": [
+        1950,
+        5153,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18640
+        ]
+       }
+      },
+      {
+       "t": "Pull the north lever to open the water tank.",
+       "s": "Pull the north lever to open the water tank.",
+       "k": "pullLeverToOpenTankDoor",
+       "at": [
+        1953,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18648
+        ]
+       }
+      },
+      {
+       "t": "Turn the north west water valve.",
+       "s": "Turn the north west water valve.",
+       "k": "turnWestValve",
+       "at": [
+        1949,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18646
+        ]
+       }
+      },
+      {
+       "t": "Turn the north east water valve.",
+       "s": "Turn the north east water valve.",
+       "k": "turnEastValve",
+       "at": [
+        1957,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18647
+        ]
+       }
+      },
+      {
+       "t": "Turn the corkscrew again.",
+       "s": "Turn the corkscrew again.",
+       "k": "turnCorkscrewAgain",
+       "at": [
+        1955,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18649
+        ]
+       }
+      },
+      {
+       "t": "Turn the north east water valve again.",
+       "s": "Turn the north east water valve again.",
+       "k": "turnEastValveAgain",
+       "at": [
+        1957,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18647
+        ]
+       }
+      },
+      {
+       "t": "Turn the north west water valve again.",
+       "s": "Turn the north west water valve again.",
+       "k": "turnWestValveAgain",
+       "at": [
+        1949,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18646
+        ]
+       }
+      },
+      {
+       "t": "Pull the north lever to open the water tank again.",
+       "s": "Pull the north lever to open the water tank again.",
+       "k": "pullLeverToOpenTankDoorAgain",
+       "at": [
+        1953,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18648
+        ]
+       }
+      },
+      {
+       "t": "Turn the corkscrew.",
+       "s": "Turn the corkscrew.",
+       "k": "turnCorkscrewToRetrieve",
+       "at": [
+        1955,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18649
+        ]
+       }
+      },
+      {
+       "t": "Turn the corkscrew once more.",
+       "s": "Turn the corkscrew once more.",
+       "k": "turnCorkscrewToRetrieveAgain",
+       "at": [
+        1955,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18649
+        ]
+       }
+      },
+      {
+       "t": "Pull the north lever to close the water tank.",
+       "s": "Pull the north lever to close the water tank.",
+       "k": "pullLeverToCloseTankDoorAgain",
+       "at": [
+        1953,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18648
+        ]
+       }
+      },
+      {
+       "t": "Pull the east lever to start the wind tunnel.",
+       "s": "Pull the east lever to start the wind tunnel.",
+       "k": "pullFanLever",
+       "at": [
+        1959,
+        5154,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18663
+        ]
+       }
+      },
+      {
+       "t": "Pick up the primed bar.",
+       "s": "Pick up the primed bar.",
+       "k": "pickUpBar",
+       "at": [
+        1954,
+        5147,
+        2
+       ],
+       "hl": {
+        "npc": [
+         5226
+        ]
+       }
+      },
+      {
+       "t": "Go down from the priming room.",
+       "s": "Go down from the priming room.",
+       "k": "goDownToBasement",
+       "at": [
+        1949,
+        5159,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18597
+        ]
+       }
+      },
+      {
+       "t": "Use the primed bar on the extractor gun in the east room.",
+       "s": "Use the primed bar on the extractor gun in the east room.",
+       "k": "useBarOnGun",
+       "at": [
+        1962,
+        5148,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18725
+        ]
+       }
+      },
+      {
+       "t": "Sit in the extractor chair.",
+       "s": "Sit in the extractor chair.",
+       "k": "operateHat",
+       "at": [
+        1962,
+        5150,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18690
+        ]
+       }
+      },
+      {
+       "t": "Take the mind bar.",
+       "s": "Take the mind bar.",
+       "k": "takeMindBar",
+       "at": [
+        1962,
+        5148,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18725
+        ]
+       }
+      },
+      {
+       "t": "Use the mind bar on one of the workbenches in the central room with the beaten book in your inventory.",
+       "s": "Use the mind bar on a central workbench with the beaten book carried.",
+       "k": "makeMindHelmet",
+       "at": [
+        2717,
+        9888,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3402
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 10,
+     "do": [
+      {
+       "t": "Enter the elemental workshop.",
+       "s": "Enter the elemental workshop.",
+       "k": "enterWorkshop",
+       "at": [
+        2711,
+        3498,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3415
+        ]
+       }
+      },
+      {
+       "t": "Enter the hatch the middle of the workshop.",
+       "s": "Enter the hatch the middle of the workshop.",
+       "k": "enterHatch",
+       "at": [
+        2720,
+        9891,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3413
+        ]
+       }
+      },
+      {
+       "t": "Climb down from the catwalk.",
+       "s": "Climb down from the catwalk.",
+       "k": "climbDownStairs",
+       "at": [
+        1949,
+        5149,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18611
+        ]
+       }
+      },
+      {
+       "t": "Go up the stairs.",
+       "s": "Go up the stairs.",
+       "k": "goUpFromBasement",
+       "at": [
+        1949,
+        5160,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18599
+        ]
+       }
+      },
+      {
+       "t": "Take crane schematics from the crate to the south.",
+       "s": "Take crane schematics from the crate to the south.",
+       "k": "takeSchematics",
+       "at": [
+        1952,
+        5148,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18711
+        ]
+       }
+      },
+      {
+       "t": "Go up the stairs.",
+       "s": "Go up the stairs.",
+       "k": "goUpHatch",
+       "at": [
+        1954,
+        5155,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18598
+        ]
+       }
+      },
+      {
+       "t": "You need 2 elemental bars. Mine one of the elemental rocks in the west room, ready to fight a level 35.",
+       "s": "Mine an elemental rock in the west room, ready to fight a level 35.",
+       "k": "mineRock",
+       "at": [
+        2703,
+        9894,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1368
+        ]
+       }
+      },
+      {
+       "t": "Kill the rock elemental that appeared.",
+       "s": "Kill the rock elemental that appeared.",
+       "k": "killRock",
+       "at": [
+        2703,
+        9897,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1367
+        ]
+       }
+      },
+      {
+       "t": "Pick up the elemental ore.",
+       "s": "Pick up the elemental ore.",
+       "k": "pickUpOre"
+      },
+      {
+       "t": "Use the elemental ores on the furnace in the south room.",
+       "s": "Use the elemental ores on the furnace in the south room.",
+       "k": "forgeBars",
+       "at": [
+        2726,
+        9875,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3410
+        ]
+       }
+      },
+      {
+       "t": "Use the bar on one of the workbenches in the central room to make a claw.",
+       "s": "Use the bar on a workbench in the central room to make a claw.",
+       "k": "makeClaw",
+       "at": [
+        2717,
+        9888,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3402
+        ]
+       }
+      },
+      {
+       "t": "Pull the south west lever to lower the claw.",
+       "s": "Pull the south west lever to lower the claw.",
+       "k": "lowerClaw",
+       "at": [
+        1953,
+        5148,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18622
+        ]
+       }
+      },
+      {
+       "t": "Use the claw on the crane to the south.",
+       "s": "Use the claw on the crane to the south.",
+       "k": "repairClaw",
+       "at": [
+        1954,
+        5145,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18623
+        ]
+       }
+      },
+      {
+       "t": "Climb up to the catwalk.",
+       "s": "Climb up to the catwalk.",
+       "k": "climbStairs",
+       "at": [
+        1949,
+        5149,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18610
+        ]
+       }
+      },
+      {
+       "t": "Open the junction box.",
+       "s": "Open the junction box.",
+       "k": "openJunctionBox",
+       "at": [
+        1943,
+        5154,
+        3
+       ],
+       "hl": {
+        "obj": [
+         18641
+        ]
+       }
+      },
+      {
+       "t": "Connect the pipes so the water flows to the machine.",
+       "s": "Connect the pipes so the water reaches the machine.",
+       "k": "connectPipes"
+      },
+      {
+       "t": "Search the marked crates on the catwalk AND DOWN THE STAIRS for 3 cogs and a pipe.",
+       "s": "Search the marked crates up and down for 3 cogs and a pipe.",
+       "k": "getCogsAndPipe",
+       "hl": {
+        "obj": [
+         18612
+        ]
+       }
+      },
+      {
+       "t": "Use the pipe on the broken blue pipe to repair it.",
+       "s": "Use the pipe on the broken blue pipe.",
+       "k": "repairPipe",
+       "at": [
+        1953,
+        5168,
+        3
+       ],
+       "hl": {
+        "obj": [
+         3414
+        ]
+       }
+      },
+      {
+       "t": "Place the small cog on the top left peg.",
+       "s": "Place the small cog on the top left peg.",
+       "k": "placeSmallCog",
+       "at": [
+        1959,
+        5157,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18665
+        ]
+       }
+      },
+      {
+       "t": "Place the medium cog on the bottom left peg.",
+       "s": "Place the medium cog on the bottom left peg.",
+       "k": "placeMediumCog",
+       "at": [
+        1959,
+        5157,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18664
+        ]
+       }
+      },
+      {
+       "t": "Place the large cog on the right peg.",
+       "s": "Place the large cog on the right peg.",
+       "k": "placeLargeCog",
+       "at": [
+        1959,
+        5157,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18666
+        ]
+       }
+      },
+      {
+       "t": "Place the elemental bar on the jig cart.",
+       "s": "Place the elemental bar on the jig cart.",
+       "k": "placeBar",
+       "at": [
+        1954,
+        5147,
+        2
+       ],
+       "hl": {
+        "npc": [
+         5221
+        ]
+       }
+      },
+      {
+       "t": "Pull the south west lever to lower the claw.",
+       "s": "Pull the south west lever to lower the claw.",
+       "k": "lowerCraneOntoBar",
+       "at": [
+        1953,
+        5148,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18622
+        ]
+       }
+      },
+      {
+       "t": "Pull the south west lever to raise the claw.",
+       "s": "Pull the south west lever to raise the claw.",
+       "k": "raiseCraneWithBar",
+       "at": [
+        1953,
+        5148,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18622
+        ]
+       }
+      },
+      {
+       "t": "Pull the south east lever to rotate the claw.",
+       "s": "Pull the south east lever to rotate the claw.",
+       "k": "rotateCraneToLava",
+       "at": [
+        1955,
+        5148,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18621
+        ]
+       }
+      },
+      {
+       "t": "Pull the south west lever to lower the claw into the lava.",
+       "s": "Pull the south west lever to lower the claw into the lava.",
+       "k": "lowerBarIntoLava",
+       "at": [
+        1953,
+        5148,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18622
+        ]
+       }
+      },
+      {
+       "t": "Pull the south west lever to raise the claw out of the lava.",
+       "s": "Pull the south west lever to raise the claw out of the lava.",
+       "k": "raiseBarOutOfLava",
+       "at": [
+        1953,
+        5148,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18622
+        ]
+       }
+      },
+      {
+       "t": "Pull the south east lever to rotate the claw back.",
+       "s": "Pull the south east lever to rotate the claw back.",
+       "k": "rotateCraneFromLava",
+       "at": [
+        1955,
+        5148,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18621
+        ]
+       }
+      },
+      {
+       "t": "Pull the south west lever to lower the bar back onto the jig.",
+       "s": "Pull the south west lever to lower the bar back onto the jig.",
+       "k": "lowerCraneWithBar",
+       "at": [
+        1953,
+        5148,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18622
+        ]
+       }
+      },
+      {
+       "t": "Pull the south west lever to raise the claw once more.",
+       "s": "Pull the south west lever to raise the claw once more.",
+       "k": "raiseCraneFromBar",
+       "at": [
+        1953,
+        5148,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18622
+        ]
+       }
+      },
+      {
+       "t": "Pull the central lever to move the jig to the water tank.",
+       "s": "Pull the central lever to move the jig to the water tank.",
+       "k": "pullLeverToMoveToTank",
+       "at": [
+        1953,
+        5151,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18620
+        ]
+       }
+      },
+      {
+       "t": "Pull the central lever to move the jig to the wind tunnel.",
+       "s": "Pull the central lever to move the jig to the wind tunnel.",
+       "k": "pullLeverToMoveToFan",
+       "at": [
+        1953,
+        5151,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18620
+        ]
+       }
+      },
+      {
+       "t": "Pull the north lever to close the water tank.",
+       "s": "Pull the north lever to close the water tank.",
+       "k": "pullLeverToCloseTankDoor",
+       "at": [
+        1953,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18648
+        ]
+       }
+      },
+      {
+       "t": "Turn the corkscrew.",
+       "s": "Turn the corkscrew.",
+       "k": "turnCorkscrew",
+       "at": [
+        1955,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18649
+        ]
+       }
+      },
+      {
+       "t": "Pull the central lever to move the jig back to the start.",
+       "s": "Pull the central lever to move the jig back to the start.",
+       "k": "pullLeverToMoveToLava",
+       "at": [
+        1953,
+        5151,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18620
+        ]
+       }
+      },
+      {
+       "t": "Pull the east lever to stop the wind tunnel.",
+       "s": "Pull the east lever to stop the wind tunnel.",
+       "k": "pullFanLeverAgain",
+       "at": [
+        1959,
+        5154,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18663
+        ]
+       }
+      },
+      {
+       "t": "Pull the central lever to activate the press.",
+       "s": "Pull the central lever to activate the press.",
+       "k": "pullLeverToMoveToPress",
+       "at": [
+        1953,
+        5151,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18620
+        ]
+       }
+      },
+      {
+       "t": "Pull the west lever to move the jig to the press.",
+       "s": "Pull the west lever to move the jig to the press.",
+       "k": "lowerPress",
+       "at": [
+        1950,
+        5153,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18640
+        ]
+       }
+      },
+      {
+       "t": "Pull the north lever to open the water tank.",
+       "s": "Pull the north lever to open the water tank.",
+       "k": "pullLeverToOpenTankDoor",
+       "at": [
+        1953,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18648
+        ]
+       }
+      },
+      {
+       "t": "Turn the north west water valve.",
+       "s": "Turn the north west water valve.",
+       "k": "turnWestValve",
+       "at": [
+        1949,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18646
+        ]
+       }
+      },
+      {
+       "t": "Turn the north east water valve.",
+       "s": "Turn the north east water valve.",
+       "k": "turnEastValve",
+       "at": [
+        1957,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18647
+        ]
+       }
+      },
+      {
+       "t": "Turn the corkscrew again.",
+       "s": "Turn the corkscrew again.",
+       "k": "turnCorkscrewAgain",
+       "at": [
+        1955,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18649
+        ]
+       }
+      },
+      {
+       "t": "Turn the north east water valve again.",
+       "s": "Turn the north east water valve again.",
+       "k": "turnEastValveAgain",
+       "at": [
+        1957,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18647
+        ]
+       }
+      },
+      {
+       "t": "Turn the north west water valve again.",
+       "s": "Turn the north west water valve again.",
+       "k": "turnWestValveAgain",
+       "at": [
+        1949,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18646
+        ]
+       }
+      },
+      {
+       "t": "Pull the north lever to open the water tank again.",
+       "s": "Pull the north lever to open the water tank again.",
+       "k": "pullLeverToOpenTankDoorAgain",
+       "at": [
+        1953,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18648
+        ]
+       }
+      },
+      {
+       "t": "Turn the corkscrew.",
+       "s": "Turn the corkscrew.",
+       "k": "turnCorkscrewToRetrieve",
+       "at": [
+        1955,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18649
+        ]
+       }
+      },
+      {
+       "t": "Turn the corkscrew once more.",
+       "s": "Turn the corkscrew once more.",
+       "k": "turnCorkscrewToRetrieveAgain",
+       "at": [
+        1955,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18649
+        ]
+       }
+      },
+      {
+       "t": "Pull the north lever to close the water tank.",
+       "s": "Pull the north lever to close the water tank.",
+       "k": "pullLeverToCloseTankDoorAgain",
+       "at": [
+        1953,
+        5161,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18648
+        ]
+       }
+      },
+      {
+       "t": "Pull the east lever to start the wind tunnel.",
+       "s": "Pull the east lever to start the wind tunnel.",
+       "k": "pullFanLever",
+       "at": [
+        1959,
+        5154,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18663
+        ]
+       }
+      },
+      {
+       "t": "Pick up the primed bar.",
+       "s": "Pick up the primed bar.",
+       "k": "pickUpBar",
+       "at": [
+        1954,
+        5147,
+        2
+       ],
+       "hl": {
+        "npc": [
+         5226
+        ]
+       }
+      },
+      {
+       "t": "Go down from the priming room.",
+       "s": "Go down from the priming room.",
+       "k": "goDownToBasement",
+       "at": [
+        1949,
+        5159,
+        2
+       ],
+       "hl": {
+        "obj": [
+         18597
+        ]
+       }
+      },
+      {
+       "t": "Use the primed bar on the extractor gun in the east room.",
+       "s": "Use the primed bar on the extractor gun in the east room.",
+       "k": "useBarOnGun",
+       "at": [
+        1962,
+        5148,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18725
+        ]
+       }
+      },
+      {
+       "t": "Sit in the extractor chair.",
+       "s": "Sit in the extractor chair.",
+       "k": "operateHat",
+       "at": [
+        1962,
+        5150,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18690
+        ]
+       }
+      },
+      {
+       "t": "Take the mind bar.",
+       "s": "Take the mind bar.",
+       "k": "takeMindBar",
+       "at": [
+        1962,
+        5148,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18725
+        ]
+       }
+      },
+      {
+       "t": "Use the mind bar on one of the workbenches in the central room with the beaten book in your inventory.",
+       "s": "Use the mind bar on a central workbench with the beaten book carried.",
+       "k": "makeMindHelmet",
+       "at": [
+        2717,
+        9888,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3402
+        ]
+       }
+      }
+     ]
+    }
+   ]
   }
  }
 }

@@ -1788,6 +1788,76 @@
       "evidence": [
         "OSRS Wiki Sigmund (level 50, 60 hitpoints, max hit 5) and H.A.M. Guard level 22, read 2026-11-18."
       ]
+    },
+    {
+      "stepId": "S9-39",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "melee",
+      "runPast": true,
+      "objective": "Watchtower: kill Gorad (level 68, 80 hitpoints, hits up to 7) on the island west of Yanille for his tooth; the level 111 blue dragons of the Ogre Enclave are walked past.",
+      "enemies": [
+        {
+          "name": "Gorad",
+          "level": 68,
+          "maxHit": 7,
+          "table": true
+        },
+        {
+          "name": "Blue dragon",
+          "level": 111,
+          "maxHit": 10,
+          "table": false
+        }
+      ],
+      "lines": [
+        "1.4"
+      ],
+      "assumptions": [
+        "Gorad can be safespotted; the route fights him in melee with food.",
+        "The blue dragons are not fought: the route walks past them to the Rock of Dalgroth."
+      ],
+      "problems": [],
+      "alternatives": [
+        "Safespot Gorad with Ranged or Magic (wiki)."
+      ],
+      "decision": "retain",
+      "changed": [
+        "2.139.0: new quest; Gorad is in combatFoes.json."
+      ],
+      "evidence": [
+        "OSRS Wiki Gorad: level 68, 80 hitpoints, max hit 7, read 2026-11-18."
+      ]
+    },
+    {
+      "stepId": "S9-41",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "melee",
+      "objective": "Elemental Workshop II: mining an elemental rock wakes an earth elemental (level 35, 35 hitpoints, hits up to 4); two are killed for the ore.",
+      "enemies": [
+        {
+          "name": "Earth elemental",
+          "level": 35,
+          "maxHit": 4,
+          "table": true
+        }
+      ],
+      "lines": [],
+      "assumptions": [
+        "Three fish cover two earth elementals at the route's Members combat levels."
+      ],
+      "problems": [],
+      "alternatives": [
+        "Two elemental bars from an earlier visit skip the fights."
+      ],
+      "decision": "retain",
+      "changed": [
+        "2.139.0: new quest; the Earth elemental is in combatFoes.json."
+      ],
+      "evidence": [
+        "OSRS Wiki Elemental Workshop II: kill 2 earth elementals for the ore, read 2026-11-18."
+      ]
     }
   ]
 }

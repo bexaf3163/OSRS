@@ -5303,6 +5303,59 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Doogle_leaves"
   },
   {
+    "id": 536,
+    "nameEn": "Dragon bones",
+    "examine": "These would feed a dog for months!",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Dragon_bones.png",
+    "value": 160,
+    "highAlch": 96,
+    "lowAlch": 64,
+    "dropSources": [
+      {
+        "monster": "Green dragon#Regular",
+        "combatLevel": null,
+        "rate": "Always"
+      },
+      {
+        "monster": "Green dragon#Wilderness Slayer Cave",
+        "combatLevel": null,
+        "rate": "Always"
+      },
+      {
+        "monster": "Bronze dragon#Standard",
+        "combatLevel": null,
+        "rate": "Always"
+      },
+      {
+        "monster": "Steel dragon#Standard",
+        "combatLevel": null,
+        "rate": "Always"
+      },
+      {
+        "monster": "Black dragon#Regular",
+        "combatLevel": null,
+        "rate": "Always"
+      },
+      {
+        "monster": "Black dragon#Wilderness Slayer Cave",
+        "combatLevel": null,
+        "rate": "Always"
+      },
+      {
+        "monster": "Iron dragon#Standard",
+        "combatLevel": null,
+        "rate": "Always"
+      },
+      {
+        "monster": "Vorkath#Post-quest",
+        "combatLevel": null,
+        "rate": "4/150"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Dragon_bones"
+  },
+  {
     "id": 772,
     "nameEn": "Dramen staff",
     "examine": "Crafted from a Dramen tree branch.",
@@ -7023,6 +7076,17 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Grain"
   },
   {
+    "id": 6983,
+    "nameEn": "Granite (5kg)",
+    "examine": "A medium-sized chunk of granite.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Granite_(5kg).png",
+    "value": 1,
+    "highAlch": 1,
+    "lowAlch": 1,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Granite"
+  },
+  {
     "id": 1987,
     "nameEn": "Grapes",
     "examine": "Good grapes for wine making.",
@@ -7241,6 +7305,17 @@
       }
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Greenman's_ale"
+  },
+  {
+    "id": 91,
+    "nameEn": "Guam potion (unf)",
+    "examine": "I need another ingredient to finish this Guam potion.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Guam_potion_(unf).png",
+    "value": 3,
+    "highAlch": 1,
+    "lowAlch": 1,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Guam_potion_(unf)"
   },
   {
     "id": 4310,
@@ -8567,6 +8642,62 @@
       }
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Iron_scimitar"
+  },
+  {
+    "id": 247,
+    "nameEn": "Jangerberries",
+    "examine": "They don't look very ripe.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Jangerberries.png",
+    "value": 1,
+    "highAlch": 1,
+    "lowAlch": 1,
+    "freeSpawns": [
+      "Kandarin - island north of Gu'Tanoth (members only)"
+    ],
+    "dropSources": [
+      {
+        "monster": "Lev",
+        "combatLevel": 24,
+        "rate": "2/512"
+      },
+      {
+        "monster": "Lanzig",
+        "combatLevel": 48,
+        "rate": "2/512"
+      },
+      {
+        "monster": "Freidir",
+        "combatLevel": 48,
+        "rate": "2/512"
+      },
+      {
+        "monster": "Borrokar",
+        "combatLevel": 48,
+        "rate": "2/512"
+      },
+      {
+        "monster": "Lensa",
+        "combatLevel": 48,
+        "rate": "2/512"
+      },
+      {
+        "monster": "Yuri",
+        "combatLevel": 24,
+        "rate": "2/512"
+      },
+      {
+        "monster": "Joseph",
+        "combatLevel": 24,
+        "rate": "2/512"
+      },
+      {
+        "monster": "Jennella",
+        "combatLevel": 48,
+        "rate": "2/512"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Jangerberries"
   },
   {
     "id": 1935,
@@ -14813,6 +14944,28 @@
       }
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Salmon"
+  },
+  {
+    "id": 6977,
+    "nameEn": "Sandstone (10kg)",
+    "examine": "A large chunk of sandstone.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Sandstone_(10kg).png",
+    "value": 1,
+    "highAlch": 1,
+    "lowAlch": 1,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Sandstone"
+  },
+  {
+    "id": 6973,
+    "nameEn": "Sandstone (2kg)",
+    "examine": "A small chunk of sandstone.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Sandstone_(2kg).png",
+    "value": 1,
+    "highAlch": 1,
+    "lowAlch": 1,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Sandstone"
   },
   {
     "id": 1607,
