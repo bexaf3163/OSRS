@@ -91,12 +91,13 @@ export function parseCombatLog(v: unknown): CombatLogState | null {
  * 4 (2.11) — the "What you need" list on the game screen; plugin 2.10 (protocol 3) does not have it.
  * 6 (2.22) — one /prep-plan state snapshot instead of five requests, the preparation plan on the game screen.
  */
-export const APP_PROTOCOL = 6;
+export const APP_PROTOCOL = 7;
 
 /** What an old plugin lacks — for the "update the plugin" warning: what appeared since which protocol. */
 export function missingWithPlugin(protocol: number | null): string[] {
   const p = protocol ?? 1;
   const out: string[] = [];
+  if (p < 7) out.push('the in-game stages of the longest quests');
   if (p < 6) out.push('a single state snapshot and the preparation plan on the game screen (readiness percent, "do not take now", recovery mode)');
   if (p < 5) out.push('XP, quests and the character name from the game (account sync, profiles, time to the goal)');
   if (p < 4) out.push('the "What you need" list on the game screen (a click on a row gives an arrow and the path there)');
@@ -257,7 +258,7 @@ export interface StagePayload {
   banks?: { x: number; y: number; plane: number; label: string }[];
   kind: 'varp' | 'varbit';
   id: number;
-  stages: { at: number; steps: { t: string; s?: string; x?: number; y?: number; plane?: number; has?: string; need?: string; hl?: StageHighlight; k?: string; pre?: StagePre[]; mh?: number }[]; /** The index of the point in places. */ go?: number; /** The guide's item shape: the plugin reads both lists as GuideItem. */ items?: StepGuidePayload['items'] }[];
+  stages: { at: number; steps: { /** Absent on a repeat (r). */ t?: string; s?: string; x?: number; y?: number; plane?: number; has?: string; need?: string; hl?: StageHighlight; k?: string; pre?: StagePre[]; mh?: number; /** A repeat: the line with this k in stages[r], an earlier stage (protocol 7). */ r?: number }[]; /** The index of the point in places. */ go?: number; /** The guide's item shape: the plugin reads both lists as GuideItem. */ items?: StepGuidePayload['items'] }[];
 }
 
 /** A bulk list for the exchange hint: name — the English name, count — how many are needed in all. */

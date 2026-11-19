@@ -23,6 +23,10 @@ export interface FightMechanics {
   prayer?: { name: string; level: number; distance: string };
   /** Every version of the monster is fought in a row, without a break (one shapeshifting opponent). */
   forms?: boolean;
+  /** The place allows no weapon, armour or runes (Glarial's Tomb): fought bare-handed, whatever is worn. */
+  bare?: boolean;
+  /** It lowers every combat level, Hitpoints included, to this before the fight (the Mourner's potion). */
+  levelCap?: number;
   facts: string[];
 }
 

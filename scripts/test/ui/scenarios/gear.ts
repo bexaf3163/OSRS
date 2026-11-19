@@ -15,7 +15,7 @@ async function gearScenarios(browser: Browser) {
     const gear = { equipment, inventory, coins, bankCoins: 0 };
     return {
       progress: progressBefore('S4-02'), localStorage: { 'osrs-put:active-step': 'S4-02' }, market: true,
-      status: { protocol: 6, inGame: true, player: 'Gear Test', activeStepId: 'S4-02', ...gear, stats },
+      status: { protocol: 7, inGame: true, player: 'Gear Test', activeStepId: 'S4-02', ...gear, stats },
       events: [{ type: 'STATS', stats }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items: [...bank.map((b) => ({ name: b.name, carried: 0, noted: 0, bank: b.bank })),
         ...inventory.map((i) => ({ name: i.name, carried: i.count, noted: 0, bank: 0 }))] }],
     };
@@ -104,7 +104,7 @@ async function gearPage(browser: Browser) {
   const newGear = { ...oldGear, equipment: [{ id: 1331, name: 'Adamant scimitar', slot: 'weapon' }] };
   const { page, errors } = await open(browser, 1280, {
     progress: progressBefore('S4-01'),
-    status: { protocol: 6, player: 'Session Test', stats: { attack: 22, strength: 20, defence: 1 }, ...oldGear },
+    status: { protocol: 7, player: 'Session Test', stats: { attack: 22, strength: 20, defence: 1 }, ...oldGear },
     // The game shows the S4-01 fight: with no quest data the Decision waits, and no route order stands in for it (v14).
     localStorage: { 'osrs-put:active-step': 'S4-01' },
   }, '#/gear');

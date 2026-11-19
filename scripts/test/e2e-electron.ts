@@ -63,7 +63,7 @@ const runningFrom = (dir: string) =>
 
 // --- The plugin stub ---
 const status = {
-  status: 'ok', inGame: true, protocol: 6, pluginVersion: packageVersion, shortestPath: false, player: 'E2E Tester',
+  status: 'ok', inGame: true, protocol: 7, pluginVersion: packageVersion, shortestPath: false, player: 'E2E Tester',
   stats: { magic: 10, woodcutting: 15, attack: 5, strength: 5, defence: 5 }, xp: { magic: 1200 }, questsDone: ['Rune Mysteries'],
   pos: { x: 3222, y: 3218, plane: 0 }, coins: 500, equipment: [], inventory: [],
 };

@@ -88278,6 +88278,6801 @@
      ]
     }
    ]
+  },
+  "S9-68": {
+   "var": [
+    "varp",
+    328
+   ],
+   "route": [
+    {
+     "title": "Back through the Underground Pass",
+     "steps": [
+      "Talk to King Lathas in Ardougne Castle. Dialogue: \"I assume you have a plan?\", \"Yes.\"",
+      "Travel through the Underground Pass, entering on the far west side of West Ardougne. Refer to Underground Pass/Quick guide if you become stuck.",
+      "Travel south to Iban's Temple and enter the well (optional: talk to Koftik for some free food).",
+      "Exit the cave to the west."
+     ]
+    },
+    {
+     "title": "Traversing Isafdar",
+     "steps": [
+      "Run west through the forest, then talk to Idris when he spawns (this may take a little while).",
+      "Follow the map to Lord Iorwerth.",
+      "Talk to Lord Iorwerth.",
+      "Follow the map to the Elf Tracker.",
+      "Talk to the Elf Tracker.",
+      "Talk to Lord Iorwerth again. (You must have an open space in your inventory to receive the Crystal Pendant.)",
+      "Talk to the Elf Tracker again.",
+      "Click to follow the tracks, they are west of the tracker, at the north-west corner of the blue mushrooms.",
+      "Talk to the Elf Tracker.",
+      "Climb through the dense forest, kill the level 110 Tyras guard that spawns, with Fire Bolt from a safespot.",
+      "Go north, pass tripwire and go through more dense forest.",
+      "Run west then south through more dense forest, talk to General Hining in the camp.",
+      "Take at least 2 barrels. 3 is highly recommended in case you fail distillation of coal tar in upcoming steps. The second barrel is needed for Mourning's End Part I.",
+      "Go back to the Elf Tracker and use 2-3 of your barrels on the tar just south of him to obtain barrel of coal tar.",
+      "Get a piece of sulphur from right next to where you got the tar.",
+      "Talk to Lord Iorwerth with one empty inventory slot. Players wishing to keep their Crystal pendant should drop it each time before talking to Lord Iorwerth (or King Lathas) for the rest of the quest. Banking it will not keep it safe!",
+      "Read the book and keep it in your inventory.",
+      "Talk to Lord Iorwerth about each item (sulphur, naptha, quicklime, barrel, and fuse). Dialogue: \"I need some quicklime.\", \"I need some sulphur.\", \"I need some naphtha.\", \"I need a barrel.\", \"I need a fuse.\", \"That's all thanks.\"",
+      "If you need limestone, make sure you have your pickaxe. Head east through the Dense forest, jump over the leaves, then into the mine. Beware of Level 88 dire wolves.",
+      "Go back to where you got the barrels so you can use the small furnace, or teleport to a bank near a furnace (Falador, Edgeville, etc)"
+     ]
+    },
+    {
+     "title": "Preparing the bomb",
+     "steps": [
+      "Use limestone on any furnace (make sure gloves are equipped or you will take damage.)",
+      "With a pot in your inventory, use your pestle and mortar on the quicklime. If you do this incorrectly, you will need to repeat the previous step with a new limestone.",
+      "Use your pestle and mortar on the sulphur.",
+      "If you have not already created a strip of cloth, use four balls of wool on the loom in the farm south of Falador or near the house portal in the Hosidius area to make one."
+     ]
+    },
+    {
+     "title": "Deadly chemistry",
+     "steps": [
+      "The coal from your bank can be noted, but you will need to un-note it using Phials in the nearby general store once you get there.",
+      "Talk to the chemist Dialogue: \"Your quest.\" in Rimmington. Make sure you have the book in your inventory. (If you don't, the Quest Journal will not update!)",
+      "Un-note your coal and then use your barrel of coal tar on the fractionalising still outside. All 20 coal should be in the inventory at once, as leaving the interface for the still will reset all process towards making the naphtha.",
+      "Read this whole section first before you distill! When you are ready, operate the still:",
+      "Once the green bar is full you may exit out of the interface and automatically receive the barrel of naphtha",
+      "Make a second barrel of naphtha for Mourning's End Part I. No sulphur or quicklime needed to be added to the second barrel.",
+      "Use the pot of quicklime and ground sulphur on the barrel of naphtha to make a barrel bomb (unfused).",
+      "Use the strip of cloth on the barrel bomb (unfused) to make a barrel bomb."
+     ]
+    },
+    {
+     "title": "Royal assassination",
+     "steps": [
+      "Go through the Underground Pass once more. Bringing summer pies this time is highly recommended because you are now carrying a very heavy barrel bomb.",
+      "If you did not bring your own cooked rabbit, kill one north-west of the Elf Tracker and cook it. If you forgot an axe, there is a fire in the Iorwerth Camp.",
+      "Head to the catapult, north of the Tyras Camp.",
+      "If you did not bring a tinderbox, go south to Quartermaster's general store and purchase a tinderbox before you give the guard near the catapult the cooked rabbit.",
+      "Use the cooked rabbit on the guard near the catapult.",
+      "Use the bomb on the catapult.",
+      "Talk to Lord Iorwerth."
+     ]
+    },
+    {
+     "title": "Lord Iorwerth's message",
+     "steps": [
+      "Attempt to enter Ardougne Castle.",
+      "Talk to King Lathas.",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Go to the second floor of Ardougne Castle.",
+       "s": "Go to the second floor of Ardougne Castle.",
+       "k": "goToArdougneCastleFloor2",
+       "at": [
+        2572,
+        3296,
+        0
+       ],
+       "hl": {
+        "obj": [
+         15645
+        ]
+       }
+      },
+      {
+       "t": "Talk to King Lathas.",
+       "s": "Talk to King Lathas.",
+       "k": "talkToKingLathas",
+       "at": [
+        2578,
+        3293,
+        1
+       ],
+       "hl": {
+        "npc": [
+         9005
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 1,
+     "do": [
+      {
+       "t": "Go to the second floor of Ardougne Castle.",
+       "s": "Go to the second floor of Ardougne Castle.",
+       "k": "goToArdougneCastleFloor2",
+       "at": [
+        2572,
+        3296,
+        0
+       ],
+       "hl": {
+        "obj": [
+         15645
+        ]
+       }
+      },
+      {
+       "t": "Talk to King Lathas.",
+       "s": "Talk to King Lathas.",
+       "k": "talkToKingLathas",
+       "at": [
+        2578,
+        3293,
+        1
+       ],
+       "hl": {
+        "npc": [
+         9005
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 2,
+     "do": [
+      {
+       "t": "Enter the Underground Pass.",
+       "s": "Enter the Underground Pass.",
+       "k": "enterTheDungeon",
+       "at": [
+        2434,
+        3315,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3213
+        ]
+       }
+      },
+      {
+       "t": "Search the abandoned equipment for an oily cloth.",
+       "s": "Search the abandoned equipment for an oily cloth.",
+       "k": "searchBagForCloth",
+       "at": [
+        2452,
+        9715,
+        0
+       ],
+       "hl": {
+        "obj": [
+         35938
+        ]
+       }
+      },
+      {
+       "t": "Use the oily cloth on an arrow.",
+       "s": "Use the oily cloth on an arrow.",
+       "k": "useClothOnArrow"
+      },
+      {
+       "t": "Light the fire arrow.",
+       "s": "Light the fire arrow.",
+       "k": "lightArrow",
+       "at": [
+        2451,
+        9715,
+        0
+       ],
+       "hl": {
+        "obj": [
+         26185
+        ]
+       }
+      },
+      {
+       "t": "Walk to the room north of Koftik.",
+       "s": "Walk to the room north of Koftik.",
+       "k": "walkNorthEastOfBridge",
+       "at": [
+        2447,
+        9722,
+        0
+       ]
+      },
+      {
+       "t": "Wield a lit arrow and shoot the guide-rope.",
+       "s": "Wield a lit arrow and shoot the guide-rope.",
+       "k": "shootBridgeRope",
+       "hl": {
+        "obj": [
+         3340
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide.",
+       "s": "Climb-over rockslide.",
+       "k": "climbOverRockslide3",
+       "at": [
+        2458,
+        9712,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide.",
+       "s": "Climb-over rockslide.",
+       "k": "climbOverRockslide2",
+       "at": [
+        2471,
+        9706,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide.",
+       "s": "Climb-over rockslide.",
+       "k": "climbOverRockslide1",
+       "at": [
+        2480,
+        9713,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb down the well.",
+       "s": "Climb down the well.",
+       "k": "climbDownWell",
+       "at": [
+        2417,
+        9675,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3264
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap5",
+       "at": [
+        2430,
+        9676,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap4",
+       "at": [
+        2432,
+        9676,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap3",
+       "at": [
+        2435,
+        9676,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap2",
+       "at": [
+        2440,
+        9678,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap1",
+       "at": [
+        2443,
+        9678,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Pull the lever to raise the gate.",
+       "s": "Pull the lever to raise the gate.",
+       "k": "pullLeverAfterGrid",
+       "hl": {
+        "obj": [
+         3337
+        ]
+       }
+      },
+      {
+       "t": "Cross the grid by trial and error. The correct path is the same as it was during Underground Pass.",
+       "s": "Cross the grid; the safe path is the one from Underground Pass.",
+       "k": "crossTheGrid"
+      },
+      {
+       "t": "Climb-over rockslide",
+       "s": "Climb-over rockslide",
+       "k": "climbOverRockslide5",
+       "at": [
+        2482,
+        9679,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide",
+       "s": "Climb-over rockslide",
+       "k": "climbOverRockslide4",
+       "at": [
+        2491,
+        9691,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Swing across the pit with a rope.",
+       "s": "Swing across the pit with a rope.",
+       "k": "crossThePit",
+       "at": [
+        2463,
+        9699,
+        0
+       ],
+       "hl": {
+        "obj": [
+         23125
+        ]
+       }
+      },
+      {
+       "t": "Pick up the plank in the north room.",
+       "s": "Pick up the plank in the north room.",
+       "k": "collectPlank",
+       "at": [
+        2435,
+        9726,
+        0
+       ]
+      },
+      {
+       "t": "Pick the lock to enter the cell.",
+       "s": "Pick the lock to enter the cell.",
+       "k": "pickCellLock",
+       "at": [
+        2393,
+        9655,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3266
+        ]
+       }
+      },
+      {
+       "t": "Dig the loose mud.",
+       "s": "Dig the loose mud.",
+       "k": "digMud",
+       "at": [
+        2393,
+        9650,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3216
+        ]
+       }
+      },
+      {
+       "t": "Cross the ledge.",
+       "s": "Cross the ledge.",
+       "k": "crossLedge",
+       "at": [
+        2374,
+        9644,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3238
+        ]
+       }
+      },
+      {
+       "t": "Navigate the maze, or use the shortcut to the south with 50 Thieving.",
+       "s": "Navigate the maze, or use the shortcut to the south with 50 Thieving.",
+       "k": "navigateMaze"
+      },
+      {
+       "t": "Enter the pipe to the next section.",
+       "s": "Enter the pipe to the next section.",
+       "k": "goThroughPipe",
+       "at": [
+        2418,
+        9605,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3237
+        ]
+       }
+      },
+      {
+       "t": "Enter the tunnel.",
+       "s": "Enter the tunnel.",
+       "k": "leaveUnicornArea",
+       "at": [
+        2375,
+        9611,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3219
+        ]
+       }
+      },
+      {
+       "t": "Open the door at the end of the path.",
+       "s": "Open the door at the end of the path.",
+       "k": "openIbansDoor",
+       "at": [
+        2369,
+        9720,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3221
+        ]
+       }
+      },
+      {
+       "t": "Enter the central area from the north east corner of the area.",
+       "s": "Enter the central area from the north east corner of the area.",
+       "k": "enterTemple",
+       "at": [
+        2144,
+        4648,
+        1
+       ],
+       "hl": {
+        "obj": [
+         3333
+        ]
+       }
+      },
+      {
+       "t": "Enter the well.",
+       "s": "Enter the well.",
+       "k": "enterWell",
+       "at": [
+        2009,
+        4712,
+        1
+       ],
+       "hl": {
+        "obj": [
+         4004
+        ]
+       }
+      },
+      {
+       "t": "Leave the cave.",
+       "s": "Leave the cave.",
+       "k": "leaveWellCave",
+       "at": [
+        2313,
+        9624,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4007
+        ]
+       }
+      },
+      {
+       "t": "Return up to Iban's Cavern.",
+       "s": "Return up to Iban's Cavern.",
+       "k": "goBackUpToIbansCavern",
+       "at": [
+        2336,
+        9793,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3223
+        ]
+       }
+      },
+      {
+       "t": "Enter the Underground Pass.",
+       "s": "Enter the Underground Pass.",
+       "k": "goDownCastleStairs",
+       "at": [
+        2572,
+        3296,
+        1
+       ],
+       "hl": {
+        "obj": [
+         15648
+        ]
+       }
+      },
+      {
+       "t": "Talk to Lord Iorwerth in the elf camp west of the Underground Pass exit.",
+       "s": "Talk to Lord Iorwerth in the elf camp.",
+       "k": "talkToIorwerth",
+       "at": [
+        2203,
+        3255,
+        0
+       ],
+       "hl": {
+        "npc": [
+         8758
+        ]
+       }
+      },
+      {
+       "t": "Follow the path along and hop over the leaves.",
+       "s": "Follow the path along and hop over the leaves.",
+       "k": "goFromCaveToLeaves",
+       "at": [
+        2268,
+        3204,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3923
+        ]
+       }
+      },
+      {
+       "t": "Head west, and cross the sticks there. To do so without failing, stand next to them and spam-click it until you cross it.",
+       "s": "Head west and cross the sticks; stand by them and click until across.",
+       "k": "goFromLeavesToStickTrap",
+       "at": [
+        2236,
+        3181,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3922
+        ]
+       }
+      },
+      {
+       "t": "Return back out the camp, to the east, then south to the traps and cross them.",
+       "s": "Go back east out of the camp, then south to the traps, and cross them.",
+       "k": "goFromTyrasToTrap",
+       "at": [
+        2220,
+        3154,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3921
+        ]
+       }
+      },
+      {
+       "t": "Climb through the dense forest.",
+       "s": "Climb through the dense forest.",
+       "k": "climbThroughForest",
+       "at": [
+        2239,
+        3149,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3939
+        ]
+       }
+      },
+      {
+       "t": "Go north, and jump over the leaves.",
+       "s": "Go north, and jump over the leaves.",
+       "k": "goUpToLeafTowardsLog",
+       "at": [
+        2209,
+        3202,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3925
+        ]
+       }
+      },
+      {
+       "t": "Cross the log to the north to the Iorwerth Camp.",
+       "s": "Cross the log to the north to the Iorwerth Camp.",
+       "k": "goCrossLogToCamp",
+       "at": [
+        2201,
+        3237,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3931
+        ]
+       }
+      },
+      {
+       "t": "Talk to Idris.",
+       "s": "Talk to Idris.",
+       "k": "talkToIdris",
+       "hl": {
+        "npc": [
+         3414
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 3,
+     "do": [
+      {
+       "t": "Enter the Underground Pass.",
+       "s": "Enter the Underground Pass.",
+       "k": "enterTheDungeon",
+       "at": [
+        2434,
+        3315,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3213
+        ]
+       }
+      },
+      {
+       "t": "Search the abandoned equipment for an oily cloth.",
+       "s": "Search the abandoned equipment for an oily cloth.",
+       "k": "searchBagForCloth",
+       "at": [
+        2452,
+        9715,
+        0
+       ],
+       "hl": {
+        "obj": [
+         35938
+        ]
+       }
+      },
+      {
+       "t": "Use the oily cloth on an arrow.",
+       "s": "Use the oily cloth on an arrow.",
+       "k": "useClothOnArrow"
+      },
+      {
+       "t": "Light the fire arrow.",
+       "s": "Light the fire arrow.",
+       "k": "lightArrow",
+       "at": [
+        2451,
+        9715,
+        0
+       ],
+       "hl": {
+        "obj": [
+         26185
+        ]
+       }
+      },
+      {
+       "t": "Walk to the room north of Koftik.",
+       "s": "Walk to the room north of Koftik.",
+       "k": "walkNorthEastOfBridge",
+       "at": [
+        2447,
+        9722,
+        0
+       ]
+      },
+      {
+       "t": "Wield a lit arrow and shoot the guide-rope.",
+       "s": "Wield a lit arrow and shoot the guide-rope.",
+       "k": "shootBridgeRope",
+       "hl": {
+        "obj": [
+         3340
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide.",
+       "s": "Climb-over rockslide.",
+       "k": "climbOverRockslide3",
+       "at": [
+        2458,
+        9712,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide.",
+       "s": "Climb-over rockslide.",
+       "k": "climbOverRockslide2",
+       "at": [
+        2471,
+        9706,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide.",
+       "s": "Climb-over rockslide.",
+       "k": "climbOverRockslide1",
+       "at": [
+        2480,
+        9713,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb down the well.",
+       "s": "Climb down the well.",
+       "k": "climbDownWell",
+       "at": [
+        2417,
+        9675,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3264
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap5",
+       "at": [
+        2430,
+        9676,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap4",
+       "at": [
+        2432,
+        9676,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap3",
+       "at": [
+        2435,
+        9676,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap2",
+       "at": [
+        2440,
+        9678,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap1",
+       "at": [
+        2443,
+        9678,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Pull the lever to raise the gate.",
+       "s": "Pull the lever to raise the gate.",
+       "k": "pullLeverAfterGrid",
+       "hl": {
+        "obj": [
+         3337
+        ]
+       }
+      },
+      {
+       "t": "Cross the grid by trial and error. The correct path is the same as it was during Underground Pass.",
+       "s": "Cross the grid; the safe path is the one from Underground Pass.",
+       "k": "crossTheGrid"
+      },
+      {
+       "t": "Climb-over rockslide",
+       "s": "Climb-over rockslide",
+       "k": "climbOverRockslide5",
+       "at": [
+        2482,
+        9679,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide",
+       "s": "Climb-over rockslide",
+       "k": "climbOverRockslide4",
+       "at": [
+        2491,
+        9691,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Swing across the pit with a rope.",
+       "s": "Swing across the pit with a rope.",
+       "k": "crossThePit",
+       "at": [
+        2463,
+        9699,
+        0
+       ],
+       "hl": {
+        "obj": [
+         23125
+        ]
+       }
+      },
+      {
+       "t": "Pick up the plank in the north room.",
+       "s": "Pick up the plank in the north room.",
+       "k": "collectPlank",
+       "at": [
+        2435,
+        9726,
+        0
+       ]
+      },
+      {
+       "t": "Pick the lock to enter the cell.",
+       "s": "Pick the lock to enter the cell.",
+       "k": "pickCellLock",
+       "at": [
+        2393,
+        9655,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3266
+        ]
+       }
+      },
+      {
+       "t": "Dig the loose mud.",
+       "s": "Dig the loose mud.",
+       "k": "digMud",
+       "at": [
+        2393,
+        9650,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3216
+        ]
+       }
+      },
+      {
+       "t": "Cross the ledge.",
+       "s": "Cross the ledge.",
+       "k": "crossLedge",
+       "at": [
+        2374,
+        9644,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3238
+        ]
+       }
+      },
+      {
+       "t": "Navigate the maze, or use the shortcut to the south with 50 Thieving.",
+       "s": "Navigate the maze, or use the shortcut to the south with 50 Thieving.",
+       "k": "navigateMaze"
+      },
+      {
+       "t": "Enter the pipe to the next section.",
+       "s": "Enter the pipe to the next section.",
+       "k": "goThroughPipe",
+       "at": [
+        2418,
+        9605,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3237
+        ]
+       }
+      },
+      {
+       "t": "Enter the tunnel.",
+       "s": "Enter the tunnel.",
+       "k": "leaveUnicornArea",
+       "at": [
+        2375,
+        9611,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3219
+        ]
+       }
+      },
+      {
+       "t": "Open the door at the end of the path.",
+       "s": "Open the door at the end of the path.",
+       "k": "openIbansDoor",
+       "at": [
+        2369,
+        9720,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3221
+        ]
+       }
+      },
+      {
+       "t": "Enter the central area from the north east corner of the area.",
+       "s": "Enter the central area from the north east corner of the area.",
+       "k": "enterTemple",
+       "at": [
+        2144,
+        4648,
+        1
+       ],
+       "hl": {
+        "obj": [
+         3333
+        ]
+       }
+      },
+      {
+       "t": "Enter the well.",
+       "s": "Enter the well.",
+       "k": "enterWell",
+       "at": [
+        2009,
+        4712,
+        1
+       ],
+       "hl": {
+        "obj": [
+         4004
+        ]
+       }
+      },
+      {
+       "t": "Leave the cave.",
+       "s": "Leave the cave.",
+       "k": "leaveWellCave",
+       "at": [
+        2313,
+        9624,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4007
+        ]
+       }
+      },
+      {
+       "t": "Return up to Iban's Cavern.",
+       "s": "Return up to Iban's Cavern.",
+       "k": "goBackUpToIbansCavern",
+       "at": [
+        2336,
+        9793,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3223
+        ]
+       }
+      },
+      {
+       "t": "Enter the Underground Pass.",
+       "s": "Enter the Underground Pass.",
+       "k": "goDownCastleStairs",
+       "at": [
+        2572,
+        3296,
+        1
+       ],
+       "hl": {
+        "obj": [
+         15648
+        ]
+       }
+      },
+      {
+       "t": "Talk to Lord Iorwerth in the elf camp west of the Underground Pass exit.",
+       "s": "Talk to Lord Iorwerth in the elf camp.",
+       "k": "talkToIorwerth",
+       "at": [
+        2203,
+        3255,
+        0
+       ],
+       "hl": {
+        "npc": [
+         8758
+        ]
+       }
+      },
+      {
+       "t": "Follow the path along and hop over the leaves.",
+       "s": "Follow the path along and hop over the leaves.",
+       "k": "goFromCaveToLeaves",
+       "at": [
+        2268,
+        3204,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3923
+        ]
+       }
+      },
+      {
+       "t": "Head west, and cross the sticks there. To do so without failing, stand next to them and spam-click it until you cross it.",
+       "s": "Head west and cross the sticks; stand by them and click until across.",
+       "k": "goFromLeavesToStickTrap",
+       "at": [
+        2236,
+        3181,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3922
+        ]
+       }
+      },
+      {
+       "t": "Return back out the camp, to the east, then south to the traps and cross them.",
+       "s": "Go back east out of the camp, then south to the traps, and cross them.",
+       "k": "goFromTyrasToTrap",
+       "at": [
+        2220,
+        3154,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3921
+        ]
+       }
+      },
+      {
+       "t": "Climb through the dense forest.",
+       "s": "Climb through the dense forest.",
+       "k": "climbThroughForest",
+       "at": [
+        2239,
+        3149,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3939
+        ]
+       }
+      },
+      {
+       "t": "Go north, and jump over the leaves.",
+       "s": "Go north, and jump over the leaves.",
+       "k": "goUpToLeafTowardsLog",
+       "at": [
+        2209,
+        3202,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3925
+        ]
+       }
+      },
+      {
+       "t": "Cross the log to the north to the Iorwerth Camp.",
+       "s": "Cross the log to the north to the Iorwerth Camp.",
+       "k": "goCrossLogToCamp",
+       "at": [
+        2201,
+        3237,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3931
+        ]
+       }
+      },
+      {
+       "t": "Talk to Idris.",
+       "s": "Talk to Idris.",
+       "k": "talkToIdris",
+       "hl": {
+        "npc": [
+         3414
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 4,
+     "do": [
+      {
+       "t": "Enter the Underground Pass.",
+       "s": "Enter the Underground Pass.",
+       "k": "enterTheDungeon",
+       "at": [
+        2434,
+        3315,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3213
+        ]
+       }
+      },
+      {
+       "t": "Search the abandoned equipment for an oily cloth.",
+       "s": "Search the abandoned equipment for an oily cloth.",
+       "k": "searchBagForCloth",
+       "at": [
+        2452,
+        9715,
+        0
+       ],
+       "hl": {
+        "obj": [
+         35938
+        ]
+       }
+      },
+      {
+       "t": "Use the oily cloth on an arrow.",
+       "s": "Use the oily cloth on an arrow.",
+       "k": "useClothOnArrow"
+      },
+      {
+       "t": "Light the fire arrow.",
+       "s": "Light the fire arrow.",
+       "k": "lightArrow",
+       "at": [
+        2451,
+        9715,
+        0
+       ],
+       "hl": {
+        "obj": [
+         26185
+        ]
+       }
+      },
+      {
+       "t": "Walk to the room north of Koftik.",
+       "s": "Walk to the room north of Koftik.",
+       "k": "walkNorthEastOfBridge",
+       "at": [
+        2447,
+        9722,
+        0
+       ]
+      },
+      {
+       "t": "Wield a lit arrow and shoot the guide-rope.",
+       "s": "Wield a lit arrow and shoot the guide-rope.",
+       "k": "shootBridgeRope",
+       "hl": {
+        "obj": [
+         3340
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide.",
+       "s": "Climb-over rockslide.",
+       "k": "climbOverRockslide3",
+       "at": [
+        2458,
+        9712,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide.",
+       "s": "Climb-over rockslide.",
+       "k": "climbOverRockslide2",
+       "at": [
+        2471,
+        9706,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide.",
+       "s": "Climb-over rockslide.",
+       "k": "climbOverRockslide1",
+       "at": [
+        2480,
+        9713,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb down the well.",
+       "s": "Climb down the well.",
+       "k": "climbDownWell",
+       "at": [
+        2417,
+        9675,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3264
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap5",
+       "at": [
+        2430,
+        9676,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap4",
+       "at": [
+        2432,
+        9676,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap3",
+       "at": [
+        2435,
+        9676,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap2",
+       "at": [
+        2440,
+        9678,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap1",
+       "at": [
+        2443,
+        9678,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Pull the lever to raise the gate.",
+       "s": "Pull the lever to raise the gate.",
+       "k": "pullLeverAfterGrid",
+       "hl": {
+        "obj": [
+         3337
+        ]
+       }
+      },
+      {
+       "t": "Cross the grid by trial and error. The correct path is the same as it was during Underground Pass.",
+       "s": "Cross the grid; the safe path is the one from Underground Pass.",
+       "k": "crossTheGrid"
+      },
+      {
+       "t": "Climb-over rockslide",
+       "s": "Climb-over rockslide",
+       "k": "climbOverRockslide5",
+       "at": [
+        2482,
+        9679,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide",
+       "s": "Climb-over rockslide",
+       "k": "climbOverRockslide4",
+       "at": [
+        2491,
+        9691,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Swing across the pit with a rope.",
+       "s": "Swing across the pit with a rope.",
+       "k": "crossThePit",
+       "at": [
+        2463,
+        9699,
+        0
+       ],
+       "hl": {
+        "obj": [
+         23125
+        ]
+       }
+      },
+      {
+       "t": "Pick up the plank in the north room.",
+       "s": "Pick up the plank in the north room.",
+       "k": "collectPlank",
+       "at": [
+        2435,
+        9726,
+        0
+       ]
+      },
+      {
+       "t": "Pick the lock to enter the cell.",
+       "s": "Pick the lock to enter the cell.",
+       "k": "pickCellLock",
+       "at": [
+        2393,
+        9655,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3266
+        ]
+       }
+      },
+      {
+       "t": "Dig the loose mud.",
+       "s": "Dig the loose mud.",
+       "k": "digMud",
+       "at": [
+        2393,
+        9650,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3216
+        ]
+       }
+      },
+      {
+       "t": "Cross the ledge.",
+       "s": "Cross the ledge.",
+       "k": "crossLedge",
+       "at": [
+        2374,
+        9644,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3238
+        ]
+       }
+      },
+      {
+       "t": "Navigate the maze, or use the shortcut to the south with 50 Thieving.",
+       "s": "Navigate the maze, or use the shortcut to the south with 50 Thieving.",
+       "k": "navigateMaze"
+      },
+      {
+       "t": "Enter the pipe to the next section.",
+       "s": "Enter the pipe to the next section.",
+       "k": "goThroughPipe",
+       "at": [
+        2418,
+        9605,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3237
+        ]
+       }
+      },
+      {
+       "t": "Enter the tunnel.",
+       "s": "Enter the tunnel.",
+       "k": "leaveUnicornArea",
+       "at": [
+        2375,
+        9611,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3219
+        ]
+       }
+      },
+      {
+       "t": "Open the door at the end of the path.",
+       "s": "Open the door at the end of the path.",
+       "k": "openIbansDoor",
+       "at": [
+        2369,
+        9720,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3221
+        ]
+       }
+      },
+      {
+       "t": "Enter the central area from the north east corner of the area.",
+       "s": "Enter the central area from the north east corner of the area.",
+       "k": "enterTemple",
+       "at": [
+        2144,
+        4648,
+        1
+       ],
+       "hl": {
+        "obj": [
+         3333
+        ]
+       }
+      },
+      {
+       "t": "Enter the well.",
+       "s": "Enter the well.",
+       "k": "enterWell",
+       "at": [
+        2009,
+        4712,
+        1
+       ],
+       "hl": {
+        "obj": [
+         4004
+        ]
+       }
+      },
+      {
+       "t": "Leave the cave.",
+       "s": "Leave the cave.",
+       "k": "leaveWellCave",
+       "at": [
+        2313,
+        9624,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4007
+        ]
+       }
+      },
+      {
+       "t": "Return up to Iban's Cavern.",
+       "s": "Return up to Iban's Cavern.",
+       "k": "goBackUpToIbansCavern",
+       "at": [
+        2336,
+        9793,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3223
+        ]
+       }
+      },
+      {
+       "t": "Talk to the elf tracker.",
+       "s": "Talk to the elf tracker.",
+       "k": "talkToTracker",
+       "at": [
+        2258,
+        3148,
+        0
+       ],
+       "hl": {
+        "npc": [
+         8761
+        ]
+       }
+      },
+      {
+       "t": "Cross the log from the camp.",
+       "s": "Cross the log from the camp.",
+       "k": "crossLogFromCamp",
+       "at": [
+        2197,
+        3237,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3931
+        ]
+       }
+      },
+      {
+       "t": "Go south, and jump over the leaves.",
+       "s": "Go south, and jump over the leaves.",
+       "k": "goFromCampToLeavesSouth",
+       "at": [
+        2209,
+        3204,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3925
+        ]
+       }
+      },
+      {
+       "t": "Follow the path along and hop over the leaves.",
+       "s": "Follow the path along and hop over the leaves.",
+       "k": "goFromCaveToLeaves",
+       "at": [
+        2268,
+        3204,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3923
+        ]
+       }
+      },
+      {
+       "t": "Head west, and cross the sticks there. To do so without failing, stand next to them and spam-click it until you cross it.",
+       "s": "Head west and cross the sticks; stand by them and click until across.",
+       "k": "goFromLeavesToStickTrap",
+       "at": [
+        2236,
+        3181,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3922
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 5,
+     "do": [
+      {
+       "t": "Enter the Underground Pass.",
+       "s": "Enter the Underground Pass.",
+       "k": "enterTheDungeon",
+       "at": [
+        2434,
+        3315,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3213
+        ]
+       }
+      },
+      {
+       "t": "Search the abandoned equipment for an oily cloth.",
+       "s": "Search the abandoned equipment for an oily cloth.",
+       "k": "searchBagForCloth",
+       "at": [
+        2452,
+        9715,
+        0
+       ],
+       "hl": {
+        "obj": [
+         35938
+        ]
+       }
+      },
+      {
+       "t": "Use the oily cloth on an arrow.",
+       "s": "Use the oily cloth on an arrow.",
+       "k": "useClothOnArrow"
+      },
+      {
+       "t": "Light the fire arrow.",
+       "s": "Light the fire arrow.",
+       "k": "lightArrow",
+       "at": [
+        2451,
+        9715,
+        0
+       ],
+       "hl": {
+        "obj": [
+         26185
+        ]
+       }
+      },
+      {
+       "t": "Walk to the room north of Koftik.",
+       "s": "Walk to the room north of Koftik.",
+       "k": "walkNorthEastOfBridge",
+       "at": [
+        2447,
+        9722,
+        0
+       ]
+      },
+      {
+       "t": "Wield a lit arrow and shoot the guide-rope.",
+       "s": "Wield a lit arrow and shoot the guide-rope.",
+       "k": "shootBridgeRope",
+       "hl": {
+        "obj": [
+         3340
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide.",
+       "s": "Climb-over rockslide.",
+       "k": "climbOverRockslide3",
+       "at": [
+        2458,
+        9712,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide.",
+       "s": "Climb-over rockslide.",
+       "k": "climbOverRockslide2",
+       "at": [
+        2471,
+        9706,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide.",
+       "s": "Climb-over rockslide.",
+       "k": "climbOverRockslide1",
+       "at": [
+        2480,
+        9713,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb down the well.",
+       "s": "Climb down the well.",
+       "k": "climbDownWell",
+       "at": [
+        2417,
+        9675,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3264
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap5",
+       "at": [
+        2430,
+        9676,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap4",
+       "at": [
+        2432,
+        9676,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap3",
+       "at": [
+        2435,
+        9676,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap2",
+       "at": [
+        2440,
+        9678,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap1",
+       "at": [
+        2443,
+        9678,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Pull the lever to raise the gate.",
+       "s": "Pull the lever to raise the gate.",
+       "k": "pullLeverAfterGrid",
+       "hl": {
+        "obj": [
+         3337
+        ]
+       }
+      },
+      {
+       "t": "Cross the grid by trial and error. The correct path is the same as it was during Underground Pass.",
+       "s": "Cross the grid; the safe path is the one from Underground Pass.",
+       "k": "crossTheGrid"
+      },
+      {
+       "t": "Climb-over rockslide",
+       "s": "Climb-over rockslide",
+       "k": "climbOverRockslide5",
+       "at": [
+        2482,
+        9679,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide",
+       "s": "Climb-over rockslide",
+       "k": "climbOverRockslide4",
+       "at": [
+        2491,
+        9691,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Swing across the pit with a rope.",
+       "s": "Swing across the pit with a rope.",
+       "k": "crossThePit",
+       "at": [
+        2463,
+        9699,
+        0
+       ],
+       "hl": {
+        "obj": [
+         23125
+        ]
+       }
+      },
+      {
+       "t": "Pick up the plank in the north room.",
+       "s": "Pick up the plank in the north room.",
+       "k": "collectPlank",
+       "at": [
+        2435,
+        9726,
+        0
+       ]
+      },
+      {
+       "t": "Pick the lock to enter the cell.",
+       "s": "Pick the lock to enter the cell.",
+       "k": "pickCellLock",
+       "at": [
+        2393,
+        9655,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3266
+        ]
+       }
+      },
+      {
+       "t": "Dig the loose mud.",
+       "s": "Dig the loose mud.",
+       "k": "digMud",
+       "at": [
+        2393,
+        9650,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3216
+        ]
+       }
+      },
+      {
+       "t": "Cross the ledge.",
+       "s": "Cross the ledge.",
+       "k": "crossLedge",
+       "at": [
+        2374,
+        9644,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3238
+        ]
+       }
+      },
+      {
+       "t": "Navigate the maze, or use the shortcut to the south with 50 Thieving.",
+       "s": "Navigate the maze, or use the shortcut to the south with 50 Thieving.",
+       "k": "navigateMaze"
+      },
+      {
+       "t": "Enter the pipe to the next section.",
+       "s": "Enter the pipe to the next section.",
+       "k": "goThroughPipe",
+       "at": [
+        2418,
+        9605,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3237
+        ]
+       }
+      },
+      {
+       "t": "Enter the tunnel.",
+       "s": "Enter the tunnel.",
+       "k": "leaveUnicornArea",
+       "at": [
+        2375,
+        9611,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3219
+        ]
+       }
+      },
+      {
+       "t": "Open the door at the end of the path.",
+       "s": "Open the door at the end of the path.",
+       "k": "openIbansDoor",
+       "at": [
+        2369,
+        9720,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3221
+        ]
+       }
+      },
+      {
+       "t": "Enter the central area from the north east corner of the area.",
+       "s": "Enter the central area from the north east corner of the area.",
+       "k": "enterTemple",
+       "at": [
+        2144,
+        4648,
+        1
+       ],
+       "hl": {
+        "obj": [
+         3333
+        ]
+       }
+      },
+      {
+       "t": "Enter the well.",
+       "s": "Enter the well.",
+       "k": "enterWell",
+       "at": [
+        2009,
+        4712,
+        1
+       ],
+       "hl": {
+        "obj": [
+         4004
+        ]
+       }
+      },
+      {
+       "t": "Leave the cave.",
+       "s": "Leave the cave.",
+       "k": "leaveWellCave",
+       "at": [
+        2313,
+        9624,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4007
+        ]
+       }
+      },
+      {
+       "t": "Return up to Iban's Cavern.",
+       "s": "Return up to Iban's Cavern.",
+       "k": "goBackUpToIbansCavern",
+       "at": [
+        2336,
+        9793,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3223
+        ]
+       }
+      },
+      {
+       "t": "Talk to Lord Iorwerth in the elf camp west of the Underground Pass exit.",
+       "s": "Talk to Lord Iorwerth in the elf camp.",
+       "k": "talkToIorwerth",
+       "at": [
+        2203,
+        3255,
+        0
+       ],
+       "hl": {
+        "npc": [
+         8758
+        ]
+       }
+      },
+      {
+       "t": "Follow the path along and hop over the leaves.",
+       "s": "Follow the path along and hop over the leaves.",
+       "k": "goFromCaveToLeaves",
+       "at": [
+        2268,
+        3204,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3923
+        ]
+       }
+      },
+      {
+       "t": "Head west, and cross the sticks there. To do so without failing, stand next to them and spam-click it until you cross it.",
+       "s": "Head west and cross the sticks; stand by them and click until across.",
+       "k": "goFromLeavesToStickTrap",
+       "at": [
+        2236,
+        3181,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3922
+        ]
+       }
+      },
+      {
+       "t": "Return back out the camp, to the east, then south to the traps and cross them.",
+       "s": "Go back east out of the camp, then south to the traps, and cross them.",
+       "k": "goFromTyrasToTrap",
+       "at": [
+        2220,
+        3154,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3921
+        ]
+       }
+      },
+      {
+       "t": "Climb through the dense forest.",
+       "s": "Climb through the dense forest.",
+       "k": "climbThroughForest",
+       "at": [
+        2239,
+        3149,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3939
+        ]
+       }
+      },
+      {
+       "t": "Go north, and jump over the leaves.",
+       "s": "Go north, and jump over the leaves.",
+       "k": "goUpToLeafTowardsLog",
+       "at": [
+        2209,
+        3202,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3925
+        ]
+       }
+      },
+      {
+       "t": "Cross the log to the north to the Iorwerth Camp.",
+       "s": "Cross the log to the north to the Iorwerth Camp.",
+       "k": "goCrossLogToCamp",
+       "at": [
+        2201,
+        3237,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3931
+        ]
+       }
+      },
+      {
+       "t": "Talk to the elf tracker.",
+       "s": "Talk to the elf tracker.",
+       "k": "talkToTracker",
+       "at": [
+        2258,
+        3148,
+        0
+       ],
+       "hl": {
+        "npc": [
+         8761
+        ]
+       }
+      },
+      {
+       "t": "Cross the log from the camp.",
+       "s": "Cross the log from the camp.",
+       "k": "crossLogFromCamp",
+       "at": [
+        2197,
+        3237,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3931
+        ]
+       }
+      },
+      {
+       "t": "Go south, and jump over the leaves.",
+       "s": "Go south, and jump over the leaves.",
+       "k": "goFromCampToLeavesSouth",
+       "at": [
+        2209,
+        3204,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3925
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 6,
+     "do": [
+      {
+       "t": "Enter the Underground Pass.",
+       "s": "Enter the Underground Pass.",
+       "k": "enterTheDungeon",
+       "at": [
+        2434,
+        3315,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3213
+        ]
+       }
+      },
+      {
+       "t": "Search the abandoned equipment for an oily cloth.",
+       "s": "Search the abandoned equipment for an oily cloth.",
+       "k": "searchBagForCloth",
+       "at": [
+        2452,
+        9715,
+        0
+       ],
+       "hl": {
+        "obj": [
+         35938
+        ]
+       }
+      },
+      {
+       "t": "Use the oily cloth on an arrow.",
+       "s": "Use the oily cloth on an arrow.",
+       "k": "useClothOnArrow"
+      },
+      {
+       "t": "Light the fire arrow.",
+       "s": "Light the fire arrow.",
+       "k": "lightArrow",
+       "at": [
+        2451,
+        9715,
+        0
+       ],
+       "hl": {
+        "obj": [
+         26185
+        ]
+       }
+      },
+      {
+       "t": "Walk to the room north of Koftik.",
+       "s": "Walk to the room north of Koftik.",
+       "k": "walkNorthEastOfBridge",
+       "at": [
+        2447,
+        9722,
+        0
+       ]
+      },
+      {
+       "t": "Wield a lit arrow and shoot the guide-rope.",
+       "s": "Wield a lit arrow and shoot the guide-rope.",
+       "k": "shootBridgeRope",
+       "hl": {
+        "obj": [
+         3340
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide.",
+       "s": "Climb-over rockslide.",
+       "k": "climbOverRockslide3",
+       "at": [
+        2458,
+        9712,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide.",
+       "s": "Climb-over rockslide.",
+       "k": "climbOverRockslide2",
+       "at": [
+        2471,
+        9706,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide.",
+       "s": "Climb-over rockslide.",
+       "k": "climbOverRockslide1",
+       "at": [
+        2480,
+        9713,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb down the well.",
+       "s": "Climb down the well.",
+       "k": "climbDownWell",
+       "at": [
+        2417,
+        9675,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3264
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap5",
+       "at": [
+        2430,
+        9676,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap4",
+       "at": [
+        2432,
+        9676,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap3",
+       "at": [
+        2435,
+        9676,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap2",
+       "at": [
+        2440,
+        9678,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap1",
+       "at": [
+        2443,
+        9678,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Pull the lever to raise the gate.",
+       "s": "Pull the lever to raise the gate.",
+       "k": "pullLeverAfterGrid",
+       "hl": {
+        "obj": [
+         3337
+        ]
+       }
+      },
+      {
+       "t": "Cross the grid by trial and error. The correct path is the same as it was during Underground Pass.",
+       "s": "Cross the grid; the safe path is the one from Underground Pass.",
+       "k": "crossTheGrid"
+      },
+      {
+       "t": "Climb-over rockslide",
+       "s": "Climb-over rockslide",
+       "k": "climbOverRockslide5",
+       "at": [
+        2482,
+        9679,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide",
+       "s": "Climb-over rockslide",
+       "k": "climbOverRockslide4",
+       "at": [
+        2491,
+        9691,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Swing across the pit with a rope.",
+       "s": "Swing across the pit with a rope.",
+       "k": "crossThePit",
+       "at": [
+        2463,
+        9699,
+        0
+       ],
+       "hl": {
+        "obj": [
+         23125
+        ]
+       }
+      },
+      {
+       "t": "Pick up the plank in the north room.",
+       "s": "Pick up the plank in the north room.",
+       "k": "collectPlank",
+       "at": [
+        2435,
+        9726,
+        0
+       ]
+      },
+      {
+       "t": "Pick the lock to enter the cell.",
+       "s": "Pick the lock to enter the cell.",
+       "k": "pickCellLock",
+       "at": [
+        2393,
+        9655,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3266
+        ]
+       }
+      },
+      {
+       "t": "Dig the loose mud.",
+       "s": "Dig the loose mud.",
+       "k": "digMud",
+       "at": [
+        2393,
+        9650,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3216
+        ]
+       }
+      },
+      {
+       "t": "Cross the ledge.",
+       "s": "Cross the ledge.",
+       "k": "crossLedge",
+       "at": [
+        2374,
+        9644,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3238
+        ]
+       }
+      },
+      {
+       "t": "Navigate the maze, or use the shortcut to the south with 50 Thieving.",
+       "s": "Navigate the maze, or use the shortcut to the south with 50 Thieving.",
+       "k": "navigateMaze"
+      },
+      {
+       "t": "Enter the pipe to the next section.",
+       "s": "Enter the pipe to the next section.",
+       "k": "goThroughPipe",
+       "at": [
+        2418,
+        9605,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3237
+        ]
+       }
+      },
+      {
+       "t": "Enter the tunnel.",
+       "s": "Enter the tunnel.",
+       "k": "leaveUnicornArea",
+       "at": [
+        2375,
+        9611,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3219
+        ]
+       }
+      },
+      {
+       "t": "Open the door at the end of the path.",
+       "s": "Open the door at the end of the path.",
+       "k": "openIbansDoor",
+       "at": [
+        2369,
+        9720,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3221
+        ]
+       }
+      },
+      {
+       "t": "Enter the central area from the north east corner of the area.",
+       "s": "Enter the central area from the north east corner of the area.",
+       "k": "enterTemple",
+       "at": [
+        2144,
+        4648,
+        1
+       ],
+       "hl": {
+        "obj": [
+         3333
+        ]
+       }
+      },
+      {
+       "t": "Enter the well.",
+       "s": "Enter the well.",
+       "k": "enterWell",
+       "at": [
+        2009,
+        4712,
+        1
+       ],
+       "hl": {
+        "obj": [
+         4004
+        ]
+       }
+      },
+      {
+       "t": "Leave the cave.",
+       "s": "Leave the cave.",
+       "k": "leaveWellCave",
+       "at": [
+        2313,
+        9624,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4007
+        ]
+       }
+      },
+      {
+       "t": "Return up to Iban's Cavern.",
+       "s": "Return up to Iban's Cavern.",
+       "k": "goBackUpToIbansCavern",
+       "at": [
+        2336,
+        9793,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3223
+        ]
+       }
+      },
+      {
+       "t": "Follow the tracks the tracker shows you.",
+       "s": "Follow the tracks the tracker shows you.",
+       "k": "clickTracks",
+       "at": [
+        2241,
+        3150,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2004
+        ]
+       }
+      },
+      {
+       "t": "Cross the log from the camp.",
+       "s": "Cross the log from the camp.",
+       "k": "crossLogFromCamp",
+       "at": [
+        2197,
+        3237,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3931
+        ]
+       }
+      },
+      {
+       "t": "Go south, and jump over the leaves.",
+       "s": "Go south, and jump over the leaves.",
+       "k": "goFromCampToLeavesSouth",
+       "at": [
+        2209,
+        3204,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3925
+        ]
+       }
+      },
+      {
+       "t": "Follow the path along and hop over the leaves.",
+       "s": "Follow the path along and hop over the leaves.",
+       "k": "goFromCaveToLeaves",
+       "at": [
+        2268,
+        3204,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3923
+        ]
+       }
+      },
+      {
+       "t": "Head west, and cross the sticks there. To do so without failing, stand next to them and spam-click it until you cross it.",
+       "s": "Head west and cross the sticks; stand by them and click until across.",
+       "k": "goFromLeavesToStickTrap",
+       "at": [
+        2236,
+        3181,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3922
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 7,
+     "do": [
+      {
+       "t": "Enter the Underground Pass.",
+       "s": "Enter the Underground Pass.",
+       "k": "enterTheDungeon",
+       "at": [
+        2434,
+        3315,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3213
+        ]
+       }
+      },
+      {
+       "t": "Search the abandoned equipment for an oily cloth.",
+       "s": "Search the abandoned equipment for an oily cloth.",
+       "k": "searchBagForCloth",
+       "at": [
+        2452,
+        9715,
+        0
+       ],
+       "hl": {
+        "obj": [
+         35938
+        ]
+       }
+      },
+      {
+       "t": "Use the oily cloth on an arrow.",
+       "s": "Use the oily cloth on an arrow.",
+       "k": "useClothOnArrow"
+      },
+      {
+       "t": "Light the fire arrow.",
+       "s": "Light the fire arrow.",
+       "k": "lightArrow",
+       "at": [
+        2451,
+        9715,
+        0
+       ],
+       "hl": {
+        "obj": [
+         26185
+        ]
+       }
+      },
+      {
+       "t": "Walk to the room north of Koftik.",
+       "s": "Walk to the room north of Koftik.",
+       "k": "walkNorthEastOfBridge",
+       "at": [
+        2447,
+        9722,
+        0
+       ]
+      },
+      {
+       "t": "Wield a lit arrow and shoot the guide-rope.",
+       "s": "Wield a lit arrow and shoot the guide-rope.",
+       "k": "shootBridgeRope",
+       "hl": {
+        "obj": [
+         3340
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide.",
+       "s": "Climb-over rockslide.",
+       "k": "climbOverRockslide3",
+       "at": [
+        2458,
+        9712,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide.",
+       "s": "Climb-over rockslide.",
+       "k": "climbOverRockslide2",
+       "at": [
+        2471,
+        9706,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide.",
+       "s": "Climb-over rockslide.",
+       "k": "climbOverRockslide1",
+       "at": [
+        2480,
+        9713,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb down the well.",
+       "s": "Climb down the well.",
+       "k": "climbDownWell",
+       "at": [
+        2417,
+        9675,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3264
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap5",
+       "at": [
+        2430,
+        9676,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap4",
+       "at": [
+        2432,
+        9676,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap3",
+       "at": [
+        2435,
+        9676,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap2",
+       "at": [
+        2440,
+        9678,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap1",
+       "at": [
+        2443,
+        9678,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Pull the lever to raise the gate.",
+       "s": "Pull the lever to raise the gate.",
+       "k": "pullLeverAfterGrid",
+       "hl": {
+        "obj": [
+         3337
+        ]
+       }
+      },
+      {
+       "t": "Cross the grid by trial and error. The correct path is the same as it was during Underground Pass.",
+       "s": "Cross the grid; the safe path is the one from Underground Pass.",
+       "k": "crossTheGrid"
+      },
+      {
+       "t": "Climb-over rockslide",
+       "s": "Climb-over rockslide",
+       "k": "climbOverRockslide5",
+       "at": [
+        2482,
+        9679,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide",
+       "s": "Climb-over rockslide",
+       "k": "climbOverRockslide4",
+       "at": [
+        2491,
+        9691,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Swing across the pit with a rope.",
+       "s": "Swing across the pit with a rope.",
+       "k": "crossThePit",
+       "at": [
+        2463,
+        9699,
+        0
+       ],
+       "hl": {
+        "obj": [
+         23125
+        ]
+       }
+      },
+      {
+       "t": "Pick up the plank in the north room.",
+       "s": "Pick up the plank in the north room.",
+       "k": "collectPlank",
+       "at": [
+        2435,
+        9726,
+        0
+       ]
+      },
+      {
+       "t": "Pick the lock to enter the cell.",
+       "s": "Pick the lock to enter the cell.",
+       "k": "pickCellLock",
+       "at": [
+        2393,
+        9655,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3266
+        ]
+       }
+      },
+      {
+       "t": "Dig the loose mud.",
+       "s": "Dig the loose mud.",
+       "k": "digMud",
+       "at": [
+        2393,
+        9650,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3216
+        ]
+       }
+      },
+      {
+       "t": "Cross the ledge.",
+       "s": "Cross the ledge.",
+       "k": "crossLedge",
+       "at": [
+        2374,
+        9644,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3238
+        ]
+       }
+      },
+      {
+       "t": "Navigate the maze, or use the shortcut to the south with 50 Thieving.",
+       "s": "Navigate the maze, or use the shortcut to the south with 50 Thieving.",
+       "k": "navigateMaze"
+      },
+      {
+       "t": "Enter the pipe to the next section.",
+       "s": "Enter the pipe to the next section.",
+       "k": "goThroughPipe",
+       "at": [
+        2418,
+        9605,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3237
+        ]
+       }
+      },
+      {
+       "t": "Enter the tunnel.",
+       "s": "Enter the tunnel.",
+       "k": "leaveUnicornArea",
+       "at": [
+        2375,
+        9611,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3219
+        ]
+       }
+      },
+      {
+       "t": "Open the door at the end of the path.",
+       "s": "Open the door at the end of the path.",
+       "k": "openIbansDoor",
+       "at": [
+        2369,
+        9720,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3221
+        ]
+       }
+      },
+      {
+       "t": "Enter the central area from the north east corner of the area.",
+       "s": "Enter the central area from the north east corner of the area.",
+       "k": "enterTemple",
+       "at": [
+        2144,
+        4648,
+        1
+       ],
+       "hl": {
+        "obj": [
+         3333
+        ]
+       }
+      },
+      {
+       "t": "Enter the well.",
+       "s": "Enter the well.",
+       "k": "enterWell",
+       "at": [
+        2009,
+        4712,
+        1
+       ],
+       "hl": {
+        "obj": [
+         4004
+        ]
+       }
+      },
+      {
+       "t": "Leave the cave.",
+       "s": "Leave the cave.",
+       "k": "leaveWellCave",
+       "at": [
+        2313,
+        9624,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4007
+        ]
+       }
+      },
+      {
+       "t": "Return up to Iban's Cavern.",
+       "s": "Return up to Iban's Cavern.",
+       "k": "goBackUpToIbansCavern",
+       "at": [
+        2336,
+        9793,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3223
+        ]
+       }
+      },
+      {
+       "t": "Talk to the elf tracker.",
+       "s": "Talk to the elf tracker.",
+       "k": "talkToTracker",
+       "at": [
+        2258,
+        3148,
+        0
+       ],
+       "hl": {
+        "npc": [
+         8761
+        ]
+       }
+      },
+      {
+       "t": "Cross the log from the camp.",
+       "s": "Cross the log from the camp.",
+       "k": "crossLogFromCamp",
+       "at": [
+        2197,
+        3237,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3931
+        ]
+       }
+      },
+      {
+       "t": "Go south, and jump over the leaves.",
+       "s": "Go south, and jump over the leaves.",
+       "k": "goFromCampToLeavesSouth",
+       "at": [
+        2209,
+        3204,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3925
+        ]
+       }
+      },
+      {
+       "t": "Follow the path along and hop over the leaves.",
+       "s": "Follow the path along and hop over the leaves.",
+       "k": "goFromCaveToLeaves",
+       "at": [
+        2268,
+        3204,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3923
+        ]
+       }
+      },
+      {
+       "t": "Head west, and cross the sticks there. To do so without failing, stand next to them and spam-click it until you cross it.",
+       "s": "Head west and cross the sticks; stand by them and click until across.",
+       "k": "goFromLeavesToStickTrap",
+       "at": [
+        2236,
+        3181,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3922
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 8,
+     "do": [
+      {
+       "t": "Enter the Underground Pass.",
+       "s": "Enter the Underground Pass.",
+       "k": "enterTheDungeon",
+       "at": [
+        2434,
+        3315,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3213
+        ]
+       }
+      },
+      {
+       "t": "Search the abandoned equipment for an oily cloth.",
+       "s": "Search the abandoned equipment for an oily cloth.",
+       "k": "searchBagForCloth",
+       "at": [
+        2452,
+        9715,
+        0
+       ],
+       "hl": {
+        "obj": [
+         35938
+        ]
+       }
+      },
+      {
+       "t": "Use the oily cloth on an arrow.",
+       "s": "Use the oily cloth on an arrow.",
+       "k": "useClothOnArrow"
+      },
+      {
+       "t": "Light the fire arrow.",
+       "s": "Light the fire arrow.",
+       "k": "lightArrow",
+       "at": [
+        2451,
+        9715,
+        0
+       ],
+       "hl": {
+        "obj": [
+         26185
+        ]
+       }
+      },
+      {
+       "t": "Walk to the room north of Koftik.",
+       "s": "Walk to the room north of Koftik.",
+       "k": "walkNorthEastOfBridge",
+       "at": [
+        2447,
+        9722,
+        0
+       ]
+      },
+      {
+       "t": "Wield a lit arrow and shoot the guide-rope.",
+       "s": "Wield a lit arrow and shoot the guide-rope.",
+       "k": "shootBridgeRope",
+       "hl": {
+        "obj": [
+         3340
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide.",
+       "s": "Climb-over rockslide.",
+       "k": "climbOverRockslide3",
+       "at": [
+        2458,
+        9712,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide.",
+       "s": "Climb-over rockslide.",
+       "k": "climbOverRockslide2",
+       "at": [
+        2471,
+        9706,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide.",
+       "s": "Climb-over rockslide.",
+       "k": "climbOverRockslide1",
+       "at": [
+        2480,
+        9713,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb down the well.",
+       "s": "Climb down the well.",
+       "k": "climbDownWell",
+       "at": [
+        2417,
+        9675,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3264
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap5",
+       "at": [
+        2430,
+        9676,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap4",
+       "at": [
+        2432,
+        9676,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap3",
+       "at": [
+        2435,
+        9676,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap2",
+       "at": [
+        2440,
+        9678,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap1",
+       "at": [
+        2443,
+        9678,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Pull the lever to raise the gate.",
+       "s": "Pull the lever to raise the gate.",
+       "k": "pullLeverAfterGrid",
+       "hl": {
+        "obj": [
+         3337
+        ]
+       }
+      },
+      {
+       "t": "Cross the grid by trial and error. The correct path is the same as it was during Underground Pass.",
+       "s": "Cross the grid; the safe path is the one from Underground Pass.",
+       "k": "crossTheGrid"
+      },
+      {
+       "t": "Climb-over rockslide",
+       "s": "Climb-over rockslide",
+       "k": "climbOverRockslide5",
+       "at": [
+        2482,
+        9679,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide",
+       "s": "Climb-over rockslide",
+       "k": "climbOverRockslide4",
+       "at": [
+        2491,
+        9691,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Swing across the pit with a rope.",
+       "s": "Swing across the pit with a rope.",
+       "k": "crossThePit",
+       "at": [
+        2463,
+        9699,
+        0
+       ],
+       "hl": {
+        "obj": [
+         23125
+        ]
+       }
+      },
+      {
+       "t": "Pick up the plank in the north room.",
+       "s": "Pick up the plank in the north room.",
+       "k": "collectPlank",
+       "at": [
+        2435,
+        9726,
+        0
+       ]
+      },
+      {
+       "t": "Pick the lock to enter the cell.",
+       "s": "Pick the lock to enter the cell.",
+       "k": "pickCellLock",
+       "at": [
+        2393,
+        9655,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3266
+        ]
+       }
+      },
+      {
+       "t": "Dig the loose mud.",
+       "s": "Dig the loose mud.",
+       "k": "digMud",
+       "at": [
+        2393,
+        9650,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3216
+        ]
+       }
+      },
+      {
+       "t": "Cross the ledge.",
+       "s": "Cross the ledge.",
+       "k": "crossLedge",
+       "at": [
+        2374,
+        9644,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3238
+        ]
+       }
+      },
+      {
+       "t": "Navigate the maze, or use the shortcut to the south with 50 Thieving.",
+       "s": "Navigate the maze, or use the shortcut to the south with 50 Thieving.",
+       "k": "navigateMaze"
+      },
+      {
+       "t": "Enter the pipe to the next section.",
+       "s": "Enter the pipe to the next section.",
+       "k": "goThroughPipe",
+       "at": [
+        2418,
+        9605,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3237
+        ]
+       }
+      },
+      {
+       "t": "Enter the tunnel.",
+       "s": "Enter the tunnel.",
+       "k": "leaveUnicornArea",
+       "at": [
+        2375,
+        9611,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3219
+        ]
+       }
+      },
+      {
+       "t": "Open the door at the end of the path.",
+       "s": "Open the door at the end of the path.",
+       "k": "openIbansDoor",
+       "at": [
+        2369,
+        9720,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3221
+        ]
+       }
+      },
+      {
+       "t": "Enter the central area from the north east corner of the area.",
+       "s": "Enter the central area from the north east corner of the area.",
+       "k": "enterTemple",
+       "at": [
+        2144,
+        4648,
+        1
+       ],
+       "hl": {
+        "obj": [
+         3333
+        ]
+       }
+      },
+      {
+       "t": "Enter the well.",
+       "s": "Enter the well.",
+       "k": "enterWell",
+       "at": [
+        2009,
+        4712,
+        1
+       ],
+       "hl": {
+        "obj": [
+         4004
+        ]
+       }
+      },
+      {
+       "t": "Leave the cave.",
+       "s": "Leave the cave.",
+       "k": "leaveWellCave",
+       "at": [
+        2313,
+        9624,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4007
+        ]
+       }
+      },
+      {
+       "t": "Return up to Iban's Cavern.",
+       "s": "Return up to Iban's Cavern.",
+       "k": "goBackUpToIbansCavern",
+       "at": [
+        2336,
+        9793,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3223
+        ]
+       }
+      },
+      {
+       "t": "Enter the Tyras Camp.",
+       "s": "Enter the Tyras Camp.",
+       "k": "enterTyrasCamp",
+       "at": [
+        2190,
+        3144,
+        0
+       ]
+      },
+      {
+       "t": "Cross the log from the camp.",
+       "s": "Cross the log from the camp.",
+       "k": "crossLogFromCamp",
+       "at": [
+        2197,
+        3237,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3931
+        ]
+       }
+      },
+      {
+       "t": "Go south, and jump over the leaves.",
+       "s": "Go south, and jump over the leaves.",
+       "k": "goFromCampToLeavesSouth",
+       "at": [
+        2209,
+        3204,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3925
+        ]
+       }
+      },
+      {
+       "t": "Follow the path along and hop over the leaves.",
+       "s": "Follow the path along and hop over the leaves.",
+       "k": "goFromCaveToLeaves",
+       "at": [
+        2268,
+        3204,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3923
+        ]
+       }
+      },
+      {
+       "t": "Head west, and cross the sticks there. To do so without failing, stand next to them and spam-click it until you cross it.",
+       "s": "Head west and cross the sticks; stand by them and click until across.",
+       "k": "goFromLeavesToStickTrap",
+       "at": [
+        2236,
+        3181,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3922
+        ]
+       }
+      },
+      {
+       "t": "Climb through the dense forest.",
+       "s": "Climb through the dense forest.",
+       "k": "climbThroughForest",
+       "at": [
+        2239,
+        3149,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3939
+        ]
+       }
+      },
+      {
+       "t": "Cross the tripwire to the north. It may poison you if you fail it.",
+       "s": "Cross the tripwire to the north. It may poison you if you fail it.",
+       "k": "crossTripwire",
+       "at": [
+        2220,
+        3154,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3921
+        ]
+       }
+      },
+      {
+       "t": "Go through the dense forest north then to the west, and fight the guard there.",
+       "s": "Go north through the dense forest, then west; fight the Tyras guard.",
+       "k": "goKillGuardAtSecondForest",
+       "at": [
+        2188,
+        3170,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3433
+        ]
+       }
+      },
+      {
+       "t": "Kill the guard.",
+       "s": "Kill the guard.",
+       "k": "killGuard",
+       "hl": {
+        "npc": [
+         639
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 9,
+     "do": [
+      {
+       "t": "Enter the Underground Pass.",
+       "s": "Enter the Underground Pass.",
+       "k": "enterTheDungeon",
+       "at": [
+        2434,
+        3315,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3213
+        ]
+       }
+      },
+      {
+       "t": "Search the abandoned equipment for an oily cloth.",
+       "s": "Search the abandoned equipment for an oily cloth.",
+       "k": "searchBagForCloth",
+       "at": [
+        2452,
+        9715,
+        0
+       ],
+       "hl": {
+        "obj": [
+         35938
+        ]
+       }
+      },
+      {
+       "t": "Use the oily cloth on an arrow.",
+       "s": "Use the oily cloth on an arrow.",
+       "k": "useClothOnArrow"
+      },
+      {
+       "t": "Light the fire arrow.",
+       "s": "Light the fire arrow.",
+       "k": "lightArrow",
+       "at": [
+        2451,
+        9715,
+        0
+       ],
+       "hl": {
+        "obj": [
+         26185
+        ]
+       }
+      },
+      {
+       "t": "Walk to the room north of Koftik.",
+       "s": "Walk to the room north of Koftik.",
+       "k": "walkNorthEastOfBridge",
+       "at": [
+        2447,
+        9722,
+        0
+       ]
+      },
+      {
+       "t": "Wield a lit arrow and shoot the guide-rope.",
+       "s": "Wield a lit arrow and shoot the guide-rope.",
+       "k": "shootBridgeRope",
+       "hl": {
+        "obj": [
+         3340
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide.",
+       "s": "Climb-over rockslide.",
+       "k": "climbOverRockslide3",
+       "at": [
+        2458,
+        9712,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide.",
+       "s": "Climb-over rockslide.",
+       "k": "climbOverRockslide2",
+       "at": [
+        2471,
+        9706,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide.",
+       "s": "Climb-over rockslide.",
+       "k": "climbOverRockslide1",
+       "at": [
+        2480,
+        9713,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb down the well.",
+       "s": "Climb down the well.",
+       "k": "climbDownWell",
+       "at": [
+        2417,
+        9675,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3264
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap5",
+       "at": [
+        2430,
+        9676,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap4",
+       "at": [
+        2432,
+        9676,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap3",
+       "at": [
+        2435,
+        9676,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap2",
+       "at": [
+        2440,
+        9678,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap1",
+       "at": [
+        2443,
+        9678,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Pull the lever to raise the gate.",
+       "s": "Pull the lever to raise the gate.",
+       "k": "pullLeverAfterGrid",
+       "hl": {
+        "obj": [
+         3337
+        ]
+       }
+      },
+      {
+       "t": "Cross the grid by trial and error. The correct path is the same as it was during Underground Pass.",
+       "s": "Cross the grid; the safe path is the one from Underground Pass.",
+       "k": "crossTheGrid"
+      },
+      {
+       "t": "Climb-over rockslide",
+       "s": "Climb-over rockslide",
+       "k": "climbOverRockslide5",
+       "at": [
+        2482,
+        9679,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide",
+       "s": "Climb-over rockslide",
+       "k": "climbOverRockslide4",
+       "at": [
+        2491,
+        9691,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Swing across the pit with a rope.",
+       "s": "Swing across the pit with a rope.",
+       "k": "crossThePit",
+       "at": [
+        2463,
+        9699,
+        0
+       ],
+       "hl": {
+        "obj": [
+         23125
+        ]
+       }
+      },
+      {
+       "t": "Pick up the plank in the north room.",
+       "s": "Pick up the plank in the north room.",
+       "k": "collectPlank",
+       "at": [
+        2435,
+        9726,
+        0
+       ]
+      },
+      {
+       "t": "Pick the lock to enter the cell.",
+       "s": "Pick the lock to enter the cell.",
+       "k": "pickCellLock",
+       "at": [
+        2393,
+        9655,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3266
+        ]
+       }
+      },
+      {
+       "t": "Dig the loose mud.",
+       "s": "Dig the loose mud.",
+       "k": "digMud",
+       "at": [
+        2393,
+        9650,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3216
+        ]
+       }
+      },
+      {
+       "t": "Cross the ledge.",
+       "s": "Cross the ledge.",
+       "k": "crossLedge",
+       "at": [
+        2374,
+        9644,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3238
+        ]
+       }
+      },
+      {
+       "t": "Navigate the maze, or use the shortcut to the south with 50 Thieving.",
+       "s": "Navigate the maze, or use the shortcut to the south with 50 Thieving.",
+       "k": "navigateMaze"
+      },
+      {
+       "t": "Enter the pipe to the next section.",
+       "s": "Enter the pipe to the next section.",
+       "k": "goThroughPipe",
+       "at": [
+        2418,
+        9605,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3237
+        ]
+       }
+      },
+      {
+       "t": "Enter the tunnel.",
+       "s": "Enter the tunnel.",
+       "k": "leaveUnicornArea",
+       "at": [
+        2375,
+        9611,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3219
+        ]
+       }
+      },
+      {
+       "t": "Open the door at the end of the path.",
+       "s": "Open the door at the end of the path.",
+       "k": "openIbansDoor",
+       "at": [
+        2369,
+        9720,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3221
+        ]
+       }
+      },
+      {
+       "t": "Enter the central area from the north east corner of the area.",
+       "s": "Enter the central area from the north east corner of the area.",
+       "k": "enterTemple",
+       "at": [
+        2144,
+        4648,
+        1
+       ],
+       "hl": {
+        "obj": [
+         3333
+        ]
+       }
+      },
+      {
+       "t": "Enter the well.",
+       "s": "Enter the well.",
+       "k": "enterWell",
+       "at": [
+        2009,
+        4712,
+        1
+       ],
+       "hl": {
+        "obj": [
+         4004
+        ]
+       }
+      },
+      {
+       "t": "Leave the cave.",
+       "s": "Leave the cave.",
+       "k": "leaveWellCave",
+       "at": [
+        2313,
+        9624,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4007
+        ]
+       }
+      },
+      {
+       "t": "Return up to Iban's Cavern.",
+       "s": "Return up to Iban's Cavern.",
+       "k": "goBackUpToIbansCavern",
+       "at": [
+        2336,
+        9793,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3223
+        ]
+       }
+      },
+      {
+       "t": "Enter the Tyras Camp.",
+       "s": "Enter the Tyras Camp.",
+       "k": "enterTyrasCamp",
+       "at": [
+        2190,
+        3144,
+        0
+       ]
+      },
+      {
+       "t": "Cross the log from the camp.",
+       "s": "Cross the log from the camp.",
+       "k": "crossLogFromCamp",
+       "at": [
+        2197,
+        3237,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3931
+        ]
+       }
+      },
+      {
+       "t": "Go south, and jump over the leaves.",
+       "s": "Go south, and jump over the leaves.",
+       "k": "goFromCampToLeavesSouth",
+       "at": [
+        2209,
+        3204,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3925
+        ]
+       }
+      },
+      {
+       "t": "Follow the path along and hop over the leaves.",
+       "s": "Follow the path along and hop over the leaves.",
+       "k": "goFromCaveToLeaves",
+       "at": [
+        2268,
+        3204,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3923
+        ]
+       }
+      },
+      {
+       "t": "Head west, and cross the sticks there. To do so without failing, stand next to them and spam-click it until you cross it.",
+       "s": "Head west and cross the sticks; stand by them and click until across.",
+       "k": "goFromLeavesToStickTrap",
+       "at": [
+        2236,
+        3181,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3922
+        ]
+       }
+      },
+      {
+       "t": "Climb through the dense forest.",
+       "s": "Climb through the dense forest.",
+       "k": "climbThroughForest",
+       "at": [
+        2239,
+        3149,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3939
+        ]
+       }
+      },
+      {
+       "t": "Cross the tripwire to the north. It may poison you if you fail it.",
+       "s": "Cross the tripwire to the north. It may poison you if you fail it.",
+       "k": "crossTripwire",
+       "at": [
+        2220,
+        3154,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3921
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 10,
+     "do": [
+      {
+       "t": "Enter the Underground Pass.",
+       "s": "Enter the Underground Pass.",
+       "k": "enterTheDungeon",
+       "at": [
+        2434,
+        3315,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3213
+        ]
+       }
+      },
+      {
+       "t": "Search the abandoned equipment for an oily cloth.",
+       "s": "Search the abandoned equipment for an oily cloth.",
+       "k": "searchBagForCloth",
+       "at": [
+        2452,
+        9715,
+        0
+       ],
+       "hl": {
+        "obj": [
+         35938
+        ]
+       }
+      },
+      {
+       "t": "Use the oily cloth on an arrow.",
+       "s": "Use the oily cloth on an arrow.",
+       "k": "useClothOnArrow"
+      },
+      {
+       "t": "Light the fire arrow.",
+       "s": "Light the fire arrow.",
+       "k": "lightArrow",
+       "at": [
+        2451,
+        9715,
+        0
+       ],
+       "hl": {
+        "obj": [
+         26185
+        ]
+       }
+      },
+      {
+       "t": "Walk to the room north of Koftik.",
+       "s": "Walk to the room north of Koftik.",
+       "k": "walkNorthEastOfBridge",
+       "at": [
+        2447,
+        9722,
+        0
+       ]
+      },
+      {
+       "t": "Wield a lit arrow and shoot the guide-rope.",
+       "s": "Wield a lit arrow and shoot the guide-rope.",
+       "k": "shootBridgeRope",
+       "hl": {
+        "obj": [
+         3340
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide.",
+       "s": "Climb-over rockslide.",
+       "k": "climbOverRockslide3",
+       "at": [
+        2458,
+        9712,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide.",
+       "s": "Climb-over rockslide.",
+       "k": "climbOverRockslide2",
+       "at": [
+        2471,
+        9706,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide.",
+       "s": "Climb-over rockslide.",
+       "k": "climbOverRockslide1",
+       "at": [
+        2480,
+        9713,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb down the well.",
+       "s": "Climb down the well.",
+       "k": "climbDownWell",
+       "at": [
+        2417,
+        9675,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3264
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap5",
+       "at": [
+        2430,
+        9676,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap4",
+       "at": [
+        2432,
+        9676,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap3",
+       "at": [
+        2435,
+        9676,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap2",
+       "at": [
+        2440,
+        9678,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap1",
+       "at": [
+        2443,
+        9678,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Pull the lever to raise the gate.",
+       "s": "Pull the lever to raise the gate.",
+       "k": "pullLeverAfterGrid",
+       "hl": {
+        "obj": [
+         3337
+        ]
+       }
+      },
+      {
+       "t": "Cross the grid by trial and error. The correct path is the same as it was during Underground Pass.",
+       "s": "Cross the grid; the safe path is the one from Underground Pass.",
+       "k": "crossTheGrid"
+      },
+      {
+       "t": "Climb-over rockslide",
+       "s": "Climb-over rockslide",
+       "k": "climbOverRockslide5",
+       "at": [
+        2482,
+        9679,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide",
+       "s": "Climb-over rockslide",
+       "k": "climbOverRockslide4",
+       "at": [
+        2491,
+        9691,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Swing across the pit with a rope.",
+       "s": "Swing across the pit with a rope.",
+       "k": "crossThePit",
+       "at": [
+        2463,
+        9699,
+        0
+       ],
+       "hl": {
+        "obj": [
+         23125
+        ]
+       }
+      },
+      {
+       "t": "Pick up the plank in the north room.",
+       "s": "Pick up the plank in the north room.",
+       "k": "collectPlank",
+       "at": [
+        2435,
+        9726,
+        0
+       ]
+      },
+      {
+       "t": "Pick the lock to enter the cell.",
+       "s": "Pick the lock to enter the cell.",
+       "k": "pickCellLock",
+       "at": [
+        2393,
+        9655,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3266
+        ]
+       }
+      },
+      {
+       "t": "Dig the loose mud.",
+       "s": "Dig the loose mud.",
+       "k": "digMud",
+       "at": [
+        2393,
+        9650,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3216
+        ]
+       }
+      },
+      {
+       "t": "Cross the ledge.",
+       "s": "Cross the ledge.",
+       "k": "crossLedge",
+       "at": [
+        2374,
+        9644,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3238
+        ]
+       }
+      },
+      {
+       "t": "Navigate the maze, or use the shortcut to the south with 50 Thieving.",
+       "s": "Navigate the maze, or use the shortcut to the south with 50 Thieving.",
+       "k": "navigateMaze"
+      },
+      {
+       "t": "Enter the pipe to the next section.",
+       "s": "Enter the pipe to the next section.",
+       "k": "goThroughPipe",
+       "at": [
+        2418,
+        9605,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3237
+        ]
+       }
+      },
+      {
+       "t": "Enter the tunnel.",
+       "s": "Enter the tunnel.",
+       "k": "leaveUnicornArea",
+       "at": [
+        2375,
+        9611,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3219
+        ]
+       }
+      },
+      {
+       "t": "Open the door at the end of the path.",
+       "s": "Open the door at the end of the path.",
+       "k": "openIbansDoor",
+       "at": [
+        2369,
+        9720,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3221
+        ]
+       }
+      },
+      {
+       "t": "Enter the central area from the north east corner of the area.",
+       "s": "Enter the central area from the north east corner of the area.",
+       "k": "enterTemple",
+       "at": [
+        2144,
+        4648,
+        1
+       ],
+       "hl": {
+        "obj": [
+         3333
+        ]
+       }
+      },
+      {
+       "t": "Enter the well.",
+       "s": "Enter the well.",
+       "k": "enterWell",
+       "at": [
+        2009,
+        4712,
+        1
+       ],
+       "hl": {
+        "obj": [
+         4004
+        ]
+       }
+      },
+      {
+       "t": "Leave the cave.",
+       "s": "Leave the cave.",
+       "k": "leaveWellCave",
+       "at": [
+        2313,
+        9624,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4007
+        ]
+       }
+      },
+      {
+       "t": "Return up to Iban's Cavern.",
+       "s": "Return up to Iban's Cavern.",
+       "k": "goBackUpToIbansCavern",
+       "at": [
+        2336,
+        9793,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3223
+        ]
+       }
+      },
+      {
+       "t": "Enter the Tyras Camp.",
+       "s": "Enter the Tyras Camp.",
+       "k": "enterTyrasCamp",
+       "at": [
+        2190,
+        3144,
+        0
+       ]
+      },
+      {
+       "t": "Cross the log from the camp.",
+       "s": "Cross the log from the camp.",
+       "k": "crossLogFromCamp",
+       "at": [
+        2197,
+        3237,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3931
+        ]
+       }
+      },
+      {
+       "t": "Go south, and jump over the leaves.",
+       "s": "Go south, and jump over the leaves.",
+       "k": "goFromCampToLeavesSouth",
+       "at": [
+        2209,
+        3204,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3925
+        ]
+       }
+      },
+      {
+       "t": "Follow the path along and hop over the leaves.",
+       "s": "Follow the path along and hop over the leaves.",
+       "k": "goFromCaveToLeaves",
+       "at": [
+        2268,
+        3204,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3923
+        ]
+       }
+      },
+      {
+       "t": "Head west, and cross the sticks there. To do so without failing, stand next to them and spam-click it until you cross it.",
+       "s": "Head west and cross the sticks; stand by them and click until across.",
+       "k": "goFromLeavesToStickTrap",
+       "at": [
+        2236,
+        3181,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3922
+        ]
+       }
+      },
+      {
+       "t": "Climb through the dense forest.",
+       "s": "Climb through the dense forest.",
+       "k": "climbThroughForest",
+       "at": [
+        2239,
+        3149,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3939
+        ]
+       }
+      },
+      {
+       "t": "Cross the tripwire to the north. It may poison you if you fail it.",
+       "s": "Cross the tripwire to the north. It may poison you if you fail it.",
+       "k": "crossTripwire",
+       "at": [
+        2220,
+        3154,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3921
+        ]
+       }
+      },
+      {
+       "t": "Take 2 barrels from the Tyras Camp.",
+       "s": "Take 2 barrels from the Tyras Camp.",
+       "k": "take2Barrels",
+       "at": [
+        2190,
+        3144,
+        0
+       ]
+      },
+      {
+       "t": "Return back out the camp, to the east, then south to the traps and cross them.",
+       "s": "Go back east out of the camp, then south to the traps, and cross them.",
+       "k": "goFromTyrasToTrap",
+       "at": [
+        2220,
+        3154,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3921
+        ]
+       }
+      },
+      {
+       "t": "Fill the barrels from the waste to the south.",
+       "s": "Fill the barrels from the waste to the south.",
+       "k": "fill2Barrels",
+       "at": [
+        2263,
+        3127,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3975
+        ]
+       }
+      },
+      {
+       "t": "Pick up some sulphur.",
+       "s": "Pick up some sulphur.",
+       "k": "getSulphur",
+       "at": [
+        2261,
+        3130,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3963
+        ]
+       }
+      },
+      {
+       "t": "Talk to Lord Iorwerth in the elf camp west of the Underground Pass exit.",
+       "s": "Talk to Lord Iorwerth in the elf camp.",
+       "k": "talkToIorwerth",
+       "at": [
+        2203,
+        3255,
+        0
+       ],
+       "hl": {
+        "npc": [
+         8758
+        ]
+       }
+      },
+      {
+       "t": "Go north, and jump over the leaves.",
+       "s": "Go north, and jump over the leaves.",
+       "k": "goUpToLeafTowardsLog",
+       "at": [
+        2209,
+        3202,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3925
+        ]
+       }
+      },
+      {
+       "t": "Cross the log to the north to the Iorwerth Camp.",
+       "s": "Cross the log to the north to the Iorwerth Camp.",
+       "k": "goCrossLogToCamp",
+       "at": [
+        2201,
+        3237,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3931
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 11,
+     "do": [
+      {
+       "t": "Read the big book of bangs.",
+       "s": "Read the big book of bangs.",
+       "k": "readBigBookOfBangs"
+      },
+      {
+       "t": "Talk to Lord Iorwerth in the elf camp west of the Underground Pass exit.",
+       "s": "Talk to Lord Iorwerth in the elf camp.",
+       "k": "talkToIorwerth",
+       "at": [
+        2203,
+        3255,
+        0
+       ],
+       "hl": {
+        "npc": [
+         8758
+        ]
+       }
+      },
+      {
+       "t": "Follow the path along and hop over the leaves.",
+       "s": "Follow the path along and hop over the leaves.",
+       "k": "goFromCaveToLeaves",
+       "at": [
+        2268,
+        3204,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3923
+        ]
+       }
+      },
+      {
+       "t": "Head west, and cross the sticks there. To do so without failing, stand next to them and spam-click it until you cross it.",
+       "s": "Head west and cross the sticks; stand by them and click until across.",
+       "k": "goFromLeavesToStickTrap",
+       "at": [
+        2236,
+        3181,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3922
+        ]
+       }
+      },
+      {
+       "t": "Return back out the camp, to the east, then south to the traps and cross them.",
+       "s": "Go back east out of the camp, then south to the traps, and cross them.",
+       "k": "goFromTyrasToTrap",
+       "at": [
+        2220,
+        3154,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3921
+        ]
+       }
+      },
+      {
+       "t": "Climb through the dense forest.",
+       "s": "Climb through the dense forest.",
+       "k": "climbThroughForest",
+       "at": [
+        2239,
+        3149,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3939
+        ]
+       }
+      },
+      {
+       "t": "Go north, and jump over the leaves.",
+       "s": "Go north, and jump over the leaves.",
+       "k": "goUpToLeafTowardsLog",
+       "at": [
+        2209,
+        3202,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3925
+        ]
+       }
+      },
+      {
+       "t": "Cross the log to the north to the Iorwerth Camp.",
+       "s": "Cross the log to the north to the Iorwerth Camp.",
+       "k": "goCrossLogToCamp",
+       "at": [
+        2201,
+        3237,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3931
+        ]
+       }
+      },
+      {
+       "t": "Ask Iorwerth about quicklime.",
+       "s": "Ask Iorwerth about quicklime.",
+       "k": "askAboutQuicklime",
+       "at": [
+        2203,
+        3255,
+        0
+       ],
+       "hl": {
+        "npc": [
+         8758
+        ]
+       }
+      },
+      {
+       "t": "Ask Iorwerth about naphtha.",
+       "s": "Ask Iorwerth about naphtha.",
+       "k": "askAboutNaphtha",
+       "at": [
+        2203,
+        3255,
+        0
+       ],
+       "hl": {
+        "npc": [
+         8758
+        ]
+       }
+      },
+      {
+       "t": "Ask Iorwerth about sulphur.",
+       "s": "Ask Iorwerth about sulphur.",
+       "k": "askAboutSulphur",
+       "at": [
+        2203,
+        3255,
+        0
+       ],
+       "hl": {
+        "npc": [
+         8758
+        ]
+       }
+      },
+      {
+       "t": "Ask Iorwerth about a barrel.",
+       "s": "Ask Iorwerth about a barrel.",
+       "k": "askAboutBarrel",
+       "at": [
+        2203,
+        3255,
+        0
+       ],
+       "hl": {
+        "npc": [
+         8758
+        ]
+       }
+      },
+      {
+       "t": "Ask Iorwerth about a fuse.",
+       "s": "Ask Iorwerth about a fuse.",
+       "k": "askAboutFuse",
+       "at": [
+        2203,
+        3255,
+        0
+       ],
+       "hl": {
+        "npc": [
+         8758
+        ]
+       }
+      },
+      {
+       "t": "Use some limestone on a furnace whilst wearing gloves.",
+       "s": "Use some limestone on a furnace whilst wearing gloves.",
+       "k": "useLimestoneOnFurnace"
+      },
+      {
+       "t": "Use a pestle and mortar on the quicklime with a pot in your inventory.",
+       "s": "Use a pestle and mortar on the quicklime with a pot in your inventory.",
+       "k": "usePestleOnQuicklime"
+      },
+      {
+       "t": "Use a pestle and mortar on some sulphur.",
+       "s": "Use a pestle and mortar on some sulphur.",
+       "k": "usePestleOnSulphur"
+      },
+      {
+       "t": "Talk to the Chemist in Rimmington.",
+       "s": "Talk to the Chemist in Rimmington.",
+       "k": "talkToChemist",
+       "at": [
+        2933,
+        3210,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1146
+        ]
+       }
+      },
+      {
+       "t": "Use a barrel of coal on the still outside the Chemist's house.",
+       "s": "Use a barrel of coal on the still outside the Chemist's house.",
+       "k": "useTarOnFractionalisingStill",
+       "at": [
+        2927,
+        3212,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4026
+        ]
+       }
+      },
+      {
+       "t": "Operate the still: add coal while the heat is below the green region, wait while it is above, and close it when the bottom bar is full.",
+       "s": "Operate the still: keep the heat in the green until the bar fills.",
+       "k": "operateStill",
+       "at": [
+        2927,
+        3212,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4026
+        ]
+       }
+      },
+      {
+       "t": "Make another barrel of naphtha for Mourning's End if you'd like, then add the quicklime to the naphtha.",
+       "s": "Add the quicklime to the naphtha; a spare barrel helps Mourning's End.",
+       "k": "useQuicklimeOnNaphtha"
+      },
+      {
+       "t": "Add the ground sulphur to the naphtha mix.",
+       "s": "Add the ground sulphur to the naphtha mix.",
+       "k": "useGroundSulphurOnNaphtha"
+      },
+      {
+       "t": "Use the cloth on the barrel bomb.",
+       "s": "Use the cloth on the barrel bomb.",
+       "k": "useClothOnBarrelBomb"
+      },
+      {
+       "t": "Enter the Underground Pass.",
+       "s": "Enter the Underground Pass.",
+       "k": "enterTheDungeon",
+       "at": [
+        2434,
+        3315,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3213
+        ]
+       }
+      },
+      {
+       "t": "Search the abandoned equipment for an oily cloth.",
+       "s": "Search the abandoned equipment for an oily cloth.",
+       "k": "searchBagForCloth",
+       "at": [
+        2452,
+        9715,
+        0
+       ],
+       "hl": {
+        "obj": [
+         35938
+        ]
+       }
+      },
+      {
+       "t": "Use the oily cloth on an arrow.",
+       "s": "Use the oily cloth on an arrow.",
+       "k": "useClothOnArrow"
+      },
+      {
+       "t": "Light the fire arrow.",
+       "s": "Light the fire arrow.",
+       "k": "lightArrow",
+       "at": [
+        2451,
+        9715,
+        0
+       ],
+       "hl": {
+        "obj": [
+         26185
+        ]
+       }
+      },
+      {
+       "t": "Walk to the room north of Koftik.",
+       "s": "Walk to the room north of Koftik.",
+       "k": "walkNorthEastOfBridge",
+       "at": [
+        2447,
+        9722,
+        0
+       ]
+      },
+      {
+       "t": "Wield a lit arrow and shoot the guide-rope.",
+       "s": "Wield a lit arrow and shoot the guide-rope.",
+       "k": "shootBridgeRope",
+       "hl": {
+        "obj": [
+         3340
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide.",
+       "s": "Climb-over rockslide.",
+       "k": "climbOverRockslide3",
+       "at": [
+        2458,
+        9712,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide.",
+       "s": "Climb-over rockslide.",
+       "k": "climbOverRockslide2",
+       "at": [
+        2471,
+        9706,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide.",
+       "s": "Climb-over rockslide.",
+       "k": "climbOverRockslide1",
+       "at": [
+        2480,
+        9713,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb down the well.",
+       "s": "Climb down the well.",
+       "k": "climbDownWell",
+       "at": [
+        2417,
+        9675,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3264
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap5",
+       "at": [
+        2430,
+        9676,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap4",
+       "at": [
+        2432,
+        9676,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap3",
+       "at": [
+        2435,
+        9676,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap2",
+       "at": [
+        2440,
+        9678,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap1",
+       "at": [
+        2443,
+        9678,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Pull the lever to raise the gate.",
+       "s": "Pull the lever to raise the gate.",
+       "k": "pullLeverAfterGrid",
+       "hl": {
+        "obj": [
+         3337
+        ]
+       }
+      },
+      {
+       "t": "Cross the grid by trial and error. The correct path is the same as it was during Underground Pass.",
+       "s": "Cross the grid; the safe path is the one from Underground Pass.",
+       "k": "crossTheGrid"
+      },
+      {
+       "t": "Climb-over rockslide",
+       "s": "Climb-over rockslide",
+       "k": "climbOverRockslide5",
+       "at": [
+        2482,
+        9679,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide",
+       "s": "Climb-over rockslide",
+       "k": "climbOverRockslide4",
+       "at": [
+        2491,
+        9691,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Swing across the pit with a rope.",
+       "s": "Swing across the pit with a rope.",
+       "k": "crossThePit",
+       "at": [
+        2463,
+        9699,
+        0
+       ],
+       "hl": {
+        "obj": [
+         23125
+        ]
+       }
+      },
+      {
+       "t": "Pick up the plank in the north room.",
+       "s": "Pick up the plank in the north room.",
+       "k": "collectPlank",
+       "at": [
+        2435,
+        9726,
+        0
+       ]
+      },
+      {
+       "t": "Pick the lock to enter the cell.",
+       "s": "Pick the lock to enter the cell.",
+       "k": "pickCellLock",
+       "at": [
+        2393,
+        9655,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3266
+        ]
+       }
+      },
+      {
+       "t": "Dig the loose mud.",
+       "s": "Dig the loose mud.",
+       "k": "digMud",
+       "at": [
+        2393,
+        9650,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3216
+        ]
+       }
+      },
+      {
+       "t": "Cross the ledge.",
+       "s": "Cross the ledge.",
+       "k": "crossLedge",
+       "at": [
+        2374,
+        9644,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3238
+        ]
+       }
+      },
+      {
+       "t": "Navigate the maze, or use the shortcut to the south with 50 Thieving.",
+       "s": "Navigate the maze, or use the shortcut to the south with 50 Thieving.",
+       "k": "navigateMaze"
+      },
+      {
+       "t": "Enter the pipe to the next section.",
+       "s": "Enter the pipe to the next section.",
+       "k": "goThroughPipe",
+       "at": [
+        2418,
+        9605,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3237
+        ]
+       }
+      },
+      {
+       "t": "Enter the tunnel.",
+       "s": "Enter the tunnel.",
+       "k": "leaveUnicornArea",
+       "at": [
+        2375,
+        9611,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3219
+        ]
+       }
+      },
+      {
+       "t": "Open the door at the end of the path.",
+       "s": "Open the door at the end of the path.",
+       "k": "openIbansDoor",
+       "at": [
+        2369,
+        9720,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3221
+        ]
+       }
+      },
+      {
+       "t": "Enter the central area from the north east corner of the area.",
+       "s": "Enter the central area from the north east corner of the area.",
+       "k": "enterTemple",
+       "at": [
+        2144,
+        4648,
+        1
+       ],
+       "hl": {
+        "obj": [
+         3333
+        ]
+       }
+      },
+      {
+       "t": "Enter the well.",
+       "s": "Enter the well.",
+       "k": "enterWell",
+       "at": [
+        2009,
+        4712,
+        1
+       ],
+       "hl": {
+        "obj": [
+         4004
+        ]
+       }
+      },
+      {
+       "t": "Leave the cave.",
+       "s": "Leave the cave.",
+       "k": "leaveWellCave",
+       "at": [
+        2313,
+        9624,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4007
+        ]
+       }
+      },
+      {
+       "t": "Return up to Iban's Cavern.",
+       "s": "Return up to Iban's Cavern.",
+       "k": "goBackUpToIbansCavern",
+       "at": [
+        2336,
+        9793,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3223
+        ]
+       }
+      },
+      {
+       "t": "Enter the Tyras Camp.",
+       "s": "Enter the Tyras Camp.",
+       "k": "enterTyrasCamp",
+       "at": [
+        2190,
+        3144,
+        0
+       ]
+      },
+      {
+       "t": "Cross the log from the camp.",
+       "s": "Cross the log from the camp.",
+       "k": "crossLogFromCamp",
+       "at": [
+        2197,
+        3237,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3931
+        ]
+       }
+      },
+      {
+       "t": "Go south, and jump over the leaves.",
+       "s": "Go south, and jump over the leaves.",
+       "k": "goFromCampToLeavesSouth",
+       "at": [
+        2209,
+        3204,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3925
+        ]
+       }
+      },
+      {
+       "t": "Cross the tripwire to the north. It may poison you if you fail it.",
+       "s": "Cross the tripwire to the north. It may poison you if you fail it.",
+       "k": "crossTripwire",
+       "at": [
+        2220,
+        3154,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3921
+        ]
+       }
+      },
+      {
+       "t": "Use the cooked rabbit on the guard.",
+       "s": "Use the cooked rabbit on the guard.",
+       "k": "useRabbitOnGuard",
+       "at": [
+        2183,
+        3185,
+        0
+       ],
+       "hl": {
+        "npc": [
+         8762
+        ]
+       }
+      },
+      {
+       "t": "Use the barrel bomb on the catapult.",
+       "s": "Use the barrel bomb on the catapult.",
+       "k": "useBombOnCatapult",
+       "at": [
+        2184,
+        3185,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3978
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 12,
+     "do": [
+      {
+       "t": "Enter the Underground Pass.",
+       "s": "Enter the Underground Pass.",
+       "k": "enterTheDungeon",
+       "at": [
+        2434,
+        3315,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3213
+        ]
+       }
+      },
+      {
+       "t": "Search the abandoned equipment for an oily cloth.",
+       "s": "Search the abandoned equipment for an oily cloth.",
+       "k": "searchBagForCloth",
+       "at": [
+        2452,
+        9715,
+        0
+       ],
+       "hl": {
+        "obj": [
+         35938
+        ]
+       }
+      },
+      {
+       "t": "Use the oily cloth on an arrow.",
+       "s": "Use the oily cloth on an arrow.",
+       "k": "useClothOnArrow"
+      },
+      {
+       "t": "Light the fire arrow.",
+       "s": "Light the fire arrow.",
+       "k": "lightArrow",
+       "at": [
+        2451,
+        9715,
+        0
+       ],
+       "hl": {
+        "obj": [
+         26185
+        ]
+       }
+      },
+      {
+       "t": "Walk to the room north of Koftik.",
+       "s": "Walk to the room north of Koftik.",
+       "k": "walkNorthEastOfBridge",
+       "at": [
+        2447,
+        9722,
+        0
+       ]
+      },
+      {
+       "t": "Wield a lit arrow and shoot the guide-rope.",
+       "s": "Wield a lit arrow and shoot the guide-rope.",
+       "k": "shootBridgeRope",
+       "hl": {
+        "obj": [
+         3340
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide.",
+       "s": "Climb-over rockslide.",
+       "k": "climbOverRockslide3",
+       "at": [
+        2458,
+        9712,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide.",
+       "s": "Climb-over rockslide.",
+       "k": "climbOverRockslide2",
+       "at": [
+        2471,
+        9706,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide.",
+       "s": "Climb-over rockslide.",
+       "k": "climbOverRockslide1",
+       "at": [
+        2480,
+        9713,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb down the well.",
+       "s": "Climb down the well.",
+       "k": "climbDownWell",
+       "at": [
+        2417,
+        9675,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3264
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap5",
+       "at": [
+        2430,
+        9676,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap4",
+       "at": [
+        2432,
+        9676,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap3",
+       "at": [
+        2435,
+        9676,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap2",
+       "at": [
+        2440,
+        9678,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap1",
+       "at": [
+        2443,
+        9678,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Pull the lever to raise the gate.",
+       "s": "Pull the lever to raise the gate.",
+       "k": "pullLeverAfterGrid",
+       "hl": {
+        "obj": [
+         3337
+        ]
+       }
+      },
+      {
+       "t": "Cross the grid by trial and error. The correct path is the same as it was during Underground Pass.",
+       "s": "Cross the grid; the safe path is the one from Underground Pass.",
+       "k": "crossTheGrid"
+      },
+      {
+       "t": "Climb-over rockslide",
+       "s": "Climb-over rockslide",
+       "k": "climbOverRockslide5",
+       "at": [
+        2482,
+        9679,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide",
+       "s": "Climb-over rockslide",
+       "k": "climbOverRockslide4",
+       "at": [
+        2491,
+        9691,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Swing across the pit with a rope.",
+       "s": "Swing across the pit with a rope.",
+       "k": "crossThePit",
+       "at": [
+        2463,
+        9699,
+        0
+       ],
+       "hl": {
+        "obj": [
+         23125
+        ]
+       }
+      },
+      {
+       "t": "Pick up the plank in the north room.",
+       "s": "Pick up the plank in the north room.",
+       "k": "collectPlank",
+       "at": [
+        2435,
+        9726,
+        0
+       ]
+      },
+      {
+       "t": "Pick the lock to enter the cell.",
+       "s": "Pick the lock to enter the cell.",
+       "k": "pickCellLock",
+       "at": [
+        2393,
+        9655,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3266
+        ]
+       }
+      },
+      {
+       "t": "Dig the loose mud.",
+       "s": "Dig the loose mud.",
+       "k": "digMud",
+       "at": [
+        2393,
+        9650,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3216
+        ]
+       }
+      },
+      {
+       "t": "Cross the ledge.",
+       "s": "Cross the ledge.",
+       "k": "crossLedge",
+       "at": [
+        2374,
+        9644,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3238
+        ]
+       }
+      },
+      {
+       "t": "Navigate the maze, or use the shortcut to the south with 50 Thieving.",
+       "s": "Navigate the maze, or use the shortcut to the south with 50 Thieving.",
+       "k": "navigateMaze"
+      },
+      {
+       "t": "Enter the pipe to the next section.",
+       "s": "Enter the pipe to the next section.",
+       "k": "goThroughPipe",
+       "at": [
+        2418,
+        9605,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3237
+        ]
+       }
+      },
+      {
+       "t": "Enter the tunnel.",
+       "s": "Enter the tunnel.",
+       "k": "leaveUnicornArea",
+       "at": [
+        2375,
+        9611,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3219
+        ]
+       }
+      },
+      {
+       "t": "Open the door at the end of the path.",
+       "s": "Open the door at the end of the path.",
+       "k": "openIbansDoor",
+       "at": [
+        2369,
+        9720,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3221
+        ]
+       }
+      },
+      {
+       "t": "Enter the central area from the north east corner of the area.",
+       "s": "Enter the central area from the north east corner of the area.",
+       "k": "enterTemple",
+       "at": [
+        2144,
+        4648,
+        1
+       ],
+       "hl": {
+        "obj": [
+         3333
+        ]
+       }
+      },
+      {
+       "t": "Enter the well.",
+       "s": "Enter the well.",
+       "k": "enterWell",
+       "at": [
+        2009,
+        4712,
+        1
+       ],
+       "hl": {
+        "obj": [
+         4004
+        ]
+       }
+      },
+      {
+       "t": "Leave the cave.",
+       "s": "Leave the cave.",
+       "k": "leaveWellCave",
+       "at": [
+        2313,
+        9624,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4007
+        ]
+       }
+      },
+      {
+       "t": "Return up to Iban's Cavern.",
+       "s": "Return up to Iban's Cavern.",
+       "k": "goBackUpToIbansCavern",
+       "at": [
+        2336,
+        9793,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3223
+        ]
+       }
+      },
+      {
+       "t": "Talk to Lord Iorwerth in the elf camp west of the Underground Pass exit.",
+       "s": "Talk to Lord Iorwerth in the elf camp.",
+       "k": "talkToIorwerth",
+       "at": [
+        2203,
+        3255,
+        0
+       ],
+       "hl": {
+        "npc": [
+         8758
+        ]
+       }
+      },
+      {
+       "t": "Follow the path along and hop over the leaves.",
+       "s": "Follow the path along and hop over the leaves.",
+       "k": "goFromCaveToLeaves",
+       "at": [
+        2268,
+        3204,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3923
+        ]
+       }
+      },
+      {
+       "t": "Head west, and cross the sticks there. To do so without failing, stand next to them and spam-click it until you cross it.",
+       "s": "Head west and cross the sticks; stand by them and click until across.",
+       "k": "goFromLeavesToStickTrap",
+       "at": [
+        2236,
+        3181,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3922
+        ]
+       }
+      },
+      {
+       "t": "Return back out the camp, to the east, then south to the traps and cross them.",
+       "s": "Go back east out of the camp, then south to the traps, and cross them.",
+       "k": "goFromTyrasToTrap",
+       "at": [
+        2220,
+        3154,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3921
+        ]
+       }
+      },
+      {
+       "t": "Climb through the dense forest.",
+       "s": "Climb through the dense forest.",
+       "k": "climbThroughForest",
+       "at": [
+        2239,
+        3149,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3939
+        ]
+       }
+      },
+      {
+       "t": "Go north, and jump over the leaves.",
+       "s": "Go north, and jump over the leaves.",
+       "k": "goUpToLeafTowardsLog",
+       "at": [
+        2209,
+        3202,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3925
+        ]
+       }
+      },
+      {
+       "t": "Cross the log to the north to the Iorwerth Camp.",
+       "s": "Cross the log to the north to the Iorwerth Camp.",
+       "k": "goCrossLogToCamp",
+       "at": [
+        2201,
+        3237,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3931
+        ]
+       }
+      },
+      {
+       "t": "Go to the east, then south to the traps and cross them.",
+       "s": "Go to the east, then south to the traps and cross them.",
+       "k": "leaveFromCatapult",
+       "at": [
+        2220,
+        3154,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3921
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 13,
+     "do": [
+      {
+       "t": "Talk to Arianwyn outside Ardougne Castle.",
+       "s": "Talk to Arianwyn outside Ardougne Castle.",
+       "k": "talkToArianwyn",
+       "at": [
+        2582,
+        3298,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3432
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 14,
+     "do": [
+      {
+       "t": "Go to the second floor of Ardougne Castle.",
+       "s": "Go to the second floor of Ardougne Castle.",
+       "k": "goToArdougneCastleFloor2",
+       "at": [
+        2572,
+        3296,
+        0
+       ],
+       "hl": {
+        "obj": [
+         15645
+        ]
+       }
+      },
+      {
+       "t": "Talk to King Lathas.",
+       "s": "Talk to King Lathas.",
+       "k": "talkToKingLathas",
+       "at": [
+        2578,
+        3293,
+        1
+       ],
+       "hl": {
+        "npc": [
+         9005
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  "S9-69": {
+   "var": [
+    "varp",
+    402
+   ],
+   "route": [
+    {
+     "title": "Tracking Islwyn",
+     "steps": [
+      "Head to Tirannwn (Catherby teleport (tablet), use charter to Port Tyras)",
+      "Track down Islwyn, who will be either west of Lletya or north-east of the Tyras Camp. Use this map to assist you. (If the elves are not there, switch worlds until they appear)",
+      "Offer your help to Islwyn. Dialogue: \"Tell the truth?\", \"Maybe I could help.\"",
+      "Talk to Eluned."
+     ]
+    },
+    {
+     "title": "Obtaining the Seed",
+     "steps": [
+      "Bank all weapons, armour and runes: the tomb lets in only the pebble, food, potions and jewellery.",
+      "Travel north-west of the Fishing Guild and use Glarial's pebble on Glarial's tombstone.",
+      "Kill a Moss Guardian (level 84, hits up to 14) bare-handed, eating lobsters. It drops a consecration seed.",
+      "Take the seed to Eluned."
+     ]
+    },
+    {
+     "title": "Planting The Seed",
+     "steps": [
+      "Enter the Waterfall Dungeon.",
+      "(Skip this step if you already have the key.) Search the most northern crates in the east room for a key.",
+      "Take the west path all the way north.",
+      "Left click the seed in the final room to plant it.",
+      "Return to Islwyn to choose your reward.",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Talk to Islwyn in Isafdar. If he's not at the marked location, try hopping worlds to find him here.",
+       "s": "Talk to Islwyn in Isafdar; hop worlds if he is not there.",
+       "k": "talkToIslwyn",
+       "at": [
+        2207,
+        3159,
+        0
+       ],
+       "hl": {
+        "npc": [
+         7780
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 1,
+     "do": [
+      {
+       "t": "Talk to Islwyn in Isafdar. If he's not at the marked location, try hopping worlds to find him here.",
+       "s": "Talk to Islwyn in Isafdar; hop worlds if he is not there.",
+       "k": "talkToIslwyn",
+       "at": [
+        2207,
+        3159,
+        0
+       ],
+       "hl": {
+        "npc": [
+         7780
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 2,
+     "do": [
+      {
+       "t": "Talk to Eluned.",
+       "s": "Talk to Eluned.",
+       "k": "talkToEluned",
+       "at": [
+        2207,
+        3159,
+        0
+       ],
+       "hl": {
+        "npc": [
+         8766
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 3,
+     "do": [
+      {
+       "t": "Bank everything besides the pebble, some potions, and some food. After, go use Glarial's pebble to Glarial's Tombstone east of Baxtorian Falls. Be prepared to fight a level 84 Moss Guardian bare-handed.",
+       "s": "Keep only pebble, food and potions; use the pebble on Glarial's tomb.",
+       "k": "enterGlarialsTombstone",
+       "at": [
+        2559,
+        3445,
+        0
+       ],
+       "hl": {
+        "obj": [
+         1992
+        ]
+       }
+      },
+      {
+       "t": "Kill the Moss Guardian for a Consecration seed.",
+       "s": "Kill the Moss Guardian for a Consecration seed.",
+       "k": "killGuardian",
+       "at": [
+        2515,
+        9844,
+        0
+       ],
+       "hl": {
+        "npc": [
+         891
+        ]
+       }
+      },
+      {
+       "t": "Pick up the consecration seed.",
+       "s": "Pick up the consecration seed.",
+       "k": "pickUpSeed"
+      },
+      {
+       "t": "Return the seed to Eluned.",
+       "s": "Return the seed to Eluned.",
+       "k": "returnSeedToEluned",
+       "at": [
+        2207,
+        3159,
+        0
+       ],
+       "hl": {
+        "npc": [
+         8766
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 4,
+     "do": [
+      {
+       "t": "Board the log raft on the top of Baxtorian Falls.",
+       "s": "Board the log raft on the top of Baxtorian Falls.",
+       "k": "boardRaft",
+       "at": [
+        2509,
+        3494,
+        0
+       ],
+       "hl": {
+        "obj": [
+         1987
+        ]
+       }
+      },
+      {
+       "t": "Use a rope on the rock to the south.",
+       "s": "Use a rope on the rock to the south",
+       "k": "useRopeOnRock",
+       "at": [
+        2512,
+        3468,
+        0
+       ],
+       "hl": {
+        "obj": [
+         1996
+        ]
+       }
+      },
+      {
+       "t": "Use a rope on the dead tree.",
+       "s": "Use a rope on the dead tree",
+       "k": "useRopeOnTree",
+       "at": [
+        2512,
+        3465,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2020
+        ]
+       }
+      },
+      {
+       "t": "Enter the falls.",
+       "s": "Enter the falls.",
+       "k": "enterFalls",
+       "at": [
+        2511,
+        3464,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2010
+        ]
+       }
+      },
+      {
+       "t": "Search the crate in the east room for a key.",
+       "s": "Search the crate in the east room for a key",
+       "k": "searchFallsCrate",
+       "at": [
+        2589,
+        9888,
+        0
+       ],
+       "hl": {
+        "obj": [
+         1999
+        ]
+       }
+      },
+      {
+       "t": "Go through the doors from the west room.",
+       "s": "Go through the doors from the west room.",
+       "k": "useKeyOnFallsDoor",
+       "at": [
+        2566,
+        9901,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2002
+        ]
+       }
+      },
+      {
+       "t": "Plant the consecrated seed anywhere in the room.",
+       "s": "Plant the consecrated seed anywhere in the room.",
+       "k": "plantSeed"
+      }
+     ]
+    },
+    {
+     "at": 5,
+     "do": [
+      {
+       "t": "Return to Islwyn in Isafdar to finish the quest.",
+       "s": "Return to Islwyn in Isafdar to finish the quest.",
+       "k": "returnToIslwyn",
+       "at": [
+        2207,
+        3159,
+        0
+       ],
+       "hl": {
+        "npc": [
+         7780
+        ]
+       }
+      }
+     ]
+    }
+   ]
   }
  }
 }

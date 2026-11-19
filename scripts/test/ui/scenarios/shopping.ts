@@ -20,7 +20,7 @@ async function shoppingScenarios(browser: Browser) {
       localStorage: { 'osrs-put:active-step': 'S3-01', 'osrs-put:shopping-scope': 'step' },
       market: true,
       ...(o.offline ? { offline: true } : {
-        status: { protocol: 6, inGame: true, player: 'Shop Test', activeStepId: 'S3-01', questPoints: 20, totalLevel: 120, ...gear },
+        status: { protocol: 7, inGame: true, player: 'Shop Test', activeStepId: 'S3-01', questPoints: 20, totalLevel: 120, ...gear },
         events: [{ type: 'OWNED', bankSeen: o.bankSeen !== false, items: o.items ?? [] }, { type: 'GEAR', gear }],
       }),
     };
@@ -93,7 +93,7 @@ async function shoppingQuoteScenarios(browser: Browser) {
     const { page, errors } = await open(browser, width, {
       market: true, marketUnavailable: state === 'missing', marketAgeMinutes: state === 'cached' ? 120 : undefined,
       progress: progressBefore('S4-01'), localStorage: { 'osrs-put:active-step': 'S4-01', 'osrs-put:shopping-scope': 'step' },
-      status: { protocol: 6, inGame: true, player: 'Shopping Quotes', activeStepId: 'S4-01', coins: 100000, bankCoins: 0, equipment: [{ id: 1329, name: 'Mithril scimitar', slot: 'weapon' }], inventory: [],
+      status: { protocol: 7, inGame: true, player: 'Shopping Quotes', activeStepId: 'S4-01', coins: 100000, bankCoins: 0, equipment: [{ id: 1329, name: 'Mithril scimitar', slot: 'weapon' }], inventory: [],
         stats: { attack: 10, strength: 10, defence: 1, hitpoints: 14, magic: 1 } },
       events: [{ type: 'OWNED', bankSeen: true, items: ['Salmon', 'Trout', 'Tuna', 'Lobster', 'Swordfish'].map(name => ({ name, carried: 0, noted: 0, bank: 0 })) }],
     }, '#/shopping');
@@ -113,7 +113,7 @@ async function shoppingPage(browser: Browser) {
   p.steps['S2-06'] = 'skipped';
   const gear = { equipment: [], inventory: [{ id: 290, name: 'Research package', count: 1 }], coins: 100, bankCoins: 0 };
   const { page, errors } = await open(browser, 1280, {
-    progress: p, status: { protocol: 6, player: 'Reserve Test', questsDone: [], accountType: 'normal', ...gear },
+    progress: p, status: { protocol: 7, player: 'Reserve Test', questsDone: [], accountType: 'normal', ...gear },
     events: [{ type: 'GEAR', gear }, { type: 'QUESTS', done: [] }], market: true,
   }, '#/shopping');
   await page.locator('.shop-cleanup > summary').click();

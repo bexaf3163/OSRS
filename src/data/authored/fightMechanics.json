@@ -15,6 +15,30 @@
         "A stake and a hammer in the inventory deal the killing blow; without them he heals to full health."
       ]
     },
+    "Mourner": {
+      "url": "https://oldschool.runescape.wiki/w/Mourning%27s_End_Part_I",
+      "levelCap": 20,
+      "facts": [
+        "Before your first hit lands, the mourner throws a potion that lowers your combat stats, Hitpoints included, to 20; a potion cannot restore them (OSRS Wiki Mourning's End Part I).",
+        "Level 11, 19 hit points, max hit 2 with crush (OSRS Wiki infobox)."
+      ]
+    },
+    "Moss Guardian": {
+      "url": "https://oldschool.runescape.wiki/w/Glarial%27s_Tomb",
+      "bare": true,
+      "facts": [
+        "Glarial's Tomb allows no weapons, armour or runes; food, potions, prayer and jewellery are allowed, so Roving Elves fights it bare-handed (OSRS Wiki Roving Elves).",
+        "Level 84, 120 hit points, max hit 14 with crush; Protect from Melee (Prayer 43) and a ring of recoil help, and it can be flinched."
+      ]
+    },
+    "Tyras guard": {
+      "url": "https://oldschool.runescape.wiki/w/Tyras_guard",
+      "safespot": { "spell": "Fire Bolt" },
+      "facts": [
+        "The wiki says the level-110 Tyras guard in Regicide can be safespotted, with Ranged, Magic or a halberd; Regicide fights it with Fire Bolt (combat audit).",
+        "It hits up to 15 with stab and has Magic defence -10, so Fire Bolt lands often."
+      ]
+    },
     "Arrg": {
       "url": "https://oldschool.runescape.wiki/w/Arrg",
       "safespot": { "spell": "Fire Bolt" },

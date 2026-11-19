@@ -92,7 +92,7 @@ async function membersGatheringScenarios(browser: Browser) {
     const { page, errors } = await open(browser, width, {
       progress: progressBefore('S9-01', { gameMode: 'members', levels }),
       localStorage: {},
-      status: { protocol: 6, inGame: true, stats: levels, equipment: [], inventory: [{ id: 1359, name: 'Rune axe', count: 1 }], coins: 5000, bankCoins: 0 },
+      status: { protocol: 7, inGame: true, stats: levels, equipment: [], inventory: [{ id: 1359, name: 'Rune axe', count: 1 }], coins: 5000, bankCoins: 0 },
       events: [{ type: 'STATS', stats: levels }, { type: 'OWNED', bankSeen: true, items: [{ name: 'Rune axe', carried: 1, noted: 0, bank: 0 }] }],
     }, '#/skills/WC/woodcutting');
     const card = await text(page, '.training-summary');
@@ -118,7 +118,7 @@ async function membersGatheringScenarios(browser: Browser) {
     const gear = { equipment: [], inventory: items.map(name => ({ id: 0, name, count: name === 'Feather' || name === 'Fishing bait' || name === 'Raw karambwanji' ? 100 : 1 })), coins: 500000, bankCoins: 0 };
     const { page, errors } = await open(browser, 1280, {
       progress: progressBefore('S9-01', { gameMode: 'members', levels: stats }),
-      status: { protocol: 6, inGame: true, stats, ...gear, questsDone: ['Swan Song'] },
+      status: { protocol: 7, inGame: true, stats, ...gear, questsDone: ['Swan Song'] },
       events: [{ type: 'STATS', stats }, { type: 'GEAR', gear }, { type: 'QUESTS', done: ['Swan Song'] },
         { type: 'OWNED', bankSeen: true, items: gear.inventory.map(i => ({ name: i.name, carried: i.count, noted: 0, bank: 0 })) }],
     }, `#/skills/${sample.code}/${sample.skill}?goal=80`);
@@ -153,7 +153,7 @@ async function processingKitScenarios(browser: Browser) {
       market: true, marketUnavailable: true,
       progress: progressBefore('S5-01', { gameMode: 'f2p', levels: stats }),
       localStorage: {},
-      status: { protocol: 6, inGame: true, player: 'Processing kit', activeStepId: 'S5-01', stats, ...gear, ...(sample.quests ? { questsDone: sample.quests } : {}) },
+      status: { protocol: 7, inGame: true, player: 'Processing kit', activeStepId: 'S5-01', stats, ...gear, ...(sample.quests ? { questsDone: sample.quests } : {}) },
       events: [{ type: 'STATS', stats }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true,
         items: [...new Set([...watched, ...Object.keys(sample.items)])].map(name => ({ name, carried: sample.items[name] ?? 0, noted: 0, bank: 0 })) }, ...(sample.quests ? [{ type: 'QUESTS', done: sample.quests }] : [])],
     }, `#/skills/${sample.code}/${sample.skill}?goal=${sample.target}`);
@@ -194,7 +194,7 @@ async function cookingCatchScenarios(browser: Browser) {
     market: true, marketUnavailable: true,
     progress: progressBefore('S5-01', { gameMode: 'f2p', levels: stats }),
     localStorage: {},
-    status: { protocol: 6, inGame: true, player: 'Cooking catch', activeStepId: 'S5-01', stats, ...gear },
+    status: { protocol: 7, inGame: true, player: 'Cooking catch', activeStepId: 'S5-01', stats, ...gear },
     events: [{ type: 'STATS', stats }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true,
       items: watched.map(name => ({ name, carried: name === 'Raw swordfish' ? 7 : 0, noted: 0, bank: 0 })) }],
   }, '#/skills/CO/cooking?goal=46');
@@ -224,7 +224,7 @@ async function processingBudgetScenarios(browser: Browser) {
     const { page, errors } = await open(browser, width, {
       progress: progressBefore('S9-01', { gameMode: 'members', levels }),
       localStorage: {},
-      status: { protocol: 6, inGame: true, stats: levels, ...gear },
+      status: { protocol: 7, inGame: true, stats: levels, ...gear },
       events: [{ type: 'STATS', stats: levels }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items: [
         { name: 'Knife', carried: 1, noted: 0, bank: 0 },
         { name: 'Oak logs', carried: 0, noted: 0, bank: 28 },
@@ -257,7 +257,7 @@ async function trainingScopeScenarios(browser: Browser) {
     const { page, errors } = await open(browser, 1280, {
       market: true, progress: progressBefore('S5-01', { gameMode: mode, levels: stats }),
       localStorage: { 'osrs-put:active-step': 'S5-01', 'osrs-put:skill-track': JSON.stringify({ skill: 'woodcutting', mode: 'fast', freeOnly, target: level + 4 }) },
-      status: { protocol: 6, inGame: true, player: 'Scoped Tool', activeStepId: 'S5-01', questsDone: [], stats, ...gear },
+      status: { protocol: 7, inGame: true, player: 'Scoped Tool', activeStepId: 'S5-01', questsDone: [], stats, ...gear },
       events: [{ type: 'STATS', stats }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items }],
     }, '#/skills/WC/woodcutting');
     await page.locator('.training-follow').waitFor();
@@ -275,7 +275,7 @@ async function fishingStep(browser: Browser) {
     const { page, errors } = await open(browser, width, {
       progress: progressBefore('S5-01', { gameMode: 'f2p', levels: { fishing: 45 } }),
       localStorage: {},
-      status: { protocol: 6, stats: { fishing: 45 } }, events: [{ type: 'STATS', stats: { fishing: 45 } }],
+      status: { protocol: 7, stats: { fishing: 45 } }, events: [{ type: 'STATS', stats: { fishing: 45 } }],
     }, '#/skills/FI');
     await waitFor(page, '.training', 5000);
     await page.getByRole('tab', { name: 'Calculator', exact: true }).click();

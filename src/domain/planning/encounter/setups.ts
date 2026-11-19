@@ -85,7 +85,9 @@ export function encounterSetups(step: Step, snapshot: PlanningSnapshot, prices: 
   const base = wearing(gear, protection);
   // A fight done with its own weapon (fightMechanics.json) gains nothing from another one.
   const taken = new Set([...guards.map(piece => piece.slot), ...(stepFightFoes(step).some(foe => FIGHT_MECHANICS[foe.name]?.weapon) ? ['weapon'] : [])]);
-  const free = (kit: GearAction[]) => kit.filter(a => !taken.has(a.item.slot) && !(a.item.twoHanded && taken.has('shield')));
+  // A bare-handed fight (fightMechanics.json) gains nothing from any piece.
+  const bare = stepFightFoes(step).some((foe) => FIGHT_MECHANICS[foe.name]?.bare);
+  const free = (kit: GearAction[]) => bare ? [] : kit.filter(a => !taken.has(a.item.slot) && !(a.item.twoHanded && taken.has('shield')));
   const observed = forecast(step, stats, base, [], protection.length ? protection.map(piece => piece.name).join(' + ') : 'Current equipment', [], protection,
     protection.length ? undefined : estimates);
   const current = observed && { ...observed, current: true as const };

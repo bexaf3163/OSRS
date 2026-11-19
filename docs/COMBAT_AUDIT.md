@@ -4,7 +4,7 @@ Written by `tests/combatAudit.test.ts` from `src/data/authored/combatAudit.json`
 
 Every stage of the route where the player fights or can be attacked, checked against the route text, the quest stage lines (Quest Helper), the OSRS Wiki infoboxes in combatFoes.json and the danger zones. The rule for a fight the quest cannot go on without: its food is a required item (readiness and the game check it before leaving), the app estimates it with the player's kit where it has the opponent's numbers, and an unread kit or bag is reported as not checked, never as ready.
 
-74 stages: 46 retained, 27 revised, 0 with a branch, 1 deferred.
+76 stages: 48 retained, 27 revised, 0 with a branch, 1 deferred.
 
 | Step | Kind | Mandatory | Opponents | Method | Estimate | Food in the item list | Decision |
 |---|---|---|---|---|---|---|---|
@@ -82,6 +82,8 @@ Every stage of the route where the player fights or can be attacked, checked aga
 | S9-64 Shadow of the Storm | quest-fight | yes | Agrith Naar (100) | melee | Agrith Naar | Lobster 10 | Retain |
 | S9-65 Troll Romance | quest-fight | yes | Arrg (113) | safespot | Arrg | Lobster 6 | Retain |
 | S9-66 Underground Pass | quest-fight | yes | Sir Jerro (62), Sir Carl (62), Sir Harry (62), Doomion (91), Holthion (91), Othainian (91), Kalrag (89), Disciple of Iban (13) | melee | Sir Jerro, Sir Carl, Sir Harry, Doomion, Holthion, Othainian, Kalrag, Disciple of Iban | Lobster 20 | Retain |
+| S9-68 Regicide | quest-fight | yes | Tyras guard (110) | safespot | Tyras guard | Lobster 10 | Retain |
+| S9-69 Roving Elves | quest-fight | yes | Moss Guardian (84) | melee | Moss Guardian | Lobster 12 | Retain |
 
 ## S1-06 The Restless Ghost
 
@@ -1764,4 +1766,56 @@ Changed:
 Evidence:
 
 - OSRS Wiki Underground Pass kills field and the foes' infoboxes, read 2026-11-19.
+
+## S9-68 Regicide
+
+**Retain.** Regicide: kill the Tyras guard (level 110) that spawns in the second forest, with Fire Bolt from a safespot.
+
+Quest stage lines: 1.9, 4.1.
+
+Assumptions:
+
+- The Wiki says the guard can be safespotted with Ranged, Magic or a halberd; from the safespot it cannot reach you, and ten lobsters cover the traps and the walk to it.
+
+Problems:
+
+- Its Magic defence is -10, so most Fire Bolts land; the step plans a staff of fire and runes for 30 casts.
+
+Alternatives:
+
+- Melee with food, as the Wiki allows, instead of the safespot.
+
+Changed:
+
+- 2.151.0: new quest; the Tyras guard is in combatFoes.json and fought from the safespot (fightMechanics.json).
+
+Evidence:
+
+- OSRS Wiki Tyras guard infobox and Regicide requirements, read 2026-11-19.
+
+## S9-69 Roving Elves
+
+**Retain.** Roving Elves: kill a Moss Guardian (level 84, 120 hitpoints) in Glarial's Tomb bare-handed for the consecration seed.
+
+Quest stage lines: 1.2.
+
+Assumptions:
+
+- Glarial's Tomb lets in no weapons, armour or runes, so the estimate fights it with no weapon and no armour (fightMechanics.json bare); twelve lobsters cover the hits.
+
+Problems:
+
+- Unarmed melee with no Strength bonus makes it a long fight against 120 hitpoints.
+
+Alternatives:
+
+- Protect from Melee (Prayer 43), a ring of recoil or flinching by the south-eastern pillar, as the Wiki describes.
+
+Changed:
+
+- 2.151.0: new quest; the Moss Guardian is fought bare-handed (fightMechanics.json bare).
+
+Evidence:
+
+- OSRS Wiki Moss Guardian infobox, Glarial's Tomb restricted items and Roving Elves walkthrough, read 2026-11-19.
 

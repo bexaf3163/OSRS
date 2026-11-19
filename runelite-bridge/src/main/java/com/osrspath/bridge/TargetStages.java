@@ -73,6 +73,32 @@ final class TargetStages
 			return stage;
 		}
 
+		/** Replaces each repeat {k, r} with the line of that k in stage r; false when r is not an earlier stage with such a line. */
+		boolean expandRepeats()
+		{
+			for (int i = 0; stages != null && i < stages.size(); i++)
+			{
+				StageStep s = stages.get(i);
+				for (int j = 0; s != null && s.steps != null && j < s.steps.size(); j++)
+				{
+					StageLine line = s.steps.get(j);
+					if (line == null || line.r == null)
+					{
+						continue;
+					}
+					StageStep from = line.r >= 0 && line.r < i ? stages.get(line.r) : null;
+					StageLine same = from == null || from.steps == null || line.k == null ? null
+						: from.steps.stream().filter(o -> o != null && o.r == null && line.k.equals(o.k)).findFirst().orElse(null);
+					if (same == null)
+					{
+						return false;
+					}
+					s.steps.set(j, same);
+				}
+			}
+			return true;
+		}
+
 		/** The stage number (zero-based) for a variable value: the last one whose at is not above the value; if there is none, the first. */
 		int indexFor(int value)
 		{
@@ -89,6 +115,10 @@ final class TargetStages
 
 		String problem(int placeCount)
 		{
+			if (!expandRepeats())
+			{
+				return "invalid quest stage step";
+			}
 			if (isManual())
 			{
 				// Built by prepare() from an already checked quick path; a saved target is prepared again when the client starts.
@@ -333,6 +363,8 @@ final class TargetStages
 		private List<Pre> pre;
 		/** The strongest usual hit of what attacks the player on this line; the health warning uses it while this line is current. null means none. */
 		private Integer mh;
+		/** A repeat (protocol 7): the line with this k in stage r, an earlier stage; the app sends it for long quests to fit the body limit. */
+		private Integer r;
 
 		boolean hasPoint()
 		{

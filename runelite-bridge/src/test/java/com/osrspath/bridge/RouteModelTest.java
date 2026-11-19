@@ -201,6 +201,26 @@ public class RouteModelTest
 		assertEquals("invalid quest stage step", withHit(",\"mh\":500").prepare());
 	}
 
+	// ---- a long quest sends a repeated line as {k, r}: the line of that k in an earlier stage
+	private static ActiveTarget withRepeat(String repeat)
+	{
+		return GSON.fromJson("{\"stepId\":\"S3-04\",\"title\":\"Below Ice Mountain\","
+			+ "\"completionTrigger\":{\"type\":\"QUEST_COMPLETED\",\"questName\":\"Below Ice Mountain\"},"
+			+ "\"guide\":{\"items\":[],\"places\":[],\"stage\":{\"kind\":\"varbit\",\"id\":12063,\"stages\":["
+			+ "{\"at\":0,\"steps\":[{\"t\":\"Defeat the Ancient Guardian.\",\"k\":\"fight\"}]},"
+			+ "{\"at\":1,\"steps\":[" + repeat + "]}]}}}", ActiveTarget.class);
+	}
+
+	@Test
+	public void aRepeatedStageLineIsTheEarlierLine()
+	{
+		ActiveTarget t = withRepeat("{\"k\":\"fight\",\"r\":0}");
+		assertNull(t.prepare());
+		assertEquals("Defeat the Ancient Guardian.", t.getGuide().getStage().getStages().get(1).getSteps().get(0).getT());
+		assertEquals("no such line in that stage", "invalid quest stage step", withRepeat("{\"k\":\"talk\",\"r\":0}").prepare());
+		assertEquals("only an earlier stage", "invalid quest stage step", withRepeat("{\"k\":\"fight\",\"r\":1}").prepare());
+	}
+
 	@Test
 	public void theHealthWarningFollowsTheLineFigure()
 	{

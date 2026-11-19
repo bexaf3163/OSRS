@@ -118,7 +118,7 @@ describe('F2P route audit: waypoints and planes', () => {
       if (nav) pts.push([`${s.id} arrow`, nav]);
       for (const st of g.stage?.stages ?? []) {
         if (st.go !== undefined && !g.places[st.go]) bad.push(`${s.id}#${st.at}: go ${st.go} is not a place`);
-        for (const l of st.steps) if (l.x !== undefined) pts.push([`${s.id}#${st.at} ${l.k ?? l.t.slice(0, 30)}`, { x: l.x, y: l.y!, plane: l.plane! }]);
+        for (const l of st.steps) if (l.x !== undefined) pts.push([`${s.id}#${st.at} ${l.k ?? l.t?.slice(0, 30)}`, { x: l.x, y: l.y!, plane: l.plane! }]);
       }
       for (const [what, p] of pts) {
         stats.points++;

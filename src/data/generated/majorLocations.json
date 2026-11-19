@@ -1,6 +1,6 @@
 {
   "source": "OSRS Wiki, the {{Map}} template in the article",
-  "updated": "2026-11-18",
+  "updated": "2026-11-19",
   "locations": {
     "Lumbridge": {
       "x": 3188,
@@ -340,6 +340,14 @@
       "label": "Pollnivneach",
       "kind": "city",
       "page": "Pollnivneach"
+    },
+    "Hosidius": {
+      "x": 1762,
+      "y": 3598,
+      "plane": 0,
+      "label": "Hosidius",
+      "kind": "city",
+      "page": "Hosidius"
     },
     "Nardah": {
       "x": 3427,

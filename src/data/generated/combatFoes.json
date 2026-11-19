@@ -2751,6 +2751,52 @@
       "aggressive": false
     },
     {
+      "name": "Tyras guard",
+      "combat": 110,
+      "members": true,
+      "hitpoints": 110,
+      "attackLevel": 85,
+      "strengthLevel": 95,
+      "defenceLevel": 100,
+      "magicLevel": 1,
+      "attackBonus": 20,
+      "defence": {
+        "stab": 87,
+        "slash": 84,
+        "crush": 76,
+        "magic": -10,
+        "ranged": 79
+      },
+      "attackStyle": "stab",
+      "maxHit": 15,
+      "speedTicks": 5,
+      "aggressive": false,
+      "xpBonus": 5
+    },
+    {
+      "name": "Moss Guardian",
+      "combat": 84,
+      "members": true,
+      "hitpoints": 120,
+      "attackLevel": 60,
+      "strengthLevel": 60,
+      "defenceLevel": 60,
+      "magicLevel": 1,
+      "attackBonus": 66,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "crush",
+      "maxHit": 14,
+      "speedTicks": 6,
+      "aggressive": true,
+      "xpBonus": -97
+    },
+    {
       "name": "Cow",
       "version": "1",
       "combat": 2,

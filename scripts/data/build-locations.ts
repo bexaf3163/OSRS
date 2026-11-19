@@ -57,6 +57,7 @@ const PLACES: [string, Kind, string[], string?][] = [
   ['Tree Gnome Village', 'city', []],
   ['Shilo Village', 'city', []],
   ['Pollnivneach', 'city', []],
+  ['Hosidius', 'city', []],
   ['Nardah', 'city', []],
   ['Shantay Pass', 'landmark', []],
   ['Ferox Enclave', 'city', []],

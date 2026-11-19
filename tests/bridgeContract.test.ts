@@ -31,7 +31,7 @@ const FIELDS = [
   'guide.stage.stages[].items[].inStep', 'guide.stage.stages[].items[].alt', 'guide.stage.stages[].items[].doses',
   'guide.stage.stages[].steps', 'guide.stage.stages[].steps[].t', 'guide.stage.stages[].steps[].s', 'guide.stage.stages[].steps[].x',
   'guide.stage.stages[].steps[].y', 'guide.stage.stages[].steps[].plane', 'guide.stage.stages[].steps[].has', 'guide.stage.stages[].steps[].need',
-  'guide.stage.stages[].steps[].k', 'guide.stage.stages[].steps[].mh',
+  'guide.stage.stages[].steps[].k', 'guide.stage.stages[].steps[].r','guide.stage.stages[].steps[].mh',
   'guide.stage.stages[].steps[].hl', 'guide.stage.stages[].steps[].hl.npc', 'guide.stage.stages[].steps[].hl.obj',
   'guide.stage.stages[].steps[].hl.on', 'guide.stage.stages[].steps[].hl.item',
   'guide.stage.stages[].steps[].pre', 'guide.stage.stages[].steps[].pre[].item', 'guide.stage.stages[].steps[].pre[].id',

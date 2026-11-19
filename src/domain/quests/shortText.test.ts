@@ -55,9 +55,9 @@ describe('short text for the game', () => {
     const g = stepGuide(step);
     const stages = g.stage!.stages;
     const last = stages[stages.length - 1].steps;
-    const ore = last.find((l) => l.t.startsWith('Mine a blurite ore'))!;
+    const ore = last.find((l) => l.t?.startsWith('Mine a blurite ore'))!;
     expect(ore.s).toBe('Mine a blurite ore in the eastern cavern');
-    expect(ore.t.length).toBeGreaterThan(ore.s!.length);
+    expect(ore.t!.length).toBeGreaterThan(ore.s!.length);
     expect(ore.has).toBe('Blurite ore');
     const back = last.find((l) => l.need === 'Blurite ore')!;
     expect(back.s).toBe('Bring Thurgo blurite ore and 2 iron bars');

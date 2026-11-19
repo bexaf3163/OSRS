@@ -21,6 +21,19 @@ describe('one quest fight with your kit', () => {
     expect(estimateFight({ ...base, foe: { ...base.foe, name: 'Synthetic ranged foe', attackStyle: 'ranged' } })?.unmodelled)
       .not.toContain('unsupported incoming ranged attack model');
   });
+  it('a bare-handed fight ignores the kit, and a level cap fights at the capped levels', () => {
+    const base = { foe: foe('Black Knight'), levels: { attack: 40, strength: 40, defence: 40, hitpoints: 40 }, weapon: gearById.get(id('Mithril scimitar'))!, neck: null, armour: [], food: { name: 'Trout', heals: 7 } };
+    const guardian = COMBAT_FOES.find((f) => f.name === 'Moss Guardian')!;
+    const armed = estimateFight({ ...base, foe: guardian, armour: IRON.map((n) => gearById.get(id(n))!) });
+    expect(armed?.maxHit).toBeGreaterThan(0);
+    expect(armed).toEqual(estimateFight({ ...base, foe: guardian, weapon: null }));
+    // fightMechanics.json lowers every level of the Mourner's opponent to 20; the same foe under another name keeps them.
+    const strong = { ...base, levels: { attack: 90, strength: 90, defence: 90, hitpoints: 90 } };
+    const capped = estimateFight({ ...strong, foe: { ...foe('Black Knight'), name: 'Mourner' } });
+    expect(capped?.maxHit).toBe(estimateFight({ ...base, levels: { attack: 20, strength: 20, defence: 20, hitpoints: 20 } })?.maxHit);
+    expect(capped?.maxHit).toBeLessThan(estimateFight(strong)!.maxHit);
+  });
+
   it('every route quest fight the table knows has a free version', () => {
     for (const n of ['Count Draynor', 'Ithoi the Navigator', 'Brutus', 'Melzar the Mad', 'Lesser demon', 'Elvarg', 'Black Knight', 'Ancient Guardian']) {
       expect(foe(n), n).toBeTruthy();

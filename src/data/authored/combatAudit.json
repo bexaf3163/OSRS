@@ -2634,6 +2634,36 @@
       "evidence": [
         "OSRS Wiki Underground Pass kills field and the foes' infoboxes, read 2026-11-19."
       ]
+    },
+    {
+      "stepId": "S9-68",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "safespot",
+      "objective": "Regicide: kill the Tyras guard (level 110) that spawns in the second forest, with Fire Bolt from a safespot.",
+      "enemies": [{ "name": "Tyras guard", "level": 110, "maxHit": 15, "table": true }],
+      "lines": ["1.9", "4.1"],
+      "assumptions": ["The Wiki says the guard can be safespotted with Ranged, Magic or a halberd; from the safespot it cannot reach you, and ten lobsters cover the traps and the walk to it."],
+      "problems": ["Its Magic defence is -10, so most Fire Bolts land; the step plans a staff of fire and runes for 30 casts."],
+      "alternatives": ["Melee with food, as the Wiki allows, instead of the safespot."],
+      "decision": "retain",
+      "changed": ["2.151.0: new quest; the Tyras guard is in combatFoes.json and fought from the safespot (fightMechanics.json)."],
+      "evidence": ["OSRS Wiki Tyras guard infobox and Regicide requirements, read 2026-11-19."]
+    },
+    {
+      "stepId": "S9-69",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "melee",
+      "objective": "Roving Elves: kill a Moss Guardian (level 84, 120 hitpoints) in Glarial's Tomb bare-handed for the consecration seed.",
+      "enemies": [{ "name": "Moss Guardian", "level": 84, "maxHit": 14, "table": true }],
+      "lines": ["1.2"],
+      "assumptions": ["Glarial's Tomb lets in no weapons, armour or runes, so the estimate fights it with no weapon and no armour (fightMechanics.json bare); twelve lobsters cover the hits."],
+      "problems": ["Unarmed melee with no Strength bonus makes it a long fight against 120 hitpoints."],
+      "alternatives": ["Protect from Melee (Prayer 43), a ring of recoil or flinching by the south-eastern pillar, as the Wiki describes."],
+      "decision": "retain",
+      "changed": ["2.151.0: new quest; the Moss Guardian is fought bare-handed (fightMechanics.json bare)."],
+      "evidence": ["OSRS Wiki Moss Guardian infobox, Glarial's Tomb restricted items and Roving Elves walkthrough, read 2026-11-19."]
     }
   ]
 }

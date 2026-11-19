@@ -108,7 +108,7 @@ async function visualReview(browser: Browser) {
       for (const [name, hash] of pages) {
         const { page, errors } = await open(browser, Math.round(1920 / scale), {
           scale, progress: progressBefore('S4-01'), localStorage: { 'osrs-put:active-step': 'S4-01' },
-          status: { protocol: 6, ...gear, stats, xp, activeStepId: 'S4-01', player: 'Scale Test' },
+          status: { protocol: 7, ...gear, stats, xp, activeStepId: 'S4-01', player: 'Scale Test' },
           events: [{ type: 'STATS', stats }, { type: 'XP', xp }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items: [{ name: 'Salmon', carried: 0, noted: 0, bank: 13 }] }],
         }, hash);
         await settle(page);

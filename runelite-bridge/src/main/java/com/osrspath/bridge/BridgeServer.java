@@ -75,9 +75,9 @@ public final class BridgeServer
 	 * does with them. 6 is since 2.22: one /prep-plan state snapshot instead of five requests (step, shopping, bank highlight, gear
 	 * advice, the preparation plan with a readiness percentage); the old addresses remain for an app with protocol 5.
 	 */
-	static final int PROTOCOL = 6;
+	static final int PROTOCOL = 7;
 	/** The plugin version, the same as the app it ships with in one exe. */
-	static final String PLUGIN_VERSION = "2.150.0";
+	static final String PLUGIN_VERSION = "2.151.0";
 	public static final String HEADER = "X-OSRS-Path";
 	static final int MAX_BODY = 64 * 1024;
 	/** The whole snapshot: the step with the quest stages, shopping and plan in one body. */

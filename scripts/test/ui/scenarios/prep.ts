@@ -22,7 +22,7 @@ async function stockScenarios(browser: Browser) {
     const { page, errors } = await open(browser, 1280, {
       market: true, marketQuotes, progress: progressBefore('S5-01', { gameMode: 'f2p', levels: stats }),
       localStorage: { 'osrs-put:skill-track': JSON.stringify({ skill: 'ranged', mode: 'f2p', target: 40 }) },
-      status: { inGame: true, protocol: 6, player: 'Stock fixture', activeStepId: 'S5-01', stats, ...gear },
+      status: { inGame: true, protocol: 7, player: 'Stock fixture', activeStepId: 'S5-01', stats, ...gear },
       events: [{ type: 'STATS', stats }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items }],
     }, '#/shopping');
     await settle(page);
@@ -122,7 +122,7 @@ async function marketPreparationScenarios(browser: Browser) {
       market: true, marketUnavailable: unavailable,
       progress: progressBefore('S3-01', { gameMode: 'f2p' }),
       localStorage: { 'osrs-put:active-step': 'S3-01' },
-      status: { protocol: 6, activeStepId: 'S3-01', coins: 10000, bankCoins: 0 },
+      status: { protocol: 7, activeStepId: 'S3-01', coins: 10000, bankCoins: 0 },
       events: [{ type: 'OWNED', bankSeen: true, items: [{ name: 'Clay', carried: 0, noted: 0, bank: 0 }] }],
     }, '#/step/S3-01');
     // The quest's items are on the Preparation ribbon. The quote is checked on Doric's 6 Clay.
@@ -153,7 +153,7 @@ async function toolProofScenarios(browser: Browser) {
     const { page, errors } = await open(browser, width, {
       progress: progressBefore('S2-07', { gameMode: 'f2p' }),
       localStorage: { 'osrs-put:active-step': 'S2-07' },
-      status: { protocol: 6, stats: { mining: 6 }, activeStepId: 'S2-07' },
+      status: { protocol: 7, stats: { mining: 6 }, activeStepId: 'S2-07' },
       events: [{ type: 'STATS', stats: { mining: 6 } }, { type: 'OWNED', bankSeen: true, items: [rows[0]] }],
     }, '#/step/S2-07');
     const line = () => page.evaluate(() => {
@@ -192,7 +192,7 @@ async function rangedPreparationScenarios(browser: Browser) {
     const { page, errors } = await open(browser, width, {
       market: true, progress: progressBefore('S5-01', { gameMode: 'f2p', levels: stats }),
       localStorage: { 'osrs-put:active-step': 'S5-01' },
-      status: { protocol: 6, inGame: true, player: 'Ranged Preparation', activeStepId: 'S5-01', stats, ...gear },
+      status: { protocol: 7, inGame: true, player: 'Ranged Preparation', activeStepId: 'S5-01', stats, ...gear },
       events: [{ type: 'STATS', stats }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items }],
     }, '#/skills/RA/ranged');
     const snapshot = () => page.evaluate(() => (window as unknown as { __posts: { path: string; body: any }[] }).__posts.filter(p => p.path === '/prep-plan').at(-1)?.body);
@@ -258,7 +258,7 @@ async function rangedPreparationScenarios(browser: Browser) {
     const restarted = await open(browser, width, {
       market: true, progress: progressBefore('S5-01', { gameMode: 'f2p', levels: stats }),
       localStorage: { 'osrs-put:active-step': 'S5-01', 'osrs-put:skill-track': JSON.stringify({ skill: 'ranged', mode: 'fast', freeOnly: true }) },
-      status: { protocol: 6, inGame: true, player: 'Ranged Preparation', activeStepId: 'S5-01', stats, ...gear },
+      status: { protocol: 7, inGame: true, player: 'Ranged Preparation', activeStepId: 'S5-01', stats, ...gear },
       events: [{ type: 'STATS', stats }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items }],
     }, '#/skills/RA/ranged');
     // The Train button starts the engine session for Ranged; the quest route waits on Dragon Slayer I.
@@ -293,7 +293,7 @@ async function rangedPreparationScenarios(browser: Browser) {
       market: true, progress: progressBefore('S5-01', { gameMode: 'f2p', levels: poorStats, sellRestrictions: 'lifted' }),
       marketQuotes: { 'Willow shortbow': { id: 849, price: 100 } },
       localStorage: { 'osrs-put:active-step': 'S5-01', 'osrs-put:skill-track': JSON.stringify({ skill: 'ranged', mode: 'fast', freeOnly: true }) },
-      status: { protocol: 6, inGame: true, player: 'Range Fund', activeStepId: 'S5-01', stats: poorStats, questPoints: 40, totalLevel: 200, pos: { x: 3093, y: 3495, plane: 0 }, ...poorGear },
+      status: { protocol: 7, inGame: true, player: 'Range Fund', activeStepId: 'S5-01', stats: poorStats, questPoints: 40, totalLevel: 200, pos: { x: 3093, y: 3495, plane: 0 }, ...poorGear },
       events: [{ type: 'STATS', stats: poorStats }, { type: 'GEAR', gear: poorGear }, { type: 'OWNED', bankSeen: true, items }],
     }, '#/');
     await waitFor(poor.page, '.funding-card.is-running', 12000).catch(async error => {
@@ -324,7 +324,7 @@ async function nonCombatPreparationScenarios(browser: Browser) {
   const mock = {
     market: true, progress: progressBefore('S2-07', { gameMode: 'f2p', levels: stats }),
     localStorage: { 'osrs-put:active-step': 'S2-07' },
-    status: { protocol: 6, inGame: true, player: 'Preparation Target', activeStepId: 'S2-07', questsDone: [], stats, ...gear },
+    status: { protocol: 7, inGame: true, player: 'Preparation Target', activeStepId: 'S2-07', questsDone: [], stats, ...gear },
     events: [{ type: 'STATS', stats }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items }],
   };
   {
@@ -382,7 +382,7 @@ async function magicPreparationScenarios(browser: Browser) {
   const { page, errors } = await open(browser, width, {
     market: true, progress: progressBefore('S5-01', { gameMode: 'f2p', levels: stats }),
     localStorage: { 'osrs-put:active-step': 'S5-01' },
-    status: { protocol: 6, inGame: true, player: 'Magic Prep', activeStepId: 'S5-01', stats, ...gear },
+    status: { protocol: 7, inGame: true, player: 'Magic Prep', activeStepId: 'S5-01', stats, ...gear },
     events: [{ type: 'STATS', stats }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items }],
   }, '#/skills/MA/magic');
   await page.getByRole('tab', { name: 'Calculator', exact: true }).click();
@@ -484,7 +484,7 @@ async function inventoryCleanup(browser: Browser) {
     const { page, errors } = await open(browser, width, {
       progress: progressBefore('S2-10', { gameMode: 'f2p' }),
       status: {
-        protocol: 6, inGame: true, player: 'Cleanup Test', questPoints: 4, totalLevel: 41, coins: 100, bankCoins: 0,
+        protocol: 7, inGame: true, player: 'Cleanup Test', questPoints: 4, totalLevel: 41, coins: 100, bankCoins: 0,
         equipment: [], inventory: [{ id: 1759, name: 'Ball of wool', count: 23 }, { id: 1760, name: 'Ball of wool', count: 7, noted: true }, { id: 315, name: 'Shrimps', count: 4 }, { id: 995, name: 'Coins', count: 100 }],
       },
     }, '#/shopping');

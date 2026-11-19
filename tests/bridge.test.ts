@@ -356,13 +356,15 @@ describe('the arrow target chosen in the game (protocol 4)', () => {
 
   it('an old plugin: the app says what it lacks', () => {
     expect(missingWithPlugin(3)).toEqual([
+      'the in-game stages of the longest quests',
       'a single state snapshot and the preparation plan on the game screen (readiness percent, "do not take now", recovery mode)',
       'XP, quests and the character name from the game (account sync, profiles, time to the goal)',
       'the "What you need" list on the game screen (a click on a row gives an arrow and the path there)',
     ]);
-    expect(missingWithPlugin(4)).toHaveLength(2);
-    expect(missingWithPlugin(5)).toHaveLength(1);
-    expect(missingWithPlugin(null)).toHaveLength(5);
+    expect(missingWithPlugin(4)).toHaveLength(3);
+    expect(missingWithPlugin(5)).toHaveLength(2);
+    expect(missingWithPlugin(6)).toHaveLength(1);
+    expect(missingWithPlugin(null)).toHaveLength(6);
     expect(missingWithPlugin(APP_PROTOCOL)).toEqual([]);
   });
 });

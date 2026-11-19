@@ -477,6 +477,32 @@ const REVIEWED_FLOWS: Record<string, { revision: number; flow: NonNullable<Quest
     receives: [], unknownItems: ['Ring of charos(a)', 'Orchid seed', 'Snowdrop seed', 'Delphinium seed', 'White tree shoot', 'White tree sapling', 'Rose seed', 'Vine seed', 'Rune shards', 'Rune dust', 'Magic plant cure', 'Trolley'],
     uncertainReceipts: ['Plant cure'], partialDelivery: false, fromStartOnly: false,
   } },
+  // The six elemental runes go on the pillars; Golrie's pebble is kept for Roving Elves (Wiki tip); the rope may stay.
+  'Waterfall Quest': { revision: 15357907, flow: {
+    consumes: [{ name: 'Air rune', count: 6 }, { name: 'Earth rune', count: 6 }, { name: 'Water rune', count: 6 }],
+    receives: [{ name: "Glarial's pebble", count: 1, when: 'complete' }],
+    unknownItems: ['Book on baxtorian', 'Large key', "Glarial's amulet", "Glarial's urn", 'Key (Waterfall Dungeon)'],
+    uncertainReceipts: ['Rope', 'Lobster'], partialDelivery: false, fromStartOnly: false,
+  } },
+  // The consecration seed is planted by the chalice; the pebble, rope and spade stay.
+  'Roving Elves': { revision: 15401434, flow: {
+    consumes: [], receives: [], unknownItems: ['Consecration seed', 'Key (Waterfall Dungeon)', 'Crystal bow', 'Crystal shield'],
+    uncertainReceipts: ["Glarial's pebble", 'Rope', 'Spade', 'Lobster'], partialDelivery: false, fromStartOnly: false,
+  } },
+  // Oronwen sews the fur and silk, the gnome takes the crunchies, logs and leather, the dyes colour four toads,
+  // the still burns the coal; the mourner gear stays for Part II and the bellows refill.
+  "Mourning's End Part I": { revision: 15366066, flow: {
+    consumes: [{ name: 'Bear fur', count: 1 }, { name: 'Silk', count: 2 }, { name: 'Red dye', count: 1 }, { name: 'Yellow dye', count: 1 }, { name: 'Green dye', count: 1 }, { name: 'Blue dye', count: 1 }, { name: 'Bucket of water', count: 1 }, { name: 'Feather', count: 1 }, { name: 'Toad crunchies', count: 1 }, { name: 'Magic logs', count: 1 }, { name: 'Leather', count: 1 }, { name: 'Coal', count: 10 }],
+    receives: [], unknownItems: ['Mourner letter', 'Gas mask', 'Mourner top', 'Mourner trousers', 'Mourner gloves', 'Mourner boots', 'Mourner cloak', 'Bloody mourner top', 'Ripped mourner trousers', 'Soap', 'Fixed device', 'Red toad', 'Yellow toad', 'Green toad', 'Blue toad', 'Rotten apple', 'Barrel', 'Apple barrel', 'Barrel of coal tar', 'Barrel of naphtha', 'Naphtha apple mix', 'Toxic naphtha', 'Toxic powder', 'Sieve', 'Teleport crystal'],
+    uncertainReceipts: ['Ogre bellows'], partialDelivery: false, fromStartOnly: false,
+  } },
+  // The coal, quicklime (from the limestone) and sulphur fill the barrel bomb, lit with the cloth strip woven from the wool;
+  // a lit arrow and a rope go in the pass again, and the rabbit distracts the guard; tools stay.
+  'Regicide': { revision: 15396547, flow: {
+    consumes: [{ name: 'Coal', count: 8 }, { name: 'Limestone', count: 1 }, { name: 'Ball of wool', count: 4 }, { name: 'Bronze arrow', count: 1 }, { name: 'Rope', count: 1 }, { name: 'Cooked rabbit', count: 1 }],
+    receives: [], unknownItems: ['Strip of cloth', 'Fire arrow', 'Quicklime', 'Ground quicklime', 'Sulphur', 'Ground sulphur', 'Barrel', 'Barrel of naphtha', 'Naphtha mix', 'Barrel bomb', 'Big book of bangs', 'Pot of quicklime'],
+    uncertainReceipts: ['Rope', 'Bronze arrow', 'Chaos rune', 'Air rune', 'Lobster'], partialDelivery: false, fromStartOnly: false,
+  } },
   // One lit arrow cuts the guide rope and a rope stays over the pit; everything else is found and used inside the pass.
   'Underground Pass': { revision: 15392817, flow: {
     consumes: [{ name: 'Bronze arrow', count: 1 }, { name: 'Rope', count: 1 }],
@@ -592,6 +618,10 @@ const REVIEWED_CLAUSES = new Set([
   'The ability to defeat a level 100 monster',
   'The ability to defeat a level 100 demon',
   'The ability to defeat a level 113 [[Arrg|troll]]',
+  'The ability to defeat a level 110 [[Tyras guard]] (can be [[safespotted]])',
+  "The ability to defeat a level 84 enemy unarmed, with [[Glarial's Tomb#Restricted items|heavy restrictions]]",
+  ', unless travelling with a [[charter ship]] to the elven woods',
+  'The ability to defeat a level 11 enemy with your combat stats set to 20 each.',
   'The ability to defeat 5 level 30 monsters.',
   "The ability to defeat a level 13 [[icefiend]] if you don't have the [[ice gloves]].",
   'Ability to defeat a [[Koschei|fairly strong warrior]] without [[armour]], [[weapons]], or [[spells]]',

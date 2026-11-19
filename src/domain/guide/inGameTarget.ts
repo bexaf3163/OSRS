@@ -87,6 +87,21 @@ export function stagePayload(step: Step, places: StepGuidePayload['places']): St
       ...(st.items ? { items: st.items.slice(0, 12).map((i) => ({ ...i })) } : {}),
     });
   }
+  // A long quest repeats whole walks in many stages (Regicide's Underground Pass). Past 40 KB a repeated line goes as {k, r}:
+  // the same line in stage r, so the body fits the plugin's limit. Only protocol 7 reads it; an older plugin refused such a body anyway.
+  if (JSON.stringify(stages).length > 40 * 1024) {
+    const first = new Map<string, number>();
+    stages.forEach((st, i) => {
+      const own = new Set<string>();
+      st.steps = st.steps.map((l) => {
+        const key = JSON.stringify(l), at = first.get(key);
+        if (l.k === undefined || own.has(l.k)) return l;
+        own.add(l.k);
+        if (at === undefined) { first.set(key, i); return l; }
+        return { k: l.k, r: at };
+      });
+    });
+  }
   const guarded = stages.some((s) => s.steps.some((l) => l.pre));
   return { kind: qs.var[0], id: qs.var[1], stages, ...(guarded ? { banks: BANK_SPOTS.slice(0, 40) } : {}) };
 }

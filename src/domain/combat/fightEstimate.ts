@@ -184,10 +184,17 @@ export function estimateFight(inp: FightInput): FightEstimate | null {
   return result;
 }
 
-function rollFight(inp: FightInput): FightEstimate | null {
-  const { foe } = inp;
+function rollFight(input: FightInput): FightEstimate | null {
+  const { foe } = input;
   if (foe.hitpoints <= 0) return null;
   const mech = FIGHT_MECHANICS[foe.name] ?? null;
+  const bare: FightInput = mech?.bare ? { ...input, weapon: null, armour: [], unknownPieces: 0, ammo: undefined, worn: [] } : input;
+  const cap = mech?.levelCap;
+  const inp: FightInput = cap === undefined ? bare : {
+    ...bare,
+    levels: Object.fromEntries(Object.entries(bare.levels).map(([k, v]) => [k, Math.min(v, cap)])) as FightInput['levels'],
+    currentHp: Math.min(bare.currentHp ?? cap, cap),
+  };
   const assumed: string[] = [];
   if (foe.attackStyle === 'magic') assumed.push(`${foeLabel(foe)} attacks with magic: its magic attack bonus counted as 0${inp.levels.magic === undefined ? ', your Magic as 1' : ''}`);
   if (inp.unknownPieces) assumed.push(`${inp.unknownPieces} worn item${inp.unknownPieces > 1 ? 's' : ''} without data counted as no armour`);

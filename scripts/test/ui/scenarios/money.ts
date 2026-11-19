@@ -20,7 +20,7 @@ async function fundingScenarios(browser: Browser) {
     const { page, errors } = await open(browser, width, {
       progress: progressBefore('S2-10', { gameMode: 'f2p' }),
       status: {
-        protocol: 6, inGame: true, player: 'Funding Test', activeStepId: 'S2-10', questPoints: 30, totalLevel: 150,
+        protocol: 7, inGame: true, player: 'Funding Test', activeStepId: 'S2-10', questPoints: 30, totalLevel: 150,
         stats: { attack: 30, strength: 21, defence: 1, hitpoints: 24 }, pos: { x: 3093, y: 3495, plane: 0 }, ...gear,
       },
       events: [
@@ -92,7 +92,7 @@ async function moneyScenarios(browser: Browser) {
       localStorage: { 'osrs-put:active-step': step },
       market: true,
       ...(o.offline ? { offline: true } : {
-        status: { protocol: 6, inGame: true, player: 'Money Test', activeStepId: step, questPoints: 30, totalLevel: 150, stats, pos: { x: 3093, y: 3495, plane: 0 }, ...gear },
+        status: { protocol: 7, inGame: true, player: 'Money Test', activeStepId: step, questPoints: 30, totalLevel: 150, stats, pos: { x: 3093, y: 3495, plane: 0 }, ...gear },
         events: [
           { type: 'OWNED', bankSeen: o.bankSeen !== false, items: owned }, { type: 'GEAR', gear }, { type: 'QUESTS', done: [] },
           { type: 'STATS', stats }, { type: 'XP', xp: { attack: 13363, strength: 2000, defence: 0, hitpoints: 3500 } },
@@ -284,7 +284,7 @@ async function moneyScenarios(browser: Browser) {
 async function tradeLimitsScenario(browser: Browser) {
   const mock = (questPoints: number): Mock => ({
     progress: progressBefore('S5-01', { gameMode: 'f2p' }), market: true,
-    status: { protocol: 6, inGame: true, player: 'Trade Test', questPoints, totalLevel: 150, stats: { attack: 30, strength: 21, defence: 1, hitpoints: 24 } },
+    status: { protocol: 7, inGame: true, player: 'Trade Test', questPoints, totalLevel: 150, stats: { attack: 30, strength: 21, defence: 1, hitpoints: 24 } },
   });
   {
     const { page, errors } = await open(browser, 1300, mock(30), '#/money');
