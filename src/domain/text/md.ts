@@ -28,7 +28,7 @@ export function cleanWikiText(s: string): string {
     .replace(/&#160;|\u00a0/g, ' ')
     // Since 2026-11 the wiki wraps each floor in spans and <sup> suffixes: the tags go before the floor is read.
     .replace(/<[^>]+>/g, '')
-    .replace(/\b(Ground|\d+(?:st|nd|rd|th)) floor\[UK\](?:Ground|\d+(?:st|nd|rd|th)) floor\[US\]/g,
+    .replace(/\b(Ground|\d+(?:st|nd|rd|th)) floor\[UK\](?:Ground|\d+(?:st|nd|rd|th)) floor\[US\]/gi,
       (_m, uk: string) => `${uk} floor`)
     .replace(/\{\{FloorNumber\|(?:[^}]*?\|)?uk=(\d)[^}]*\}\}/gi, (_m, n: string) => UK_FLOOR[n] ?? `${n} floor`)
     .replace(/\{\{[^{}]*\}\}/g, '')

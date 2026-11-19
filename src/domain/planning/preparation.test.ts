@@ -45,6 +45,13 @@ describe('one shared tactical preparation resolver', () => {
       expect(resolvePreparation(input)?.kind).toBe('BUY');
     }
   });
+  it('buys a missing potion as whole potions of the named size, not one per dose', () => {
+    const input = fixture({ bank: 0 });
+    Object.assign(input.plan.lines[0], { name: 'Agility potion(4)', unit: 'dose', count: 4, action: { kind: 'BUY', label: 'Exchange offer', price: 200, purchase: { source: 'ge' } } });
+    const result = resolvePreparation(input)!;
+    expect(result.kind).toBe('BUY');
+    expect(result.gpCost?.amount).toBe(200);
+  });
   it('withdraws owned stock before buying and never treats being at a bank as withdrawal evidence', () => {
     const input = fixture({ bank: 100 });
     const action = resolvePreparation(input)!;

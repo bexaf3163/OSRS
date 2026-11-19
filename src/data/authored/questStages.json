@@ -80887,6 +80887,1572 @@
      ]
     }
    ]
+  },
+  "S9-62": {
+   "var": [
+    "varbit",
+    10582
+   ],
+   "route": [
+    {
+     "title": "Walkthrough",
+     "steps": [
+      "Check the noticeboard on the wall behind the Wine Stall in the Draynor Village market. Dialogue: \"Yes.\"",
+      "Talk to Sarah located near the loom at the South Falador Farm north of Port Sarim. Dialogue: \"Talk about the bounty.\"",
+      "Go to the crossroads north of Draynor Village and south of Draynor Manor.",
+      "Follow the cabbages and carrots on the ground north-east towards the strange hole.",
+      "Use your rope on the strange hole, then climb down.",
+      "Follow the cave to the end and investigate the skeleton.",
+      "After the cut-scene, talk to Spria to receive reinforced goggles.",
+      "Equip the goggles and return to the hole in the ground and kill Sourhog (level 37).",
+      "Remove the foot from the dead Sourhog.",
+      "Return to Sarah at Falador farm. Dialogue: \"Talk about the bounty.\"",
+      "Return to Spria in Draynor Village.",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Read the notice board in Draynor Village.",
+       "s": "Read the notice board in Draynor Village.",
+       "k": "readNotice",
+       "at": [
+        3086,
+        3251,
+        0
+       ],
+       "hl": {
+        "obj": [
+         40307
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 5,
+     "do": [
+      {
+       "t": "Talk to Sarah in the South Falador Farm.",
+       "s": "Talk to Sarah in the South Falador Farm.",
+       "k": "talkToSarah",
+       "at": [
+        3033,
+        3293,
+        0
+       ],
+       "hl": {
+        "npc": [
+         501
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 10,
+     "do": [
+      {
+       "t": "Use a rope on the Strange Hole east of Draynor Manor.",
+       "s": "Use a rope on the Strange Hole east of Draynor Manor.",
+       "k": "useRopeOnHole",
+       "at": [
+        3151,
+        3348,
+        0
+       ],
+       "hl": {
+        "obj": [
+         40341
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 15,
+     "do": [
+      {
+       "t": "Climb down into the Strange Hole east of Draynor Manor.",
+       "s": "Climb down into the Strange Hole east of Draynor Manor.",
+       "k": "enterHole",
+       "at": [
+        3151,
+        3348,
+        0
+       ],
+       "hl": {
+        "obj": [
+         40341
+        ]
+       }
+      },
+      {
+       "t": "Go to the end of the cave and investigate the skeleton there.",
+       "s": "Go to the end of the cave and investigate the skeleton there.",
+       "k": "investigateSkeleton",
+       "at": [
+        3164,
+        9676,
+        0
+       ],
+       "hl": {
+        "obj": [
+         40350
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 20,
+     "do": [
+      {
+       "t": "Talk to Spria in Draynor Village.",
+       "s": "Talk to Spria in Draynor Village.",
+       "k": "talkToSpria",
+       "at": [
+        3092,
+        3267,
+        0
+       ],
+       "hl": {
+        "npc": [
+         10434
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 25,
+     "do": [
+      {
+       "t": "Climb down into the Strange Hole east of Draynor Manor. Be prepared to fight Sourhog (level 37).",
+       "s": "Climb into the hole east of Draynor Manor to fight Sourhog (level 37).",
+       "k": "enterHoleAgain",
+       "at": [
+        3151,
+        3348,
+        0
+       ],
+       "hl": {
+        "obj": [
+         40341
+        ]
+       }
+      },
+      {
+       "t": "Kill Sourhog.",
+       "s": "Kill Sourhog.",
+       "k": "killSourhog",
+       "hl": {
+        "npc": [
+         10436
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 30,
+     "do": [
+      {
+       "t": "Climb down into the Strange Hole east of Draynor Manor.",
+       "s": "Climb down into the Strange Hole east of Draynor Manor.",
+       "k": "enterHoleForFoot",
+       "at": [
+        3151,
+        3348,
+        0
+       ],
+       "hl": {
+        "obj": [
+         40341
+        ]
+       }
+      },
+      {
+       "t": "Cut off Sourhog's foot.",
+       "s": "Cut off Sourhog's foot.",
+       "k": "cutOffFoot",
+       "hl": {
+        "obj": [
+         40348
+        ]
+       }
+      },
+      {
+       "t": "Return to Sarah in the South Falador Farm.",
+       "s": "Return to Sarah in the South Falador Farm.",
+       "k": "returnToSarah",
+       "at": [
+        3033,
+        3293,
+        0
+       ],
+       "hl": {
+        "npc": [
+         501
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 35,
+     "do": [
+      {
+       "t": "Return to Spria in Draynor Village.",
+       "s": "Return to Spria in Draynor Village.",
+       "k": "returnToSpria",
+       "at": [
+        3092,
+        3267,
+        0
+       ],
+       "hl": {
+        "npc": [
+         10434
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  "S9-63": {
+   "var": [
+    "varp",
+    320
+   ],
+   "route": [
+    {
+     "title": "Starting out",
+     "steps": [
+      "Talk to Timfraku upstairs in the western hut north of Tai Bwo Wannai. Dialogue: \"I am a wandering wayfarer.\", \"Trufitus sent me.\", \"So far??\", \"Yes\".",
+      "With your small fishing net, catch at least 23 raw karambwanji at the fishing spots just south of Tai Bwo Wannai.",
+      "Talk to Lubufu at the fishing spots south of the Brimhaven house portal. Dialogue: \"I wasn't going anywhere...\", then \"Talk about him...\", \"What do you do?\", \"How old are you?\", \"I could help collect the bait.\", \"You sound like you could do with the help.\"",
+      "Talk to him again to give him 20 raw karambwanji, then again: \"What do you use to catch Karambwan?\", \"What do you do with your Karambwan?\", and accept his offer to receive a karambwan vessel.",
+      "Drop the vessel and ask Lubufu for another (\"Actually, I've lost my Karambwan vessel.\"), then pick up the first, so that you have two."
+     ]
+    },
+    {
+     "title": "Preparing the gifts",
+     "steps": [
+      "Slice a banana with your knife and use the sliced banana on the Karamjan rum (bought from Zembo in Musa Point for 30 coins).",
+      "Light a fire with logs and a tinderbox, use the jogre bones on it and wait for the fire to go out; pick up the burnt jogre bones.",
+      "Use the pestle and mortar on one raw karambwanji to make karambwanji paste, and use the paste on the burnt jogre bones.",
+      "Cook the pasty jogre bones on a fire to make marinated jogre bones. Do not bury them.",
+      "Cook the raw karambwan into a poison karambwan, grind it with the pestle and mortar and use the karambwan paste on your iron spear."
+     ]
+    },
+    {
+     "title": "Helping the brothers",
+     "steps": [
+      "Go to Tiadeche, north-east of fairy ring DKP, and pick up the seaweed nearby. Talk to him.",
+      "Use a raw karambwanji on a karambwan vessel, then use the baited vessel on Tiadeche. Dialogue: \"Yes\".",
+      "Go to Tamayu at the mine north-east of fairy ring CKR. Talk to him twice and watch the cutscene. Dialogue: \"When will you succeed?\", \"Yes\".",
+      "Use the agility potion(4) and your karambwan-poisoned spear on Tamayu; make sure he takes both.",
+      "Talk to him again and watch him kill the Shaikahan. Dialogue: \"Take me on your next hunt for the Shaikahan.\"",
+      "Kill a nearby level 3 monkey with Wind Strike and pick up its corpse; melee does no damage to it.",
+      "Use the corpse on Tamayu to get a monkey skin, and use the seaweed on the skin to make a seaweed sandwich.",
+      "Go to Cairn Isle, west of fairy ring CKR, climb the rocks and cross the bridge. Talk to Tinsay and give him the banana rum, seaweed sandwich and marinated jogre bones. Dialogue: \"Yes.\"",
+      "Use your remaining karambwan vessel, empty or baited, on Tinsay to receive a crafting manual.",
+      "Return to Tiadeche near fairy ring DKP, talk to him, then use the manual on him."
+     ]
+    },
+    {
+     "title": "Finishing up",
+     "steps": [
+      "Return to Timfraku and talk to him to complete the quest. Dialogue: \"Oh it was nothing really.\"",
+      "Talk to each brother in his house in southern Tai Bwo Wannai for the extra rewards: Tiadeche 5,000 Fishing XP, Tinsay 5,000 Cooking XP and karambwan cooking, Tamayu 2,500 Attack and 2,500 Strength XP and a karambwan-poisoned rune spear."
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Talk to Timfraku upstairs in his house in Tai Bwo Wannai.",
+       "s": "Talk to Timfraku upstairs in his house in Tai Bwo Wannai.",
+       "k": "goToTimfrakuLadder",
+       "at": [
+        2782,
+        3087,
+        0
+       ],
+       "hl": {
+        "obj": [
+         16683
+        ]
+       }
+      },
+      {
+       "t": "Talk to Timfraku upstairs in his house in Tai Bwo Wannai.",
+       "s": "Talk to Timfraku upstairs in his house in Tai Bwo Wannai.",
+       "k": "talkToTimfrakuStart",
+       "hl": {
+        "npc": [
+         4698
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 3,
+     "do": [
+      {
+       "t": "Open your quest journal to sync your current state.",
+       "s": "Open your quest journal to sync your current state.",
+       "k": "syncStep"
+      },
+      {
+       "t": "Using your small fishing net, catch at least 23 raw karambwanji just south of Tai Bwo Wannai.",
+       "s": "Net at least 23 raw karambwanji south of Tai Bwo Wannai.",
+       "k": "fishKarambwaji",
+       "at": [
+        2791,
+        3019,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4710
+        ]
+       }
+      },
+      {
+       "t": "Go to Brimhaven and talk to Lubufu. You have to talk to him multiple times. You'll need to ask him twice about what he does, then talk to him to give him the karambwanji.",
+       "s": "Talk to Lubufu in Brimhaven and give him 20 karambwanji.",
+       "k": "goToLubufu",
+       "at": [
+        2769,
+        3171,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4707
+        ]
+       }
+      },
+      {
+       "t": "Get a Vessel from Lubufu by asking what he uses to catch them multiple times. Drop it, and talk to him go get another, then pick up the one you dropped. You can get as many as you want but you need 2 to complete this quest.",
+       "s": "Drop Lubufu's vessel and ask him for another; you need 2 vessels.",
+       "k": "getMoreVessel",
+       "at": [
+        2769,
+        3171,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4707
+        ]
+       }
+      },
+      {
+       "t": "Drop the vessel, then get another from Lubufu.",
+       "s": "Drop the vessel, then get another from Lubufu.",
+       "k": "dropVessel",
+       "hl": {
+        "item": [
+         "Karambwan vessel"
+        ]
+       }
+      },
+      {
+       "t": "Get another Vessel from Lubufu.",
+       "s": "Get another Vessel from Lubufu.",
+       "k": "getAnotherVessel",
+       "at": [
+        2769,
+        3171,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4707
+        ]
+       }
+      },
+      {
+       "t": "Pick up the vessel you dropped.",
+       "s": "Pick up the vessel you dropped.",
+       "k": "pickupVessel",
+       "hl": {
+        "item": [
+         "Karambwan vessel"
+        ]
+       }
+      },
+      {
+       "t": "Use a karambwanji on a karambwan Vessel to fill it.",
+       "s": "Use a karambwanji on a karambwan Vessel to fill it.",
+       "k": "fillVessel",
+       "hl": {
+        "item": [
+         "Raw karambwanji"
+        ]
+       }
+      },
+      {
+       "t": "Go east to Musa point to buy some Karamjan rum from Zembo.",
+       "s": "Go east to Musa point to buy some Karamjan rum from Zembo.",
+       "k": "getRum",
+       "at": [
+        2925,
+        3143,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13655
+        ]
+       }
+      },
+      {
+       "t": "Slice a banana with a knife. You can get a banana from one of the trees in the plantation.",
+       "s": "Slice a banana with a knife; bananas grow in the plantation.",
+       "k": "sliceBanana",
+       "hl": {
+        "item": [
+         "Banana"
+        ]
+       }
+      },
+      {
+       "t": "Add banana slices to the karamjan rum to make Karamjan rum with banana slices.",
+       "s": "Add the banana slices to the Karamjan rum.",
+       "k": "makeBananaRum",
+       "hl": {
+        "item": [
+         "Karamjan rum"
+        ]
+       }
+      },
+      {
+       "t": "Talk to Tiadeche in east Karamja, near the fairy ring DKP. You can teleport off Karamja; the Karamjan rum with banana will not break.",
+       "s": "Talk to Tiadeche in east Karamja, near fairy ring DKP.",
+       "k": "talkToTiadeche1",
+       "at": [
+        2912,
+        3116,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4699
+        ]
+       }
+      },
+      {
+       "t": "Use a filled vessel on Tiadeche. Make sure to finish the dialogue with him and accept the karambwan he offers!",
+       "s": "Use a filled vessel on Tiadeche and accept the karambwan he offers.",
+       "k": "giveVessel",
+       "at": [
+        2912,
+        3116,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4699
+        ]
+       }
+      },
+      {
+       "t": "Talk to Tiadeche more.",
+       "s": "Talk to Tiadeche more.",
+       "k": "askAboutResearch",
+       "at": [
+        2912,
+        3116,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4699
+        ]
+       }
+      },
+      {
+       "t": "Pickup some seaweed from Karamja's coast.",
+       "s": "Pickup some seaweed from Karamja's coast.",
+       "k": "pickupSeaweed",
+       "has": "Seaweed",
+       "hl": {
+        "item": [
+         "Seaweed"
+        ]
+       }
+      },
+      {
+       "t": "Get some jogre bones. You can kill the jogres south of Tiadeche.",
+       "s": "Get some jogre bones. You can kill the jogres south of Tiadeche.",
+       "k": "getJogreBones",
+       "at": [
+        2925,
+        3062,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2094
+        ]
+       },
+       "has": "Jogre bones"
+      },
+      {
+       "t": "Pickup the jogre bones.",
+       "s": "Pickup the jogre bones.",
+       "k": "pickupBones",
+       "has": "Jogre bones",
+       "hl": {
+        "item": [
+         "Jogre bones"
+        ]
+       }
+      },
+      {
+       "t": "Use a tinderbox on the jogre bones to set them on fire.",
+       "s": "Use a tinderbox on the jogre bones to set them on fire.",
+       "k": "burnBones",
+       "hl": {
+        "item": [
+         "Jogre bones"
+        ]
+       }
+      },
+      {
+       "t": "Wait for the bones to burn, then pick them up.",
+       "s": "Wait for the bones to burn, then pick them up.",
+       "k": "pickupBurntBones",
+       "hl": {
+        "item": [
+         "Burnt jogre bones"
+        ]
+       }
+      },
+      {
+       "t": "Use a pestle and mortar on a karambwanji.",
+       "s": "Use a pestle and mortar on a karambwanji.",
+       "k": "makeKarambwanjiPaste",
+       "hl": {
+        "item": [
+         "Raw karambwanji"
+        ]
+       }
+      },
+      {
+       "t": "Use the karambwanji paste on the burnt jogre bones.",
+       "s": "Use the karambwanji paste on the burnt jogre bones.",
+       "k": "usePasteOnBones",
+       "hl": {
+        "item": [
+         "Karambwanji paste"
+        ]
+       }
+      },
+      {
+       "t": "Fish raw Karambwan next to Tiadeche with a loaded vessel or buy them from the GE.",
+       "s": "Fish a raw karambwan by Tiadeche with a loaded vessel, or buy one.",
+       "k": "getPoisonKarambwan",
+       "hl": {
+        "item": [
+         "Raw karambwan"
+        ]
+       }
+      },
+      {
+       "t": "Use the bones on a fire. You can either make one yourself, or use them on the fire south of Tai Bwo Wannai.",
+       "s": "Use the pasty jogre bones on a fire to marinate them.",
+       "k": "cookBones",
+       "at": [
+        2790,
+        3048,
+        0
+       ],
+       "hl": {
+        "obj": [
+         26185
+        ]
+       }
+      },
+      {
+       "t": "Cook the karambwan for a poison karambwan. Note you may fail this and need to try again.",
+       "s": "Cook the raw karambwan into a poison karambwan; it can fail.",
+       "k": "cookKarambwan",
+       "hl": {
+        "item": [
+         "Raw karambwan"
+        ]
+       }
+      },
+      {
+       "t": "Use a pestle and mortar on a poison karambwan.",
+       "s": "Use a pestle and mortar on a poison karambwan.",
+       "k": "usePestleOnKarambwan",
+       "hl": {
+        "item": [
+         "Poison karambwan"
+        ]
+       }
+      },
+      {
+       "t": "Use the karambwan paste on a iron or better spear.",
+       "s": "Use the karambwan paste on a iron or better spear.",
+       "k": "usePasteOnSpear",
+       "hl": {
+        "item": [
+         "Karambwan paste"
+        ]
+       }
+      },
+      {
+       "t": "Talk to Tamayu, he is located north of Shilo Village near the mining sign on the map, after watching him use your tinder box on your jogre bones and pick up the burnt jogre bones.",
+       "s": "Talk to Tamayu north of Shilo Village, by the mining sign.",
+       "k": "talkToTamayu1",
+       "at": [
+        2845,
+        3041,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4703
+        ]
+       }
+      },
+      {
+       "t": "Use an agility potion (4) on Tamayu.",
+       "s": "Use an agility potion (4) on Tamayu.",
+       "k": "givePotion",
+       "at": [
+        2845,
+        3041,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4703
+        ]
+       }
+      },
+      {
+       "t": "Use a poisoned spear on Tamayu.",
+       "s": "Use a poisoned spear on Tamayu.",
+       "k": "giveSpear",
+       "at": [
+        2845,
+        3041,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4703
+        ]
+       }
+      },
+      {
+       "t": "Go on a hunt with Tamayu.",
+       "s": "Go on a hunt with Tamayu.",
+       "k": "goOnHuntToKill",
+       "at": [
+        2845,
+        3041,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4703
+        ]
+       }
+      },
+      {
+       "t": "Kill a monkey to get its corpse, there are plenty of monkeys around Karamja and you will need either magic or range to kill one.",
+       "s": "Kill a monkey with Magic or Ranged and take its corpse.",
+       "k": "getMonkeyCorpse",
+       "hl": {
+        "npc": [
+         2848
+        ]
+       }
+      },
+      {
+       "t": "Pickup the monkey corpse.",
+       "s": "Pickup the monkey corpse.",
+       "k": "pickupCorpse",
+       "hl": {
+        "item": [
+         "Monkey corpse"
+        ]
+       }
+      },
+      {
+       "t": "Use your monkey corpse on Tamayu to have him skin it for you.",
+       "s": "Use your monkey corpse on Tamayu to have him skin it for you.",
+       "k": "useCorpseOnTamayu",
+       "at": [
+        2845,
+        3041,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4703
+        ]
+       }
+      },
+      {
+       "t": "Use your seaweed on your monkey skin to make a seaweed sandwich.",
+       "s": "Use your seaweed on your monkey skin to make a seaweed sandwich.",
+       "k": "makeSeaweedSandwich",
+       "hl": {
+        "item": [
+         "Seaweed"
+        ]
+       }
+      },
+      {
+       "t": "Talk to Tinsay on Cairn Isle west of Shilo Village, south of fairy ring CKR. Keep talking to him, giving him the items he asks for.",
+       "s": "Talk to Tinsay on Cairn Isle (ring CKR) and give what he asks for.",
+       "k": "talkToTinsay",
+       "at": [
+        2764,
+        2975,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4701
+        ]
+       }
+      },
+      {
+       "t": "Use the vessel on Tinsay.",
+       "s": "Use the vessel on Tinsay.",
+       "k": "useVesselOnTinsay",
+       "at": [
+        2764,
+        2975,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4701
+        ]
+       }
+      },
+      {
+       "t": "Go back to Tiadeche located north of fairy ring DKP and use the crafting manual on him.",
+       "s": "Go back to Tiadeche near fairy ring DKP and use the manual on him.",
+       "k": "goToTiadecheFinal",
+       "at": [
+        2912,
+        3116,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4699
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 4,
+     "do": [
+      {
+       "t": "Go to Timfraku's house to finish the quest.",
+       "s": "Go to Timfraku's house to finish the quest.",
+       "k": "goToTimfrakuLadderEnd",
+       "at": [
+        2782,
+        3087,
+        0
+       ],
+       "hl": {
+        "obj": [
+         16683
+        ]
+       }
+      },
+      {
+       "t": "Talk to Timfraku to end the quest; the option chosen does not matter. Then talk to each brother for his reward and the ability to cook karambwans.",
+       "s": "Talk to Timfraku to finish; then visit each brother for his reward.",
+       "k": "talkToTimfrakuEnd",
+       "hl": {
+        "npc": [
+         4698
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  "S9-64": {
+   "var": [
+    "varbit",
+    1372
+   ],
+   "route": [
+    {
+     "title": "Starting out",
+     "steps": [
+      "Talk to Father Reen outside Al Kharid bank. Dialogue: \"That's me!\"",
+      "Travel to the Ruins of Uzer: take the magic carpet south of Al Kharid (Shantay pass needed), or use fairy ring DLQ and go north-east.",
+      "Talk to Father Badden near the ruin entrance. Dialogue: \"Reen sent me.\", \"So what do you want me to do?\", \"How can I do that?\" Be sure to have Silverlight in your inventory.",
+      "Pick 3 black mushrooms beside the staircase. Use one on Silverlight to dye it black; grind the others with the pestle and mortar and a vial each into 2 black dyes, and dye your desert shirt and desert robe.",
+      "Go down the stairs and grab a copy of the Strange implement in the north-west corner of the ruin.",
+      "Wearing the black desert shirt, black desert robe, black cape and the dyed Silverlight, talk to Evil Dave in the dungeon. Dialogue: \"I want to join your group.\", \"I'm evil!\""
+     ]
+    },
+    {
+     "title": "Ritual",
+     "steps": [
+      "Talk to Denath on the other side of the portal. Dialogue: \"What do I have to do?\"",
+      "Talk to Jennifer to get a demonic sigil mould. Dialogue: \"Do you have the demonic sigil mould?\"",
+      "Talk to Matthew. Dialogue: \"Do you know what happened to Josef?\"",
+      "Go to any furnace and smelt a demonic sigil (use silver bar on furnace and select 'demonic sigil').",
+      "Your black outfit can now be discarded and replaced with combat gear (keep Silverlight with you).",
+      "Head back to Uzer and talk to the clay golem outside about last night. Dialogue: \"Did you see anything happen last night?\"",
+      "Search the nearby kilns for a book (there are four kilns – the last two are on the east side of the ruin, and by the magic carpet).",
+      "Read the book, and take it to Matthew on the other side of the portal",
+      "Go north and talk to Denath. Dialogue: \"I forgot the incantation.\" (or Dialogue: \"I forgot the incantation.\" during the ritual). Write down the incantation he tells you as it is used twice during the quest.",
+      "Complete the circle and click the sigil in your inventory to chant the incantation (unequip the Silverlight if nothing happens).",
+      "Take the demonic sigil Denath dropped on the floor. If you do not, you will have to create another demonic sigil.",
+      "Enter the portal to exit the room and take Tanya's sigil.",
+      "Tell Evil Dave to return to the lair Dialogue: \"You've got to get back to the throne room!\" – you should have 4 sigils now."
+     ]
+    },
+    {
+     "title": "Rallying the troops",
+     "steps": [
+      "Talk to Father Badden outside.",
+      "Convince Father Reen to join the ritual. Dialogue: \"Oh, don't be so simple-minded!\"",
+      "Talk to the golem, he will refuse to help. Dialogue: \"I could just reprogram you again.\"",
+      "Use the Strange implement on the golem to reprogram him.",
+      "Talk to the golem again to make him enter the dungeon."
+     ]
+    },
+    {
+     "title": "The final fight",
+     "steps": [
+      "Talk to Matthew to start the incantation, say it backwards. Dialogue: \"Yes\"",
+      "Kill Agrith Naar (level 100) with any weapon, but the final blow must be with Silverlight. The demon heals if you run away while the final blow is being dealt.",
+      "Unequip Silverlight.",
+      "Choose your reward to finish the quest.",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Talk to Father Reen outside Al Kharid bank.",
+       "s": "Talk to Father Reen outside Al Kharid bank.",
+       "k": "talkToReen",
+       "at": [
+        3270,
+        3159,
+        0
+       ],
+       "hl": {
+        "npc": [
+         893
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 10,
+     "do": [
+      {
+       "t": "Talk to Father Badden in Uzer.",
+       "s": "Talk to Father Badden in Uzer.",
+       "k": "talkToBadden",
+       "at": [
+        3490,
+        3090,
+        0
+       ],
+       "hl": {
+        "npc": [
+         895
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 20,
+     "do": [
+      {
+       "t": "Pick up some black mushrooms.",
+       "s": "Pick up some black mushrooms.",
+       "k": "pickMushroom",
+       "at": [
+        3495,
+        3088,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6311
+        ]
+       }
+      },
+      {
+       "t": "Use the black mushrooms on Silverlight.",
+       "s": "Use the black mushrooms on Silverlight.",
+       "k": "dyeSilverlight"
+      },
+      {
+       "t": "Enter the Uzer ruins.",
+       "s": "Enter the Uzer ruins.",
+       "k": "goIntoRuin",
+       "at": [
+        3493,
+        3090,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6373
+        ]
+       }
+      },
+      {
+       "t": "Pick up the strange implement in the north west corner of the ruin.",
+       "s": "Pick up the strange implement in the north west corner of the ruin.",
+       "k": "pickUpStrangeImplement",
+       "at": [
+        2713,
+        4913,
+        0
+       ]
+      },
+      {
+       "t": "Talk to Evil Dave with the dyed Silverlight and 3 dark clothing items equipped.",
+       "s": "Talk to Evil Dave with dyed Silverlight and 3 black items worn.",
+       "k": "talkToEvilDave",
+       "at": [
+        2721,
+        4911,
+        0
+       ],
+       "hl": {
+        "npc": [
+         902
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 30,
+     "do": [
+      {
+       "t": "Enter the Uzer ruins.",
+       "s": "Enter the Uzer ruins.",
+       "k": "enterRuinNoDark",
+       "at": [
+        3493,
+        3090,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6373
+        ]
+       }
+      },
+      {
+       "t": "Enter the portal.",
+       "s": "Enter the portal.",
+       "k": "enterPortal",
+       "at": [
+        2722,
+        4913,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6310
+        ]
+       }
+      },
+      {
+       "t": "Talk to Denath next to the throne.",
+       "s": "Talk to Denath next to the throne.",
+       "k": "talkToDenath",
+       "at": [
+        2720,
+        4912,
+        2
+       ],
+       "hl": {
+        "npc": [
+         897
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 40,
+     "do": [
+      {
+       "t": "Enter the Uzer ruins.",
+       "s": "Enter the Uzer ruins.",
+       "k": "enterRuinNoDark",
+       "at": [
+        3493,
+        3090,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6373
+        ]
+       }
+      },
+      {
+       "t": "Enter the portal.",
+       "s": "Enter the portal.",
+       "k": "enterPortal",
+       "at": [
+        2722,
+        4913,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6310
+        ]
+       }
+      },
+      {
+       "t": "Talk to Jennifer.",
+       "s": "Talk to Jennifer.",
+       "k": "talkToJennifer",
+       "at": [
+        2723,
+        4901,
+        2
+       ],
+       "hl": {
+        "npc": [
+         905
+        ]
+       }
+      },
+      {
+       "t": "Talk to Matthew.",
+       "s": "Talk to Matthew.",
+       "k": "talkToMatthew",
+       "at": [
+        2727,
+        4897,
+        2
+       ],
+       "hl": {
+        "npc": [
+         903
+        ]
+       }
+      },
+      {
+       "t": "Travel to any furnace with the sigil mould and silver bar and smelt a sigil.",
+       "s": "Smelt a demonic sigil at a furnace from the mould and a silver bar.",
+       "k": "smeltSigil"
+      },
+      {
+       "t": "Talk to the Golem in Uzer.",
+       "s": "Talk to the Golem in Uzer.",
+       "k": "talkToGolem",
+       "at": [
+        3485,
+        3088,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5136
+        ]
+       }
+      },
+      {
+       "t": "Search the kilns around the Ruins of Uzer for a book: there are four, the last two east of the ruin and by the magic carpet.",
+       "s": "Search the kilns around the Ruins of Uzer for the book.",
+       "k": "pwSearchKilns"
+      },
+      {
+       "t": "Enter the Uzer ruins.",
+       "s": "Enter the Uzer ruins.",
+       "k": "enterRuinAfterBook",
+       "at": [
+        3493,
+        3090,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6373
+        ]
+       }
+      },
+      {
+       "t": "Enter the portal.",
+       "s": "Enter the portal.",
+       "k": "enterPortalAfterBook",
+       "at": [
+        2722,
+        4913,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6310
+        ]
+       }
+      },
+      {
+       "t": "Bring the book to Matthew in the Demon Throne Room. Afterwards Denath should start the ritual. If he doesn't, leave and re-enter the throne room and talk to Matthew again.",
+       "s": "Bring the book to Matthew in the Demon Throne Room.",
+       "k": "talkToMatthewAfterBook",
+       "at": [
+        2727,
+        4897,
+        2
+       ],
+       "hl": {
+        "npc": [
+         903
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 70,
+     "do": [
+      {
+       "t": "Enter the Uzer ruins.",
+       "s": "Enter the Uzer ruins.",
+       "k": "enterRuinForRitual",
+       "at": [
+        3493,
+        3090,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6373
+        ]
+       }
+      },
+      {
+       "t": "Enter the portal.",
+       "s": "Enter the portal.",
+       "k": "enterPortalForRitual",
+       "at": [
+        2722,
+        4913,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6310
+        ]
+       }
+      },
+      {
+       "t": "Bring the book to Matthew in the Demon Throne Room. Afterwards Denath should start the ritual. If he doesn't, leave and re-enter the throne room and talk to Matthew again.",
+       "s": "Bring the book to Matthew in the Demon Throne Room.",
+       "k": "talkToMatthewAfterBook",
+       "at": [
+        2727,
+        4897,
+        2
+       ],
+       "hl": {
+        "npc": [
+         903
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 80,
+     "do": [
+      {
+       "t": "Enter the Uzer ruins.",
+       "s": "Enter the Uzer ruins.",
+       "k": "enterRuinForRitual",
+       "at": [
+        3493,
+        3090,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6373
+        ]
+       }
+      },
+      {
+       "t": "Enter the portal.",
+       "s": "Enter the portal.",
+       "k": "enterPortalForRitual",
+       "at": [
+        2722,
+        4913,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6310
+        ]
+       }
+      },
+      {
+       "t": "Stand in the correct spot in the circle.",
+       "s": "Stand in the correct spot in the circle.",
+       "k": "standInCircle",
+       "at": [
+        2718,
+        4902,
+        2
+       ]
+      },
+      {
+       "t": "Ask Denath for the incantation and write it down; it is different for every player, and you say it twice during the quest.",
+       "s": "Write down the incantation Denath tells you; it differs per player.",
+       "k": "pwReadIncantation"
+      }
+     ]
+    },
+    {
+     "at": 90,
+     "do": [
+      {
+       "t": "Talk to Evil Dave in the Uzer ruins.",
+       "s": "Talk to Evil Dave in the Uzer ruins.",
+       "k": "enterRuinForDave",
+       "at": [
+        3493,
+        3090,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6373
+        ]
+       }
+      },
+      {
+       "t": "Leave the throne room.",
+       "s": "Leave the throne room.",
+       "k": "leavePortal",
+       "at": [
+        2720,
+        4883,
+        2
+       ],
+       "hl": {
+        "obj": [
+         10251
+        ]
+       }
+      },
+      {
+       "t": "Talk to Evil Dave.",
+       "s": "Talk to Evil Dave.",
+       "k": "tellDaveToReturn",
+       "at": [
+        2721,
+        4900,
+        0
+       ],
+       "hl": {
+        "npc": [
+         902
+        ]
+       }
+      },
+      {
+       "t": "Talk to Father Badden in Uzer.",
+       "s": "Talk to Father Badden in Uzer.",
+       "k": "talkToBaddenAfterRitual",
+       "at": [
+        3490,
+        3090,
+        0
+       ],
+       "hl": {
+        "npc": [
+         895
+        ]
+       }
+      },
+      {
+       "t": "Pick up the strange implement in the north west corner of the ruin.",
+       "s": "Pick up the strange implement in the north west corner of the ruin.",
+       "k": "pickUpImplementAfterRitual",
+       "at": [
+        2713,
+        4913,
+        0
+       ]
+      },
+      {
+       "t": "Leave the ruins.",
+       "s": "Leave the ruins.",
+       "k": "goUpToBadden",
+       "at": [
+        2722,
+        4885,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6372
+        ]
+       }
+      },
+      {
+       "t": "Talk to Father Reen in Uzer.",
+       "s": "Talk to Father Reen in Uzer.",
+       "k": "talkToReenAfterRitual",
+       "at": [
+        3490,
+        3090,
+        0
+       ],
+       "hl": {
+        "npc": [
+         893
+        ]
+       }
+      },
+      {
+       "t": "Talk to the Golem in Uzer.",
+       "s": "Talk to the Golem in Uzer.",
+       "k": "talkToTheGolemAfterRitual",
+       "at": [
+        3485,
+        3088,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5136
+        ]
+       }
+      },
+      {
+       "t": "Use the strange implement on the Golem in Uzer.",
+       "s": "Use the strange implement on the Golem in Uzer.",
+       "k": "useImplementOnGolem",
+       "at": [
+        3485,
+        3088,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5136
+        ]
+       }
+      },
+      {
+       "t": "Talk to the Golem again.",
+       "s": "Talk to the Golem again.",
+       "k": "talkToGolemAfterReprogramming",
+       "at": [
+        3485,
+        3088,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5136
+        ]
+       }
+      },
+      {
+       "t": "Enter the Uzer ruins.",
+       "s": "Enter the Uzer ruins.",
+       "k": "enterRuinAfterRecruiting",
+       "at": [
+        3493,
+        3090,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6373
+        ]
+       }
+      },
+      {
+       "t": "Enter the portal.",
+       "s": "Enter the portal.",
+       "k": "enterPortalAfterRecruiting",
+       "at": [
+        2722,
+        4913,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6310
+        ]
+       }
+      },
+      {
+       "t": "Talk to Matthew in the throne room.",
+       "s": "Talk to Matthew in the throne room.",
+       "k": "talkToMatthewToStartFight",
+       "at": [
+        2727,
+        4897,
+        2
+       ],
+       "hl": {
+        "npc": [
+         903
+        ]
+       }
+      },
+      {
+       "t": "Pick up the demonic sigil from the circle.",
+       "s": "Pick up the demonic sigil from the circle.",
+       "k": "pickUpSigil"
+      }
+     ]
+    },
+    {
+     "at": 110,
+     "do": [
+      {
+       "t": "Enter the Uzer ruins.",
+       "s": "Enter the Uzer ruins.",
+       "k": "enterRuinAfterRecruiting",
+       "at": [
+        3493,
+        3090,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6373
+        ]
+       }
+      },
+      {
+       "t": "Enter the portal.",
+       "s": "Enter the portal.",
+       "k": "enterPortalAfterRecruiting",
+       "at": [
+        2722,
+        4913,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6310
+        ]
+       }
+      },
+      {
+       "t": "Stand in the correct spot in the circle.",
+       "s": "Stand in the correct spot in the circle.",
+       "k": "standInCircleAgain",
+       "at": [
+        2720,
+        4903,
+        2
+       ]
+      },
+      {
+       "t": "Complete the circle and click the sigil in your inventory to chant the incantation; unequip Silverlight if nothing happens.",
+       "s": "Click the sigil in the circle to chant the incantation.",
+       "k": "pwIncantRitual"
+      }
+     ]
+    },
+    {
+     "at": 120,
+     "do": [
+      {
+       "t": "Enter the Uzer ruins to finish fighting Agrith-Naar.",
+       "s": "Enter the Uzer ruins to finish fighting Agrith-Naar.",
+       "k": "enterRuinForFight",
+       "at": [
+        3493,
+        3090,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6373
+        ]
+       }
+      },
+      {
+       "t": "Enter the portal to finish fighting Agrith-Naar.",
+       "s": "Enter the portal to finish fighting Agrith-Naar.",
+       "k": "enterPortalForFight",
+       "at": [
+        2722,
+        4913,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6310
+        ]
+       }
+      },
+      {
+       "t": "Kill Agrith-Naar. You can hurt him with any weapon, BUT YOU MUST DEAL THE FINAL BLOW WITH SILVERLIGHT.",
+       "s": "Kill Agrith Naar; the final blow must come from Silverlight.",
+       "k": "killDemon",
+       "hl": {
+        "npc": [
+         911
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 124,
+     "do": [
+      {
+       "t": "Unequip Darklight to complete the quest!",
+       "s": "Unequip Darklight to complete the quest!",
+       "k": "unequipDarklight"
+      }
+     ]
+    }
+   ]
   }
  }
 }

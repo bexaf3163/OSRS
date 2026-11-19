@@ -2423,6 +2423,101 @@
       "evidence": [
         "OSRS Wiki Recipe for Disaster/Freeing Skrach Uglogwee quick guide, read 2026-11-18."
       ]
+    },
+    {
+      "stepId": "S9-62",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "melee",
+      "objective": "A Porcine of Interest: kill Sourhog (level 37, 40 hitpoints, hits up to 6) in the cave under the Strange Hole east of Draynor Manor, wearing the reinforced goggles from Spria.",
+      "enemies": [
+        {
+          "name": "Sourhog",
+          "level": 37,
+          "maxHit": 6,
+          "table": true
+        }
+      ],
+      "lines": [
+        "0.7"
+      ],
+      "assumptions": [
+        "The reinforced goggles are worn, which keeps its hits at 6; four trout (heals 7) cover the fight."
+      ],
+      "problems": [
+        "Without the goggles its saliva hits 20-30 and drains Attack and Defence; the route tells you to equip them first."
+      ],
+      "alternatives": [
+        "Any weapon works; a knife or slash weapon cuts off the foot afterwards."
+      ],
+      "decision": "retain",
+      "changed": [
+        "2.149.0: new quest; Sourhog is in combatFoes.json."
+      ],
+      "evidence": [
+        "OSRS Wiki Sourhog infobox and A Porcine of Interest quick guide, read 2026-11-19."
+      ]
+    },
+    {
+      "stepId": "S9-63",
+      "kind": "incidental",
+      "mandatory": true,
+      "method": "other",
+      "objective": "Tai Bwo Wannai Trio: kill a level-3 monkey with Wind Strike for its corpse; Tamayu fights the Shaikahan himself.",
+      "enemies": [],
+      "lines": [
+        "2.4",
+        "2.5",
+        "3.1"
+      ],
+      "assumptions": [
+        "Melee does no damage to the monkey, so the route plans air and mind runes for Wind Strike; a level-3 monkey cannot threaten the player."
+      ],
+      "problems": [],
+      "alternatives": [
+        "A bow or a halberd also kills the monkey."
+      ],
+      "decision": "retain",
+      "changed": [
+        "2.149.0: new quest."
+      ],
+      "evidence": [
+        "OSRS Wiki Tai Bwo Wannai Trio quick guide, read 2026-11-19."
+      ]
+    },
+    {
+      "stepId": "S9-64",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "melee",
+      "objective": "Shadow of the Storm: kill Agrith Naar (level 100, 95 hitpoints, hits up to 10) in the Uzer temple; the final blow must be dealt with Silverlight.",
+      "enemies": [
+        {
+          "name": "Agrith Naar",
+          "level": 100,
+          "maxHit": 10,
+          "table": true
+        }
+      ],
+      "lines": [
+        "3.1"
+      ],
+      "assumptions": [
+        "The estimate fights him with Silverlight throughout (fightMechanics.json); ten lobsters (heals 12) are a margin."
+      ],
+      "problems": [
+        "He also casts magic for up to 10; the estimate uses his crush attack, the first style the Wiki lists."
+      ],
+      "alternatives": [
+        "He can be flinched by standing behind the north-western torch."
+      ],
+      "decision": "retain",
+      "changed": [
+        "2.149.0: new quest; Agrith Naar is in combatFoes.json and fights with Silverlight."
+      ],
+      "evidence": [
+        "OSRS Wiki Agrith Naar infobox and Shadow of the Storm quick guide, read 2026-11-19."
+      ]
     }
   ]
 }

@@ -15,6 +15,14 @@
         "A stake and a hammer in the inventory deal the killing blow; without them he heals to full health."
       ]
     },
+    "Agrith Naar": {
+      "url": "https://oldschool.runescape.wiki/w/Agrith_Naar",
+      "weapon": { "item": "Silverlight" },
+      "facts": [
+        "Any weapon damages him, but the final blow must be dealt with Silverlight; the estimate fights him with Silverlight throughout (Shadow of the Storm, combat audit).",
+        "He heals if you run away while the final blow is being dealt."
+      ]
+    },
     "Delrith": {
       "url": "https://oldschool.runescape.wiki/w/Delrith",
       "weapon": { "item": "Silverlight", "damageMultiplier": 2 },

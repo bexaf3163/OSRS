@@ -11980,5 +11980,380 @@
         "questName": "Recipe for Disaster - Skrach Uglogwee"
       }
     }
+  },
+  {
+    "id": "S9-62",
+    "stage": 9,
+    "type": "quest",
+    "title": "A Porcine of Interest",
+    "qp": 1,
+    "requires": [],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/A_Porcine_of_Interest",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/A_Porcine_of_Interest/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3086,3251,0",
+    "mapLocation": {
+      "x": 3086,
+      "y": 3251,
+      "plane": 0,
+      "label": "Draynor Village, behind Fortunato's Wine Shop"
+    },
+    "npc": {
+      "nameEn": "Notice board (Draynor Village)",
+      "location": "Draynor Village, behind Fortunato's Wine Shop",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Notice_board_(Draynor_Village)"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Rope",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Ned in Draynor Village for 4 balls of wool or 15 gp.",
+        "wikiItemId": 954,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Rope.png"
+      },
+      {
+        "nameEn": "Knife",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange; any slash weapon also cuts off the foot.",
+        "wikiItemId": 946,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Knife.png"
+      },
+      {
+        "nameEn": "Trout",
+        "amount": 4,
+        "howToGet": "Buy on the Grand Exchange. Four trout cover Sourhog (level 37, hits up to 6 with the reinforced goggles on).",
+        "wikiItemId": 333,
+        "heals": 7,
+        "anyOf": [
+          "Salmon"
+        ],
+        "iconUrl": "https://oldschool.runescape.wiki/images/Trout.png"
+      }
+    ],
+    "foes": [
+      "Sourhog"
+    ],
+    "reward": "1 QP, 1,000 Slayer XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Notice board (Draynor Village)"
+      ],
+      "dialogChoices": [
+        "Yes.",
+        "Talk about the bounty."
+      ],
+      "highlightItems": [
+        "Rope",
+        "Knife",
+        "Trout"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "A Porcine of Interest"
+      }
+    }
+  },
+  {
+    "id": "S9-63",
+    "stage": 9,
+    "type": "quest",
+    "title": "Tai Bwo Wannai Trio",
+    "qp": 2,
+    "requires": [
+      "S7-14"
+    ],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Tai_Bwo_Wannai_Trio",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Tai_Bwo_Wannai_Trio/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2782,3087,0",
+    "mapLocation": {
+      "x": 2782,
+      "y": 3087,
+      "plane": 0,
+      "label": "His house in Tai Bwo Wannai"
+    },
+    "npc": {
+      "nameEn": "Timfraku",
+      "location": "His house in Tai Bwo Wannai",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Timfraku"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Knife",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from a general store.",
+        "wikiItemId": 946,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Knife.png"
+      },
+      {
+        "nameEn": "Sliced banana",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or pick a banana on Karamja and slice it with the knife.",
+        "wikiItemId": 3162,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Sliced_banana.png"
+      },
+      {
+        "nameEn": "Karamjan rum",
+        "amount": 1,
+        "howToGet": "Buy from Zembo in Musa Point for 30 coins, or on the Grand Exchange.",
+        "wikiItemId": 431,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Karamjan_rum.png"
+      },
+      {
+        "nameEn": "Small fishing net",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Gerrant's Fishy Business in Port Sarim for 5 gp.",
+        "wikiItemId": 303,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Small_fishing_net.png"
+      },
+      {
+        "nameEn": "Pestle and mortar",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from a general store.",
+        "wikiItemId": 233,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Pestle_and_mortar.png"
+      },
+      {
+        "nameEn": "Logs",
+        "amount": 2,
+        "howToGet": "Buy on the Grand Exchange: one fire burns the jogre bones, one marinates them.",
+        "wikiItemId": 1511,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Logs.png"
+      },
+      {
+        "nameEn": "Tinderbox",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from a general store for 1 gp.",
+        "wikiItemId": 590,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Tinderbox.png"
+      },
+      {
+        "nameEn": "Iron spear",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange; any iron or better spear takes the karambwan paste.",
+        "wikiItemId": 1239,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Iron_spear.png"
+      },
+      {
+        "nameEn": "Jogre bones",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or kill a jogre south of Tiadeche.",
+        "wikiItemId": 3125,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Jogre_bones.png"
+      },
+      {
+        "nameEn": "Seaweed",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or pick some on Karamja's coast by Tiadeche.",
+        "wikiItemId": 401,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Seaweed.png"
+      },
+      {
+        "nameEn": "Raw karambwan",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange; catching one yourself needs Fishing 65.",
+        "wikiItemId": 3142,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Raw_karambwan.png"
+      },
+      {
+        "nameEn": "Agility potion(4)",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange.",
+        "wikiItemId": 3032,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Agility_potion(4).png"
+      },
+      {
+        "nameEn": "Air rune",
+        "amount": 10,
+        "howToGet": "Buy on the Grand Exchange: Wind Strike kills the level-3 monkey, which melee cannot be used on.",
+        "wikiItemId": 556,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Air_rune.png"
+      },
+      {
+        "nameEn": "Mind rune",
+        "amount": 5,
+        "howToGet": "Buy on the Grand Exchange, for Wind Strike on the monkey.",
+        "wikiItemId": 558,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Mind_rune.png"
+      }
+    ],
+    "reward": "2 QP, 5,000 Cooking XP, 5,000 Fishing XP, 2,500 Attack XP, 2,500 Strength XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Timfraku"
+      ],
+      "dialogChoices": [
+        "I am a wandering wayfarer.",
+        "Trufitus sent me.",
+        "So far??",
+        "Yes",
+        "I wasn't going anywhere...",
+        "Talk about him...",
+        "What do you do?",
+        "How old are you?",
+        "I could help collect the bait.",
+        "You sound like you could do with the help.",
+        "When will you succeed?",
+        "Take me on your next hunt for the Shaikahan.",
+        "Yes.",
+        "Oh it was nothing really."
+      ],
+      "highlightItems": [
+        "Knife",
+        "Sliced banana",
+        "Karamjan rum",
+        "Small fishing net",
+        "Pestle and mortar",
+        "Logs",
+        "Tinderbox",
+        "Iron spear",
+        "Jogre bones",
+        "Seaweed",
+        "Raw karambwan",
+        "Agility potion(4)",
+        "Air rune",
+        "Mind rune"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Tai Bwo Wannai Trio"
+      }
+    }
+  },
+  {
+    "id": "S9-64",
+    "stage": 9,
+    "type": "quest",
+    "title": "Shadow of the Storm",
+    "qp": 1,
+    "requires": [
+      "S9-16",
+      "S3-03"
+    ],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Shadow_of_the_Storm",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Shadow_of_the_Storm/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3271,3158,0",
+    "mapLocation": {
+      "x": 3271,
+      "y": 3158,
+      "plane": 0,
+      "label": "Father Reen"
+    },
+    "npc": {
+      "nameEn": "Father Reen",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Father_Reen"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Silverlight",
+        "amount": 1,
+        "howToGet": "Kept from Demon Slayer. A black mushroom by the Uzer staircase dyes it black.",
+        "wikiItemId": 2402,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Silverlight.png"
+      },
+      {
+        "nameEn": "Desert shirt",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from the clothes shop in Pollnivneach. A black mushroom from Uzer dyes it black.",
+        "wikiItemId": 1833,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Desert_shirt.png"
+      },
+      {
+        "nameEn": "Desert robe",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from the clothes shop in Pollnivneach. A black mushroom from Uzer dyes it black.",
+        "wikiItemId": 1835,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Desert_robe.png"
+      },
+      {
+        "nameEn": "Black cape",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange: the third black item Evil Dave wants to see.",
+        "wikiItemId": 1019,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Black_cape.png"
+      },
+      {
+        "nameEn": "Vial",
+        "amount": 2,
+        "howToGet": "Buy on the Grand Exchange: each makes black dye from a black mushroom.",
+        "wikiItemId": 229,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Vial.png"
+      },
+      {
+        "nameEn": "Pestle and mortar",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from a general store: grinds the black mushrooms into dye.",
+        "wikiItemId": 233,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Pestle_and_mortar.png"
+      },
+      {
+        "nameEn": "Silver bar",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from the Ardougne Silver Stall in East Ardougne for 150 gp.",
+        "wikiItemId": 2355,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Silver_bar.png"
+      },
+      {
+        "nameEn": "Shantay pass",
+        "amount": 1,
+        "howToGet": "Buy from Shantay at the Shantay Pass for 5 coins; not needed if you use fairy ring DLQ.",
+        "wikiItemId": 1854,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Shantay_pass_(item).png"
+      },
+      {
+        "nameEn": "Lobster",
+        "amount": 10,
+        "howToGet": "Buy on the Grand Exchange. Ten lobsters are a margin for Agrith Naar (level 100, hits up to 10).",
+        "wikiItemId": 379,
+        "heals": 12,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Lobster.png"
+      }
+    ],
+    "foes": [
+      "Agrith Naar"
+    ],
+    "reward": "1 QP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Father Reen"
+      ],
+      "dialogChoices": [
+        "That's me!",
+        "Reen sent me.",
+        "So what do you want me to do?",
+        "How can I do that?",
+        "I want to join your group.",
+        "I'm evil!",
+        "What do I have to do?",
+        "Do you have the demonic sigil mould?",
+        "Do you know what happened to Josef?",
+        "Did you see anything happen last night?",
+        "I forgot the incantation.",
+        "You've got to get back to the throne room!",
+        "Oh, don't be so simple-minded!",
+        "I could just reprogram you again.",
+        "Yes"
+      ],
+      "highlightItems": [
+        "Silverlight",
+        "Black full helm",
+        "Black platebody",
+        "Black platelegs",
+        "Silver bar",
+        "Shantay pass",
+        "Lobster"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Shadow of the Storm"
+      }
+    }
   }
 ]

@@ -4,6 +4,7 @@ import type { StepReadiness } from '../readiness/readiness';
 import type { Budget } from '../economy/funding/budget';
 import { purchaseCost, purchaseFees } from '../items/purchaseCost';
 import { nameKey } from '../items/itemKey';
+import { doseKind } from '../items/doses';
 import type { PurchaseFee } from '../items/purchaseCost';
 import type { CandidateAction, Minutes, PlanningSnapshot } from './contracts';
 
@@ -99,8 +100,9 @@ export function resolvePreparation(input: PreparationInput): CandidateAction | n
         input.ironman === true ? 'Accessible non-exchange acquisition method verified' : 'Observed account trading mode', line);
     }
     const missing = Math.max(0, count - bag - equipped);
-    const price = line.unit === 'dose' && line.marketPrice?.quantity !== missing ? null
-      : purchaseCost({ price: line.action.price ?? line.marketPrice?.unit, fee: line.action.purchase?.fee }, missing);
+    // Missing doses are bought as whole potions of the named size.
+    const pieces = line.unit === 'dose' ? Math.ceil(missing / (doseKind(line.name)?.per ?? 1)) : missing;
+    const price = purchaseCost({ price: line.action.price ?? line.marketPrice?.unit, fee: line.action.purchase?.fee }, pieces);
     const cash = input.budget.spendable;
     const fee = line.action.purchase?.fee;
     const reservedFee = fee ? Math.min(fee.coins, input.budget.reserve,

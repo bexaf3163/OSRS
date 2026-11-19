@@ -2493,6 +2493,54 @@
       }
     },
     {
+      "name": "Sourhog",
+      "combat": 37,
+      "members": true,
+      "hitpoints": 40,
+      "attackLevel": 35,
+      "strengthLevel": 30,
+      "defenceLevel": 25,
+      "magicLevel": 25,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 30,
+        "crush": 10,
+        "magic": 30,
+        "ranged": 0
+      },
+      "attackStyle": "crush",
+      "maxHit": 6,
+      "speedTicks": 5,
+      "aggressive": true
+    },
+    {
+      "name": "Agrith Naar",
+      "combat": 100,
+      "members": true,
+      "hitpoints": 95,
+      "attackLevel": 83,
+      "strengthLevel": 90,
+      "defenceLevel": 82,
+      "magicLevel": 100,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "crush",
+      "maxHit": 10,
+      "speedTicks": 4,
+      "aggressive": true,
+      "weakness": {
+        "element": "water",
+        "percent": 25
+      }
+    },
+    {
       "name": "Cow",
       "version": "1",
       "combat": 2,

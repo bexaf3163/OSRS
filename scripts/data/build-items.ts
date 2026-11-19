@@ -94,6 +94,8 @@ const wanted = new Set<string>(KEY_ITEMS);
 const methods = JSON.parse(readFileSync(`${root}src/data/authored/trainingMethods.json`, 'utf8')) as { methods: { needs?: { type: string; name: string; anyOf?: string[] }[] }[] };
 for (const m of methods.methods) for (const n of m.needs ?? []) if (n.type === 'item') for (const name of [n.name, ...(n.anyOf ?? [])]) wanted.add(name);
 for (const it of stepItems) wanted.add(it.nameEn);
+// A potion is counted in doses across all four sizes (heldUnits.ts), so each size must be known.
+for (const name of [...wanted]) { const dose = /^(.+)\([1-4]\)$/.exec(name); if (dose) for (const size of [1, 2, 3, 4]) wanted.add(`${dose[1]}(${size})`); }
 
 const mappingRes = await fetchFn('https://prices.runescape.wiki/api/v1/osrs/mapping');
 if (!mappingRes.ok) throw new Error(`The price API answered ${mappingRes.status}`);

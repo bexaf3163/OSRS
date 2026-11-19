@@ -360,8 +360,13 @@ export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
         const spot = acquired.from ? npcSpot(acquired.from, step.id) : undefined;
         action = { kind: 'GATHER', label: acquired.howToGet, ...(spot ? { nav: { label: `${acquired.from}: ${acquired.nameEn}`, x: spot.x, y: spot.y, plane: spot.plane, itemName: acquired.nameEn, stepId: step.id } } : {}) };
       } else if (where === 'MISSING' && dose) {
-        // Doses, not potions: the shortfall and the sizes that cover it; Shopping prices every size and names the package.
-        action = { kind: 'BUY', label: shortText(t.line.nameEn, g.missing), href: hrefTo.shopping() };
+        // Doses, not potions: the shared sources sell whole potions of the named size (a price and a place, so the trip is timed);
+        // Shopping still prices every size and names the package.
+        const potions = Math.ceil(g.missing / (doseKind(t.line.nameEn)?.per ?? 1));
+        const plan = planSources({ name: t.line.nameEn, need: potions, shortage: true, detail: t.line.id !== undefined ? detail(t.line.id) : undefined, manualKey: t.line.key,
+          ...(i.prices !== undefined ? { gePrice: itemPrice(i.prices, t.line.nameEn, t.line.id, potions).unit } : {}),
+        }, state);
+        action = sourceAction(plan.primary, t.line.nameEn, potions, coinsTotal, step.id) ?? { kind: 'BUY', label: shortText(t.line.nameEn, g.missing), href: hrefTo.shopping() };
       } else if (where === 'MISSING') {
         const plan = planSources({ name: t.line.nameEn, need: g.missing, shortage: true, detail: t.line.id !== undefined ? detail(t.line.id) : undefined, manualKey: t.line.key,
           ...(i.prices !== undefined ? { gePrice: itemPrice(i.prices, t.line.nameEn, t.line.id, g.missing).unit } : {}),
@@ -437,11 +442,13 @@ export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
 
   // Price physical quantities once for every consumer. Unknown/untradeable items get no fabricated GE value.
   if (i.prices !== undefined) for (const l of lines) {
-    if (l.unit === 'dose' || l.name.toLowerCase() === 'coins') continue;
+    if (l.name.toLowerCase() === 'coins') continue;
     const row = trip.lines.find(t => t.line.nameEn === l.name);
     const id = row?.line.id;
     const d = id !== undefined ? detail(id) : undefined;
-    const price = marketItemPrice(i.prices, l.name, id, l.count, Boolean(d?.gePrice));
+    // A potion line counts doses; the market sells whole potions of the named size.
+    const pieces = l.unit === 'dose' ? Math.ceil(l.count / (doseKind(l.name)?.per ?? 1)) : l.count;
+    const price = marketItemPrice(i.prices, l.name, id, pieces, Boolean(d?.gePrice));
     if (price) l.marketPrice = price;
   }
 

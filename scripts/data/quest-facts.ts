@@ -459,6 +459,30 @@ const REVIEWED_FLOWS: Record<string, { revision: number; flow: NonNullable<Quest
     receives: [], unknownItems: ['Skewered chompy', 'Cooked chompy', 'Bloated toad', 'Balloon toad', 'Rock', 'Raw jubbly', 'Cooked jubbly'],
     uncertainReceipts: ['Ball of wool', 'Ogre arrow'], partialDelivery: false, fromStartOnly: false,
   } },
+  // Traiborn takes the 25 bones (in increments), the water goes down the drain and Aris takes a coin; you keep Silverlight (Shadow of the Storm needs it).
+  'Demon Slayer': { revision: 15398358, flow: {
+    consumes: [{ name: 'Bones', count: 25 }, { name: 'Bucket of water', count: 1 }, { name: 'Coins', count: 1 }],
+    receives: [{ name: 'Silverlight', count: 1, when: 'complete' }], unknownItems: ['Silverlight key'],
+    uncertainReceipts: ['Trout'], partialDelivery: true, fromStartOnly: false,
+  } },
+  // The silver bar becomes the demonic sigil; two vials of black dye turn the desert shirt and robe black; Silverlight becomes Darklight, which you keep.
+  'Shadow of the Storm': { revision: 15375058, flow: {
+    consumes: [{ name: 'Silver bar', count: 1 }, { name: 'Shantay pass', count: 1 }, { name: 'Silverlight', count: 1 }, { name: 'Vial', count: 2 }, { name: 'Desert shirt', count: 1 }, { name: 'Desert robe', count: 1 }],
+    receives: [{ name: 'Darklight', count: 1, when: 'complete' }], unknownItems: ['Black mushroom', 'Black dye', 'Black desert shirt', 'Black desert robe', 'Strange implement', 'Demonic sigil mould', 'Demonic sigil', 'Demonic tome'],
+    uncertainReceipts: ['Lobster'], partialDelivery: false, fromStartOnly: false,
+  } },
+  // The rope stays in the hole; Spria's goggles and the Sourhog's foot are quest items.
+  'A Porcine of Interest': { revision: 15367468, flow: {
+    consumes: [{ name: 'Rope', count: 1 }], receives: [], unknownItems: ['Reinforced goggles', 'Sourhog foot'],
+    uncertainReceipts: ['Trout'], partialDelivery: false, fromStartOnly: false,
+  } },
+  // The rum, sandwich and bones go to Tinsay, the potion and poisoned spear to Tamayu; the net, pestle, knife and tinderbox stay.
+  'Tai Bwo Wannai Trio': { revision: 15385720, flow: {
+    consumes: [{ name: 'Sliced banana', count: 1 }, { name: 'Karamjan rum', count: 1 }, { name: 'Logs', count: 2 }, { name: 'Jogre bones', count: 1 }, { name: 'Seaweed', count: 1 },
+      { name: 'Raw karambwan', count: 1 }, { name: 'Agility potion(4)', count: 1 }, { name: 'Iron spear', count: 1 }],
+    receives: [], unknownItems: ['Raw karambwanji', 'Karambwan vessel', 'Karambwanji paste', 'Burnt jogre bones', 'Pasty jogre bones', "Marinated j' bones", 'Poison karambwan', 'Karambwan paste', 'Monkey corpse', 'Monkey skin', 'Seaweed sandwich', 'Crafting manual'],
+    uncertainReceipts: ['Air rune', 'Mind rune'], partialDelivery: false, fromStartOnly: false,
+  } },
   'Ernest the Chicken': { revision: 15390916, flow: {
     // All puzzle parts are obtained within the manor; a spade is reused, not handed in.
     consumes: [], receives: [], unknownItems: ['Fish food', 'Poison', 'Poisoned fish food', 'Pressure gauge', 'Rubber tube', 'Oil can', 'Key'],
@@ -504,6 +528,8 @@ const REVIEWED_CLAUSES = new Set([
   '<ref>Adding the sapphire lens to a [[Bullseye lantern (unf)]] is boostable. Adding it to a [[Bullseye lantern (empty)]] or [[Bullseye lantern]] is not boostable.</ref>',
   // Mountain Daughter: the note sits under Agility 20, which covers it; the Kendal is in the step foes and combat ledger.
   '<ref>Entering the Mountain Camp initially requires 10 Agility.</ref>',
+  // Tai Bwo Wannai Trio: the route buys the raw karambwan, so Fishing 65 is not needed.
+  '<ref>Level 65 is required if you wish to catch the [[Raw karambwan]] yourself.</ref>',
   'The ability to defeat a level 70 [[The Kendal|monster]] (can be [[safespot|safespotted]])',
   'The ability to defeat a level 112 [[Khazard warlord]]',
   // Watchtower: Gorad is in the step foes and the combat ledger; the blue dragons of the enclave are walked past (ledger runPast).
@@ -539,6 +565,7 @@ const REVIEWED_CLAUSES = new Set([
   "to enter the Champions' Guild",
   'Ability to defeat a level-69 [[Draugen]]',
   'The ability to defeat a level 100 monster',
+  'The ability to defeat a level 100 demon',
   'The ability to defeat 5 level 30 monsters.',
   "The ability to defeat a level 13 [[icefiend]] if you don't have the [[ice gloves]].",
   'Ability to defeat a [[Koschei|fairly strong warrior]] without [[armour]], [[weapons]], or [[spells]]',

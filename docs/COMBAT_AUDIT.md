@@ -4,7 +4,7 @@ Written by `tests/combatAudit.test.ts` from `src/data/authored/combatAudit.json`
 
 Every stage of the route where the player fights or can be attacked, checked against the route text, the quest stage lines (Quest Helper), the OSRS Wiki infoboxes in combatFoes.json and the danger zones. The rule for a fight the quest cannot go on without: its food is a required item (readiness and the game check it before leaving), the app estimates it with the player's kit where it has the opponent's numbers, and an unread kit or bag is reported as not checked, never as ready.
 
-69 stages: 41 retained, 27 revised, 0 with a branch, 1 deferred.
+72 stages: 44 retained, 27 revised, 0 with a branch, 1 deferred.
 
 | Step | Kind | Mandatory | Opponents | Method | Estimate | Food in the item list | Decision |
 |---|---|---|---|---|---|---|---|
@@ -77,6 +77,9 @@ Every stage of the route where the player fights or can be attacked, checked aga
 | S9-59 Recipe for Disaster/Freeing the Mountain Dwarf | quest-fight | no | Icefiend (13) | melee | Icefiend | Trout 2 | Retain |
 | S9-60 Recipe for Disaster/Freeing Pirate Pete | quest-fight | yes | Mudskipper (31), Crab (23) | melee | Mudskipper, Crab | Trout 5 | Retain |
 | S9-61 Recipe for Disaster/Freeing Skrach Uglogwee | incidental | yes | - | other | - | - | Retain |
+| S9-62 A Porcine of Interest | quest-fight | yes | Sourhog (37) | melee | Sourhog | Trout 4 | Retain |
+| S9-63 Tai Bwo Wannai Trio | incidental | yes | - | other | - | - | Retain |
+| S9-64 Shadow of the Storm | quest-fight | yes | Agrith Naar (100) | melee | Agrith Naar | Lobster 10 | Retain |
 
 ## S1-06 The Restless Ghost
 
@@ -1633,4 +1636,78 @@ Changed:
 Evidence:
 
 - OSRS Wiki Recipe for Disaster/Freeing Skrach Uglogwee quick guide, read 2026-11-18.
+
+## S9-62 A Porcine of Interest
+
+**Retain.** A Porcine of Interest: kill Sourhog (level 37, 40 hitpoints, hits up to 6) in the cave under the Strange Hole east of Draynor Manor, wearing the reinforced goggles from Spria.
+
+Quest stage lines: 0.7.
+
+Assumptions:
+
+- The reinforced goggles are worn, which keeps its hits at 6; four trout (heals 7) cover the fight.
+
+Problems:
+
+- Without the goggles its saliva hits 20-30 and drains Attack and Defence; the route tells you to equip them first.
+
+Alternatives:
+
+- Any weapon works; a knife or slash weapon cuts off the foot afterwards.
+
+Changed:
+
+- 2.149.0: new quest; Sourhog is in combatFoes.json.
+
+Evidence:
+
+- OSRS Wiki Sourhog infobox and A Porcine of Interest quick guide, read 2026-11-19.
+
+## S9-63 Tai Bwo Wannai Trio
+
+**Retain.** Tai Bwo Wannai Trio: kill a level-3 monkey with Wind Strike for its corpse; Tamayu fights the Shaikahan himself.
+
+Quest stage lines: 2.4, 2.5, 3.1.
+
+Assumptions:
+
+- Melee does no damage to the monkey, so the route plans air and mind runes for Wind Strike; a level-3 monkey cannot threaten the player.
+
+Alternatives:
+
+- A bow or a halberd also kills the monkey.
+
+Changed:
+
+- 2.149.0: new quest.
+
+Evidence:
+
+- OSRS Wiki Tai Bwo Wannai Trio quick guide, read 2026-11-19.
+
+## S9-64 Shadow of the Storm
+
+**Retain.** Shadow of the Storm: kill Agrith Naar (level 100, 95 hitpoints, hits up to 10) in the Uzer temple; the final blow must be dealt with Silverlight.
+
+Quest stage lines: 3.1.
+
+Assumptions:
+
+- The estimate fights him with Silverlight throughout (fightMechanics.json); ten lobsters (heals 12) are a margin.
+
+Problems:
+
+- He also casts magic for up to 10; the estimate uses his crush attack, the first style the Wiki lists.
+
+Alternatives:
+
+- He can be flinched by standing behind the north-western torch.
+
+Changed:
+
+- 2.149.0: new quest; Agrith Naar is in combatFoes.json and fights with Silverlight.
+
+Evidence:
+
+- OSRS Wiki Agrith Naar infobox and Shadow of the Storm quick guide, read 2026-11-19.
 

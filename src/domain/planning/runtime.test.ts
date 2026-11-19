@@ -90,7 +90,8 @@ describe('quest work and travel adapters', () => {
     const base = f2pSteps.find(step => step.id === original.stepIds[0])!;
     const fight = { ...base, id: 'synthetic-fight', itemsRequired: [], foes: ['Synthetic unmodelled foe'], threats: [] };
     const returning = { ...base, id: 'synthetic-return', itemsRequired: [], foes: [], threats: [] };
-    const goal = { ...original, id: 'Synthetic completed encounter', stepIds: [fight.id, returning.id] };
+    // No item flow: this test is about the encounter, not Demon Slayer's partial bone hand-ins.
+    const goal = { ...original, id: 'Synthetic completed encounter', stepIds: [fight.id, returning.id], resourceFlow: null };
     const snap = snapshot();
     snap.quests = { [goal.id]: { state: 'IN_PROGRESS', stepId: returning.id, source: 'Admitted stage evidence' } };
     const decision = runtimeDecision(input(snap, { catalogue: [goal], steps: [fight, returning], intent: { kind: 'quest', questId: goal.id } }))!;

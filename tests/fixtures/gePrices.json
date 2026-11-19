@@ -1,5 +1,5 @@
 {
- "source": "OSRS Wiki real-time prices API /latest (high = buy, low = sell), F2P route items and gear, read 2026-11-10; Members route items added 2026-11-14 and 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-17; Members route items added 2026-11-17; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18",
+ "source": "OSRS Wiki real-time prices API /latest (high = buy, low = sell), F2P route items and gear, read 2026-11-10; Members route items added 2026-11-14 and 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-17; Members route items added 2026-11-17; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-19; Members route items added 2026-11-19",
  "prices": {
   "Adamant 2h sword": {
    "buy": 3670,
@@ -3028,6 +3028,86 @@
   "Ogre arrow": {
    "buy": 152,
    "sell": 136
+  },
+  "Agility potion(4)": {
+   "buy": 235,
+   "sell": 101
+  },
+  "Iron spear": {
+   "buy": 995,
+   "sell": 125
+  },
+  "Jogre bones": {
+   "buy": 870,
+   "sell": 820
+  },
+  "Raw karambwan": {
+   "buy": 205,
+   "sell": 196
+  },
+  "Sliced banana": {
+   "buy": 450,
+   "sell": 74
+  },
+  "Black cape": {
+   "buy": 416,
+   "sell": 250
+  },
+  "Agility potion(1)": {
+   "buy": 87,
+   "sell": 61
+  },
+  "Agility potion(2)": {
+   "buy": 107,
+   "sell": 16
+  },
+  "Agility potion(3)": {
+   "buy": 50,
+   "sell": 34
+  },
+  "Antipoison(1)": {
+   "buy": 87,
+   "sell": 81
+  },
+  "Antipoison(2)": {
+   "buy": 979,
+   "sell": 497
+  },
+  "Attack potion(1)": {
+   "buy": 4,
+   "sell": 3
+  },
+  "Attack potion(2)": {
+   "buy": 10,
+   "sell": 4
+  },
+  "Energy potion(1)": {
+   "buy": 21,
+   "sell": 17
+  },
+  "Energy potion(2)": {
+   "buy": 55,
+   "sell": 26
+  },
+  "Energy potion(3)": {
+   "buy": 53,
+   "sell": 45
+  },
+  "Prayer potion(1)": {
+   "buy": 1915,
+   "sell": 1915
+  },
+  "Prayer potion(2)": {
+   "buy": 3819,
+   "sell": 3801
+  },
+  "Strength potion(1)": {
+   "buy": 21,
+   "sell": 14
+  },
+  "Strength potion(2)": {
+   "buy": 47,
+   "sell": 46
   }
  }
 }

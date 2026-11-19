@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { fakePrices } from '../../../tests/funding/helpers';
 import { buildPrepPlan, BAG_SLOTS, stacks, type PrepPlan } from './prepPlan';
 import { buildPlayerState } from '../player/playerState';
 import { planOneTrip } from './oneTrip';
@@ -319,5 +320,17 @@ describe('made items: the ingredients are planned too (Goblin Diplomacy, Orange 
   it('a bank that was not opened leaves the ingredients "not checked", never missing', () => {
     const p = plan(state(owned({ 'Blue dye': { carried: 1 } }, false)), { list: dye, id: 'G1' });
     expect(line(p, 'Red dye').where).toBe('UNKNOWN');
+  });
+});
+
+describe('a missing potion', () => {
+  it('is bought as whole potions of the named size with a price, so its trip can be timed', () => {
+    const one = [mk('P1', [item('Strength potion(4)', 2)])];
+    const s = state(owned({ 'Strength potion(1)': { bank: 0 }, 'Strength potion(2)': { bank: 0 }, 'Strength potion(3)': { bank: 0 }, 'Strength potion(4)': { bank: 0 } }, true));
+    const progress = emptyProgress();
+    const p = buildPrepPlan({ step: one[0], steps: one, progress, state: s, trip: planOneTrip(one, progress, 'P1', s, 3),
+      readiness: readinessOf(one[0], { steps: one, progress, qp: 0, mode: 'f2p', state: s }), upgrade: null, detail: () => undefined,
+      prices: fakePrices({ 'Strength potion(4)': { buy: 300, sell: 200 } }) });
+    expect(line(p, 'Strength potion(4)').action).toMatchObject({ kind: 'BUY', price: 300 });
   });
 });
