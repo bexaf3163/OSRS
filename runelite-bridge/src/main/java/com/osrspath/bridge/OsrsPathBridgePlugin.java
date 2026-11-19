@@ -156,6 +156,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	private NavigationButton panelButton;
 	/** Clicks on the "What you need" list on the game screen. */
 	private GuideMouse guideMouse;
+	private CardMouse cardMouse;
 	/**
 	 * What the step needs and where to go, for the in-game list and the side panel. Computed on the client thread when the step,
 	 * target, bag or bank changes; the Swing panel is rebuilt only when the view changed.
@@ -343,6 +344,14 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		overlayManager.add(guideOverlay);
 		guideMouse = new GuideMouse(client, guideOverlay, a -> clientThread.invokeLater(() -> quests.guideAction(a)));
 		mouseManager.registerMouseListener(guideMouse);
+		java.util.Map<String, java.util.function.Supplier<java.awt.Rectangle>> titles = new java.util.LinkedHashMap<>();
+		titles.put(CardFold.CHECK, checklistOverlay::header);
+		titles.put(CardFold.BULK, geOverlay::header);
+		titles.put(CardFold.SHOP, shopOverlay::header);
+		cardMouse = new CardMouse(client, titles, shopOverlay,
+			card -> configManager.setConfiguration(OsrsPathBridgeConfig.GROUP, "foldedCards", CardFold.toggled(config.foldedCards(), card)),
+			p -> configManager.setConfiguration(OsrsPathBridgeConfig.GROUP, "shopCardOffset", p.x + "," + p.y));
+		mouseManager.registerMouseListener(cardMouse);
 		panel = new OsrsPathPanel(new OsrsPathPanel.Actions()
 		{
 			@Override
@@ -407,6 +416,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		overlayManager.remove(arrowOverlay);
 		overlayManager.remove(guideOverlay);
 		mouseManager.unregisterMouseListener(guideMouse);
+		mouseManager.unregisterMouseListener(cardMouse);
 		clientToolbar.removeNavigation(panelButton);
 		clientThread.invoke(() ->
 		{

@@ -179,6 +179,22 @@
       },
       "bank": "Edgeville Bank",
       "members": false
+    },
+    {
+      "kind": "fire",
+      "objectNames": [
+        "Fire"
+      ],
+      "label": "Your own fire by the Grand Exchange bank",
+      "place": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Your own fire by the Grand Exchange bank"
+      },
+      "bankTiles": 12,
+      "lit": true,
+      "members": false
     }
   ],
   "recipes": [

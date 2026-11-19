@@ -31,6 +31,9 @@ class OsrsPathShopOverlay extends Overlay
 	private final Client client;
 	private final OsrsPathBridgePlugin plugin;
 	private final OsrsPathBridgeConfig config;
+	private java.awt.Point offset;
+	private Rectangle drawn;
+	private Rectangle header;
 
 	@Inject
 	OsrsPathShopOverlay(Client client, OsrsPathBridgePlugin plugin, OsrsPathBridgeConfig config)
@@ -38,6 +41,7 @@ class OsrsPathShopOverlay extends Overlay
 		this.client = client;
 		this.plugin = plugin;
 		this.config = config;
+		offset = CardFold.offset(config.shopCardOffset());
 		// We compute the position ourselves from the game window: it differs for the bank and the merchant.
 		setPosition(OverlayPosition.DYNAMIC);
 		setLayer(OverlayLayer.ABOVE_WIDGETS);
@@ -125,12 +129,22 @@ class OsrsPathShopOverlay extends Overlay
 		if (r == null)
 		{
 			plugin.debug.shopWindowShown(false);
+			drawn = null;
+			header = null;
 			return null;
 		}
 		plugin.debug.shopWindowShown(true);
 		plugin.debug.uiShown("shop", ShopWindow.plain(r));
 		Rectangle frame = o.frame != null && !o.frame.isHidden() ? o.frame.getBounds() : null;
-		Dimension size = paint(g, r, WIDTH, config.hudLarge() ? Hud.LARGE : 1f, config.hudOpacity(), place(frame, client.getCanvasWidth(), client.getCanvasHeight(), r, g));
+		boolean folded = CardFold.folded(config.foldedCards(), CardFold.SHOP);
+		java.awt.Point at = place(frame, client.getCanvasWidth(), client.getCanvasHeight(), r, g);
+		// Moved with Alt+drag (CardMouse): the offset from its own place, kept inside the canvas.
+		at = new java.awt.Point(Math.max(0, Math.min(client.getCanvasWidth() - WIDTH, at.x + offset.x)), Math.max(0, Math.min(client.getCanvasHeight() - 40, at.y + offset.y)));
+		float scale = config.hudLarge() ? Hud.LARGE : 1f;
+		Dimension size = paint(g, r, WIDTH, scale, config.hudOpacity(), at, folded);
+		FontMetrics fm = g.getFontMetrics(OverlayText.font(g.getFont(), scale));
+		drawn = new Rectangle(at.x, at.y, size.width, size.height);
+		header = new Rectangle(at.x, at.y, size.width, PAD + OverlayText.wrap(r.getTitle() + CardFold.mark(folded), fm, WIDTH - 2 * PAD).size() * fm.getHeight());
 		return size;
 	}
 
@@ -156,18 +170,44 @@ class OsrsPathShopOverlay extends Overlay
 	/** Drawing apart from the client: a test draws with the real fonts and takes a picture. Returns the card size. */
 	static Dimension paint(Graphics2D g, ShopWindow.Result r, int width, float scale, int opacity, java.awt.Point at)
 	{
+		return paint(g, r, width, scale, opacity, at, false);
+	}
+
+	/** Where the card was drawn and its title, for CardMouse; null when it is not shown. */
+	Rectangle drawn()
+	{
+		return drawn;
+	}
+
+	Rectangle header()
+	{
+		return header;
+	}
+
+	java.awt.Point offset()
+	{
+		return new java.awt.Point(offset);
+	}
+
+	void setOffset(java.awt.Point p)
+	{
+		offset = new java.awt.Point(p);
+	}
+
+	static Dimension paint(Graphics2D g, ShopWindow.Result r, int width, float scale, int opacity, java.awt.Point at, boolean folded)
+	{
 		Font font = OverlayText.font(g.getFont(), scale);
 		g.setFont(font);
 		FontMetrics fm = g.getFontMetrics(font);
 		int inner = width - 2 * PAD;
 		List<String> lines = new ArrayList<>();
 		List<Color> colors = new ArrayList<>();
-		for (String l : OverlayText.wrap(r.getTitle(), fm, inner))
+		for (String l : OverlayText.wrap(r.getTitle() + CardFold.mark(folded), fm, inner))
 		{
 			lines.add(l);
 			colors.add(Hud.TITLE);
 		}
-		for (ShopWindow.Row row : r.getRows())
+		for (ShopWindow.Row row : folded ? java.util.Collections.<ShopWindow.Row>emptyList() : r.getRows())
 		{
 			String text = glyph(row.getMark()) + row.getText();
 			boolean first = true;

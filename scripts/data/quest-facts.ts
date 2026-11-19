@@ -477,6 +477,33 @@ const REVIEWED_FLOWS: Record<string, { revision: number; flow: NonNullable<Quest
     receives: [], unknownItems: ['Ring of charos(a)', 'Orchid seed', 'Snowdrop seed', 'Delphinium seed', 'White tree shoot', 'White tree sapling', 'Rose seed', 'Vine seed', 'Rune shards', 'Rune dust', 'Magic plant cure', 'Trolley'],
     uncertainReceipts: ['Plant cure'], partialDelivery: false, fromStartOnly: false,
   } },
+  // The water brews the strong tea; the chisel and pickaxe stay.
+  'Temple of the Eye': { revision: 15304735, flow: {
+    consumes: [{ name: 'Bucket of water', count: 1 }], receives: [],
+    unknownItems: ['Strong tea', 'Abyssal incantation', 'Unstrung lyre', 'Eye of the abyss'],
+    uncertainReceipts: ['Chisel', 'Bronze pickaxe'], partialDelivery: false, fromStartOnly: false,
+  } },
+  // Traiborn enchants the milk, egg and flour, which become the guide's cake; the tin may come back.
+  'Recipe for Disaster/Freeing the Lumbridge Guide': { revision: 15375111, flow: {
+    consumes: [{ name: 'Bucket of milk', count: 1 }, { name: 'Egg', count: 1 }, { name: 'Pot of flour', count: 1 }], receives: [],
+    unknownItems: ['Enchanted milk', 'Enchanted egg', 'Enchanted flour', 'Raw guide cake', 'Cake of guidance'],
+    uncertainReceipts: ['Cake tin'], partialDelivery: false, fromStartOnly: false,
+  } },
+  // The water douses Skippy and he drinks the nettle tea; the dust, milk and snape grass make the hangover cure; gloves stay.
+  'Skippy and the Mogres': { revision: 15396629, flow: {
+    consumes: [{ name: 'Bucket of water', count: 1 }, { name: 'Nettle tea', count: 1 }, { name: 'Chocolate dust', count: 1 }, { name: 'Bucket of milk', count: 1 }, { name: 'Snape grass', count: 1 }],
+    receives: [], unknownItems: ['Nettle-water', 'Chocolatey milk', 'Hangover cure'], uncertainReceipts: [], partialDelivery: false, fromStartOnly: false,
+  } },
+  // Sir Tiffy takes 10,000 coins for the Commorb; the Mage of Zamorak takes the essence; the lantern stays.
+  'Wanted!': { revision: 15391809, flow: {
+    consumes: [{ name: 'Coins', count: 10000 }, { name: 'Rune essence', count: 20 }],
+    receives: [], unknownItems: ['Commorb', "Solus's hat"], uncertainReceipts: ['Lobster'], partialDelivery: false, fromStartOnly: false,
+  } },
+  // The test rooms allow no items: everything used is found inside and stays there.
+  'Recruitment Drive': { revision: 15395322, flow: {
+    consumes: [], receives: [], unknownItems: ['Steel warhammer', 'Grain', 'Chicken', 'Fox', 'Vial', 'Cake tin', 'Gypsum', 'Knife', 'Spade', 'Key', 'Bronze key', 'Initiate sallet'],
+    uncertainReceipts: [], partialDelivery: false, fromStartOnly: false,
+  } },
   // The six elemental runes go on the pillars; Golrie's pebble is kept for Roving Elves (Wiki tip); the rope may stay.
   'Waterfall Quest': { revision: 15357907, flow: {
     consumes: [{ name: 'Air rune', count: 6 }, { name: 'Earth rune', count: 6 }, { name: 'Water rune', count: 6 }],
@@ -622,6 +649,7 @@ const REVIEWED_CLAUSES = new Set([
   "The ability to defeat a level 84 enemy unarmed, with [[Glarial's Tomb#Restricted items|heavy restrictions]]",
   ', unless travelling with a [[charter ship]] to the elven woods',
   'The ability to defeat a level 11 enemy with your combat stats set to 20 each.',
+  'The ability to defeat a level 32 [[Black Knight (Wanted!)|Black Knight]].',
   'The ability to defeat 5 level 30 monsters.',
   "The ability to defeat a level 13 [[icefiend]] if you don't have the [[ice gloves]].",
   'Ability to defeat a [[Koschei|fairly strong warrior]] without [[armour]], [[weapons]], or [[spells]]',

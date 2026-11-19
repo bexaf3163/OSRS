@@ -790,10 +790,10 @@
       "effort": "low",
       "cost": "cost",
       "risk": "none",
-      "where": "At Edgeville Bank; no range or guild access is needed",
+      "where": "At the Grand Exchange bank: buy the grapes and jugs of water there; no range or guild access is needed",
       "note": "Combine 13 grapes with 13 jugs of water per starter bag. Withdraw owned ingredients first. Wait 12 seconds after the batch for fermentation and XP. Below Cooking 68, bad wine gives no XP; recheck your level and budget before another batch.",
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_Cooking_training",
-      "place": "Edgeville Bank"
+      "place": "Grand Exchange"
     },
     {
       "id": "fm-normal",
@@ -1046,9 +1046,9 @@
       "effort": "medium",
       "cost": "cost",
       "risk": "none",
-      "where": "By a bank (leather from Al Kharid)",
+      "where": "At the Grand Exchange bank: buy the leather, needle and thread there and craft by the bank",
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_Crafting_training",
-      "place": "Al Kharid Bank"
+      "place": "Grand Exchange"
     },
     {
       "id": "cr-hardleather",
@@ -1070,9 +1070,9 @@
       "effort": "medium",
       "cost": "cost",
       "risk": "none",
-      "where": "By a bank (hard leather from the Al Kharid tanner)",
+      "where": "At the Grand Exchange bank: buy the hard leather, needle and thread there and craft by the bank",
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_Crafting_training",
-      "place": "Al Kharid Bank",
+      "place": "Grand Exchange",
       "note": "The best F2P armour crafting: about 91,000 XP/h with banked hard leather, needle and thread (OSRS Wiki, checked 2026-11-02)."
     },
     {
@@ -1318,9 +1318,9 @@
       "effort": "medium",
       "cost": "cost",
       "risk": "none",
-      "where": "By a bank",
+      "where": "At the Grand Exchange bank: buy the ore and runes there and cast by the bank",
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_Magic_training",
-      "place": "Varrock West Bank",
+      "place": "Grand Exchange",
       "note": "Starter batch: 25 unnoted iron ore, 25 nature runes and 100 fire runes, or equip an owned Staff of fire instead of the fire runes. Bank surplus items to leave 25 ore slots plus rune stacks. Keep coal in the bank to make iron bars. Cast manually on each ore, then bank the bars and refill. This is one starter bag, not the full-goal cost; rate and profit are not guaranteed."
     },
     {
@@ -2542,8 +2542,8 @@
       "effort": "high",
       "cost": "cost",
       "risk": "none",
-      "where": "By a bank",
-      "place": "Edgeville Bank",
+      "where": "At the Grand Exchange bank: buy or withdraw the bones and bury them by the bank",
+      "place": "Grand Exchange",
       "note": "Withdraw owned unnoted bones first. Buying bones is a separate paid method; it does not include collecting them through combat. Check the price and your budget before buying.",
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_Prayer_training"
     },
@@ -2566,8 +2566,8 @@
       "effort": "high",
       "cost": "cost",
       "risk": "none",
-      "where": "By a bank",
-      "place": "Edgeville Bank",
+      "where": "At the Grand Exchange bank: buy or withdraw the big bones and bury them by the bank",
+      "place": "Grand Exchange",
       "note": "Withdraw owned unnoted bones first. Buying bones is a separate paid method; it does not include collecting them through combat. Check the price and your budget before buying.",
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_Prayer_training"
     },

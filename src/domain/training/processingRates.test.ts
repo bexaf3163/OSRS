@@ -367,4 +367,15 @@ describe('Runecraft uses an inventory action and the altar journey', () => {
     expect(two.xpPerAction).toBe(5);
     expect(two.lootPerHour).toBeCloseTo(one.lootPerHour! * 2);
   });
+
+  it('food bought on the exchange is cooked on your own fire by its bank: a tinderbox and a log a trip, the lighting timed', () => {
+    const kit = new Map([['tinderbox', { name: 'Tinderbox', carried: 1, bank: 0, noted: 0 }]]);
+    const at40 = buildPlayerState({ mode: 'f2p', connected: true, stats: { cooking: 40, firemaking: 30 }, progress: emptyProgress(), questsDone: [], gear: { equipment: [], inventory: [], coins: 50_000, bankCoins: 0 }, owned: { bankSeen: true, items: kit } } as never);
+    expect(processRate(method('ck-tuna'), 'cooking', stateOf({ cooking: 40, firemaking: 30 }))?.spot?.label, 'no tinderbox: the permanent fire').toBe('Barbarian Village fire');
+    const r = processRate(method('ck-tuna'), 'cooking', at40)!;
+    expect(r.spot?.label).toBe('Your own fire by the Grand Exchange bank');
+    expect(r.needs?.map((n) => (n.type === 'item' ? n.name : ''))).toEqual(expect.arrayContaining(['Tinderbox', 'Logs']));
+    const permanent: ProcessingRegistry = { ...PROCESSING, stations: PROCESSING.stations.filter((s) => !s.lit) };
+    expect(processRate(method('ck-tuna'), 'cooking', at40, {}, permanent)?.spot?.label).toBe('Barbarian Village fire');
+  });
 });

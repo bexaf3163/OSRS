@@ -674,6 +674,8 @@ function pathFresh(skill: string, level: number, target: number, input: AdviceIn
     // Each level is weighed as the first one is (adviseTraining): the hours from here to the goal, less what the banked drops are worth.
     cands.sort(compare(Math.max(0, xpForLevel(target) - xpForLevel(lv)), lv, coinsPerMinute(input.prices, input.mode)));
     let pick = (lv === level ? cands.find(c => c.method.id === first?.id)?.method : undefined) ?? cands[0]?.method;
+    // A method whose rate this state cannot price (a fight kit with no coins) leaves the whole goal untimed; a priced one is a plan.
+    if (pick && practicalRate(pick) === null) pick = cands.find(c => practicalRate(c.method) !== null && (c.method.to === null || lv < c.method.to))?.method ?? pick;
     if (!pick) { timed = false; continue; }
     const last = legs[legs.length - 1];
     if (last && last.method.id !== pick.id && cands.some((c) => c.method.id === last.method.id)) {

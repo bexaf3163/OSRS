@@ -15,7 +15,9 @@ const root = fileURLToPath(new URL('../..', import.meta.url));
 const OUT = `${root}src/data/generated/processing.json`;
 
 type Kind = 'furnace' | 'anvil' | 'fire' | 'altar';
-interface StationDef { objectName?: string; kind: Kind; page: string; row?: string; location?: string; near?: string; bank?: string }
+interface StationDef { objectName?: string; kind: Kind; page: string; row?: string; location?: string; near?: string; bank?: string;
+  /** A fire the player lights a few tiles from a bank (the Grand Exchange, where its building forbids fires): bankTiles away from it. */
+  lit?: boolean; bankTiles?: number }
 interface TickEvidence { page: string; evidence: string; ticks: number }
 interface RecipeDef { id: string; page: string; skill: string; facility: Kind | null; members?: boolean; /** Lit with a tinderbox (Firemaking): read from the log's {{Firemaking info}}. */ light?: boolean;
   consume?: { level: number; xp: number; xpEvidence: string; action: TickEvidence };
@@ -48,6 +50,13 @@ for (const s of defs.stations) {
   const scene = s.objectName ?? (sceneNames.length === 1 ? sceneNames[0] : undefined);
   if (!scene || !sceneNames.includes(scene)) { fail(what, 'select a verified scene object name from the station page'); continue; }
   const objectNames = [scene];
+  if (s.lit) {
+    const bank = s.bank ? places[s.bank] : undefined;
+    if (!bank || bank.kind !== 'bank' || !s.bankTiles) { fail(what, 'a lit fire needs a bank of majorLocations.json and its distance in tiles'); continue; }
+    const label = `Your own fire by the ${s.bank}`;
+    stations.push({ kind: s.kind, objectNames, label, place: { x: bank.x, y: bank.y, plane: bank.plane, label }, bankTiles: s.bankTiles, lit: true, members: false });
+    continue;
+  }
   if (s.kind === 'altar') {
     const box = templates(text, 'Infobox Scenery')[0] ?? {};
     const at = mapPoint(box.map ?? '');
@@ -159,9 +168,10 @@ for (const d of defs.recipes) {
     // The log's {{Firemaking info}}: the tinderbox version's level and XP. A failed light keeps the log (retry): it costs time, not the log.
     const fi = templates(text, 'Firemaking info')[0] ?? {};
     const k = Object.entries(fi).find(([key, v]) => /^version\d+$/.test(key) && /^tinderbox$/i.test(v.trim()))?.[0].slice(7);
-    const level = num(fi[`skill1lvl${k}`]);
-    const xp = num(fi[`skill1exp${k}`]);
-    if (!light || !k || !(level > 0) || !(xp > 0)) { fail(d.id, `no tinderbox level and XP in the {{Firemaking info}} of ${d.page}`); continue; }
+    // Since 2026 the template gives the tinderbox light as plain level and xp; older pages name a Tinderbox version.
+    const level = num(k ? fi[`skill1lvl${k}`] : fi.level);
+    const xp = num(k ? fi[`skill1exp${k}`] : fi.xp);
+    if (!light || !(level > 0) || !(xp > 0)) { fail(d.id, `no tinderbox level and XP in the {{Firemaking info}} of ${d.page}`); continue; }
     const log = plain(d.page);
     recipes.push({
       id: d.id, skill: d.skill, level, xp, ticks: light.ticks, facility: null, tools: ['Tinderbox'], inputs: [{ name: log, qty: 1, stacks: await stacks(log) }],
@@ -213,9 +223,15 @@ for (const d of defs.recipes) {
 }
 
 // A charged ingredient is shared by every recipe that uses it; facts need explicit source evidence.
+/** The count a sentence states: "5 uses" or "used five times" (the Thread page since 2026). */
+function statedCount(text: string): number {
+  const words = ['two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
+  const m = /\b(\d+|two|three|four|five|six|seven|eight|nine|ten) (?:uses|times)\b/i.exec(text)?.[1]?.toLowerCase();
+  return m === undefined ? NaN : /^\d+$/.test(m) ? Number(m) : words.indexOf(m) + 2;
+}
 const usesByName = new Map<string, number>();
 for (const fact of defs.consumableUses ?? []) {
-  if (!Number.isSafeInteger(fact.uses) || fact.uses <= 1 || !fact.evidence || Number(/\b(\d+) uses\b/.exec(fact.evidence)?.[1]) !== fact.uses || !plain(await page(fact.page)).includes(fact.evidence) || usesByName.has(fact.name)) {
+  if (!Number.isSafeInteger(fact.uses) || fact.uses <= 1 || !fact.evidence || statedCount(fact.evidence) !== fact.uses || !plain(await page(fact.page)).includes(fact.evidence) || usesByName.has(fact.name)) {
     fail(fact.name, 'invalid or unverified consumable uses'); continue;
   }
   usesByName.set(fact.name, fact.uses);

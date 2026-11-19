@@ -13088,5 +13088,241 @@
         "questName": "Roving Elves"
       }
     }
+  },
+  {
+    "id": "S9-70",
+    "stage": 9,
+    "type": "quest",
+    "title": "Recruitment Drive",
+    "qp": 1,
+    "requires": [
+      "S3-02",
+      "S7-06"
+    ],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Recruitment_Drive",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Recruitment_Drive/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2959,3336,0",
+    "mapLocation": {
+      "x": 2959,
+      "y": 3336,
+      "plane": 0,
+      "label": "Sir Amik Varze"
+    },
+    "npc": {
+      "nameEn": "Sir Amik Varze",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Sir_Amik_Varze"
+    },
+    "itemsRequired": [],
+    "foes": [
+      "Sir Leye"
+    ],
+    "reward": "1 QP, 1,000.5 Prayer XP, 1,000.5 Herblore XP, 1,000.5 Agility XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Sir Amik Varze"
+      ],
+      "dialogChoices": [
+        "Yes please",
+        "Yes, let's go!"
+      ],
+      "highlightItems": [],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Recruitment Drive"
+      }
+    }
+  },
+  {
+    "id": "S9-71",
+    "stage": 9,
+    "type": "quest",
+    "title": "Wanted!",
+    "qp": 1,
+    "requires": [
+      "S9-70",
+      "S9-20",
+      "S8-01",
+      "S9-29"
+    ],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Wanted!",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Wanted!/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2997,3373,0",
+    "mapLocation": {
+      "x": 2997,
+      "y": 3373,
+      "plane": 0,
+      "label": "Falador Park"
+    },
+    "npc": {
+      "nameEn": "Sir Tiffy Cashien",
+      "location": "Falador Park",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Sir_Tiffy_Cashien"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Coins",
+        "amount": 10000,
+        "howToGet": "Sir Tiffy takes 10,000 coins for the Commorb (or a law rune, an enchanted gem from a Slayer master and molten glass).",
+        "wikiItemId": 995,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Coins_1.png"
+      },
+      {
+        "nameEn": "Rune essence",
+        "amount": 20,
+        "howToGet": "Buy on the Grand Exchange, or mine it: the Mage of Zamorak takes 20 unnoted essence.",
+        "wikiItemId": 1436,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Rune_essence.png"
+      },
+      {
+        "nameEn": "Bullseye lantern",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Miltog in Dorgesh-Kaan; light it with a tinderbox before the Lumbridge Swamp Caves.",
+        "wikiItemId": 4548,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bullseye_lantern.png"
+      },
+      {
+        "nameEn": "Tinderbox",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from a general store for 1 gp.",
+        "wikiItemId": 590,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Tinderbox.png"
+      },
+      {
+        "nameEn": "Lobster",
+        "amount": 4,
+        "howToGet": "Buy on the Grand Exchange: the level 32 Black Knight and Solus hit up to 4.",
+        "wikiItemId": 379,
+        "heals": 12,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Lobster.png"
+      }
+    ],
+    "foes": [
+      "Black Knight (Wanted!)"
+    ],
+    "reward": "1 QP, 5,000 Slayer XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Sir Tiffy Cashien"
+      ],
+      "dialogChoices": [
+        "Do you have any jobs for me yet?",
+        "Yes, I'm interested.",
+        "Ask about the Wanted! Quest",
+        "How will all that help?",
+        "No, not right now...",
+        "Sure, I'll help you!",
+        "Current Assignment",
+        "Solus Dellagar"
+      ],
+      "highlightItems": [
+        "Law rune",
+        "Enchanted gem",
+        "Molten glass",
+        "Rune essence",
+        "Bullseye lantern",
+        "Tinderbox",
+        "Lobster"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Wanted!"
+      }
+    }
+  },
+  {
+    "id": "S9-72",
+    "stage": 9,
+    "type": "quest",
+    "title": "Skippy and the Mogres",
+    "qp": 0,
+    "requires": [],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Skippy_and_the_Mogres",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Skippy_and_the_Mogres/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2977,3195,0",
+    "mapLocation": {
+      "x": 2977,
+      "y": 3195,
+      "plane": 0,
+      "label": "Skippy"
+    },
+    "npc": {
+      "nameEn": "Skippy",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Skippy"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Bucket of water",
+        "amount": 1,
+        "howToGet": "Fill a bucket at any well, fountain or sink: you throw it over Skippy.",
+        "wikiItemId": 1929,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bucket_of_water.png"
+      },
+      {
+        "nameEn": "Nettle tea",
+        "amount": 1,
+        "howToGet": "Use nettles (picked in gloves) on a bowl of water and cook it on a range.",
+        "wikiItemId": 4239,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Nettle_tea.png"
+      },
+      {
+        "nameEn": "Hangover cure",
+        "amount": 1,
+        "howToGet": "Make it: use chocolate dust on a bucket of milk, then snape grass on the chocolatey milk (the ingredients below).",
+        "wikiItemId": 1504,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Hangover_cure.png"
+      },
+      {
+        "nameEn": "Chocolate dust",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or grind a chocolate bar with a knife or pestle and mortar.",
+        "wikiItemId": 1975,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Chocolate_dust.png"
+      },
+      {
+        "nameEn": "Bucket of milk",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or milk a dairy cow with a bucket.",
+        "wikiItemId": 1927,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bucket_of_milk.png"
+      },
+      {
+        "nameEn": "Snape grass",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange: it turns the chocolatey milk into the hangover cure.",
+        "wikiItemId": 231,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Snape_grass.png"
+      }
+    ],
+    "reward": "0 QP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Skippy"
+      ],
+      "dialogChoices": [
+        "Throw the water!"
+      ],
+      "highlightItems": [
+        "Bucket of water",
+        "Bowl of water",
+        "Nettles",
+        "Leather gloves",
+        "Chocolate dust",
+        "Bucket of milk",
+        "Snape grass"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Skippy and the Mogres"
+      }
+    }
   }
 ]

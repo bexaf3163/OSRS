@@ -92,7 +92,7 @@ describe('one coherent Fishing/Cooking handover', () => {
     const s = scenario({ fishing: 50, cooking: 35 }, { Grapes: { bank: 13 }, 'Jug of water': { bank: 13 } });
     expect(s.pick).toBe('ck-wine');
     expect(s.step.itemsRequired?.map(i => [i.nameEn, i.amount])).toEqual([['Grapes', 13], ['Jug of water', 13]]);
-    expect(s.payload.worldPoint?.label).toContain('Edgeville Bank');
+    expect(s.payload.worldPoint?.label).toContain('Grand Exchange');
     expect(s.step.how).toContain('12 seconds');
     expect(s.step.how).toContain('bad wine gives no XP');
   });

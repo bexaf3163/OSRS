@@ -34,6 +34,13 @@ describe('one quest fight with your kit', () => {
     expect(capped?.maxHit).toBeLessThan(estimateFight(strong)!.maxHit);
   });
 
+  it('a fight that allows no food warns only when it would need some', () => {
+    const leye = COMBAT_FOES.find((f) => f.name === 'Sir Leye')!;
+    const at = (lv: number) => estimateFight({ foe: leye, levels: { attack: lv, strength: lv, defence: lv, hitpoints: Math.max(10, lv) }, weapon: null, neck: null, armour: [], food: { name: 'Trout', heals: 7 } })!;
+    expect(at(40).assumed).not.toContain('no food is allowed, and the fight may need some');
+    expect(at(1).assumed).toContain('no food is allowed, and the fight may need some');
+  });
+
   it('every route quest fight the table knows has a free version', () => {
     for (const n of ['Count Draynor', 'Ithoi the Navigator', 'Brutus', 'Melzar the Mad', 'Lesser demon', 'Elvarg', 'Black Knight', 'Ancient Guardian']) {
       expect(foe(n), n).toBeTruthy();

@@ -95073,6 +95073,1030 @@
      ]
     }
    ]
+  },
+  "S9-70": {
+   "var": [
+    "varbit",
+    657
+   ],
+   "route": [
+    {
+     "title": "Walkthrough",
+     "steps": [
+      "Bank every item, worn ones too: the test rooms allow no items, food or potions.",
+      "Speak to Sir Amik Varze on the 2nd floor of the western section of the White Knights' Castle. Dialogue: \"Yes please\".",
+      "Speak to Sir Tiffy Cashien in Falador Park to begin the test. Dialogue: \"Yes, let's go!\".",
+      "5 of the following 7 rooms come in a random order; Sir Kuam's fight with Sir Leye is always one of them. A Hardcore Ironman who dies to him loses that status.",
+      "Sir Kuam Ferentse: take the steel warhammer in the room and defeat Sir Leye (level 20, max hit 3); prayer is allowed, food is not.",
+      "Lady Table: look at the statues for about 10 seconds, then pick the one that was added (its colour and weapon are new).",
+      "Sir Ren Itchood: ask for the clue to the door; the code is the first letter of each sentence.",
+      "Sir Tinley: left-click him, finish the conversation, then press nothing until he speaks to you again.",
+      "Sir Spishyus: cross with the chicken; bring the grain and take the chicken back; bring the fox; then fetch the chicken. Unequip each one on the far side.",
+      "Ms. Hynn Terprett: answer her riddle: Fed to wolves, Bucket A (32 degrees), 0, or Three False.",
+      "Miss Cheevers: take the vials from the shelves, the knife, cake tin and gypsum, and use the spade, cupric sulfate and a vial on the first door; on the second, mix the vial, gypsum and tin ore powders in the tin, cool it, heat it on the bunsen burner and cut the key free.",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Climb up the stairs to the first floor on the Falador Castle.",
+       "s": "Climb up the stairs to the first floor on the Falador Castle.",
+       "k": "climbBottomSteps",
+       "at": [
+        2955,
+        3339,
+        0
+       ],
+       "hl": {
+        "obj": [
+         24072
+        ]
+       }
+      },
+      {
+       "t": "Climb up the stairs to talk to Sir Amik Varze.",
+       "s": "Climb up the stairs to talk to Sir Amik Varze.",
+       "k": "climbSecondSteps",
+       "at": [
+        2961,
+        3339,
+        1
+       ],
+       "hl": {
+        "obj": [
+         24072
+        ]
+       }
+      },
+      {
+       "t": "Talk to Sir Amik Varze on the 2nd floor of the White Knights' Castle and agree to be tested.",
+       "s": "Talk to Sir Amik Varze on the 2nd floor; agree to be tested.",
+       "k": "talkToSirAmikVarze",
+       "hl": {
+        "npc": [
+         4771
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 1,
+     "do": [
+      {
+       "t": "Climb down the stairs from the second floor.",
+       "s": "Climb down the stairs from the second floor.",
+       "k": "climbDownSecondFloorStaircase",
+       "at": [
+        2960,
+        3339,
+        2
+       ],
+       "hl": {
+        "obj": [
+         24074
+        ]
+       }
+      },
+      {
+       "t": "Climb down the stairs from the first floor.",
+       "s": "Climb down the stairs from the first floor.",
+       "k": "climbDownfirstFloorStaircase",
+       "at": [
+        2955,
+        3338,
+        1
+       ],
+       "hl": {
+        "obj": [
+         24074
+        ]
+       }
+      },
+      {
+       "t": "Talk to Sir Tiffy Cashien in Falador Park.",
+       "s": "Talk to Sir Tiffy Cashien in Falador Park.",
+       "k": "talkToSirTiffy",
+       "at": [
+        2997,
+        3373,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4687
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  "S9-71": {
+   "var": [
+    "varbit",
+    1051
+   ],
+   "route": [
+    {
+     "title": "Tiffy/Amik",
+     "steps": [
+      "Speak with Sir Tiffy Cashien in Falador Park. Dialogue: \"Do you have any jobs for me yet?\", \"Yes, I'm interested.\", \"Ask about the Wanted! Quest\", \"How will all that help?\"",
+      "Go talk to Sir Amik Varze in the White Knights' Castle on the west side of the . Dialogue: \"No, not right now...\"",
+      "Report back to Sir Tiffy. Dialogue: \"Ask about the Wanted! Quest\"",
+      "Head back to Sir Amik and talk to him again. Dialogue: \"Sure, I'll help you!\"",
+      "Report once more to Tiffy. Dialogue: \"Ask about the Wanted! Quest\"",
+      "Use the \"contact\" option on the Commorb. Dialogue: \"Current Assignment\""
+     ]
+    },
+    {
+     "title": "Daquarius",
+     "steps": [
+      "Head over to Taverley Dungeon.",
+      "Follow the dungeon north, then east and then south, down to the Black Knights' Base.",
+      "Talk to Lord Daquarius in the south-western most room.",
+      "Kill a level 33 Black Knight; Daquarius will automatically speak to you once a knight is killed. You must finish this dialogue before speaking to him again!",
+      "Talk to Lord Daquarius again."
+     ]
+    },
+    {
+     "title": "Mage of Zamorak",
+     "steps": [
+      "Talk to the Mage of Zamorak Dialogue: \"Solus Dellagar\" (or Dialogue: if Temple of the Eye is completed.) in Varrock at the Altar of Chaos.",
+      "Speak to him again to give him the 20 rune or pure essence. Dialogue: \"Solus Dellagar\""
+     ]
+    },
+    {
+     "title": "Hunt for Solus",
+     "steps": [
+      "Head to Canifis and Savant will call you. (fairy ring )",
+      "Use the \"scan\" option of the Commorb near the bank in Canifis to unveil Solus Dellagar.",
+      "Have a look at the item list in the table below to find Solus Dellagar's location. Scan with the Commorb at the location."
+     ]
+    },
+    {
+     "title": "Final Battle",
+     "steps": [
+      "Head to the rune essence mine by talking to one of the teleporting mages.",
+      "Kill Solus.",
+      "Head back to Falador and talk to Sir Amik Varze in the White Knights' Castle.",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Talk to Sir Tiffy Cashien in Falador Park.",
+       "s": "Talk to Sir Tiffy Cashien in Falador Park.",
+       "k": "talkToSirTiffy1",
+       "at": [
+        2997,
+        3373,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4687
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 1,
+     "do": [
+      {
+       "t": "Talk to Sir Tiffy Cashien in Falador Park.",
+       "s": "Talk to Sir Tiffy Cashien in Falador Park.",
+       "k": "talkToSirTiffy1",
+       "at": [
+        2997,
+        3373,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4687
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 2,
+     "do": [
+      {
+       "t": "Talk to Sir Tiffy Cashien in Falador Park.",
+       "s": "Talk to Sir Tiffy Cashien in Falador Park.",
+       "k": "talkToSirTiffy1",
+       "at": [
+        2997,
+        3373,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4687
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 3,
+     "do": [
+      {
+       "t": "Climb to the second floor of the White Knights' castle.",
+       "s": "Climb to the second floor of the White Knights' castle.",
+       "k": "climbToWhiteKnightsCastleF1",
+       "at": [
+        2955,
+        3339,
+        0
+       ],
+       "hl": {
+        "obj": [
+         24072
+        ]
+       }
+      },
+      {
+       "t": "Climb to the second floor of the White Knights' castle.",
+       "s": "Climb to the second floor of the White Knights' castle.",
+       "k": "climbToWhiteKnightsCastleF2",
+       "at": [
+        2961,
+        3339,
+        1
+       ],
+       "hl": {
+        "obj": [
+         24072
+        ]
+       }
+      },
+      {
+       "t": "Talk to Sir Amik Varze.",
+       "s": "Talk to Sir Amik Varze.",
+       "k": "talkToSirAmik1",
+       "hl": {
+        "npc": [
+         4771
+        ]
+       }
+      },
+      {
+       "t": "Talk to Sir Tiffy Cashien about your new job as a Squire in Falador Park.",
+       "s": "Talk to Sir Tiffy in Falador Park about your new job as a Squire.",
+       "k": "talkToSirTiffyAfterBecomingSquire",
+       "at": [
+        2997,
+        3373,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4687
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 4,
+     "do": [
+      {
+       "t": "Return to Sir Tiffy Cashien in Falador Park.",
+       "s": "Return to Sir Tiffy Cashien in Falador Park.",
+       "k": "talkToSirTiffy2",
+       "at": [
+        2997,
+        3373,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4687
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 5,
+     "do": [
+      {
+       "t": "Climb to the second floor of the White Knights' castle.",
+       "s": "Climb to the second floor of the White Knights' castle.",
+       "k": "climbToWhiteKnightsCastleF1",
+       "at": [
+        2955,
+        3339,
+        0
+       ],
+       "hl": {
+        "obj": [
+         24072
+        ]
+       }
+      },
+      {
+       "t": "Climb to the second floor of the White Knights' castle.",
+       "s": "Climb to the second floor of the White Knights' castle.",
+       "k": "climbToWhiteKnightsCastleF2",
+       "at": [
+        2961,
+        3339,
+        1
+       ],
+       "hl": {
+        "obj": [
+         24072
+        ]
+       }
+      },
+      {
+       "t": "Talk to Sir Amik Varze again.",
+       "s": "Talk to Sir Amik Varze again.",
+       "k": "talkToSirAmik2",
+       "hl": {
+        "npc": [
+         4771
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 6,
+     "do": [
+      {
+       "t": "Report back to Sir Tiffy Cashien in Falador Park.",
+       "s": "Report back to Sir Tiffy Cashien in Falador Park.",
+       "k": "talkToSirTiffy3",
+       "at": [
+        2997,
+        3373,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4687
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 7,
+     "do": [
+      {
+       "t": "Get a Commorb from Sir Tiffy Cashien in Falador Park.",
+       "s": "Get a Commorb from Sir Tiffy Cashien in Falador Park.",
+       "k": "getCommorbFromSirTiffy",
+       "at": [
+        2997,
+        3373,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4687
+        ]
+       }
+      },
+      {
+       "t": "Get a Commorb from Sir Tiffy Cashien in Falador Park.",
+       "s": "Get a Commorb from Sir Tiffy Cashien in Falador Park.",
+       "k": "getCommorbWithGp",
+       "at": [
+        2997,
+        3373,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4687
+        ]
+       }
+      },
+      {
+       "t": "Get a Commorb from Sir Tiffy Cashien in Falador Park.",
+       "s": "Get a Commorb from Sir Tiffy Cashien in Falador Park.",
+       "k": "getCommorbWithComponents",
+       "at": [
+        2997,
+        3373,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4687
+        ]
+       }
+      },
+      {
+       "t": "Get a Commorb from Sir Tiffy Cashien in Falador Park.",
+       "s": "Get a Commorb from Sir Tiffy Cashien in Falador Park.",
+       "k": "doNotGetCommorbWithGp",
+       "at": [
+        2997,
+        3373,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4687
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 8,
+     "do": [
+      {
+       "t": "Right-click the Commorb and select 'contact' to contact Savant.",
+       "s": "Right-click the Commorb and select 'contact' to contact Savant.",
+       "k": "talkToSavantAfterGettingCommorb"
+      },
+      {
+       "t": "Enter Taverley Dungeon.",
+       "s": "Enter Taverley Dungeon.",
+       "k": "enterTaverleyDungeon",
+       "at": [
+        2884,
+        3397,
+        0
+       ],
+       "hl": {
+        "obj": [
+         16680
+        ]
+       }
+      },
+      {
+       "t": "Talk to Lord Daquarius in Taverley Dungeon.",
+       "s": "Talk to Lord Daquarius in Taverley Dungeon.",
+       "k": "talkToLordDaquarius",
+       "at": [
+        2891,
+        9681,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4929
+        ]
+       }
+      },
+      {
+       "t": "Go to the Black Knights' Base in Taverley Dungeon.",
+       "s": "Go to the Black Knights' Base in Taverley Dungeon.",
+       "k": "goToBlackKnightsBase",
+       "at": [
+        2896,
+        9681,
+        0
+       ]
+      },
+      {
+       "t": "Kill a Black Knight near Daquarius.",
+       "s": "Kill a Black Knight near Daquarius.",
+       "k": "killBlackKnight",
+       "at": [
+        2891,
+        9681,
+        0
+       ],
+       "hl": {
+        "npc": [
+         516
+        ]
+       }
+      },
+      {
+       "t": "Talk to Lord Daquarius in Taverley Dungeon again.",
+       "s": "Talk to Lord Daquarius in Taverley Dungeon again.",
+       "k": "talkToIntimidatedLordDaquarius",
+       "at": [
+        2891,
+        9681,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4929
+        ]
+       }
+      },
+      {
+       "t": "Talk to the Mage of Zamorak in the wilderness just north of Edgeville.",
+       "s": "Talk to the Mage of Zamorak in the wilderness just north of Edgeville.",
+       "k": "talkToMageOfZamorakInWilderness",
+       "at": [
+        3106,
+        3558,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2580
+        ]
+       }
+      },
+      {
+       "t": "Talk to the Mage of Zamorak in south east Varrock.",
+       "s": "Talk to the Mage of Zamorak in south east Varrock.",
+       "k": "talkToMageOfZamorak",
+       "at": [
+        3258,
+        3388,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2582
+        ]
+       }
+      },
+      {
+       "t": "Bring the 20 rune or pure essence to the Mage of Zamorak in Varrock.",
+       "s": "Bring the 20 rune or pure essence to the Mage of Zamorak in Varrock.",
+       "k": "giveEssenceToMageOfZamorak",
+       "at": [
+        3258,
+        3388,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2582
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 9,
+     "do": [
+      {
+       "t": "Go to Canifis. Finish the conversation when Savant calls you. If you accidentally exit this conversation, move away and enter Canifis again.",
+       "s": "Go to Canifis and finish the talk with Savant; if it breaks, re-enter.",
+       "k": "chaseToCanifis",
+       "at": [
+        3485,
+        3481,
+        0
+       ]
+      },
+      {
+       "t": "Finish the conversation with Savant. Move out of Canifis again first to trigger it again if needed.",
+       "s": "Leave Canifis and come back to make Savant call you again.",
+       "k": "moveOutOfCanifisAgain",
+       "at": [
+        3450,
+        3488,
+        0
+       ]
+      },
+      {
+       "t": "Go to Canifis, and scan with your Commorb there until you find Solus.",
+       "s": "Go to Canifis, and scan with your Commorb there until you find Solus.",
+       "k": "enterCanifis",
+       "at": [
+        3485,
+        3481,
+        0
+       ]
+      },
+      {
+       "t": "Use the 'scan' option on the Commorb.",
+       "s": "Use the 'scan' option on the Commorb.",
+       "k": "scanWithCommorb"
+      },
+      {
+       "t": "Enter the Lumbridge Swamp Caves. Use a Games Necklace teleport to Tears of Guthix for a faster route.",
+       "s": "Enter the Lumbridge Swamp Caves with your lit lantern.",
+       "k": "goDownToLumbridgeSwampCaves",
+       "at": [
+        3169,
+        3172,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5947
+        ]
+       }
+      },
+      {
+       "t": "Enter the Lumbridge Swamp Caves. Use a Games Necklace teleport to Tears of Guthix for a faster route.",
+       "s": "Enter the Lumbridge Swamp Caves with your lit lantern.",
+       "k": "goDownToLumbridgeSwampCavesPlacedRope",
+       "at": [
+        3169,
+        3172,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5947
+        ]
+       }
+      },
+      {
+       "t": "Go to the point indicated in the Lumbridge Swamp Caves.",
+       "s": "Go to the point indicated in the Lumbridge Swamp Caves.",
+       "k": "goToEndOfLumbridgeSwampCaves",
+       "at": [
+        3221,
+        9550,
+        0
+       ]
+      },
+      {
+       "t": "Enter the Lumbridge Swamp caves.",
+       "s": "Enter the Lumbridge Swamp caves.",
+       "k": "enterLumbridgeSwampCavesFromTears",
+       "at": [
+        3219,
+        9534,
+        2
+       ],
+       "hl": {
+        "obj": [
+         6658
+        ]
+       }
+      },
+      {
+       "t": "Go to the pub in Yanille.",
+       "s": "Go to the pub in Yanille.",
+       "k": "goToYanillePub",
+       "at": [
+        2551,
+        3081,
+        0
+       ]
+      },
+      {
+       "t": "Go to the Slayer Tower in Morytania.",
+       "s": "Go to the Slayer Tower in Morytania.",
+       "k": "goToSlayerTower",
+       "at": [
+        3428,
+        3537,
+        0
+       ]
+      },
+      {
+       "t": "Go to McGrubor's Wood. Fairy ring ALS.",
+       "s": "Go to McGrubor's Wood. Fairy ring ALS.",
+       "k": "goToMcGruborsWood",
+       "at": [
+        2662,
+        3500,
+        0
+       ],
+       "hl": {
+        "obj": [
+         51
+        ]
+       }
+      },
+      {
+       "t": "Go to Rellekka.",
+       "s": "Go to Rellekka.",
+       "k": "goToRellekka",
+       "at": [
+        2660,
+        3657,
+        0
+       ]
+      },
+      {
+       "t": "Go to Castle Wars.",
+       "s": "Go to Castle Wars.",
+       "k": "goToCastleWars",
+       "at": [
+        2441,
+        3090,
+        0
+       ]
+      },
+      {
+       "t": "Go to the pub in Brimhaven.",
+       "s": "Go to the pub in Brimhaven.",
+       "k": "goToBrimhavenPub",
+       "at": [
+        2795,
+        3162,
+        0
+       ]
+      },
+      {
+       "t": "Go to the Wizards' Tower.",
+       "s": "Go to the Wizards' Tower.",
+       "k": "goToWizardsTower",
+       "at": [
+        3109,
+        3164,
+        0
+       ]
+      },
+      {
+       "t": "Go to Ali Morrisane in Al Kharid.",
+       "s": "Go to Ali Morrisane in Al Kharid.",
+       "k": "goToAliMorrisane",
+       "at": [
+        3304,
+        3211,
+        0
+       ]
+      },
+      {
+       "t": "Go to the Shrine of Scorpius north of the Observatory.",
+       "s": "Go to the Shrine of Scorpius north of the Observatory.",
+       "k": "goToScorpiusShrine",
+       "at": [
+        2465,
+        3227,
+        0
+       ]
+      },
+      {
+       "t": "Go to the Grand Tree.",
+       "s": "Go to the Grand Tree.",
+       "k": "goToGrandTree",
+       "at": [
+        2465,
+        3496,
+        0
+       ]
+      },
+      {
+       "t": "Go to Ardougne market.",
+       "s": "Go to Ardougne market.",
+       "k": "goToArdougneMarket",
+       "at": [
+        2662,
+        3305,
+        0
+       ]
+      },
+      {
+       "t": "Go to goblin village north of Falador.",
+       "s": "Go to goblin village north of Falador.",
+       "k": "goToGoblinVillage",
+       "at": [
+        2956,
+        3506,
+        0
+       ]
+      },
+      {
+       "t": "Go to Draynor Market.",
+       "s": "Go to Draynor Market.",
+       "k": "goToDraynorMarket",
+       "at": [
+        3082,
+        3249,
+        0
+       ]
+      },
+      {
+       "t": "Go to Musa Point on Karamja.",
+       "s": "Go to Musa Point on Karamja.",
+       "k": "goToMusaPoint",
+       "at": [
+        2916,
+        3160,
+        0
+       ]
+      },
+      {
+       "t": "Go down to the Lumbridge Cellars.",
+       "s": "Go down to the Lumbridge Cellars.",
+       "k": "goDownToLumbridgeCellar",
+       "at": [
+        3209,
+        3216,
+        0
+       ],
+       "hl": {
+        "obj": [
+         14880
+        ]
+       }
+      },
+      {
+       "t": "Go to the mines near the entrance of Dorgesh Kaan.",
+       "s": "Go to the mines near the entrance of Dorgesh Kaan.",
+       "k": "goToDorgeshKaan",
+       "at": [
+        3317,
+        9612,
+        0
+       ]
+      },
+      {
+       "t": "Go to the Champions' Guild.",
+       "s": "Go to the Champions' Guild.",
+       "k": "goToChampionsGuild",
+       "at": [
+        3190,
+        3359,
+        0
+       ]
+      },
+      {
+       "t": "Go to the Rune Essence mine by talking to any of the NPCs that can teleport you there.",
+       "s": "Go to the Rune Essence mine through any mage who teleports there.",
+       "k": "goToEssenceMine",
+       "at": [
+        3253,
+        3402,
+        0
+       ],
+       "hl": {
+        "npc": [
+         10681
+        ]
+       }
+      },
+      {
+       "t": "Kill Solus Dellagar.",
+       "s": "Kill Solus Dellagar.",
+       "k": "killSolus",
+       "hl": {
+        "npc": [
+         4962
+        ]
+       }
+      },
+      {
+       "t": "Kill the Black Knight, or run away.",
+       "s": "Kill the Black Knight, or run away.",
+       "k": "killBlackKnightFromScan",
+       "hl": {
+        "npc": [
+         4959
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 10,
+     "do": [
+      {
+       "t": "Right click the Commorb and select the 'contact' option to get Solus' Hat from Savant.",
+       "s": "Right-click the Commorb, Contact, and get Solus' hat from Savant.",
+       "k": "getSolusHatFromSavant"
+      },
+      {
+       "t": "Climb to the second floor of the White Knights' castle.",
+       "s": "Climb to the second floor of the White Knights' castle.",
+       "k": "climbToWhiteKnightsCastleF1",
+       "at": [
+        2955,
+        3339,
+        0
+       ],
+       "hl": {
+        "obj": [
+         24072
+        ]
+       }
+      },
+      {
+       "t": "Climb to the second floor of the White Knights' castle.",
+       "s": "Climb to the second floor of the White Knights' castle.",
+       "k": "climbToWhiteKnightsCastleF2",
+       "at": [
+        2961,
+        3339,
+        1
+       ],
+       "hl": {
+        "obj": [
+         24072
+        ]
+       }
+      },
+      {
+       "t": "Talk to Sir Amik Varze at the White Knights' Castle in Falador.",
+       "s": "Talk to Sir Amik Varze at the White Knights' Castle in Falador.",
+       "k": "talkToSirAmikAfterSolusFight",
+       "hl": {
+        "npc": [
+         4771
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  "S9-72": {
+   "var": [
+    "varbit",
+    1344
+   ],
+   "route": [
+    {
+     "title": "Walkthrough",
+     "steps": [
+      "Right-click \"Sober-Up\" Skippy south-east of Rimmington (bucket of water required). Dialogue: \"Throw the water!\"",
+      "Right-click use the nettle tea on Skippy. (Do not accidentally drink it!) or simply talk to Skippy with the nettle tea in your inventory.",
+      "Talk to Skippy",
+      "Use the chocolate dust on the bucket of milk.",
+      "Use the snape grass on the chocolatey milk (Do not accidentally drink the milk!)",
+      "Use the hangover cure on Skippy.",
+      "Congratulations, miniquest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Right-click 'sober-up' on Skippy south west of Port Sarim.",
+       "s": "Right-click 'sober-up' on Skippy south west of Port Sarim.",
+       "k": "soberSkippy",
+       "at": [
+        2982,
+        3194,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2587
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 1,
+     "do": [
+      {
+       "t": "Talk to Skippy with the nettle tea in your inventory.",
+       "s": "Talk to Skippy with the nettle tea in your inventory.",
+       "k": "useTeaOnSkippy",
+       "at": [
+        2982,
+        3194,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2588
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 2,
+     "do": [
+      {
+       "t": "Use some chocolate dust on a bucket of milk.",
+       "s": "Use some chocolate dust on a bucket of milk.",
+       "k": "useChocolateDustOnMilk"
+      },
+      {
+       "t": "Use some snape grass on the chocolatey milk.",
+       "s": "Use some snape grass on the chocolatey milk.",
+       "k": "useSnapeGrassOnMilk"
+      },
+      {
+       "t": "Use the hangover cure on Skippy.",
+       "s": "Use the hangover cure on Skippy.",
+       "k": "useHangoverCure",
+       "at": [
+        2982,
+        3194,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2589
+        ]
+       }
+      }
+     ]
+    }
+   ]
   }
  }
 }

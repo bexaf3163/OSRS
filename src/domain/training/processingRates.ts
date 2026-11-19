@@ -20,7 +20,9 @@ import type { TrainingMethod, MethodNeed } from './trainingRouter';
 import type { Point } from '../travel/travel';
 
 type Facility = 'furnace' | 'anvil' | 'fire' | 'altar';
-interface Station { objectNames?: string[]; kind: Facility; label: string; place: Point & { label: string }; bankTiles?: number; bank?: string; members: boolean; entry?: Point; portal?: Point }
+interface Station { objectNames?: string[]; kind: Facility; label: string; place: Point & { label: string }; bankTiles?: number; bank?: string; members: boolean; entry?: Point; portal?: Point;
+  /** A fire the player lights by a bank (the Grand Exchange): one log and its lighting each trip, a tinderbox in the bag. */
+  lit?: boolean }
 import { actionsForQuantity, quantityForActions, type Consumption } from '../items/consumption';
 
 interface Recipe {
@@ -52,14 +54,16 @@ const MARGIN = 0.1;
 const BANK_VISIT: [number, number] = [3, 15];
 
 /** Where the recipe is made and the minutes of one bank trip from there: a station of its kind, or (no facility) by the bank itself. */
-function placesFor(r: Recipe, state: PlayerState, reg: ProcessingRegistry): { spot: RateSpot | null; trip: [number, number] }[] {
+function placesFor(r: Recipe, state: PlayerState, reg: ProcessingRegistry): { spot: RateSpot | null; trip: [number, number]; lit?: boolean }[] {
   if (!r.facility) return [{ spot: null, trip: tripMinutes(0, 0, BANK_VISIT) }];
-  return reg.stations.filter((s) => s.kind === r.facility && (!r.station || r.station === s.label) && !(s.members && state.mode !== 'members')).flatMap((s) => {
+  return reg.stations.filter((s) => s.kind === r.facility && (!r.station || r.station === s.label) && !(s.members && state.mode !== 'members')
+    // An own fire only for a player who holds a tinderbox: the plan never buys one just to skip a walk, and owned food stays first.
+    && !(s.lit && !((heldOf(state, 'Tinderbox').total ?? 0) > 0))).flatMap((s) => {
     const walk = s.bankTiles !== undefined ? { minutes: tripMinutes(s.bankTiles, 0, BANK_VISIT), bank: undefined } : s.bank ? bankTrip({ place: s.place, bank: s.bank,
       ...(s.entry && s.portal ? { waypoints: [s.entry, s.portal, s.place] } : {}) }, BANK_VISIT) : null;
     if (!walk) return [];
     return [{ spot: { label: s.label, place: s.place, ...(s.objectNames?.length ? { objectNames: [...s.objectNames] } : {}), how: 'bank' as const, ...(walk.bank ? { bank: walk.bank.label } : {}),
-      ...(s.entry ? { waypoints: [s.entry, s.place] } : {}) }, trip: walk.minutes }];
+      ...(s.entry ? { waypoints: [s.entry, s.place] } : {}) }, trip: walk.minutes, ...(s.lit ? { lit: true } : {}) }];
   });
 }
 
@@ -92,7 +96,7 @@ function mixableRecipe(r: Recipe, method: TrainingMethod, ids: readonly string[]
   return { ...r, inputs: [{ ...r.inputs[0], name: need.name, anyOf: names.filter(n => n !== need.name) }] };
 }
 
-function recipeBag(r: Recipe, state: PlayerState, market: Market, method?: TrainingMethod) {
+function recipeBag(r: Recipe, state: PlayerState, market: Market, method?: TrainingMethod, lit = false) {
   const substituted = r.inputs.filter((i) => {
     if (!i.staff) return false;
     const staff = gearPieceByName(i.staff);
@@ -117,7 +121,7 @@ function recipeBag(r: Recipe, state: PlayerState, market: Market, method?: Train
     : { type: 'item', name: r.access.carried, count: 1, anyOf: [r.access.equipped] } : null;
   // The bag: a slot for each tool and each stackable material, the rest for the materials one action uses.
   const perAction = inputs.filter((i) => !i.stacks).reduce((a, i) => a + i.qty, 0);
-  const free = BAG - r.tools.length - inputs.filter((i) => i.stacks).length - (r.access && !wearsAccess ? 1 : 0);
+  const free = BAG - r.tools.length - (lit ? 2 : 0) - inputs.filter((i) => i.stacks).length - (r.access && !wearsAccess ? 1 : 0);
   const planned = inputs.flatMap((i) => {
     const n = method?.needs?.find((n) => n.type === 'item' && (n.name === i.name || n.anyOf?.includes(i.name) || i.anyOf?.includes(n.name)));
     return n?.type === 'item' && n.count !== undefined && n.count > 0 ? [actionsForQuantity(i, n.count)] : [];
@@ -125,6 +129,7 @@ function recipeBag(r: Recipe, state: PlayerState, market: Market, method?: Train
   const capacity = Math.min(r.batchSize ?? Infinity, ...planned, perAction > 0 ? Math.floor(free / perAction) : free);
   const needsAt = (actions: number): MethodNeed[] => [
     ...r.tools.map(name => ({ type: 'item' as const, name, count: 1 })),
+    ...(lit ? [{ type: 'item' as const, name: 'Tinderbox', count: 1 }, { type: 'item' as const, name: 'Logs', count: 1 }] : []),
     ...(accessNeed ? [accessNeed] : []),
     ...substituted.map(i => ({ type: 'item' as const, name: i.staff!, count: 1, equip: true })),
     ...inputs.map(i => ({ type: 'item' as const, name: i.name, count: quantityForActions(i, actions), ...(i.anyOf?.length ? { anyOf: i.anyOf } : {}) })),
@@ -146,14 +151,21 @@ function recipeBag(r: Recipe, state: PlayerState, market: Market, method?: Train
   return { actions, inputs, needs: needsAt(actions), capped: actions < capacity };
 }
 
-function option(r: Recipe, at: { spot: RateSpot | null; trip: [number, number] }, level: number, state: PlayerState, market: Market, coinRate: number | null, method: TrainingMethod): Option | null {
-  const { actions, inputs, needs, capped } = recipeBag(r, state, market, method);
+/** Seconds to light one log for an own fire: 4 ticks an attempt at the normal log's Firemaking chance (data/processing.json fm-logs). */
+function lightSeconds(state: PlayerState): number {
+  const logs = PROCESSING.recipes.find((x) => x.id === 'fm-logs');
+  const chance = logs?.success ? skillChance(logs.success.low, logs.success.high, levelOf(state, 'firemaking') ?? 1) : 1;
+  return (logs?.ticks ?? 4) * TICK / Math.max(chance, 0.05);
+}
+
+function option(r: Recipe, at: { spot: RateSpot | null; trip: [number, number]; lit?: boolean }, level: number, state: PlayerState, market: Market, coinRate: number | null, method: TrainingMethod): Option | null {
+  const { actions, inputs, needs, capped } = recipeBag(r, state, market, method, at.lit);
   if (actions <= 0) return null;
   const chance = r.success ? skillChance(r.success.low, r.success.high, level) : r.chance ?? 1;
   // A retried action (a log that did not light) is tried again: the failures cost time, and every action ends in a success.
   const tries = r.retry ? 1 / chance : 1;
   const success = r.retry ? 1 : chance;
-  const seconds = (i: 0 | 1) => r.ticks * TICK * tries / (r.wholeBatch ? actions : 1) + (at.trip[i] * 60 + (r.batchWaitTicks ?? 0) * TICK) / actions;
+  const seconds = (i: 0 | 1) => r.ticks * TICK * tries / (r.wholeBatch ? actions : 1) + (at.trip[i] * 60 + (at.lit ? lightSeconds(state) : 0) + (r.batchWaitTicks ?? 0) * TICK) / actions;
   const perHour = (i: 0 | 1) => 3600 / seconds(i);
   const xph: [number, number] = [(r.xp * success * perHour(1)) / (1 + MARGIN), r.xp * success * perHour(0)];
   const done = (perHour(0) + perHour(1)) / 2;
@@ -165,7 +177,9 @@ function option(r: Recipe, at: { spot: RateSpot | null; trip: [number, number] }
   const sale = r.output ? dropValue(r.output.name, market.prices, market.restriction) : 0;
   // A product the trade rules keep from being sold is worth nothing to sell; one with no price is unknown, and then so are the coins.
   const value = sale ?? (market.restriction === 'RESTRICTED' && isRestrictedItem(r.output!.name) ? 0 : null);
-  const costPerHour = each === null || value === null ? null : each * done;
+  // An own fire burns one log a trip.
+  const logPrice = at.lit ? supplyPrice('Logs', market.prices, state.mode) : 0;
+  const costPerHour = each === null || value === null || logPrice === null ? null : each * done + logPrice * done / actions;
   // The product's value is shown only with its materials' cost: a gain without the cost would read as profit.
   const outputQty = (r.output?.qty ?? 0) * (r.multiplierEvery ? 1 + Math.floor(level / r.multiplierEvery) : 1);
   const lootPerHour = costPerHour === null || !r.output ? 0 : value! * outputQty * success * done;
@@ -244,7 +258,7 @@ export function processPace(product: string, near: Point, state: PlayerState, re
   if (level === undefined || level < r.level) return null;
   if (r.requires?.some((q) => (levelOf(state, q.skill) ?? 0) < q.level)) return null;
   const station = r.facility
-    ? reg.stations.filter((s) => s.kind === r.facility && (!r.station || r.station === s.label) && !(s.members && state.mode !== 'members') && s.place.plane === near.plane)
+    ? reg.stations.filter((s) => s.kind === r.facility && (!r.station || r.station === s.label) && !(s.members && state.mode !== 'members') && !s.lit && s.place.plane === near.plane)
       .map((s) => ({ s, far: Math.max(Math.abs(s.place.x - near.x), Math.abs(s.place.y - near.y)) })).filter((x) => x.far <= SAME_PLACE)
       .sort((a, b) => a.far - b.far)[0]?.s ?? null
     : null;

@@ -2797,6 +2797,50 @@
       "xpBonus": -97
     },
     {
+      "name": "Sir Leye",
+      "combat": 20,
+      "members": true,
+      "hitpoints": 20,
+      "attackLevel": 18,
+      "strengthLevel": 18,
+      "defenceLevel": 15,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "crush",
+      "maxHit": 3,
+      "speedTicks": 5,
+      "aggressive": true
+    },
+    {
+      "name": "Black Knight (Wanted!)",
+      "combat": 32,
+      "members": true,
+      "hitpoints": 42,
+      "attackLevel": 25,
+      "strengthLevel": 25,
+      "defenceLevel": 25,
+      "magicLevel": 1,
+      "attackBonus": 18,
+      "defence": {
+        "stab": 73,
+        "slash": 76,
+        "crush": 70,
+        "magic": -11,
+        "ranged": 72
+      },
+      "attackStyle": "slash",
+      "maxHit": 4,
+      "speedTicks": 5,
+      "aggressive": true
+    },
+    {
       "name": "Cow",
       "version": "1",
       "combat": 2,

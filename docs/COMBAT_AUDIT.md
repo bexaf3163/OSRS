@@ -4,7 +4,7 @@ Written by `tests/combatAudit.test.ts` from `src/data/authored/combatAudit.json`
 
 Every stage of the route where the player fights or can be attacked, checked against the route text, the quest stage lines (Quest Helper), the OSRS Wiki infoboxes in combatFoes.json and the danger zones. The rule for a fight the quest cannot go on without: its food is a required item (readiness and the game check it before leaving), the app estimates it with the player's kit where it has the opponent's numbers, and an unread kit or bag is reported as not checked, never as ready.
 
-76 stages: 48 retained, 27 revised, 0 with a branch, 1 deferred.
+78 stages: 50 retained, 27 revised, 0 with a branch, 1 deferred.
 
 | Step | Kind | Mandatory | Opponents | Method | Estimate | Food in the item list | Decision |
 |---|---|---|---|---|---|---|---|
@@ -84,6 +84,8 @@ Every stage of the route where the player fights or can be attacked, checked aga
 | S9-66 Underground Pass | quest-fight | yes | Sir Jerro (62), Sir Carl (62), Sir Harry (62), Doomion (91), Holthion (91), Othainian (91), Kalrag (89), Disciple of Iban (13) | melee | Sir Jerro, Sir Carl, Sir Harry, Doomion, Holthion, Othainian, Kalrag, Disciple of Iban | Lobster 20 | Retain |
 | S9-68 Regicide | quest-fight | yes | Tyras guard (110) | safespot | Tyras guard | Lobster 10 | Retain |
 | S9-69 Roving Elves | quest-fight | yes | Moss Guardian (84) | melee | Moss Guardian | Lobster 12 | Retain |
+| S9-70 Recruitment Drive | quest-fight | yes | Sir Leye (20) | melee | Sir Leye | - | Retain |
+| S9-71 Wanted! | quest-fight | yes | Black Knight (Wanted!) (32) | melee | Black Knight (Wanted!) | Lobster 4 | Retain |
 
 ## S1-06 The Restless Ghost
 
@@ -1818,4 +1820,56 @@ Changed:
 Evidence:
 
 - OSRS Wiki Moss Guardian infobox, Glarial's Tomb restricted items and Roving Elves walkthrough, read 2026-11-19.
+
+## S9-70 Recruitment Drive
+
+**Retain.** Recruitment Drive: defeat Sir Leye (level 20, 20 hitpoints) in Sir Kuam's test room, with no armour, food or potions.
+
+Quest stage lines: 0.3, 0.4.
+
+Assumptions:
+
+- The test rooms allow no items, so the estimate fights him unarmed with no armour and no food (fightMechanics.json bare, noFood); the steel warhammer in the room only makes it faster.
+
+Problems:
+
+- If the fight needed food it could not be planned: the estimate flags that as unmodelled.
+
+Alternatives:
+
+- Prayer is allowed; the Wiki advises 25 Attack, Defence, Strength and Hitpoints.
+
+Changed:
+
+- 2.152.0: new quest; Sir Leye is fought bare-handed without food (fightMechanics.json).
+
+Evidence:
+
+- OSRS Wiki Sir Leye infobox and Recruitment Drive quick guide, read 2026-11-19.
+
+## S9-71 Wanted!
+
+**Retain.** Wanted!: kill a level 32 Black Knight in Taverley Dungeon for Lord Daquarius, then Solus Dellagar (40 hitpoints, max hit 4) in the Rune Essence mine.
+
+Quest stage lines: 1.3, 4.1.
+
+Assumptions:
+
+- Four lobsters cover both fights; the Black Knight sets the kit.
+
+Problems:
+
+- Solus has no combat level and a blank attack bonus on the Wiki, so he is not estimated: 40 hitpoints and a max hit of 4 make him weaker than the knight.
+
+Alternatives:
+
+- Any melee kit that beats the knight.
+
+Changed:
+
+- 2.152.0: new quest; the Black Knight is in combatFoes.json.
+
+Evidence:
+
+- OSRS Wiki Black Knight (Wanted!) and Solus Dellagar infoboxes, Wanted! walkthrough, read 2026-11-19.
 

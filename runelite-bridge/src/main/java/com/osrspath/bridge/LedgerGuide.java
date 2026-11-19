@@ -15,6 +15,7 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.TexturePaint;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Arc2D;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
@@ -146,16 +147,19 @@ final class LedgerGuide
 			warningTone);
 	}
 
+	/** The tab has nothing to show for this card (Now always has the step). */
+	static boolean empty(HudModel.Card c, int tab)
+	{
+		return tab == PREPARE ? c.getPrepare().isEmpty() : tab == NEXT ? c.getNext().isEmpty() : tab == ADVICE && c.adviceCount() == 0;
+	}
+
 	/** The tabs and the open tab's page, cut short (with a pointer to the side panel) when it would pass maxHeight. */
 	private static int page(List<Row> rows, HudModel.Card c, int tab, Graphics2D g, float scale, int width, int y, int maxHeight, FontMetrics fm,
 		FontMetrics sm, FontMetrics stm, Font body, Font small, Font step)
 	{
-		List<Integer> tabs = new ArrayList<>();
-		tabs.add(NOW);
-		if (!c.getPrepare().isEmpty()) tabs.add(PREPARE);
-		if (!c.getNext().isEmpty()) tabs.add(NEXT);
-		if (c.adviceCount() > 0) tabs.add(ADVICE);
-		int active = tabs.contains(tab) ? tab : NOW;
+		// Every tab stays, so the strip does not jump while a step's lists come and go (cooking empties and fills the bag); an empty one is faded and shows Now until it fills.
+		List<Integer> tabs = java.util.Arrays.asList(NOW, PREPARE, NEXT, ADVICE);
+		int active = tabs.contains(tab) && !empty(c, tab) ? tab : NOW;
 		Font tf = LedgerFont.label(10f * scale);
 		int th = Math.round(28 * scale), inner = width - 20, n = tabs.size();
 		// The open tab is wide enough for its icon, name and badge; the others share the rest and show their icon.
@@ -165,8 +169,8 @@ final class LedgerGuide
 		for (int k : tabs)
 		{
 			int tw = k == active ? activeW : restW;
-			rows.add(new Row(Part.TAB, new Rectangle(x, y, tw, th), x, Collections.singletonList(TABS[k]), badge(c, k), tf, k == active ? INK : GOLD,
-				tabIcon(k), k == active ? INK_SOFT : GOLD, k == active ? GuideList.Action.NONE : GuideList.Action.tab(k), TAB_HINTS[k]));
+			rows.add(new Row(Part.TAB, new Rectangle(x, y, tw, th), x, Collections.singletonList(TABS[k]), badge(c, k), tf, k == active ? INK : empty(c, k) ? FADED : GOLD,
+				tabIcon(k), k == active ? INK_SOFT : empty(c, k) ? FADED : GOLD, k == active ? GuideList.Action.NONE : GuideList.Action.tab(k), TAB_HINTS[k]));
 			x += tw;
 		}
 		y += th + 12;
@@ -276,6 +280,7 @@ final class LedgerGuide
 	private static Layout drawnLayout;
 	private static Row drawnHover;
 	private static int drawnOpacity;
+	private static double drawnScaleX = 1, drawnScaleY = 1;
 
 	/**
 	 * Draws the laid-out plaque from (0, 0), the button under the mouse highlighted. The leather, the gradients and the spaced labels cost
@@ -284,9 +289,13 @@ final class LedgerGuide
 	 */
 	static void paint(Graphics2D g, Layout l, Row hovered, int opacity)
 	{
-		if (drawn == null || l != drawnLayout || hovered != drawnHover || opacity != drawnOpacity)
+		// A scaled canvas (Windows display scaling, the client's UI scale) would stretch an image made at the layout's size and blur
+		// the text: the image is made at the screen's own pixels and copied without scaling.
+		AffineTransform t = g.getTransform();
+		double sx = t.getScaleX(), sy = t.getScaleY();
+		if (drawn == null || l != drawnLayout || hovered != drawnHover || opacity != drawnOpacity || sx != drawnScaleX || sy != drawnScaleY)
 		{
-			int w = l.getSize().width, h = l.getSize().height;
+			int w = (int) Math.ceil(l.getSize().width * sx), h = (int) Math.ceil(l.getSize().height * sy);
 			boolean reuse = drawn != null && drawn.getWidth() == w && drawn.getHeight() == h;
 			BufferedImage img = reuse ? drawn : new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
 			Graphics2D c = img.createGraphics();
@@ -298,6 +307,7 @@ final class LedgerGuide
 					c.fillRect(0, 0, w, h);
 					c.setComposite(AlphaComposite.SrcOver);
 				}
+				c.scale(sx, sy);
 				c.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 				c.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_OFF);
 				draw(c, l, hovered, opacity);
@@ -310,8 +320,19 @@ final class LedgerGuide
 			drawnLayout = l;
 			drawnHover = hovered;
 			drawnOpacity = opacity;
+			drawnScaleX = sx;
+			drawnScaleY = sy;
 		}
-		g.drawImage(drawn, 0, 0, null);
+		Graphics2D d = (Graphics2D) g.create();
+		try
+		{
+			d.setTransform(AffineTransform.getTranslateInstance(t.getTranslateX(), t.getTranslateY()));
+			d.drawImage(drawn, 0, 0, null);
+		}
+		finally
+		{
+			d.dispose();
+		}
 	}
 
 	private static void draw(Graphics2D g, Layout l, Row hovered, int opacity)

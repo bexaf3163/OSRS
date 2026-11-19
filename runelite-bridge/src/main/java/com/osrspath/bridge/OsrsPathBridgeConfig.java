@@ -118,6 +118,28 @@ public interface OsrsPathBridgeConfig extends Config
 		return false;
 	}
 
+	@ConfigItem(
+		keyName = "foldedCards",
+		name = "",
+		description = "The small cards folded to their title with a click on it (departure check, bulk list, shop window)",
+		hidden = true
+	)
+	default String foldedCards()
+	{
+		return "";
+	}
+
+	@ConfigItem(
+		keyName = "shopCardOffset",
+		name = "",
+		description = "How far the shop window card was moved with Alt+drag from its place beside the window: \"x,y\"",
+		hidden = true
+	)
+	default String shopCardOffset()
+	{
+		return "";
+	}
+
 	@Range(min = 20, max = 100)
 	@Units(Units.PERCENT)
 	@ConfigItem(

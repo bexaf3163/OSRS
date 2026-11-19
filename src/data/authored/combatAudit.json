@@ -2664,6 +2664,76 @@
       "decision": "retain",
       "changed": ["2.151.0: new quest; the Moss Guardian is fought bare-handed (fightMechanics.json bare)."],
       "evidence": ["OSRS Wiki Moss Guardian infobox, Glarial's Tomb restricted items and Roving Elves walkthrough, read 2026-11-19."]
+    },
+    {
+      "stepId": "S9-70",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "melee",
+      "objective": "Recruitment Drive: defeat Sir Leye (level 20, 20 hitpoints) in Sir Kuam's test room, with no armour, food or potions.",
+      "enemies": [
+        {
+          "name": "Sir Leye",
+          "level": 20,
+          "maxHit": 3,
+          "table": true
+        }
+      ],
+      "lines": [
+        "0.3",
+        "0.4"
+      ],
+      "assumptions": [
+        "The test rooms allow no items, so the estimate fights him unarmed with no armour and no food (fightMechanics.json bare, noFood); the steel warhammer in the room only makes it faster."
+      ],
+      "problems": [
+        "If the fight needed food it could not be planned: the estimate flags that as unmodelled."
+      ],
+      "alternatives": [
+        "Prayer is allowed; the Wiki advises 25 Attack, Defence, Strength and Hitpoints."
+      ],
+      "decision": "retain",
+      "changed": [
+        "2.152.0: new quest; Sir Leye is fought bare-handed without food (fightMechanics.json)."
+      ],
+      "evidence": [
+        "OSRS Wiki Sir Leye infobox and Recruitment Drive quick guide, read 2026-11-19."
+      ]
+    },
+    {
+      "stepId": "S9-71",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "melee",
+      "objective": "Wanted!: kill a level 32 Black Knight in Taverley Dungeon for Lord Daquarius, then Solus Dellagar (40 hitpoints, max hit 4) in the Rune Essence mine.",
+      "enemies": [
+        {
+          "name": "Black Knight (Wanted!)",
+          "level": 32,
+          "maxHit": 4,
+          "table": true
+        }
+      ],
+      "lines": [
+        "1.3",
+        "4.1"
+      ],
+      "assumptions": [
+        "Four lobsters cover both fights; the Black Knight sets the kit."
+      ],
+      "problems": [
+        "Solus has no combat level and a blank attack bonus on the Wiki, so he is not estimated: 40 hitpoints and a max hit of 4 make him weaker than the knight."
+      ],
+      "alternatives": [
+        "Any melee kit that beats the knight."
+      ],
+      "decision": "retain",
+      "changed": [
+        "2.152.0: new quest; the Black Knight is in combatFoes.json."
+      ],
+      "evidence": [
+        "OSRS Wiki Black Knight (Wanted!) and Solus Dellagar infoboxes, Wanted! walkthrough, read 2026-11-19."
+      ]
     }
   ]
 }

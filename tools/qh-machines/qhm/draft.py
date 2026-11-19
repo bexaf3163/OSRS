@@ -29,6 +29,7 @@ SUBQUESTS = {
     'Recipe for Disaster/Freeing the Mountain Dwarf': 'RECIPE_FOR_DISASTER_DWARF',
     'Recipe for Disaster/Freeing Pirate Pete': 'RECIPE_FOR_DISASTER_PIRATE_PETE',
     'Recipe for Disaster/Freeing Skrach Uglogwee': 'RECIPE_FOR_DISASTER_SKRACH_UGLOGWEE',
+    'Recipe for Disaster/Freeing the Lumbridge Guide': 'RECIPE_FOR_DISASTER_LUMBRIDGE_GUIDE',
 }
 
 

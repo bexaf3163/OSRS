@@ -187,6 +187,42 @@ public class LedgerGuideTest
 		assertTrue("even a low opacity setting keeps the plaque readable: " + fill, fill.getRed() < 60);
 	}
 
+	@Test
+	public void everyCardShowsAllFourTabs_soTheStripDoesNotJumpWhileListsComeAndGo()
+	{
+		for (java.util.Map.Entry<String, HudModel.Card> e : HudRenderTest.cards().entrySet())
+		{
+			OsrsPathGuideOverlay.Layout l = layout(e.getValue(), LedgerGuide.NOW, LedgerGuide.WIDTH, 1f, 2000);
+			long tabs = l.getRows().stream().filter(r -> r.getPart() == OsrsPathGuideOverlay.Part.TAB).count();
+			assertEquals(e.getKey(), 4, tabs);
+		}
+	}
+
+	@Test
+	public void onAScaledCanvasThePlaqueIsDrawnAtTheScreensPixelsNotStretched()
+	{
+		OsrsPathGuideOverlay.Layout l = layout(HudRenderTest.cards().get("training"), CLOSED, LedgerGuide.WIDTH, 1f, 2000);
+		BufferedImage img = new BufferedImage(l.getSize().width * 2, l.getSize().height * 2, BufferedImage.TYPE_INT_RGB);
+		Graphics2D g = img.createGraphics();
+		g.scale(2, 2);
+		LedgerGuide.paint(g, l, null, 0);
+		g.dispose();
+		// A stretched copy of the layout-size image fills every 2x2 block with one colour; drawn at the screen's pixels, the text edges split them.
+		int split = 0;
+		for (int y = 0; y + 1 < img.getHeight(); y += 2)
+		{
+			for (int x = 0; x + 1 < img.getWidth(); x += 2)
+			{
+				int c = img.getRGB(x, y);
+				if (img.getRGB(x + 1, y) != c || img.getRGB(x, y + 1) != c || img.getRGB(x + 1, y + 1) != c)
+				{
+					split++;
+				}
+			}
+		}
+		assertTrue("sharp at 200% scaling: " + split + " split blocks", split > 500);
+	}
+
 	static BufferedImage paint(OsrsPathGuideOverlay.Layout l, int opacity)
 	{
 		int m = 12;

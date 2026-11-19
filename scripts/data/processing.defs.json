@@ -50,6 +50,13 @@
       "kind": "altar",
       "page": "Body Altar",
       "bank": "Edgeville Bank"
+    },
+    {
+      "kind": "fire",
+      "page": "Fire",
+      "lit": true,
+      "bank": "Grand Exchange bank",
+      "bankTiles": 12
     }
   ],
   "recipes": [
@@ -831,7 +838,7 @@
       "name": "Thread",
       "page": "Thread",
       "uses": 5,
-      "evidence": "Each thread spool has 5 uses before it is consumed."
+      "evidence": "Each spool of thread can be used five times before it is consumed."
     }
   ]
 }

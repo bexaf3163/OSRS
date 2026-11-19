@@ -226,6 +226,8 @@ function rollFight(input: FightInput): FightEstimate | null {
   const threat = Object.values(THREATS).find((t) => t.page === foe.name);
   const extra = (threat?.hits ?? []).filter((h) => h.n > foe.maxHit && !covered.has(h.n)).map((h) => `${h.n}${h.label ? ` (${h.label})` : ''}`);
   if (extra.length) assumed.push(`its other attacks (${extra.join(', ')}) are not counted: the food is a lower bound`);
+  // A warning, not a gap, so the planner can still time the step.
+  if (mech?.noFood && food.high > 0) assumed.push('no food is allowed, and the fight may need some');
   const finisher = (mech?.finisher ?? []).filter((item) => !held(inp.carried, item));
   const unmodelled = [...extra.map(hit => `additional attack: ${hit}`),
     ...(finisher.length ? [`the killing blow needs ${finisher.join(' and ')} in the inventory, and this step does not carry ${finisher.length > 1 ? 'them' : 'it'}`] : []),

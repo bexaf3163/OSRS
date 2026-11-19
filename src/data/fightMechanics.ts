@@ -27,6 +27,8 @@ export interface FightMechanics {
   bare?: boolean;
   /** It lowers every combat level, Hitpoints included, to this before the fight (the Mourner's potion). */
   levelCap?: number;
+  /** The place allows no food (Recruitment Drive's test rooms): the fight must be won on Hitpoints alone. */
+  noFood?: boolean;
   facts: string[];
 }
 

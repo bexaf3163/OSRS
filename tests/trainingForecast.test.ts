@@ -47,6 +47,12 @@ describe('time follows the complete training path', () => {
     expect(a.path.map((l) => l.method.id)).toEqual(['early', 'unknown']);
     expect(a.time).toBeNull();
   });
+  it('takes a priced method over a newer one this state cannot price', () => {
+    const ms = [method('steady', 10, [500, 500], { suggestedFrom: 18 }), method('unknown', 15, null)];
+    const a = advice(ms, 12, 20);
+    expect(new Set(a.path.map((l) => l.method.id))).toEqual(new Set(['steady']));
+    expect(a.time).not.toBeNull();
+  });
   it('does not recommend a tool on savings from XP assigned to another method', () => {
     const ms = [method('early', 10, [1000, 1000], { upgrades: [{ tool: 'Better tool', price: 10, xph: [2000, 2000] }] }), method('later', 15, [10000, 10000])];
     const a = advice(ms, 14, 80);

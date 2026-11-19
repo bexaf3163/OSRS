@@ -88,7 +88,8 @@ describe('the mandatory fights are prepared before the danger', () => {
   const fought = fights.filter((e) => e.method === 'melee' || e.method === 'other');
 
   it('every one the player fights up close has its food as a required item, which readiness and the game check before leaving', () => {
-    for (const e of fought) expect(food(step(e.stepId)), e.stepId).toBeTruthy();
+    // A fight that allows no food (fightMechanics.json noFood) is won on Hitpoints alone.
+    for (const e of fought) if (!e.enemies.some((x) => FIGHT_MECHANICS[x.name]?.noFood)) expect(food(step(e.stepId)), e.stepId).toBeTruthy();
   });
 
   it('every melee one the app has numbers for is estimated with the player\'s kit', () => {

@@ -36,6 +36,7 @@ class GrandExchangeHelperOverlay extends OverlayPanel
 	private final OsrsPathBridgeConfig config;
 	private Object builtFor;
 	private Dimension last = new Dimension();
+	private int header;
 
 	@Inject
 	GrandExchangeHelperOverlay(Client client, OsrsPathBridgePlugin plugin, OsrsPathBridgeConfig config)
@@ -70,10 +71,13 @@ class GrandExchangeHelperOverlay extends OverlayPanel
 		Font font = OverlayText.font(g.getFont(), large ? Hud.LARGE : 1f);
 		g.setFont(font);
 		int width = Hud.panelWidth(this, standardWidth(large));
-		Object key = Arrays.asList(rows, extras, step == null ? null : step.getTitle(), config.hudOpacity(), font, width);
+		boolean folded = CardFold.folded(config.foldedCards(), CardFold.BULK);
+		FontMetrics fm = g.getFontMetrics(font);
+		header = OverlayText.PAD_TOP + OverlayText.wrap(title(rows, folded), fm, OverlayText.inner(width)).size() * fm.getHeight();
+		Object key = Arrays.asList(rows, extras, step == null ? null : step.getTitle(), config.hudOpacity(), font, width, folded);
 		if (!Objects.equals(key, builtFor))
 		{
-			build(panelComponent, rows, extras, step == null ? null : ShopWindow.stepId(plugin.getGuideView()), g.getFontMetrics(font), width, config.hudOpacity());
+			build(panelComponent, rows, extras, step == null ? null : ShopWindow.stepId(plugin.getGuideView()), fm, width, config.hudOpacity(), folded);
 			builtFor = key;
 		}
 		OverlayCard.paint(g, last.width, last.height, accent(rows), Math.max(config.hudOpacity(), 85));
@@ -111,14 +115,37 @@ class GrandExchangeHelperOverlay extends OverlayPanel
 	/** As above, with the step's purchases the list does not hold ({@link ExchangeView#extras}): they follow the rows as "Also for S3-08". */
 	static void build(PanelComponent panel, List<ShoppingPlan.Row> rows, List<String> extras, String stepId, FontMetrics fm, int width, int opacity)
 	{
+		build(panel, rows, extras, stepId, fm, width, opacity, false);
+	}
+
+	/** The title a click folds or opens (CardFold). */
+	static String title(List<ShoppingPlan.Row> rows, boolean folded)
+	{
+		long left = rows.stream().filter(r -> r.getState() != ShoppingPlan.RowState.HAVE).count();
+		return (left == 0 ? "Bulk list: have everything" : "Bulk list · buy " + left) + CardFold.mark(folded);
+	}
+
+	/** Where a click folds or opens the card; null before it is drawn. */
+	java.awt.Rectangle header()
+	{
+		java.awt.Rectangle b = getBounds();
+		return b == null || b.isEmpty() ? null : new java.awt.Rectangle(b.x, b.y, b.width, header);
+	}
+
+	static void build(PanelComponent panel, List<ShoppingPlan.Row> rows, List<String> extras, String stepId, FontMetrics fm, int width, int opacity, boolean folded)
+	{
 		int inner = OverlayText.inner(width);
 		List<LayoutableRenderableEntity> c = panel.getChildren();
 		c.clear();
 		panel.setPreferredSize(new Dimension(width, 0));
 		OverlayText.frame(panel, fm);
 		long left = rows.stream().filter(r -> r.getState() != ShoppingPlan.RowState.HAVE).count();
-		OverlayText.title(c, left == 0 ? "Bulk list: have everything" : "Bulk list · buy " + left,
+		OverlayText.title(c, title(rows, folded),
 			left == 0 ? Hud.GOOD : Hud.TITLE, fm, inner);
+		if (folded)
+		{
+			return;
+		}
 		c.add(new OverlayCard.Bar(progress(rows), left == 0 ? OverlayCard.GREEN : OverlayCard.GOLD));
 		// First what is left to buy: the finished ones go down.
 		List<ShoppingPlan.Row> ordered = rows.stream()
