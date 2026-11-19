@@ -3924,6 +3924,85 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Cabbage"
   },
   {
+    "id": 5324,
+    "nameEn": "Cabbage seed",
+    "examine": "A cabbage seed - plant in an allotment.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Cabbage_seed_1.png",
+    "value": 3,
+    "highAlch": 1,
+    "lowAlch": 1,
+    "buyLocations": [
+      {
+        "shopName": "Draynor Seed Market",
+        "location": "Draynor Village",
+        "owner": "Olivia",
+        "price": 3,
+        "stock": 5,
+        "members": true
+      },
+      {
+        "shopName": "Amelia's Seed Shop",
+        "location": "Farming Guild",
+        "owner": "Amelia",
+        "price": 3,
+        "stock": 5,
+        "members": true
+      },
+      {
+        "shopName": "Port Roberts Veg Stall",
+        "location": "Port Roberts",
+        "owner": "Marla",
+        "price": 3,
+        "stock": 5,
+        "members": true
+      }
+    ],
+    "dropSources": [
+      {
+        "monster": "Tortoise#No riders",
+        "combatLevel": null,
+        "rate": "10/128"
+      },
+      {
+        "monster": "Tortoise#With riders",
+        "combatLevel": null,
+        "rate": "10/128"
+      },
+      {
+        "monster": "White Knight#Level 42",
+        "combatLevel": null,
+        "rate": "1/25"
+      },
+      {
+        "monster": "Farmer#Members",
+        "combatLevel": null,
+        "rate": "1/37.9"
+      },
+      {
+        "monster": "Guard",
+        "combatLevel": 21,
+        "rate": "1/38"
+      },
+      {
+        "monster": "Hobgoblin#Unarmed",
+        "combatLevel": null,
+        "rate": "1/38"
+      },
+      {
+        "monster": "White Knight#Level 38",
+        "combatLevel": null,
+        "rate": "1/38"
+      },
+      {
+        "monster": "White Knight#Level 39",
+        "combatLevel": null,
+        "rate": "1/38"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Cabbage_seed"
+  },
+  {
     "id": 753,
     "nameEn": "Cadava berries",
     "examine": "Poisonous berries.",
@@ -3940,6 +4019,103 @@
       }
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Cadava_berries"
+  },
+  {
+    "id": 1887,
+    "nameEn": "Cake tin",
+    "examine": "Useful for baking cakes.",
+    "members": false,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Cake_tin.png",
+    "value": 10,
+    "highAlch": 6,
+    "lowAlch": 4,
+    "buyLocations": [
+      {
+        "shopName": "Karamja General Store",
+        "location": "Musa Point (Karamja)",
+        "owner": "Shop keeper",
+        "price": 11,
+        "stock": 2,
+        "members": false
+      },
+      {
+        "shopName": "Rimmington General Store",
+        "location": "Rimmington",
+        "owner": "Shop keeper (Rimmington)",
+        "price": 13,
+        "stock": 2,
+        "members": false
+      },
+      {
+        "shopName": "Falador General Store",
+        "location": "Falador",
+        "owner": "Shop keeper",
+        "price": 13,
+        "stock": 2,
+        "members": false
+      },
+      {
+        "shopName": "Lumbridge General Store",
+        "location": "Lumbridge",
+        "owner": "Shop keeper, Shop assistant",
+        "price": 13,
+        "stock": 2,
+        "members": false
+      },
+      {
+        "shopName": "Varrock General Store",
+        "location": "Varrock",
+        "owner": "Shop keeper",
+        "price": 13,
+        "stock": 2,
+        "members": false
+      },
+      {
+        "shopName": "Al Kharid General Store",
+        "location": "Al Kharid",
+        "owner": "Shop keeper",
+        "price": 13,
+        "stock": 2,
+        "members": false
+      },
+      {
+        "shopName": "Edgeville General Store",
+        "location": "Edgeville",
+        "owner": "Shop keeper",
+        "price": 13,
+        "stock": 2,
+        "members": false
+      },
+      {
+        "shopName": "Culinaromancer's Chest",
+        "location": "Lumbridge Castle basement",
+        "owner": "None",
+        "price": 10,
+        "stock": 50,
+        "members": true
+      },
+      {
+        "shopName": "Moon Clan General Store.",
+        "location": "Lunar Isle",
+        "owner": "Melana Moonlander",
+        "price": 10,
+        "stock": 2,
+        "members": true
+      },
+      {
+        "shopName": "Frenita's Cookery Shop.",
+        "location": "Yanille",
+        "owner": "Frenita",
+        "price": 10,
+        "stock": 2,
+        "members": true
+      }
+    ],
+    "freeSpawns": [
+      "Wilderness - western Ruins",
+      "Cooks' Guild (1st floor)"
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Cake_tin"
   },
   {
     "id": 36,
@@ -6755,6 +6931,99 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Feather"
   },
   {
+    "id": 5354,
+    "nameEn": "Filled plant pot",
+    "examine": "A plant pot filled with soil.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Filled_plant_pot.png",
+    "value": 1,
+    "highAlch": 1,
+    "lowAlch": 1,
+    "buyLocations": [
+      {
+        "shopName": "Vanessa's Farming shop.",
+        "location": "Catherby",
+        "owner": "Vanessa",
+        "price": 1,
+        "stock": 500,
+        "members": true
+      },
+      {
+        "shopName": "Richard's Farming shop.",
+        "location": "North of East Ardougne",
+        "owner": "Richard",
+        "price": 1,
+        "stock": 500,
+        "members": true
+      },
+      {
+        "shopName": "Sarah's Farming shop.",
+        "location": "South Falador Farm",
+        "owner": "Sarah",
+        "price": 1,
+        "stock": 500,
+        "members": true
+      },
+      {
+        "shopName": "Alice's Farming shop.",
+        "location": "Alice's farm",
+        "owner": "Alice",
+        "price": 1,
+        "stock": 500,
+        "members": true
+      },
+      {
+        "shopName": "Vannah's Farming Stall",
+        "location": "Hosidius",
+        "owner": "Vannah",
+        "price": 1,
+        "stock": 100,
+        "members": true
+      },
+      {
+        "shopName": "Allanna's Farming Shop",
+        "location": "Farming Guild",
+        "owner": "Allanna",
+        "price": 1,
+        "stock": 100,
+        "members": true
+      },
+      {
+        "shopName": "Branwen's Farming Shop",
+        "location": "Prifddinas",
+        "owner": "Branwen",
+        "price": 1,
+        "stock": 500,
+        "members": true
+      },
+      {
+        "shopName": "Agelus' Farm Shop",
+        "location": "Ortus Farm",
+        "owner": "Agelus",
+        "price": 1,
+        "stock": 30,
+        "members": true
+      },
+      {
+        "shopName": "Kastori Farming Supplies",
+        "location": "Kastori",
+        "owner": "Ameyalli",
+        "price": 1,
+        "stock": 100,
+        "members": true
+      },
+      {
+        "shopName": "Elder Reggle's Farming Shop",
+        "location": "The Great Conch",
+        "owner": "Elder Reggle",
+        "price": 1,
+        "stock": 30,
+        "members": true
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Filled_plant_pot"
+  },
+  {
     "id": 554,
     "nameEn": "Fire rune",
     "examine": "One of the 4 basic elemental Runes.",
@@ -7317,6 +7586,89 @@
     "highAlch": 18,
     "lowAlch": 12,
     "wikiUrl": "https://oldschool.runescape.wiki/w/Fruit_blast"
+  },
+  {
+    "id": 5325,
+    "nameEn": "Gardening trowel",
+    "examine": "Not suitable for archaeological digs.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Gardening_trowel.png",
+    "value": 12,
+    "highAlch": 7,
+    "lowAlch": 4,
+    "buyLocations": [
+      {
+        "shopName": "Lyra",
+        "location": "",
+        "price": 12,
+        "stock": "∞",
+        "members": false
+      },
+      {
+        "shopName": "Elstan",
+        "location": "",
+        "price": 12,
+        "stock": "∞",
+        "members": false
+      },
+      {
+        "shopName": "Bolongo",
+        "location": "",
+        "price": 12,
+        "stock": "∞",
+        "members": false
+      },
+      {
+        "shopName": "Dantaera",
+        "location": "",
+        "price": 12,
+        "stock": "∞",
+        "members": false
+      },
+      {
+        "shopName": "Ellena",
+        "location": "",
+        "price": 12,
+        "stock": "∞",
+        "members": false
+      },
+      {
+        "shopName": "Dreven",
+        "location": "",
+        "price": 12,
+        "stock": "∞",
+        "members": false
+      },
+      {
+        "shopName": "Frizzy Skernip",
+        "location": "",
+        "price": 12,
+        "stock": "∞",
+        "members": false
+      },
+      {
+        "shopName": "Fayeth",
+        "location": "",
+        "price": 12,
+        "stock": "∞",
+        "members": false
+      },
+      {
+        "shopName": "Heskel",
+        "location": "",
+        "price": 12,
+        "stock": "∞",
+        "members": false
+      },
+      {
+        "shopName": "Liliwen",
+        "location": "",
+        "price": 12,
+        "stock": "∞",
+        "members": false
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Gardening_trowel"
   },
   {
     "id": 1550,
@@ -10598,6 +10950,77 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Maple_shortbow"
   },
   {
+    "id": 5096,
+    "nameEn": "Marigold seed",
+    "examine": "A marigold seed - plant in a flower patch.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Marigold_seed_1.png",
+    "value": 2,
+    "highAlch": 1,
+    "lowAlch": 1,
+    "buyLocations": [
+      {
+        "shopName": "Draynor Seed Market",
+        "location": "Draynor Village",
+        "owner": "Olivia",
+        "price": 2,
+        "stock": 20,
+        "members": true
+      },
+      {
+        "shopName": "Amelia's Seed Shop",
+        "location": "Farming Guild",
+        "owner": "Amelia",
+        "price": 2,
+        "stock": 20,
+        "members": true
+      }
+    ],
+    "dropSources": [
+      {
+        "monster": "Obor#Members",
+        "combatLevel": null,
+        "rate": "1/173"
+      },
+      {
+        "monster": "Tortoise#With riders",
+        "combatLevel": null,
+        "rate": "1/256"
+      },
+      {
+        "monster": "Tortoise#No riders",
+        "combatLevel": null,
+        "rate": "1/433"
+      },
+      {
+        "monster": "Cockathrice",
+        "combatLevel": 89,
+        "rate": "1/137"
+      },
+      {
+        "monster": "Head Guard",
+        "combatLevel": 84,
+        "rate": "1/141"
+      },
+      {
+        "monster": "Black Knight Titan",
+        "combatLevel": 120,
+        "rate": "1/186"
+      },
+      {
+        "monster": "Vyrewatch",
+        "combatLevel": 87,
+        "rate": "1/2,197"
+      },
+      {
+        "monster": "Sergeant (Shayzien)",
+        "combatLevel": 84,
+        "rate": "1/141"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Marigold_seed"
+  },
+  {
     "id": 1542,
     "nameEn": "Maze key",
     "examine": "A key to Melzar's Maze (Used in the Dragon Slayer I quest).",
@@ -12148,6 +12571,85 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Onion"
   },
   {
+    "id": 5319,
+    "nameEn": "Onion seed",
+    "examine": "An onion seed - plant in an allotment.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Onion_seed_1.png",
+    "value": 3,
+    "highAlch": 1,
+    "lowAlch": 1,
+    "buyLocations": [
+      {
+        "shopName": "Draynor Seed Market",
+        "location": "Draynor Village",
+        "owner": "Olivia",
+        "price": 3,
+        "stock": 10,
+        "members": true
+      },
+      {
+        "shopName": "Amelia's Seed Shop",
+        "location": "Farming Guild",
+        "owner": "Amelia",
+        "price": 3,
+        "stock": 10,
+        "members": true
+      },
+      {
+        "shopName": "Port Roberts Veg Stall",
+        "location": "Port Roberts",
+        "owner": "Marla",
+        "price": 3,
+        "stock": 10,
+        "members": true
+      }
+    ],
+    "dropSources": [
+      {
+        "monster": "White Knight#Level 42",
+        "combatLevel": null,
+        "rate": "1/16"
+      },
+      {
+        "monster": "Farmer#Members",
+        "combatLevel": null,
+        "rate": "1/19"
+      },
+      {
+        "monster": "Guard",
+        "combatLevel": 21,
+        "rate": "1/25"
+      },
+      {
+        "monster": "Hobgoblin#Unarmed",
+        "combatLevel": null,
+        "rate": "1/25"
+      },
+      {
+        "monster": "White Knight#Level 38",
+        "combatLevel": null,
+        "rate": "1/25"
+      },
+      {
+        "monster": "White Knight#Level 39",
+        "combatLevel": null,
+        "rate": "1/25"
+      },
+      {
+        "monster": "Hill Giant",
+        "combatLevel": 28,
+        "rate": "1/25"
+      },
+      {
+        "monster": "Black Knight",
+        "combatLevel": 33,
+        "rate": "1/25"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Onion_seed"
+  },
+  {
     "id": 1609,
     "nameEn": "Opal",
     "examine": "A semi precious stone.",
@@ -12612,6 +13114,89 @@
       }
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Plank"
+  },
+  {
+    "id": 6036,
+    "nameEn": "Plant cure",
+    "examine": "Use this on plants to cure disease.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Plant_cure.png",
+    "value": 40,
+    "highAlch": 24,
+    "lowAlch": 16,
+    "buyLocations": [
+      {
+        "shopName": "Lyra",
+        "location": "",
+        "price": 40,
+        "stock": "∞",
+        "members": false
+      },
+      {
+        "shopName": "Elstan",
+        "location": "",
+        "price": 40,
+        "stock": "∞",
+        "members": false
+      },
+      {
+        "shopName": "Bolongo",
+        "location": "",
+        "price": 40,
+        "stock": "∞",
+        "members": false
+      },
+      {
+        "shopName": "Dantaera",
+        "location": "",
+        "price": 40,
+        "stock": "∞",
+        "members": false
+      },
+      {
+        "shopName": "Ellena",
+        "location": "",
+        "price": 40,
+        "stock": "∞",
+        "members": false
+      },
+      {
+        "shopName": "Dreven",
+        "location": "",
+        "price": 40,
+        "stock": "∞",
+        "members": false
+      },
+      {
+        "shopName": "Frizzy Skernip",
+        "location": "",
+        "price": 40,
+        "stock": "∞",
+        "members": false
+      },
+      {
+        "shopName": "Fayeth",
+        "location": "",
+        "price": 40,
+        "stock": "∞",
+        "members": false
+      },
+      {
+        "shopName": "Heskel",
+        "location": "",
+        "price": 40,
+        "stock": "∞",
+        "members": false
+      },
+      {
+        "shopName": "Liliwen",
+        "location": "",
+        "price": 40,
+        "stock": "∞",
+        "members": false
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Plant_cure"
   },
   {
     "id": 10496,
@@ -13152,6 +13737,99 @@
       }
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Pure_essence"
+  },
+  {
+    "id": 5341,
+    "nameEn": "Rake",
+    "examine": "Use this to clear weeds.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Rake.png",
+    "value": 6,
+    "highAlch": 3,
+    "lowAlch": 2,
+    "buyLocations": [
+      {
+        "shopName": "Lyra",
+        "location": "",
+        "price": 6,
+        "stock": "∞",
+        "members": false
+      },
+      {
+        "shopName": "Elstan",
+        "location": "",
+        "price": 6,
+        "stock": "∞",
+        "members": false
+      },
+      {
+        "shopName": "Bolongo",
+        "location": "",
+        "price": 6,
+        "stock": "∞",
+        "members": false
+      },
+      {
+        "shopName": "Dantaera",
+        "location": "",
+        "price": 6,
+        "stock": "∞",
+        "members": false
+      },
+      {
+        "shopName": "Ellena",
+        "location": "",
+        "price": 6,
+        "stock": "∞",
+        "members": false
+      },
+      {
+        "shopName": "Dreven",
+        "location": "",
+        "price": 6,
+        "stock": "∞",
+        "members": false
+      },
+      {
+        "shopName": "Frizzy Skernip",
+        "location": "",
+        "price": 6,
+        "stock": "∞",
+        "members": false
+      },
+      {
+        "shopName": "Fayeth",
+        "location": "",
+        "price": 6,
+        "stock": "∞",
+        "members": false
+      },
+      {
+        "shopName": "Heskel",
+        "location": "",
+        "price": 6,
+        "stock": "∞",
+        "members": false
+      },
+      {
+        "shopName": "Liliwen",
+        "location": "",
+        "price": 6,
+        "stock": "∞",
+        "members": false
+      }
+    ],
+    "freeSpawns": [
+      "Keldagrim - south of farming patch (members only)"
+    ],
+    "dropSources": [
+      {
+        "monster": "Farmer#Members",
+        "combatLevel": null,
+        "rate": "3/128"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Rake"
   },
   {
     "id": 99,
@@ -15176,6 +15854,15 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Ring_mould"
   },
   {
+    "id": 4202,
+    "nameEn": "Ring of Charos",
+    "examine": "The Ring of Charos.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Ring_of_Charos.png",
+    "value": 1,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Ring_of_Charos"
+  },
+  {
     "id": 954,
     "nameEn": "Rope",
     "examine": "A coil of rope.",
@@ -16822,6 +17509,96 @@
       }
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Secateurs"
+  },
+  {
+    "id": 5343,
+    "nameEn": "Seed dibber",
+    "examine": "Use this to plant seeds with.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Seed_dibber.png",
+    "value": 6,
+    "highAlch": 3,
+    "lowAlch": 2,
+    "buyLocations": [
+      {
+        "shopName": "Lyra",
+        "location": "",
+        "price": 6,
+        "stock": "∞",
+        "members": false
+      },
+      {
+        "shopName": "Elstan",
+        "location": "",
+        "price": 6,
+        "stock": "∞",
+        "members": false
+      },
+      {
+        "shopName": "Bolongo",
+        "location": "",
+        "price": 6,
+        "stock": "∞",
+        "members": false
+      },
+      {
+        "shopName": "Dantaera",
+        "location": "",
+        "price": 6,
+        "stock": "∞",
+        "members": false
+      },
+      {
+        "shopName": "Ellena",
+        "location": "",
+        "price": 6,
+        "stock": "∞",
+        "members": false
+      },
+      {
+        "shopName": "Dreven",
+        "location": "",
+        "price": 6,
+        "stock": "∞",
+        "members": false
+      },
+      {
+        "shopName": "Frizzy Skernip",
+        "location": "",
+        "price": 6,
+        "stock": "∞",
+        "members": false
+      },
+      {
+        "shopName": "Fayeth",
+        "location": "",
+        "price": 6,
+        "stock": "∞",
+        "members": false
+      },
+      {
+        "shopName": "Heskel",
+        "location": "",
+        "price": 6,
+        "stock": "∞",
+        "members": false
+      },
+      {
+        "shopName": "Liliwen",
+        "location": "",
+        "price": 6,
+        "stock": "∞",
+        "members": false
+      }
+    ],
+    "dropSources": [
+      {
+        "monster": "Farmer#Members",
+        "combatLevel": null,
+        "rate": "2/128"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Seed_dibber"
   },
   {
     "id": 1854,
@@ -20185,6 +20962,17 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Tuna"
   },
   {
+    "id": 21483,
+    "nameEn": "Ultracompost",
+    "examine": "Ultra-good for the smallest or largest of plants.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Ultracompost.png",
+    "value": 85,
+    "highAlch": 51,
+    "lowAlch": 34,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Ultracompost"
+  },
+  {
     "id": 1617,
     "nameEn": "Uncut diamond",
     "examine": "This would be worth more cut.",
@@ -20907,6 +21695,89 @@
       }
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Water_rune"
+  },
+  {
+    "id": 5331,
+    "nameEn": "Watering can",
+    "examine": "This watering can is empty.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Watering_can.png",
+    "value": 8,
+    "highAlch": 4,
+    "lowAlch": 3,
+    "buyLocations": [
+      {
+        "shopName": "Lyra",
+        "location": "",
+        "price": 8,
+        "stock": "∞",
+        "members": false
+      },
+      {
+        "shopName": "Elstan",
+        "location": "",
+        "price": 8,
+        "stock": "∞",
+        "members": false
+      },
+      {
+        "shopName": "Bolongo",
+        "location": "",
+        "price": 8,
+        "stock": "∞",
+        "members": false
+      },
+      {
+        "shopName": "Dantaera",
+        "location": "",
+        "price": 8,
+        "stock": "∞",
+        "members": false
+      },
+      {
+        "shopName": "Ellena",
+        "location": "",
+        "price": 8,
+        "stock": "∞",
+        "members": false
+      },
+      {
+        "shopName": "Dreven",
+        "location": "",
+        "price": 8,
+        "stock": "∞",
+        "members": false
+      },
+      {
+        "shopName": "Frizzy Skernip",
+        "location": "",
+        "price": 8,
+        "stock": "∞",
+        "members": false
+      },
+      {
+        "shopName": "Fayeth",
+        "location": "",
+        "price": 8,
+        "stock": "∞",
+        "members": false
+      },
+      {
+        "shopName": "Heskel",
+        "location": "",
+        "price": 8,
+        "stock": "∞",
+        "members": false
+      },
+      {
+        "shopName": "Liliwen",
+        "location": "",
+        "price": 8,
+        "stock": "∞",
+        "members": false
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Watering_can"
   },
   {
     "id": 1829,

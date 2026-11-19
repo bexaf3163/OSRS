@@ -1,6 +1,6 @@
 {
   "source": "OSRS Wiki: Infobox Monster of each article, every version (scripts/data/build-combat-foes.ts)",
-  "generatedAt": "2026-11-18",
+  "generatedAt": "2026-11-19",
   "foes": [
     {
       "name": "Count Draynor",
@@ -2539,6 +2539,216 @@
         "element": "water",
         "percent": 25
       }
+    },
+    {
+      "name": "Arrg",
+      "combat": 113,
+      "members": true,
+      "hitpoints": 140,
+      "attackLevel": 70,
+      "strengthLevel": 140,
+      "defenceLevel": 40,
+      "magicLevel": 0,
+      "attackBonus": 60,
+      "defence": {
+        "stab": 35,
+        "slash": 60,
+        "crush": 35,
+        "magic": 200,
+        "ranged": 200
+      },
+      "attackStyle": "slash",
+      "maxHit": 38,
+      "speedTicks": 4,
+      "aggressive": true,
+      "xpBonus": 7,
+      "weakness": {
+        "element": "earth",
+        "percent": 50
+      }
+    },
+    {
+      "name": "Sir Jerro",
+      "combat": 62,
+      "members": true,
+      "hitpoints": 57,
+      "attackLevel": 54,
+      "strengthLevel": 54,
+      "defenceLevel": 54,
+      "magicLevel": 1,
+      "attackBonus": 20,
+      "defence": {
+        "stab": 87,
+        "slash": 84,
+        "crush": 76,
+        "magic": -10,
+        "ranged": 79
+      },
+      "attackStyle": "slash",
+      "maxHit": 8,
+      "speedTicks": 5,
+      "aggressive": false,
+      "xpBonus": -75
+    },
+    {
+      "name": "Sir Carl",
+      "combat": 62,
+      "members": true,
+      "hitpoints": 57,
+      "attackLevel": 54,
+      "strengthLevel": 54,
+      "defenceLevel": 54,
+      "magicLevel": 1,
+      "attackBonus": 20,
+      "defence": {
+        "stab": 87,
+        "slash": 84,
+        "crush": 76,
+        "magic": -10,
+        "ranged": 79
+      },
+      "attackStyle": "slash",
+      "maxHit": 8,
+      "speedTicks": 5,
+      "aggressive": false,
+      "xpBonus": -75
+    },
+    {
+      "name": "Sir Harry",
+      "combat": 62,
+      "members": true,
+      "hitpoints": 57,
+      "attackLevel": 54,
+      "strengthLevel": 54,
+      "defenceLevel": 54,
+      "magicLevel": 1,
+      "attackBonus": 20,
+      "defence": {
+        "stab": 87,
+        "slash": 84,
+        "crush": 76,
+        "magic": -10,
+        "ranged": 79
+      },
+      "attackStyle": "slash",
+      "maxHit": 8,
+      "speedTicks": 5,
+      "aggressive": false,
+      "xpBonus": -75
+    },
+    {
+      "name": "Doomion",
+      "combat": 91,
+      "members": true,
+      "hitpoints": 87,
+      "attackLevel": 76,
+      "strengthLevel": 78,
+      "defenceLevel": 77,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": -10,
+        "ranged": 0
+      },
+      "attackStyle": "slash",
+      "maxHit": 9,
+      "speedTicks": 4,
+      "aggressive": true,
+      "xpBonus": -75
+    },
+    {
+      "name": "Holthion",
+      "combat": 91,
+      "members": true,
+      "hitpoints": 87,
+      "attackLevel": 76,
+      "strengthLevel": 78,
+      "defenceLevel": 77,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": -10,
+        "ranged": 0
+      },
+      "attackStyle": "slash",
+      "maxHit": 9,
+      "speedTicks": 4,
+      "aggressive": true,
+      "xpBonus": -75
+    },
+    {
+      "name": "Othainian",
+      "combat": 91,
+      "members": true,
+      "hitpoints": 87,
+      "attackLevel": 76,
+      "strengthLevel": 78,
+      "defenceLevel": 77,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": -10,
+        "ranged": 0
+      },
+      "attackStyle": "slash",
+      "maxHit": 9,
+      "speedTicks": 4,
+      "aggressive": true,
+      "xpBonus": -75
+    },
+    {
+      "name": "Kalrag",
+      "combat": 89,
+      "members": true,
+      "hitpoints": 78,
+      "attackLevel": 78,
+      "strengthLevel": 78,
+      "defenceLevel": 78,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 20,
+        "slash": 17,
+        "crush": 12,
+        "magic": 13,
+        "ranged": 13
+      },
+      "attackStyle": "stab",
+      "maxHit": 9,
+      "speedTicks": 4,
+      "aggressive": true,
+      "xpBonus": -75
+    },
+    {
+      "name": "Disciple of Iban",
+      "combat": 13,
+      "members": true,
+      "hitpoints": 20,
+      "attackLevel": 8,
+      "strengthLevel": 8,
+      "defenceLevel": 12,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "crush",
+      "maxHit": 2,
+      "speedTicks": 4,
+      "aggressive": false
     },
     {
       "name": "Cow",

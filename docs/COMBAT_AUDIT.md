@@ -4,7 +4,7 @@ Written by `tests/combatAudit.test.ts` from `src/data/authored/combatAudit.json`
 
 Every stage of the route where the player fights or can be attacked, checked against the route text, the quest stage lines (Quest Helper), the OSRS Wiki infoboxes in combatFoes.json and the danger zones. The rule for a fight the quest cannot go on without: its food is a required item (readiness and the game check it before leaving), the app estimates it with the player's kit where it has the opponent's numbers, and an unread kit or bag is reported as not checked, never as ready.
 
-72 stages: 44 retained, 27 revised, 0 with a branch, 1 deferred.
+74 stages: 46 retained, 27 revised, 0 with a branch, 1 deferred.
 
 | Step | Kind | Mandatory | Opponents | Method | Estimate | Food in the item list | Decision |
 |---|---|---|---|---|---|---|---|
@@ -80,6 +80,8 @@ Every stage of the route where the player fights or can be attacked, checked aga
 | S9-62 A Porcine of Interest | quest-fight | yes | Sourhog (37) | melee | Sourhog | Trout 4 | Retain |
 | S9-63 Tai Bwo Wannai Trio | incidental | yes | - | other | - | - | Retain |
 | S9-64 Shadow of the Storm | quest-fight | yes | Agrith Naar (100) | melee | Agrith Naar | Lobster 10 | Retain |
+| S9-65 Troll Romance | quest-fight | yes | Arrg (113) | safespot | Arrg | Lobster 6 | Retain |
+| S9-66 Underground Pass | quest-fight | yes | Sir Jerro (62), Sir Carl (62), Sir Harry (62), Doomion (91), Holthion (91), Othainian (91), Kalrag (89), Disciple of Iban (13) | melee | Sir Jerro, Sir Carl, Sir Harry, Doomion, Holthion, Othainian, Kalrag, Disciple of Iban | Lobster 20 | Retain |
 
 ## S1-06 The Restless Ghost
 
@@ -1710,4 +1712,56 @@ Changed:
 Evidence:
 
 - OSRS Wiki Agrith Naar infobox and Shadow of the Storm quick guide, read 2026-11-19.
+
+## S9-65 Troll Romance
+
+**Retain.** Troll Romance: kill Arrg (level 113, 140 hitpoints) in the arena with Fire Bolt from the safespot behind the mountain wall to the west, by the fence.
+
+Quest stage lines: 3.1, 3.2.
+
+Assumptions:
+
+- From the safespot he cannot reach you; six lobsters cover the hits taken while leading him there (up to 38 melee, 30 ranged).
+
+Problems:
+
+- His Magic defence is 200, so many Fire Bolts miss: about 35 casts by the estimate (up to 51); the step plans runes for 60.
+
+Alternatives:
+
+- Protection prayers against his switching melee and ranged attacks, as the Wiki describes, instead of the safespot.
+
+Changed:
+
+- 2.150.0: new quest; Arrg is in combatFoes.json and fought from the safespot (fightMechanics.json).
+
+Evidence:
+
+- OSRS Wiki Arrg infobox and Troll Romance quick guide, read 2026-11-19.
+
+## S9-66 Underground Pass
+
+**Retain.** Underground Pass: kill the three paladins (Sir Jerro, Sir Carl, Sir Harry, level 62), the three demons (Doomion, Holthion, Othainian, level 91), Kalrag (level 89) and a disciple of Iban (level 13).
+
+Quest stage lines: 1.13, 2.4, 3.7, 4.0, 5.1, 5.3.
+
+Assumptions:
+
+- Every foe hits for at most 9; twenty lobsters (heals 12) cover the fights and the agility traps.
+
+Problems:
+
+- Kalrag stops hitting under Protect from Melee, which the estimate does not count.
+
+Alternatives:
+
+- The Wiki marks the paladins and demons as easy to safespot.
+
+Changed:
+
+- 2.150.0: new quest; all eight foes are in combatFoes.json.
+
+Evidence:
+
+- OSRS Wiki Underground Pass kills field and the foes' infoboxes, read 2026-11-19.
 

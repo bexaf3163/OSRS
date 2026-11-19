@@ -82453,6 +82453,5831 @@
      ]
     }
    ]
+  },
+  "S9-65": {
+   "var": [
+    "varp",
+    385
+   ],
+   "route": [
+    {
+     "title": "Hitch",
+     "steps": [
+      "Talk to Ug in the south-west corner of the Troll Stronghold's middle level. Offer him your help. Dialogue: \"Aww, you poor troll. What seems to be the problem?\", \"Don't worry now, I'll see what I can do.\"",
+      "Talk to Aga in the room to the north. Dialogue: \"So... how's your... um... love life?\", \"Errr... I've got to go.\"",
+      "Talk to Ug again."
+     ]
+    },
+    {
+     "title": "Survival Techniques",
+     "steps": [
+      "Talk to Tenzing in the hut west of the Warriors' Guild in Burthorpe. Dialogue: \"Do you know where I can find Trollweiss?\", \"What would I need to make such a sled?\"",
+      "Talk to Dunstan at the anvil in north-eastern Burthorpe. Dialogue: \"Talk about a quest.\", \"I need a sled!!\", \"Yes.\"",
+      "Talk to him again to get the sled. Dialogue: \"Talk about a quest.\"",
+      "Use the swamp tar on the bucket of wax to get Wax.",
+      "Use the Wax on your Sled."
+     ]
+    },
+    {
+     "title": "Sledding",
+     "steps": [
+      "Run north-west from the Trollheim teleport to reach a cave just north-west of the Troll family (Troll child if you haven't done Desert Treasure.)",
+      "Enter the cave to the north-west (Not through the icy gate) then run north-west past the ice trolls.",
+      "Run to the end and exit through the crevasse.",
+      "Equip your sled, go south, and click to slide down the slope.",
+      "After the first Sled ride cutscene, walk west and pick some of the rare flowers. (Warning: don't start the next cutscene before collecting the flowers)"
+     ]
+    },
+    {
+     "title": "The Things We Do For Love",
+     "steps": [
+      "Return to Ug.",
+      "Talk to Arrg. Dialogue: \"I am here to kill you!\" He will teleport you into the arena.",
+      "Kill Arrg (level 113) with Fire Bolt from the safespot: lead him behind the mountain wall to the west and stand by the fence, where he cannot reach you.",
+      "Return to Ug.",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Enter the Troll Stronghold.",
+       "s": "Enter the Troll Stronghold.",
+       "k": "enterStronghold",
+       "at": [
+        2839,
+        3690,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3771
+        ]
+       }
+      },
+      {
+       "t": "Climb down the north staircase.",
+       "s": "Climb down the north staircase.",
+       "k": "goDownToUg",
+       "at": [
+        2844,
+        10109,
+        2
+       ],
+       "hl": {
+        "obj": [
+         3789
+        ]
+       }
+      },
+      {
+       "t": "Go up the stairs from the prison.",
+       "s": "Go up the stairs from the prison.",
+       "k": "goUpToUg",
+       "at": [
+        2853,
+        10107,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3788
+        ]
+       }
+      },
+      {
+       "t": "Talk to Ug in the south west room of the Troll Stronghold's first floor.",
+       "s": "Talk to Ug in the south-west room of the Troll Stronghold, 1st floor.",
+       "k": "talkToUg",
+       "at": [
+        2827,
+        10064,
+        1
+       ],
+       "hl": {
+        "npc": [
+         640
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 5,
+     "do": [
+      {
+       "t": "Talk to Aga north of Ug.",
+       "s": "Talk to Aga north of Ug.",
+       "k": "talkToAga",
+       "at": [
+        2828,
+        10104,
+        1
+       ],
+       "hl": {
+        "npc": [
+         641
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 10,
+     "do": [
+      {
+       "t": "Talk to Tenzing west of Burthorpe.",
+       "s": "Talk to Tenzing west of Burthorpe.",
+       "k": "talkToTenzing",
+       "at": [
+        2820,
+        3555,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4094
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 15,
+     "do": [
+      {
+       "t": "Talk to Dunstan in north east Burthorpe.",
+       "s": "Talk to Dunstan in north east Burthorpe.",
+       "k": "talkToDunstan",
+       "at": [
+        2919,
+        3574,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4105
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 20,
+     "do": [
+      {
+       "t": "Talk to Dunstan again.",
+       "s": "Talk to Dunstan again.",
+       "k": "talkToDunstanAgain",
+       "at": [
+        2919,
+        3574,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4105
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 22,
+     "do": [
+      {
+       "t": "Use some swamp tar on a bucket of wax.",
+       "s": "Use some swamp tar on a bucket of wax.",
+       "k": "useTarOnWax"
+      },
+      {
+       "t": "Use the wax on the sled.",
+       "s": "Use the wax on the sled.",
+       "k": "useWaxOnSled"
+      }
+     ]
+    },
+    {
+     "at": 25,
+     "do": [
+      {
+       "t": "Enter the cave north of Trollheim. High-level ice trolls are inside, so Protect from Melee helps; be careful!",
+       "s": "Enter the cave north of Trollheim; mind the ice trolls inside.",
+       "k": "enterTrollCave",
+       "at": [
+        2821,
+        3744,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5007
+        ]
+       }
+      },
+      {
+       "t": "Leave the cave via the north crevice.",
+       "s": "Leave the cave via the north crevice.",
+       "k": "leaveTrollCave",
+       "at": [
+        2772,
+        10233,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5025
+        ]
+       }
+      },
+      {
+       "t": "Equip the sled.",
+       "s": "Equip the sled.",
+       "k": "equipSled"
+      },
+      {
+       "t": "Sled to the south.",
+       "s": "Sled to the south.",
+       "k": "sledSouth",
+       "at": [
+        2773,
+        3835,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5015
+        ]
+       }
+      },
+      {
+       "t": "Pick a rare flower.",
+       "s": "Pick a rare flower.",
+       "k": "pickFlowers",
+       "at": [
+        2781,
+        3783,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5006
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 30,
+     "do": [
+      {
+       "t": "Return to Ug with the trollweiss flowers.",
+       "s": "Return to Ug with the trollweiss flowers.",
+       "k": "enterStrongholdAgain",
+       "at": [
+        2839,
+        3690,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3771
+        ]
+       }
+      },
+      {
+       "t": "Return to Ug with the trollweiss flowers.",
+       "s": "Return to Ug with the trollweiss flowers.",
+       "k": "goDownToUgAgain",
+       "at": [
+        2844,
+        10109,
+        2
+       ],
+       "hl": {
+        "obj": [
+         3789
+        ]
+       }
+      },
+      {
+       "t": "Return to Ug with the trollweiss flowers.",
+       "s": "Return to Ug with the trollweiss flowers.",
+       "k": "goUpToUgAgain",
+       "at": [
+        2853,
+        10107,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3788
+        ]
+       }
+      },
+      {
+       "t": "Return to Ug with the trollweiss flowers.",
+       "s": "Return to Ug with the trollweiss flowers.",
+       "k": "talkToUgWithFlowers",
+       "at": [
+        2827,
+        10064,
+        1
+       ],
+       "hl": {
+        "npc": [
+         640
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 35,
+     "do": [
+      {
+       "t": "Challenge Arrg to a fight, then trap him behind the mountain wall to the west and stand by the fence: from there he cannot reach you.",
+       "s": "Challenge Arrg, then fight him from the safespot by the west fence.",
+       "k": "enterStrongholdForFight",
+       "at": [
+        2839,
+        3690,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3771
+        ]
+       }
+      },
+      {
+       "t": "Challenge Arrg to a fight, then trap him behind the mountain wall to the west and stand by the fence: from there he cannot reach you.",
+       "s": "Challenge Arrg, then fight him from the safespot by the west fence.",
+       "k": "goDownToUgForFight",
+       "at": [
+        2844,
+        10109,
+        2
+       ],
+       "hl": {
+        "obj": [
+         3789
+        ]
+       }
+      },
+      {
+       "t": "Challenge Arrg to a fight, then trap him behind the mountain wall to the west and stand by the fence: from there he cannot reach you.",
+       "s": "Challenge Arrg, then fight him from the safespot by the west fence.",
+       "k": "goUpToUgForFight",
+       "at": [
+        2853,
+        10107,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3788
+        ]
+       }
+      },
+      {
+       "t": "Challenge Arrg to a fight, then trap him behind the mountain wall to the west and stand by the fence: from there he cannot reach you.",
+       "s": "Challenge Arrg, then fight him from the safespot by the west fence.",
+       "k": "challengeArrg",
+       "at": [
+        2829,
+        10095,
+        1
+       ],
+       "hl": {
+        "npc": [
+         642
+        ]
+       }
+      },
+      {
+       "t": "Kill Arrg.",
+       "s": "Kill Arrg.",
+       "k": "killArrg",
+       "hl": {
+        "npc": [
+         643
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 40,
+     "do": [
+      {
+       "t": "Return to Ug to finish.",
+       "s": "Return to Ug to finish.",
+       "k": "enterStrongholdForEnd",
+       "at": [
+        2839,
+        3690,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3771
+        ]
+       }
+      },
+      {
+       "t": "Return to Ug to finish.",
+       "s": "Return to Ug to finish.",
+       "k": "goDownToUgForEnd",
+       "at": [
+        2844,
+        10109,
+        2
+       ],
+       "hl": {
+        "obj": [
+         3789
+        ]
+       }
+      },
+      {
+       "t": "Return to Ug to finish.",
+       "s": "Return to Ug to finish.",
+       "k": "goUpToUgForEnd",
+       "at": [
+        2853,
+        10107,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3788
+        ]
+       }
+      },
+      {
+       "t": "Talk to Ug in the south west room to finish the quest.",
+       "s": "Talk to Ug in the south west room to finish the quest.",
+       "k": "returnToUg",
+       "at": [
+        2827,
+        10064,
+        1
+       ],
+       "hl": {
+        "npc": [
+         640
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  "S9-66": {
+   "var": [
+    "varp",
+    161
+   ],
+   "route": [
+    {
+     "title": "Starting out",
+     "steps": [
+      "Talk to King Lathas on the 1st floor of Ardougne Castle. Dialogue: \"I am. What's our plan?\", \"Yes.\"",
+      "Talk to Koftik in the westernmost part of West Ardougne next to the cave. Dialogue: \"I'll take my chances.\"",
+      "Enter the cave and run south at the first junction.",
+      "Talk to Koftik for a cloth. Use it on an arrow, then use your tinderbox on it or use the arrow on the fire on the ground.",
+      "Go north to the gated area.",
+      "Equip your bow and fire arrow (be sure to light the arrow with your tinderbox), then shoot the guide rope attached to the bridge.",
+      "Once across the bridge, take the plank in the north room (if you did not bring one).",
+      "Continue through the cave until you reach a section with water and a pit. Ignore the water, use a rope on the rock above the pit. If you fail, you will lose your rope.",
+      "Continue through the cave until you reach a large grid.",
+      "Walk across the grid and use trial and error to find your path. You will fall through some of the tiles. Some paths are not possible, see the full guide for solving this optimally.",
+      "Pull the lever next to the gate."
+     ]
+    },
+    {
+     "title": "Orbs of light",
+     "steps": [
+      "You can now pray Rapid Heal for the duration of this step (there is an altar up ahead). Run west past the zombie camp, there will be five sets of odd markings along the walls of the corridor (You must attempt to disable the wall traps or walk past them).",
+      "You will reach an altar, take the north path using the plank on the flat rocks.",
+      "Take the orb and walk back to the altar.",
+      "Take the north-west path with the ogres and blessed spiders. Take the orb.",
+      "Take the centre-most west path, traversing the flat rocks using the plank. Take the orb.",
+      "Take the final path, do not pick up the orb, but search the rock beneath instead and disarm the trap to get the orb.",
+      "Return to the zombie camp to the east.",
+      "Use the 4 orbs on the furnace.",
+      "Return to the altar, turn off Rapid Heal/pray at altar and climb down the well.",
+      "Optional: Search the two stacked crates in the room you landed in to find 2 salmon and 2 meat pies.",
+      "Go west and picklock the south-east slave cage gate.",
+      "Use your spade on the loose mud.",
+      "Go west and cross the ledge.",
+      "If you have 50 thieving, take the short cut - avoid the bubbles!",
+      "If you lack 50 thieving, cross the stone bridge maze to get to the other side.",
+      "Squeeze-through the pipe."
+     ]
+    },
+    {
+     "title": "Cold blooded killing",
+     "steps": [
+      "Search the unicorn cage.",
+      "Walk through the path south of the cage and use the piece of railing on the boulder above the unicorn.",
+      "Search the cage again to get the Unicorn horn. You can drop the piece of railing.",
+      "Pass-through the tunnel and follow the cave until you reach the 3 knights.",
+      "Kill the 3 knights, Sir Jerro, Sir Carl and Sir Harry (level 62 paladins), and take their badges.",
+      "Continue forward, using your plank on either flat rock, until you see a well.",
+      "Use the badges and unicorn horn on the well.",
+      "Open the door."
+     ]
+    },
+    {
+     "title": "Iban's cavern",
+     "steps": [
+      "Run south as far as you can (see map), and descend into the cave (yellow dot on map).",
+      "Talk to Niloof the dwarf, you will also receive 2 meat pies and a meat pizza.",
+      "Talk to Klank the dwarf. Dialogue: (Make sure to have one inventory slot available to receive his gauntlets.)",
+      "Go upstairs and search the Witch's window from outside her house (Cross the broken bridge north-east of the house. Use the map pictured to find her).",
+      "Pick up the Witch's cat (use the map).",
+      "Use the cat on the Witch's door and then open the door.",
+      "Open the chest in her house for a few items (do not skip chat option on chest).",
+      "Kill the three demons (Doomion, Holthion and Othainian, level 91) west of the Witch and take their amulets.",
+      "Open the chest north of the middle demon.",
+      "Return to the Dwarf encampment on the lower level. Use a bucket on the brew barrel in the eastern house.",
+      "Run to the south-east corner of the lower level and use the dwarf brew and the tinderbox on the tomb."
+     ]
+    },
+    {
+     "title": "Kalrag the Spider & The Soulless",
+     "steps": [
+      "Run north to the spider pit, kill Kalrag the spider (level 89; Protect from Melee stops his hits) and run out of its pit.",
+      "Head north-west and ascend through the cave entrance to reach the half souless area.",
+      "Wear Klank's gauntlets and search the cage circled on the map for Iban's dove. (It is applied to the doll automatically and will not go into the inventory)."
+     ]
+    },
+    {
+     "title": "Confronting Iban",
+     "steps": [
+      "Head south from where you obtain Iban's dove until you reach the broken bridge you used to get over, from there head east and then south to the Disciples of Iban.",
+      "Kill a disciple of Iban (level 13) in the middle of the maze and pick up his robes.",
+      "Equip the robes. (Following updates prior to the release of the Song of the Elves quest, you only need to equip the robes to enter the doors)",
+      "Enter Iban's temple, (Following updates prior to the release of the Song of the Elves quest Iban now has a chat dialogue) use this time to click one tile north of the well so that you can avoid any potential damage, right click use on the doll on the well, do not click investigate.",
+      "Speak to Koftik to be transported back through the pass.",
+      "Head back to Ardougne Castle and speak with King Lathas.",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Go to the second floor of Ardougne Castle.",
+       "s": "Go to the second floor of Ardougne Castle.",
+       "k": "goToArdougneCastleFloor2",
+       "at": [
+        2572,
+        3296,
+        0
+       ],
+       "hl": {
+        "obj": [
+         15645
+        ]
+       }
+      },
+      {
+       "t": "Talk to King Lathas.",
+       "s": "Talk to King Lathas.",
+       "k": "talkToKingLathas",
+       "at": [
+        2578,
+        3293,
+        1
+       ],
+       "hl": {
+        "npc": [
+         9005
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 1,
+     "do": [
+      {
+       "t": "Talk to Koftik in West Ardougne.",
+       "s": "Talk to Koftik in West Ardougne.",
+       "k": "enterWestArdougne",
+       "at": [
+        2558,
+        3300,
+        0
+       ],
+       "hl": {
+        "obj": [
+         8739
+        ]
+       }
+      },
+      {
+       "t": "Talk to Koftik outside the West Ardougne cave.",
+       "s": "Talk to Koftik outside the West Ardougne cave.",
+       "k": "talkToKoftik",
+       "at": [
+        2435,
+        3314,
+        0
+       ],
+       "hl": {
+        "npc": [
+         8976
+        ]
+       }
+      },
+      {
+       "t": "Talk to Koftik in West Ardougne.",
+       "s": "Talk to Koftik in West Ardougne.",
+       "k": "goDownCastleStairs",
+       "at": [
+        2572,
+        3296,
+        1
+       ],
+       "hl": {
+        "obj": [
+         15648
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 2,
+     "do": [
+      {
+       "t": "Enter the dungeon.",
+       "s": "Enter the dungeon.",
+       "k": "enterTheDungeon",
+       "at": [
+        2434,
+        3315,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3213
+        ]
+       }
+      },
+      {
+       "t": "Talk to Koftik inside the cave.",
+       "s": "Talk to Koftik inside the cave.",
+       "k": "talkToKoftikAtBridge",
+       "hl": {
+        "npc": [
+         8976
+        ]
+       }
+      },
+      {
+       "t": "Search the abandoned equipment for an oily cloth.",
+       "s": "Search the abandoned equipment for an oily cloth.",
+       "k": "searchBagForCloth",
+       "at": [
+        2452,
+        9715,
+        0
+       ],
+       "hl": {
+        "obj": [
+         35938
+        ]
+       }
+      },
+      {
+       "t": "Use the oily cloth on an arrow.",
+       "s": "Use the oily cloth on an arrow.",
+       "k": "useClothOnArrow"
+      },
+      {
+       "t": "Use the tinderbox on the fire arrow. If you don't have a tinderbox, use the arrow on the nearby fire instead.",
+       "s": "Light the arrow with your tinderbox, or use it on the nearby fire.",
+       "k": "lightArrow"
+      },
+      {
+       "t": "Walk to the room north of Koftik.",
+       "s": "Walk to the room north of Koftik.",
+       "k": "walkNorthEastOfBridge",
+       "at": [
+        2447,
+        9722,
+        0
+       ]
+      },
+      {
+       "t": "Wield a lit arrow and shoot the guide-rope.",
+       "s": "Wield a lit arrow and shoot the guide-rope.",
+       "k": "shootBridgeRope",
+       "hl": {
+        "obj": [
+         3340
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide.",
+       "s": "Climb-over rockslide.",
+       "k": "climbOverRockslide3",
+       "at": [
+        2458,
+        9712,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide.",
+       "s": "Climb-over rockslide.",
+       "k": "climbOverRockslide2",
+       "at": [
+        2471,
+        9706,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide.",
+       "s": "Climb-over rockslide.",
+       "k": "climbOverRockslide1",
+       "at": [
+        2480,
+        9713,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Follow the path west to leave.",
+       "s": "Follow the path west to leave.",
+       "k": "leaveFallArea",
+       "at": [
+        2443,
+        9652,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3265
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 3,
+     "do": [
+      {
+       "t": "Enter the dungeon.",
+       "s": "Enter the dungeon.",
+       "k": "enterTheDungeon",
+       "at": [
+        2434,
+        3315,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3213
+        ]
+       }
+      },
+      {
+       "t": "Talk to Koftik inside the cave.",
+       "s": "Talk to Koftik inside the cave.",
+       "k": "talkToKoftikAtBridge",
+       "hl": {
+        "npc": [
+         8976
+        ]
+       }
+      },
+      {
+       "t": "Search the abandoned equipment for an oily cloth.",
+       "s": "Search the abandoned equipment for an oily cloth.",
+       "k": "searchBagForCloth",
+       "at": [
+        2452,
+        9715,
+        0
+       ],
+       "hl": {
+        "obj": [
+         35938
+        ]
+       }
+      },
+      {
+       "t": "Use the oily cloth on an arrow.",
+       "s": "Use the oily cloth on an arrow.",
+       "k": "useClothOnArrow"
+      },
+      {
+       "t": "Use the tinderbox on the fire arrow. If you don't have a tinderbox, use the arrow on the nearby fire instead.",
+       "s": "Light the arrow with your tinderbox, or use it on the nearby fire.",
+       "k": "lightArrow"
+      },
+      {
+       "t": "Walk to the room north of Koftik.",
+       "s": "Walk to the room north of Koftik.",
+       "k": "walkNorthEastOfBridge",
+       "at": [
+        2447,
+        9722,
+        0
+       ]
+      },
+      {
+       "t": "Wield a lit arrow and shoot the guide-rope.",
+       "s": "Wield a lit arrow and shoot the guide-rope.",
+       "k": "shootBridgeRope",
+       "hl": {
+        "obj": [
+         3340
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide.",
+       "s": "Climb-over rockslide.",
+       "k": "climbOverRockslide3",
+       "at": [
+        2458,
+        9712,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide.",
+       "s": "Climb-over rockslide.",
+       "k": "climbOverRockslide2",
+       "at": [
+        2471,
+        9706,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide.",
+       "s": "Climb-over rockslide.",
+       "k": "climbOverRockslide1",
+       "at": [
+        2480,
+        9713,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Follow the path west to leave.",
+       "s": "Follow the path west to leave.",
+       "k": "leaveFallArea",
+       "at": [
+        2443,
+        9652,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3265
+        ]
+       }
+      },
+      {
+       "t": "Climb down the well.",
+       "s": "Climb down the well.",
+       "k": "climbDownWell",
+       "at": [
+        2417,
+        9675,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3264
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap5",
+       "at": [
+        2430,
+        9676,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap4",
+       "at": [
+        2432,
+        9676,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap3",
+       "at": [
+        2435,
+        9676,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap2",
+       "at": [
+        2440,
+        9678,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap1",
+       "at": [
+        2443,
+        9678,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Take the first orb of light.",
+       "s": "Take the first orb of light.",
+       "k": "collectOrb1",
+       "hl": {
+        "obj": [
+         37326
+        ]
+       }
+      },
+      {
+       "t": "Use a plank on the flat rock to cross it.",
+       "s": "Use a plank on the flat rock to cross it.",
+       "k": "plankRock3",
+       "at": [
+        2416,
+        9689,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3230
+        ]
+       }
+      },
+      {
+       "t": "Use a plank on the flat rock to cross it.",
+       "s": "Use a plank on the flat rock to cross it.",
+       "k": "plankRock2",
+       "at": [
+        2418,
+        9685,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3230
+        ]
+       }
+      },
+      {
+       "t": "Use a plank on the flat rock to cross it.",
+       "s": "Use a plank on the flat rock to cross it.",
+       "k": "plankRock1",
+       "at": [
+        2418,
+        9681,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3230
+        ]
+       }
+      },
+      {
+       "t": "Take the second orb of light north west of the well.",
+       "s": "Take the second orb of light north west of the well.",
+       "k": "collectOrb2",
+       "at": [
+        2385,
+        9685,
+        0
+       ],
+       "hl": {
+        "obj": [
+         37325
+        ]
+       }
+      },
+      {
+       "t": "Take the third orb of light west of the well. Remember to use a plank on the flat rocks to cross them.",
+       "s": "Take the third orb of light west of the well; plank the flat rocks.",
+       "k": "collectOrb3",
+       "at": [
+        2386,
+        9677,
+        0
+       ],
+       "hl": {
+        "obj": [
+         37324
+        ]
+       }
+      },
+      {
+       "t": "Search the flat rock to remove the trap and take the fourth orb to the south west of the well.",
+       "s": "Search the flat rock to disarm the trap, then take the fourth orb.",
+       "k": "collectOrb4",
+       "at": [
+        2382,
+        9668,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3339
+        ]
+       }
+      },
+      {
+       "t": "Return to the furnace to the east, and use the orbs on it.",
+       "s": "Return to the furnace to the east, and use the orbs on it.",
+       "k": "orbsToFurnace",
+       "at": [
+        2455,
+        9683,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3294
+        ]
+       }
+      },
+      {
+       "t": "Pull the lever to raise the gate.",
+       "s": "Pull the lever to raise the gate.",
+       "k": "pullLeverAfterGrid",
+       "hl": {
+        "obj": [
+         3337
+        ]
+       }
+      },
+      {
+       "t": "Cross the grid by trial and error. Keep health above 15, and remember the path for Regicide.",
+       "s": "Cross the grid by trial and error; keep your health above 15.",
+       "k": "crossTheGrid"
+      },
+      {
+       "t": "Climb-over rockslide",
+       "s": "Climb-over rockslide",
+       "k": "climbOverRockslide5",
+       "at": [
+        2482,
+        9679,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide",
+       "s": "Climb-over rockslide",
+       "k": "climbOverRockslide4",
+       "at": [
+        2491,
+        9691,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Swing across the pit with a rope.",
+       "s": "Swing across the pit with a rope.",
+       "k": "crossThePit",
+       "at": [
+        2463,
+        9699,
+        0
+       ],
+       "hl": {
+        "obj": [
+         23125
+        ]
+       }
+      },
+      {
+       "t": "Pick up the plank in the north room.",
+       "s": "Pick up the plank in the north room.",
+       "k": "collectPlank",
+       "at": [
+        2435,
+        9726,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "at": 4,
+     "do": [
+      {
+       "t": "Enter the dungeon.",
+       "s": "Enter the dungeon.",
+       "k": "enterTheDungeon",
+       "at": [
+        2434,
+        3315,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3213
+        ]
+       }
+      },
+      {
+       "t": "Talk to Koftik inside the cave.",
+       "s": "Talk to Koftik inside the cave.",
+       "k": "talkToKoftikAtBridge",
+       "hl": {
+        "npc": [
+         8976
+        ]
+       }
+      },
+      {
+       "t": "Search the abandoned equipment for an oily cloth.",
+       "s": "Search the abandoned equipment for an oily cloth.",
+       "k": "searchBagForCloth",
+       "at": [
+        2452,
+        9715,
+        0
+       ],
+       "hl": {
+        "obj": [
+         35938
+        ]
+       }
+      },
+      {
+       "t": "Use the oily cloth on an arrow.",
+       "s": "Use the oily cloth on an arrow.",
+       "k": "useClothOnArrow"
+      },
+      {
+       "t": "Use the tinderbox on the fire arrow. If you don't have a tinderbox, use the arrow on the nearby fire instead.",
+       "s": "Light the arrow with your tinderbox, or use it on the nearby fire.",
+       "k": "lightArrow"
+      },
+      {
+       "t": "Walk to the room north of Koftik.",
+       "s": "Walk to the room north of Koftik.",
+       "k": "walkNorthEastOfBridge",
+       "at": [
+        2447,
+        9722,
+        0
+       ]
+      },
+      {
+       "t": "Wield a lit arrow and shoot the guide-rope.",
+       "s": "Wield a lit arrow and shoot the guide-rope.",
+       "k": "shootBridgeRope",
+       "hl": {
+        "obj": [
+         3340
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide.",
+       "s": "Climb-over rockslide.",
+       "k": "climbOverRockslide3",
+       "at": [
+        2458,
+        9712,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide.",
+       "s": "Climb-over rockslide.",
+       "k": "climbOverRockslide2",
+       "at": [
+        2471,
+        9706,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide.",
+       "s": "Climb-over rockslide.",
+       "k": "climbOverRockslide1",
+       "at": [
+        2480,
+        9713,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Follow the path west to leave.",
+       "s": "Follow the path west to leave.",
+       "k": "leaveFallArea",
+       "at": [
+        2443,
+        9652,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3265
+        ]
+       }
+      },
+      {
+       "t": "Climb down the well.",
+       "s": "Climb down the well.",
+       "k": "climbDownWell",
+       "at": [
+        2417,
+        9675,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3264
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap5",
+       "at": [
+        2430,
+        9676,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap4",
+       "at": [
+        2432,
+        9676,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap3",
+       "at": [
+        2435,
+        9676,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap2",
+       "at": [
+        2440,
+        9678,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap1",
+       "at": [
+        2443,
+        9678,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Take the first orb of light.",
+       "s": "Take the first orb of light.",
+       "k": "collectOrb1",
+       "hl": {
+        "obj": [
+         37326
+        ]
+       }
+      },
+      {
+       "t": "Use a plank on the flat rock to cross it.",
+       "s": "Use a plank on the flat rock to cross it.",
+       "k": "plankRock3",
+       "at": [
+        2416,
+        9689,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3230
+        ]
+       }
+      },
+      {
+       "t": "Use a plank on the flat rock to cross it.",
+       "s": "Use a plank on the flat rock to cross it.",
+       "k": "plankRock2",
+       "at": [
+        2418,
+        9685,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3230
+        ]
+       }
+      },
+      {
+       "t": "Use a plank on the flat rock to cross it.",
+       "s": "Use a plank on the flat rock to cross it.",
+       "k": "plankRock1",
+       "at": [
+        2418,
+        9681,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3230
+        ]
+       }
+      },
+      {
+       "t": "Take the second orb of light north west of the well.",
+       "s": "Take the second orb of light north west of the well.",
+       "k": "collectOrb2",
+       "at": [
+        2385,
+        9685,
+        0
+       ],
+       "hl": {
+        "obj": [
+         37325
+        ]
+       }
+      },
+      {
+       "t": "Take the third orb of light west of the well. Remember to use a plank on the flat rocks to cross them.",
+       "s": "Take the third orb of light west of the well; plank the flat rocks.",
+       "k": "collectOrb3",
+       "at": [
+        2386,
+        9677,
+        0
+       ],
+       "hl": {
+        "obj": [
+         37324
+        ]
+       }
+      },
+      {
+       "t": "Search the flat rock to remove the trap and take the fourth orb to the south west of the well.",
+       "s": "Search the flat rock to disarm the trap, then take the fourth orb.",
+       "k": "collectOrb4",
+       "at": [
+        2382,
+        9668,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3339
+        ]
+       }
+      },
+      {
+       "t": "Return to the furnace to the east, and use the orbs on it.",
+       "s": "Return to the furnace to the east, and use the orbs on it.",
+       "k": "orbsToFurnace",
+       "at": [
+        2455,
+        9683,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3294
+        ]
+       }
+      },
+      {
+       "t": "Pull the lever to raise the gate.",
+       "s": "Pull the lever to raise the gate.",
+       "k": "pullLeverAfterGrid",
+       "hl": {
+        "obj": [
+         3337
+        ]
+       }
+      },
+      {
+       "t": "Cross the grid by trial and error. Keep health above 15, and remember the path for Regicide.",
+       "s": "Cross the grid by trial and error; keep your health above 15.",
+       "k": "crossTheGrid"
+      },
+      {
+       "t": "Climb-over rockslide",
+       "s": "Climb-over rockslide",
+       "k": "climbOverRockslide5",
+       "at": [
+        2482,
+        9679,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide",
+       "s": "Climb-over rockslide",
+       "k": "climbOverRockslide4",
+       "at": [
+        2491,
+        9691,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Swing across the pit with a rope.",
+       "s": "Swing across the pit with a rope.",
+       "k": "crossThePit",
+       "at": [
+        2463,
+        9699,
+        0
+       ],
+       "hl": {
+        "obj": [
+         23125
+        ]
+       }
+      },
+      {
+       "t": "Pick up the plank in the north room.",
+       "s": "Pick up the plank in the north room.",
+       "k": "collectPlank",
+       "at": [
+        2435,
+        9726,
+        0
+       ]
+      },
+      {
+       "t": "Pick the lock to enter the cell.",
+       "s": "Pick the lock to enter the cell.",
+       "k": "pickCellLock",
+       "at": [
+        2393,
+        9655,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3266
+        ]
+       }
+      },
+      {
+       "t": "Search the unicorn cage.",
+       "s": "Search the unicorn cage.",
+       "k": "searchUnicornCage",
+       "at": [
+        2398,
+        9605,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3267
+        ]
+       }
+      },
+      {
+       "t": "Use the railing on the boulder.",
+       "s": "Use the railing on the boulder.",
+       "k": "useRailingOnBoulder",
+       "at": [
+        2397,
+        9596,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4543
+        ]
+       }
+      },
+      {
+       "t": "Dig the loose mud.",
+       "s": "Dig the loose mud.",
+       "k": "digMud",
+       "at": [
+        2393,
+        9650,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3216
+        ]
+       }
+      },
+      {
+       "t": "Cross the ledge.",
+       "s": "Cross the ledge.",
+       "k": "crossLedge",
+       "at": [
+        2374,
+        9644,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3238
+        ]
+       }
+      },
+      {
+       "t": "Navigate the maze, or use the shortcut to the south with 50 Thieving.",
+       "s": "Navigate the maze, or use the shortcut to the south with 50 Thieving.",
+       "k": "navigateMaze"
+      },
+      {
+       "t": "Enter the pipe to the next section.",
+       "s": "Enter the pipe to the next section.",
+       "k": "goThroughPipe",
+       "at": [
+        2418,
+        9605,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3237
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 5,
+     "do": [
+      {
+       "t": "Enter the dungeon.",
+       "s": "Enter the dungeon.",
+       "k": "enterTheDungeon",
+       "at": [
+        2434,
+        3315,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3213
+        ]
+       }
+      },
+      {
+       "t": "Talk to Koftik inside the cave.",
+       "s": "Talk to Koftik inside the cave.",
+       "k": "talkToKoftikAtBridge",
+       "hl": {
+        "npc": [
+         8976
+        ]
+       }
+      },
+      {
+       "t": "Search the abandoned equipment for an oily cloth.",
+       "s": "Search the abandoned equipment for an oily cloth.",
+       "k": "searchBagForCloth",
+       "at": [
+        2452,
+        9715,
+        0
+       ],
+       "hl": {
+        "obj": [
+         35938
+        ]
+       }
+      },
+      {
+       "t": "Use the oily cloth on an arrow.",
+       "s": "Use the oily cloth on an arrow.",
+       "k": "useClothOnArrow"
+      },
+      {
+       "t": "Use the tinderbox on the fire arrow. If you don't have a tinderbox, use the arrow on the nearby fire instead.",
+       "s": "Light the arrow with your tinderbox, or use it on the nearby fire.",
+       "k": "lightArrow"
+      },
+      {
+       "t": "Walk to the room north of Koftik.",
+       "s": "Walk to the room north of Koftik.",
+       "k": "walkNorthEastOfBridge",
+       "at": [
+        2447,
+        9722,
+        0
+       ]
+      },
+      {
+       "t": "Wield a lit arrow and shoot the guide-rope.",
+       "s": "Wield a lit arrow and shoot the guide-rope.",
+       "k": "shootBridgeRope",
+       "hl": {
+        "obj": [
+         3340
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide.",
+       "s": "Climb-over rockslide.",
+       "k": "climbOverRockslide3",
+       "at": [
+        2458,
+        9712,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide.",
+       "s": "Climb-over rockslide.",
+       "k": "climbOverRockslide2",
+       "at": [
+        2471,
+        9706,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide.",
+       "s": "Climb-over rockslide.",
+       "k": "climbOverRockslide1",
+       "at": [
+        2480,
+        9713,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Follow the path west to leave.",
+       "s": "Follow the path west to leave.",
+       "k": "leaveFallArea",
+       "at": [
+        2443,
+        9652,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3265
+        ]
+       }
+      },
+      {
+       "t": "Climb down the well.",
+       "s": "Climb down the well.",
+       "k": "climbDownWell",
+       "at": [
+        2417,
+        9675,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3264
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap5",
+       "at": [
+        2430,
+        9676,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap4",
+       "at": [
+        2432,
+        9676,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap3",
+       "at": [
+        2435,
+        9676,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap2",
+       "at": [
+        2440,
+        9678,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap1",
+       "at": [
+        2443,
+        9678,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Take the first orb of light.",
+       "s": "Take the first orb of light.",
+       "k": "collectOrb1",
+       "hl": {
+        "obj": [
+         37326
+        ]
+       }
+      },
+      {
+       "t": "Use a plank on the flat rock to cross it.",
+       "s": "Use a plank on the flat rock to cross it.",
+       "k": "plankRock3",
+       "at": [
+        2416,
+        9689,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3230
+        ]
+       }
+      },
+      {
+       "t": "Use a plank on the flat rock to cross it.",
+       "s": "Use a plank on the flat rock to cross it.",
+       "k": "plankRock2",
+       "at": [
+        2418,
+        9685,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3230
+        ]
+       }
+      },
+      {
+       "t": "Use a plank on the flat rock to cross it.",
+       "s": "Use a plank on the flat rock to cross it.",
+       "k": "plankRock1",
+       "at": [
+        2418,
+        9681,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3230
+        ]
+       }
+      },
+      {
+       "t": "Take the second orb of light north west of the well.",
+       "s": "Take the second orb of light north west of the well.",
+       "k": "collectOrb2",
+       "at": [
+        2385,
+        9685,
+        0
+       ],
+       "hl": {
+        "obj": [
+         37325
+        ]
+       }
+      },
+      {
+       "t": "Take the third orb of light west of the well. Remember to use a plank on the flat rocks to cross them.",
+       "s": "Take the third orb of light west of the well; plank the flat rocks.",
+       "k": "collectOrb3",
+       "at": [
+        2386,
+        9677,
+        0
+       ],
+       "hl": {
+        "obj": [
+         37324
+        ]
+       }
+      },
+      {
+       "t": "Search the flat rock to remove the trap and take the fourth orb to the south west of the well.",
+       "s": "Search the flat rock to disarm the trap, then take the fourth orb.",
+       "k": "collectOrb4",
+       "at": [
+        2382,
+        9668,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3339
+        ]
+       }
+      },
+      {
+       "t": "Return to the furnace to the east, and use the orbs on it.",
+       "s": "Return to the furnace to the east, and use the orbs on it.",
+       "k": "orbsToFurnace",
+       "at": [
+        2455,
+        9683,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3294
+        ]
+       }
+      },
+      {
+       "t": "Pull the lever to raise the gate.",
+       "s": "Pull the lever to raise the gate.",
+       "k": "pullLeverAfterGrid",
+       "hl": {
+        "obj": [
+         3337
+        ]
+       }
+      },
+      {
+       "t": "Cross the grid by trial and error. Keep health above 15, and remember the path for Regicide.",
+       "s": "Cross the grid by trial and error; keep your health above 15.",
+       "k": "crossTheGrid"
+      },
+      {
+       "t": "Climb-over rockslide",
+       "s": "Climb-over rockslide",
+       "k": "climbOverRockslide5",
+       "at": [
+        2482,
+        9679,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide",
+       "s": "Climb-over rockslide",
+       "k": "climbOverRockslide4",
+       "at": [
+        2491,
+        9691,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Swing across the pit with a rope.",
+       "s": "Swing across the pit with a rope.",
+       "k": "crossThePit",
+       "at": [
+        2463,
+        9699,
+        0
+       ],
+       "hl": {
+        "obj": [
+         23125
+        ]
+       }
+      },
+      {
+       "t": "Pick up the plank in the north room.",
+       "s": "Pick up the plank in the north room.",
+       "k": "collectPlank",
+       "at": [
+        2435,
+        9726,
+        0
+       ]
+      },
+      {
+       "t": "Pick the lock to enter the cell.",
+       "s": "Pick the lock to enter the cell.",
+       "k": "pickCellLock",
+       "at": [
+        2393,
+        9655,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3266
+        ]
+       }
+      },
+      {
+       "t": "Search the unicorn cage.",
+       "s": "Search the unicorn cage.",
+       "k": "searchUnicornCage",
+       "at": [
+        2398,
+        9605,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3267
+        ]
+       }
+      },
+      {
+       "t": "Use the railing on the boulder.",
+       "s": "Use the railing on the boulder.",
+       "k": "useRailingOnBoulder",
+       "at": [
+        2397,
+        9596,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4543
+        ]
+       }
+      },
+      {
+       "t": "Dig the loose mud.",
+       "s": "Dig the loose mud.",
+       "k": "digMud",
+       "at": [
+        2393,
+        9650,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3216
+        ]
+       }
+      },
+      {
+       "t": "Cross the ledge.",
+       "s": "Cross the ledge.",
+       "k": "crossLedge",
+       "at": [
+        2374,
+        9644,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3238
+        ]
+       }
+      },
+      {
+       "t": "Navigate the maze, or use the shortcut to the south with 50 Thieving.",
+       "s": "Navigate the maze, or use the shortcut to the south with 50 Thieving.",
+       "k": "navigateMaze"
+      },
+      {
+       "t": "Enter the pipe to the next section.",
+       "s": "Enter the pipe to the next section.",
+       "k": "goThroughPipe",
+       "at": [
+        2418,
+        9605,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3237
+        ]
+       }
+      },
+      {
+       "t": "Search the cage again.",
+       "s": "Search the cage again.",
+       "k": "searchUnicornCageAgain",
+       "at": [
+        2372,
+        9605,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3308
+        ]
+       }
+      },
+      {
+       "t": "Enter the tunnel.",
+       "s": "Enter the tunnel.",
+       "k": "leaveUnicornArea",
+       "at": [
+        2375,
+        9611,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3219
+        ]
+       }
+      },
+      {
+       "t": "Travel through the tunnel to find some knights.",
+       "s": "Travel through the tunnel to find some knights.",
+       "k": "walkToKnights",
+       "at": [
+        2424,
+        9715,
+        0
+       ]
+      },
+      {
+       "t": "Kill Sir Harry and take his badge.",
+       "s": "Kill Sir Harry and take his badge.",
+       "k": "killHarry",
+       "at": [
+        2425,
+        9720,
+        0
+       ],
+       "hl": {
+        "npc": [
+         8989
+        ]
+       }
+      },
+      {
+       "t": "Kill Sir Carl and take his badge.",
+       "s": "Kill Sir Carl and take his badge.",
+       "k": "killCarl",
+       "at": [
+        2425,
+        9720,
+        0
+       ],
+       "hl": {
+        "npc": [
+         8988
+        ]
+       }
+      },
+      {
+       "t": "Kill Sir Jerro and take his badge. Optionally: talk to one of the knights first to receive food and potions.",
+       "s": "Kill Sir Jerro (level 62) and take his badge.",
+       "k": "killJerro",
+       "at": [
+        2425,
+        9720,
+        0
+       ],
+       "hl": {
+        "npc": [
+         8987
+        ]
+       }
+      },
+      {
+       "t": "Use the badges and unicorn horn on the well.",
+       "s": "Use the badges and unicorn horn on the well.",
+       "k": "useUnicornHornOnWell",
+       "at": [
+        2374,
+        9719,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3305
+        ]
+       }
+      },
+      {
+       "t": "Use the badges and unicorn horn on the well.",
+       "s": "Use the badges and unicorn horn on the well.",
+       "k": "useBadgeCarlOnWell",
+       "at": [
+        2374,
+        9719,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3305
+        ]
+       }
+      },
+      {
+       "t": "Use the badges and unicorn horn on the well.",
+       "s": "Use the badges and unicorn horn on the well.",
+       "k": "useBadgeHarryOnWell",
+       "at": [
+        2374,
+        9719,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3305
+        ]
+       }
+      },
+      {
+       "t": "Use the badges and unicorn horn on the well.",
+       "s": "Use the badges and unicorn horn on the well.",
+       "k": "useBadgeJerroOnWell",
+       "at": [
+        2374,
+        9719,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3305
+        ]
+       }
+      },
+      {
+       "t": "Open the door at the end of the path.",
+       "s": "Open the door at the end of the path.",
+       "k": "openIbansDoor",
+       "at": [
+        2369,
+        9720,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3221
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 6,
+     "do": [
+      {
+       "t": "Enter the dungeon.",
+       "s": "Enter the dungeon.",
+       "k": "enterTheDungeon",
+       "at": [
+        2434,
+        3315,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3213
+        ]
+       }
+      },
+      {
+       "t": "Talk to Koftik inside the cave.",
+       "s": "Talk to Koftik inside the cave.",
+       "k": "talkToKoftikAtBridge",
+       "hl": {
+        "npc": [
+         8976
+        ]
+       }
+      },
+      {
+       "t": "Search the abandoned equipment for an oily cloth.",
+       "s": "Search the abandoned equipment for an oily cloth.",
+       "k": "searchBagForCloth",
+       "at": [
+        2452,
+        9715,
+        0
+       ],
+       "hl": {
+        "obj": [
+         35938
+        ]
+       }
+      },
+      {
+       "t": "Use the oily cloth on an arrow.",
+       "s": "Use the oily cloth on an arrow.",
+       "k": "useClothOnArrow"
+      },
+      {
+       "t": "Use the tinderbox on the fire arrow. If you don't have a tinderbox, use the arrow on the nearby fire instead.",
+       "s": "Light the arrow with your tinderbox, or use it on the nearby fire.",
+       "k": "lightArrow"
+      },
+      {
+       "t": "Walk to the room north of Koftik.",
+       "s": "Walk to the room north of Koftik.",
+       "k": "walkNorthEastOfBridge",
+       "at": [
+        2447,
+        9722,
+        0
+       ]
+      },
+      {
+       "t": "Wield a lit arrow and shoot the guide-rope.",
+       "s": "Wield a lit arrow and shoot the guide-rope.",
+       "k": "shootBridgeRope",
+       "hl": {
+        "obj": [
+         3340
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide.",
+       "s": "Climb-over rockslide.",
+       "k": "climbOverRockslide3",
+       "at": [
+        2458,
+        9712,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide.",
+       "s": "Climb-over rockslide.",
+       "k": "climbOverRockslide2",
+       "at": [
+        2471,
+        9706,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide.",
+       "s": "Climb-over rockslide.",
+       "k": "climbOverRockslide1",
+       "at": [
+        2480,
+        9713,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Follow the path west to leave.",
+       "s": "Follow the path west to leave.",
+       "k": "leaveFallArea",
+       "at": [
+        2443,
+        9652,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3265
+        ]
+       }
+      },
+      {
+       "t": "Climb down the well.",
+       "s": "Climb down the well.",
+       "k": "climbDownWell",
+       "at": [
+        2417,
+        9675,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3264
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap5",
+       "at": [
+        2430,
+        9676,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap4",
+       "at": [
+        2432,
+        9676,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap3",
+       "at": [
+        2435,
+        9676,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap2",
+       "at": [
+        2440,
+        9678,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap1",
+       "at": [
+        2443,
+        9678,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Take the first orb of light.",
+       "s": "Take the first orb of light.",
+       "k": "collectOrb1",
+       "hl": {
+        "obj": [
+         37326
+        ]
+       }
+      },
+      {
+       "t": "Use a plank on the flat rock to cross it.",
+       "s": "Use a plank on the flat rock to cross it.",
+       "k": "plankRock3",
+       "at": [
+        2416,
+        9689,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3230
+        ]
+       }
+      },
+      {
+       "t": "Use a plank on the flat rock to cross it.",
+       "s": "Use a plank on the flat rock to cross it.",
+       "k": "plankRock2",
+       "at": [
+        2418,
+        9685,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3230
+        ]
+       }
+      },
+      {
+       "t": "Use a plank on the flat rock to cross it.",
+       "s": "Use a plank on the flat rock to cross it.",
+       "k": "plankRock1",
+       "at": [
+        2418,
+        9681,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3230
+        ]
+       }
+      },
+      {
+       "t": "Take the second orb of light north west of the well.",
+       "s": "Take the second orb of light north west of the well.",
+       "k": "collectOrb2",
+       "at": [
+        2385,
+        9685,
+        0
+       ],
+       "hl": {
+        "obj": [
+         37325
+        ]
+       }
+      },
+      {
+       "t": "Take the third orb of light west of the well. Remember to use a plank on the flat rocks to cross them.",
+       "s": "Take the third orb of light west of the well; plank the flat rocks.",
+       "k": "collectOrb3",
+       "at": [
+        2386,
+        9677,
+        0
+       ],
+       "hl": {
+        "obj": [
+         37324
+        ]
+       }
+      },
+      {
+       "t": "Search the flat rock to remove the trap and take the fourth orb to the south west of the well.",
+       "s": "Search the flat rock to disarm the trap, then take the fourth orb.",
+       "k": "collectOrb4",
+       "at": [
+        2382,
+        9668,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3339
+        ]
+       }
+      },
+      {
+       "t": "Return to the furnace to the east, and use the orbs on it.",
+       "s": "Return to the furnace to the east, and use the orbs on it.",
+       "k": "orbsToFurnace",
+       "at": [
+        2455,
+        9683,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3294
+        ]
+       }
+      },
+      {
+       "t": "Pull the lever to raise the gate.",
+       "s": "Pull the lever to raise the gate.",
+       "k": "pullLeverAfterGrid",
+       "hl": {
+        "obj": [
+         3337
+        ]
+       }
+      },
+      {
+       "t": "Cross the grid by trial and error. Keep health above 15, and remember the path for Regicide.",
+       "s": "Cross the grid by trial and error; keep your health above 15.",
+       "k": "crossTheGrid"
+      },
+      {
+       "t": "Climb-over rockslide",
+       "s": "Climb-over rockslide",
+       "k": "climbOverRockslide5",
+       "at": [
+        2482,
+        9679,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide",
+       "s": "Climb-over rockslide",
+       "k": "climbOverRockslide4",
+       "at": [
+        2491,
+        9691,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Swing across the pit with a rope.",
+       "s": "Swing across the pit with a rope.",
+       "k": "crossThePit",
+       "at": [
+        2463,
+        9699,
+        0
+       ],
+       "hl": {
+        "obj": [
+         23125
+        ]
+       }
+      },
+      {
+       "t": "Pick up the plank in the north room.",
+       "s": "Pick up the plank in the north room.",
+       "k": "collectPlank",
+       "at": [
+        2435,
+        9726,
+        0
+       ]
+      },
+      {
+       "t": "Pick the lock to enter the cell.",
+       "s": "Pick the lock to enter the cell.",
+       "k": "pickCellLock",
+       "at": [
+        2393,
+        9655,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3266
+        ]
+       }
+      },
+      {
+       "t": "Search the unicorn cage.",
+       "s": "Search the unicorn cage.",
+       "k": "searchUnicornCage",
+       "at": [
+        2398,
+        9605,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3267
+        ]
+       }
+      },
+      {
+       "t": "Use the railing on the boulder.",
+       "s": "Use the railing on the boulder.",
+       "k": "useRailingOnBoulder",
+       "at": [
+        2397,
+        9596,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4543
+        ]
+       }
+      },
+      {
+       "t": "Dig the loose mud.",
+       "s": "Dig the loose mud.",
+       "k": "digMud",
+       "at": [
+        2393,
+        9650,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3216
+        ]
+       }
+      },
+      {
+       "t": "Cross the ledge.",
+       "s": "Cross the ledge.",
+       "k": "crossLedge",
+       "at": [
+        2374,
+        9644,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3238
+        ]
+       }
+      },
+      {
+       "t": "Navigate the maze, or use the shortcut to the south with 50 Thieving.",
+       "s": "Navigate the maze, or use the shortcut to the south with 50 Thieving.",
+       "k": "navigateMaze"
+      },
+      {
+       "t": "Enter the pipe to the next section.",
+       "s": "Enter the pipe to the next section.",
+       "k": "goThroughPipe",
+       "at": [
+        2418,
+        9605,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3237
+        ]
+       }
+      },
+      {
+       "t": "Enter the tunnel.",
+       "s": "Enter the tunnel.",
+       "k": "leaveUnicornArea",
+       "at": [
+        2375,
+        9611,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3219
+        ]
+       }
+      },
+      {
+       "t": "Open the door at the end of the path.",
+       "s": "Open the door at the end of the path.",
+       "k": "openIbansDoor",
+       "at": [
+        2369,
+        9720,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3221
+        ]
+       }
+      },
+      {
+       "t": "Follow the edge of the cavern down to enter a cave on the south wall.",
+       "s": "Follow the edge of the cavern down to enter a cave on the south wall.",
+       "k": "descendCave",
+       "at": [
+        2150,
+        4545,
+        1
+       ],
+       "hl": {
+        "obj": [
+         3222
+        ]
+       }
+      },
+      {
+       "t": "Talk to Niloof.",
+       "s": "Talk to Niloof.",
+       "k": "talkToNiloof",
+       "at": [
+        2313,
+        9806,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4551
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 7,
+     "do": [
+      {
+       "t": "Enter the dungeon.",
+       "s": "Enter the dungeon.",
+       "k": "enterTheDungeon",
+       "at": [
+        2434,
+        3315,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3213
+        ]
+       }
+      },
+      {
+       "t": "Talk to Koftik inside the cave.",
+       "s": "Talk to Koftik inside the cave.",
+       "k": "talkToKoftikAtBridge",
+       "hl": {
+        "npc": [
+         8976
+        ]
+       }
+      },
+      {
+       "t": "Search the abandoned equipment for an oily cloth.",
+       "s": "Search the abandoned equipment for an oily cloth.",
+       "k": "searchBagForCloth",
+       "at": [
+        2452,
+        9715,
+        0
+       ],
+       "hl": {
+        "obj": [
+         35938
+        ]
+       }
+      },
+      {
+       "t": "Use the oily cloth on an arrow.",
+       "s": "Use the oily cloth on an arrow.",
+       "k": "useClothOnArrow"
+      },
+      {
+       "t": "Use the tinderbox on the fire arrow. If you don't have a tinderbox, use the arrow on the nearby fire instead.",
+       "s": "Light the arrow with your tinderbox, or use it on the nearby fire.",
+       "k": "lightArrow"
+      },
+      {
+       "t": "Walk to the room north of Koftik.",
+       "s": "Walk to the room north of Koftik.",
+       "k": "walkNorthEastOfBridge",
+       "at": [
+        2447,
+        9722,
+        0
+       ]
+      },
+      {
+       "t": "Wield a lit arrow and shoot the guide-rope.",
+       "s": "Wield a lit arrow and shoot the guide-rope.",
+       "k": "shootBridgeRope",
+       "hl": {
+        "obj": [
+         3340
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide.",
+       "s": "Climb-over rockslide.",
+       "k": "climbOverRockslide3",
+       "at": [
+        2458,
+        9712,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide.",
+       "s": "Climb-over rockslide.",
+       "k": "climbOverRockslide2",
+       "at": [
+        2471,
+        9706,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide.",
+       "s": "Climb-over rockslide.",
+       "k": "climbOverRockslide1",
+       "at": [
+        2480,
+        9713,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Follow the path west to leave.",
+       "s": "Follow the path west to leave.",
+       "k": "leaveFallArea",
+       "at": [
+        2443,
+        9652,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3265
+        ]
+       }
+      },
+      {
+       "t": "Climb down the well.",
+       "s": "Climb down the well.",
+       "k": "climbDownWell",
+       "at": [
+        2417,
+        9675,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3264
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap5",
+       "at": [
+        2430,
+        9676,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap4",
+       "at": [
+        2432,
+        9676,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap3",
+       "at": [
+        2435,
+        9676,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap2",
+       "at": [
+        2440,
+        9678,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap1",
+       "at": [
+        2443,
+        9678,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Take the first orb of light.",
+       "s": "Take the first orb of light.",
+       "k": "collectOrb1",
+       "hl": {
+        "obj": [
+         37326
+        ]
+       }
+      },
+      {
+       "t": "Use a plank on the flat rock to cross it.",
+       "s": "Use a plank on the flat rock to cross it.",
+       "k": "plankRock3",
+       "at": [
+        2416,
+        9689,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3230
+        ]
+       }
+      },
+      {
+       "t": "Use a plank on the flat rock to cross it.",
+       "s": "Use a plank on the flat rock to cross it.",
+       "k": "plankRock2",
+       "at": [
+        2418,
+        9685,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3230
+        ]
+       }
+      },
+      {
+       "t": "Use a plank on the flat rock to cross it.",
+       "s": "Use a plank on the flat rock to cross it.",
+       "k": "plankRock1",
+       "at": [
+        2418,
+        9681,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3230
+        ]
+       }
+      },
+      {
+       "t": "Take the second orb of light north west of the well.",
+       "s": "Take the second orb of light north west of the well.",
+       "k": "collectOrb2",
+       "at": [
+        2385,
+        9685,
+        0
+       ],
+       "hl": {
+        "obj": [
+         37325
+        ]
+       }
+      },
+      {
+       "t": "Take the third orb of light west of the well. Remember to use a plank on the flat rocks to cross them.",
+       "s": "Take the third orb of light west of the well; plank the flat rocks.",
+       "k": "collectOrb3",
+       "at": [
+        2386,
+        9677,
+        0
+       ],
+       "hl": {
+        "obj": [
+         37324
+        ]
+       }
+      },
+      {
+       "t": "Search the flat rock to remove the trap and take the fourth orb to the south west of the well.",
+       "s": "Search the flat rock to disarm the trap, then take the fourth orb.",
+       "k": "collectOrb4",
+       "at": [
+        2382,
+        9668,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3339
+        ]
+       }
+      },
+      {
+       "t": "Return to the furnace to the east, and use the orbs on it.",
+       "s": "Return to the furnace to the east, and use the orbs on it.",
+       "k": "orbsToFurnace",
+       "at": [
+        2455,
+        9683,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3294
+        ]
+       }
+      },
+      {
+       "t": "Pull the lever to raise the gate.",
+       "s": "Pull the lever to raise the gate.",
+       "k": "pullLeverAfterGrid",
+       "hl": {
+        "obj": [
+         3337
+        ]
+       }
+      },
+      {
+       "t": "Cross the grid by trial and error. Keep health above 15, and remember the path for Regicide.",
+       "s": "Cross the grid by trial and error; keep your health above 15.",
+       "k": "crossTheGrid"
+      },
+      {
+       "t": "Climb-over rockslide",
+       "s": "Climb-over rockslide",
+       "k": "climbOverRockslide5",
+       "at": [
+        2482,
+        9679,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide",
+       "s": "Climb-over rockslide",
+       "k": "climbOverRockslide4",
+       "at": [
+        2491,
+        9691,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Swing across the pit with a rope.",
+       "s": "Swing across the pit with a rope.",
+       "k": "crossThePit",
+       "at": [
+        2463,
+        9699,
+        0
+       ],
+       "hl": {
+        "obj": [
+         23125
+        ]
+       }
+      },
+      {
+       "t": "Pick up the plank in the north room.",
+       "s": "Pick up the plank in the north room.",
+       "k": "collectPlank",
+       "at": [
+        2435,
+        9726,
+        0
+       ]
+      },
+      {
+       "t": "Pick the lock to enter the cell.",
+       "s": "Pick the lock to enter the cell.",
+       "k": "pickCellLock",
+       "at": [
+        2393,
+        9655,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3266
+        ]
+       }
+      },
+      {
+       "t": "Search the unicorn cage.",
+       "s": "Search the unicorn cage.",
+       "k": "searchUnicornCage",
+       "at": [
+        2398,
+        9605,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3267
+        ]
+       }
+      },
+      {
+       "t": "Use the railing on the boulder.",
+       "s": "Use the railing on the boulder.",
+       "k": "useRailingOnBoulder",
+       "at": [
+        2397,
+        9596,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4543
+        ]
+       }
+      },
+      {
+       "t": "Dig the loose mud.",
+       "s": "Dig the loose mud.",
+       "k": "digMud",
+       "at": [
+        2393,
+        9650,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3216
+        ]
+       }
+      },
+      {
+       "t": "Cross the ledge.",
+       "s": "Cross the ledge.",
+       "k": "crossLedge",
+       "at": [
+        2374,
+        9644,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3238
+        ]
+       }
+      },
+      {
+       "t": "Navigate the maze, or use the shortcut to the south with 50 Thieving.",
+       "s": "Navigate the maze, or use the shortcut to the south with 50 Thieving.",
+       "k": "navigateMaze"
+      },
+      {
+       "t": "Enter the pipe to the next section.",
+       "s": "Enter the pipe to the next section.",
+       "k": "goThroughPipe",
+       "at": [
+        2418,
+        9605,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3237
+        ]
+       }
+      },
+      {
+       "t": "Enter the tunnel.",
+       "s": "Enter the tunnel.",
+       "k": "leaveUnicornArea",
+       "at": [
+        2375,
+        9611,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3219
+        ]
+       }
+      },
+      {
+       "t": "Open the door at the end of the path.",
+       "s": "Open the door at the end of the path.",
+       "k": "openIbansDoor",
+       "at": [
+        2369,
+        9720,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3221
+        ]
+       }
+      },
+      {
+       "t": "Follow the edge of the cavern down to enter a cave on the south wall.",
+       "s": "Follow the edge of the cavern down to enter a cave on the south wall.",
+       "k": "descendCave",
+       "at": [
+        2150,
+        4545,
+        1
+       ],
+       "hl": {
+        "obj": [
+         3222
+        ]
+       }
+      },
+      {
+       "t": "Talk to Klank the dwarf to get his gauntlets; keep a free inventory slot.",
+       "s": "Talk to Klank for his gauntlets; keep a free inventory slot.",
+       "k": "talkToKlankForGauntlets",
+       "hl": {
+        "npc": [
+         4552
+        ]
+       }
+      },
+      {
+       "t": "Return up to Iban's Cavern.",
+       "s": "Return up to Iban's Cavern.",
+       "k": "goBackUpToIbansCavern",
+       "at": [
+        2336,
+        9793,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3223
+        ]
+       }
+      },
+      {
+       "t": "Start from the south east corner of the bridges, and go northwest along them and retrieve the witch's cat.",
+       "s": "Follow the bridges north-west from the south-east and take the cat.",
+       "k": "pickUpWitchsCat",
+       "at": [
+        2131,
+        4602,
+        1
+       ],
+       "hl": {
+        "npc": [
+         8992
+        ]
+       }
+      },
+      {
+       "t": "Use the cat on the witch's door in the south east corner of the area to distract her.",
+       "s": "Use the cat on the witch's door, south-east of the area.",
+       "k": "useCatOnDoor",
+       "at": [
+        2158,
+        4566,
+        1
+       ],
+       "hl": {
+        "obj": [
+         3270
+        ]
+       }
+      },
+      {
+       "t": "Search the chest in the witch's house. You'll need 4 empty inventory slots.",
+       "s": "Search the chest in the witch's house; keep 4 inventory slots free.",
+       "k": "searchWitchsChest",
+       "at": [
+        2157,
+        4564,
+        1
+       ],
+       "hl": {
+        "obj": [
+         3272
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 8,
+     "do": [
+      {
+       "t": "Enter the dungeon.",
+       "s": "Enter the dungeon.",
+       "k": "enterTheDungeon",
+       "at": [
+        2434,
+        3315,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3213
+        ]
+       }
+      },
+      {
+       "t": "Talk to Koftik inside the cave.",
+       "s": "Talk to Koftik inside the cave.",
+       "k": "talkToKoftikAtBridge",
+       "hl": {
+        "npc": [
+         8976
+        ]
+       }
+      },
+      {
+       "t": "Search the abandoned equipment for an oily cloth.",
+       "s": "Search the abandoned equipment for an oily cloth.",
+       "k": "searchBagForCloth",
+       "at": [
+        2452,
+        9715,
+        0
+       ],
+       "hl": {
+        "obj": [
+         35938
+        ]
+       }
+      },
+      {
+       "t": "Use the oily cloth on an arrow.",
+       "s": "Use the oily cloth on an arrow.",
+       "k": "useClothOnArrow"
+      },
+      {
+       "t": "Use the tinderbox on the fire arrow. If you don't have a tinderbox, use the arrow on the nearby fire instead.",
+       "s": "Light the arrow with your tinderbox, or use it on the nearby fire.",
+       "k": "lightArrow"
+      },
+      {
+       "t": "Walk to the room north of Koftik.",
+       "s": "Walk to the room north of Koftik.",
+       "k": "walkNorthEastOfBridge",
+       "at": [
+        2447,
+        9722,
+        0
+       ]
+      },
+      {
+       "t": "Wield a lit arrow and shoot the guide-rope.",
+       "s": "Wield a lit arrow and shoot the guide-rope.",
+       "k": "shootBridgeRope",
+       "hl": {
+        "obj": [
+         3340
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide.",
+       "s": "Climb-over rockslide.",
+       "k": "climbOverRockslide3",
+       "at": [
+        2458,
+        9712,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide.",
+       "s": "Climb-over rockslide.",
+       "k": "climbOverRockslide2",
+       "at": [
+        2471,
+        9706,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide.",
+       "s": "Climb-over rockslide.",
+       "k": "climbOverRockslide1",
+       "at": [
+        2480,
+        9713,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Follow the path west to leave.",
+       "s": "Follow the path west to leave.",
+       "k": "leaveFallArea",
+       "at": [
+        2443,
+        9652,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3265
+        ]
+       }
+      },
+      {
+       "t": "Climb down the well.",
+       "s": "Climb down the well.",
+       "k": "climbDownWell",
+       "at": [
+        2417,
+        9675,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3264
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap5",
+       "at": [
+        2430,
+        9676,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap4",
+       "at": [
+        2432,
+        9676,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap3",
+       "at": [
+        2435,
+        9676,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap2",
+       "at": [
+        2440,
+        9678,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap1",
+       "at": [
+        2443,
+        9678,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Take the first orb of light.",
+       "s": "Take the first orb of light.",
+       "k": "collectOrb1",
+       "hl": {
+        "obj": [
+         37326
+        ]
+       }
+      },
+      {
+       "t": "Use a plank on the flat rock to cross it.",
+       "s": "Use a plank on the flat rock to cross it.",
+       "k": "plankRock3",
+       "at": [
+        2416,
+        9689,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3230
+        ]
+       }
+      },
+      {
+       "t": "Use a plank on the flat rock to cross it.",
+       "s": "Use a plank on the flat rock to cross it.",
+       "k": "plankRock2",
+       "at": [
+        2418,
+        9685,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3230
+        ]
+       }
+      },
+      {
+       "t": "Use a plank on the flat rock to cross it.",
+       "s": "Use a plank on the flat rock to cross it.",
+       "k": "plankRock1",
+       "at": [
+        2418,
+        9681,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3230
+        ]
+       }
+      },
+      {
+       "t": "Take the second orb of light north west of the well.",
+       "s": "Take the second orb of light north west of the well.",
+       "k": "collectOrb2",
+       "at": [
+        2385,
+        9685,
+        0
+       ],
+       "hl": {
+        "obj": [
+         37325
+        ]
+       }
+      },
+      {
+       "t": "Take the third orb of light west of the well. Remember to use a plank on the flat rocks to cross them.",
+       "s": "Take the third orb of light west of the well; plank the flat rocks.",
+       "k": "collectOrb3",
+       "at": [
+        2386,
+        9677,
+        0
+       ],
+       "hl": {
+        "obj": [
+         37324
+        ]
+       }
+      },
+      {
+       "t": "Search the flat rock to remove the trap and take the fourth orb to the south west of the well.",
+       "s": "Search the flat rock to disarm the trap, then take the fourth orb.",
+       "k": "collectOrb4",
+       "at": [
+        2382,
+        9668,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3339
+        ]
+       }
+      },
+      {
+       "t": "Return to the furnace to the east, and use the orbs on it.",
+       "s": "Return to the furnace to the east, and use the orbs on it.",
+       "k": "orbsToFurnace",
+       "at": [
+        2455,
+        9683,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3294
+        ]
+       }
+      },
+      {
+       "t": "Pull the lever to raise the gate.",
+       "s": "Pull the lever to raise the gate.",
+       "k": "pullLeverAfterGrid",
+       "hl": {
+        "obj": [
+         3337
+        ]
+       }
+      },
+      {
+       "t": "Cross the grid by trial and error. Keep health above 15, and remember the path for Regicide.",
+       "s": "Cross the grid by trial and error; keep your health above 15.",
+       "k": "crossTheGrid"
+      },
+      {
+       "t": "Climb-over rockslide",
+       "s": "Climb-over rockslide",
+       "k": "climbOverRockslide5",
+       "at": [
+        2482,
+        9679,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide",
+       "s": "Climb-over rockslide",
+       "k": "climbOverRockslide4",
+       "at": [
+        2491,
+        9691,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Swing across the pit with a rope.",
+       "s": "Swing across the pit with a rope.",
+       "k": "crossThePit",
+       "at": [
+        2463,
+        9699,
+        0
+       ],
+       "hl": {
+        "obj": [
+         23125
+        ]
+       }
+      },
+      {
+       "t": "Pick up the plank in the north room.",
+       "s": "Pick up the plank in the north room.",
+       "k": "collectPlank",
+       "at": [
+        2435,
+        9726,
+        0
+       ]
+      },
+      {
+       "t": "Pick the lock to enter the cell.",
+       "s": "Pick the lock to enter the cell.",
+       "k": "pickCellLock",
+       "at": [
+        2393,
+        9655,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3266
+        ]
+       }
+      },
+      {
+       "t": "Search the unicorn cage.",
+       "s": "Search the unicorn cage.",
+       "k": "searchUnicornCage",
+       "at": [
+        2398,
+        9605,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3267
+        ]
+       }
+      },
+      {
+       "t": "Use the railing on the boulder.",
+       "s": "Use the railing on the boulder.",
+       "k": "useRailingOnBoulder",
+       "at": [
+        2397,
+        9596,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4543
+        ]
+       }
+      },
+      {
+       "t": "Dig the loose mud.",
+       "s": "Dig the loose mud.",
+       "k": "digMud",
+       "at": [
+        2393,
+        9650,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3216
+        ]
+       }
+      },
+      {
+       "t": "Cross the ledge.",
+       "s": "Cross the ledge.",
+       "k": "crossLedge",
+       "at": [
+        2374,
+        9644,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3238
+        ]
+       }
+      },
+      {
+       "t": "Navigate the maze, or use the shortcut to the south with 50 Thieving.",
+       "s": "Navigate the maze, or use the shortcut to the south with 50 Thieving.",
+       "k": "navigateMaze"
+      },
+      {
+       "t": "Enter the pipe to the next section.",
+       "s": "Enter the pipe to the next section.",
+       "k": "goThroughPipe",
+       "at": [
+        2418,
+        9605,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3237
+        ]
+       }
+      },
+      {
+       "t": "Enter the tunnel.",
+       "s": "Enter the tunnel.",
+       "k": "leaveUnicornArea",
+       "at": [
+        2375,
+        9611,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3219
+        ]
+       }
+      },
+      {
+       "t": "Open the door at the end of the path.",
+       "s": "Open the door at the end of the path.",
+       "k": "openIbansDoor",
+       "at": [
+        2369,
+        9720,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3221
+        ]
+       }
+      },
+      {
+       "t": "Return up to Iban's Cavern.",
+       "s": "Return up to Iban's Cavern.",
+       "k": "goBackUpToIbansCavern",
+       "at": [
+        2336,
+        9793,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3223
+        ]
+       }
+      },
+      {
+       "t": "From the south east corner of the area, head west then south along the pathways. Kill Holthion and pick up his amulet.",
+       "s": "Kill Holthion (level 91) west of the witch and take his amulet.",
+       "k": "killHolthion",
+       "at": [
+        2133,
+        4555,
+        1
+       ],
+       "hl": {
+        "npc": [
+         8996
+        ]
+       }
+      },
+      {
+       "t": "Kill Doomion and pick up his amulet.",
+       "s": "Kill Doomion and pick up his amulet.",
+       "k": "killDoomion",
+       "at": [
+        2135,
+        4566,
+        1
+       ],
+       "hl": {
+        "npc": [
+         8995
+        ]
+       }
+      },
+      {
+       "t": "Kill Othainian and pick up his amulet.",
+       "s": "Kill Othainian and pick up his amulet.",
+       "k": "killOthainian",
+       "at": [
+        2123,
+        4563,
+        1
+       ],
+       "hl": {
+        "npc": [
+         8994
+        ]
+       }
+      },
+      {
+       "t": "Search the chest north of Doomion.",
+       "s": "Search the chest north of Doomion.",
+       "k": "searchDoomionsChest",
+       "at": [
+        2136,
+        4578,
+        1
+       ],
+       "hl": {
+        "obj": [
+         3274
+        ]
+       }
+      },
+      {
+       "t": "Use the shadow on the doll.",
+       "s": "Use the shadow on the doll.",
+       "k": "useShadowOnDoll"
+      },
+      {
+       "t": "Return to the dwarf encampment on the lower level.",
+       "s": "Return to the dwarf encampment on the lower level.",
+       "k": "returnToDwarfs",
+       "at": [
+        2150,
+        4545,
+        1
+       ],
+       "hl": {
+        "obj": [
+         3222
+        ]
+       }
+      },
+      {
+       "t": "Pick up a bucket in the large dwarf encampment building.",
+       "s": "Pick up a bucket in the large dwarf encampment building.",
+       "k": "pickUpBucket",
+       "at": [
+        2309,
+        9798,
+        0
+       ],
+       "has": "Bucket"
+      },
+      {
+       "t": "Pick up a tinderbox in the small dwarf encampment building.",
+       "s": "Pick up a tinderbox in the small dwarf encampment building.",
+       "k": "pickUpTinderbox",
+       "at": [
+        2324,
+        9800,
+        0
+       ],
+       "has": "Tinderbox"
+      },
+      {
+       "t": "Use a bucket on the brew barrel in the dwarf encampment on the south west.",
+       "s": "Use a bucket on the brew barrel in the south-west dwarf camp.",
+       "k": "useBucketOnBrew",
+       "at": [
+        2327,
+        9799,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3344
+        ]
+       }
+      },
+      {
+       "t": "Use the bucket of brew on the tomb in the south east corner of the area.",
+       "s": "Use the bucket of brew on the tomb in the south-east corner.",
+       "k": "useBrewOnTomb",
+       "at": [
+        2357,
+        9802,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3353
+        ]
+       }
+      },
+      {
+       "t": "Light the tomb with a tinderbox.",
+       "s": "Light the tomb with a tinderbox.",
+       "k": "useTinderboxOnTomb",
+       "at": [
+        2357,
+        9802,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3353
+        ]
+       }
+      },
+      {
+       "t": "Use the ashes on the doll.",
+       "s": "Use the ashes on the doll.",
+       "k": "useAshOnDoll"
+      },
+      {
+       "t": "Kill Kalrag the spider. Protect From Melee can keep you safe in this fight.",
+       "s": "Kill Kalrag (level 89); Protect from Melee stops his hits.",
+       "k": "killKalrag",
+       "at": [
+        2356,
+        9913,
+        0
+       ],
+       "hl": {
+        "npc": [
+         8993
+        ]
+       }
+      },
+      {
+       "t": "Follow the edge of the cavern down to enter a cave on the south wall.",
+       "s": "Follow the edge of the cavern down to enter a cave on the south wall.",
+       "k": "descendCave",
+       "at": [
+        2150,
+        4545,
+        1
+       ],
+       "hl": {
+        "obj": [
+         3222
+        ]
+       }
+      },
+      {
+       "t": "Talk to Klank the dwarf to get his gauntlets; keep a free inventory slot.",
+       "s": "Talk to Klank for his gauntlets; keep a free inventory slot.",
+       "k": "talkToKlankForGauntlets",
+       "hl": {
+        "npc": [
+         4552
+        ]
+       }
+      },
+      {
+       "t": "Ascend to the upper level of the cave again via the north west exit.",
+       "s": "Ascend to the upper level of the cave again via the north west exit.",
+       "k": "ascendToHalfSoulless",
+       "at": [
+        2304,
+        9915,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3223
+        ]
+       }
+      },
+      {
+       "t": "Search the marked cage in the north west of the area while wearing Klank's gauntlets.",
+       "s": "Wearing Klank's gauntlets, search the marked cage in the north-west.",
+       "k": "searchCage",
+       "at": [
+        2135,
+        4703,
+        1
+       ],
+       "hl": {
+        "obj": [
+         3351
+        ]
+       }
+      },
+      {
+       "t": "Use the dove on the doll.",
+       "s": "Use the dove on the doll.",
+       "k": "useDoveOnDoll"
+      },
+      {
+       "t": "Travel along the pathways from the north west corner of the area to the middle. Kill a disciple of Iban and take their robes.",
+       "s": "Kill a disciple of Iban (level 13) in the middle and take its robes.",
+       "k": "killDisciple",
+       "at": [
+        2163,
+        4648,
+        1
+       ],
+       "hl": {
+        "npc": [
+         8997
+        ]
+       }
+      },
+      {
+       "t": "Enter the Temple of Iban wearing monk robes. Prepare to use Iban's doll on the well, as Iban can deal lots of damage quickly.",
+       "s": "Wearing the monk robes, enter the Temple of Iban with Iban's doll.",
+       "k": "enterTemple",
+       "at": [
+        2144,
+        4648,
+        1
+       ],
+       "hl": {
+        "obj": [
+         3333
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 9,
+     "do": [
+      {
+       "t": "Enter the dungeon.",
+       "s": "Enter the dungeon.",
+       "k": "enterTheDungeon",
+       "at": [
+        2434,
+        3315,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3213
+        ]
+       }
+      },
+      {
+       "t": "Talk to Koftik inside the cave.",
+       "s": "Talk to Koftik inside the cave.",
+       "k": "talkToKoftikAtBridge",
+       "hl": {
+        "npc": [
+         8976
+        ]
+       }
+      },
+      {
+       "t": "Search the abandoned equipment for an oily cloth.",
+       "s": "Search the abandoned equipment for an oily cloth.",
+       "k": "searchBagForCloth",
+       "at": [
+        2452,
+        9715,
+        0
+       ],
+       "hl": {
+        "obj": [
+         35938
+        ]
+       }
+      },
+      {
+       "t": "Use the oily cloth on an arrow.",
+       "s": "Use the oily cloth on an arrow.",
+       "k": "useClothOnArrow"
+      },
+      {
+       "t": "Use the tinderbox on the fire arrow. If you don't have a tinderbox, use the arrow on the nearby fire instead.",
+       "s": "Light the arrow with your tinderbox, or use it on the nearby fire.",
+       "k": "lightArrow"
+      },
+      {
+       "t": "Walk to the room north of Koftik.",
+       "s": "Walk to the room north of Koftik.",
+       "k": "walkNorthEastOfBridge",
+       "at": [
+        2447,
+        9722,
+        0
+       ]
+      },
+      {
+       "t": "Wield a lit arrow and shoot the guide-rope.",
+       "s": "Wield a lit arrow and shoot the guide-rope.",
+       "k": "shootBridgeRope",
+       "hl": {
+        "obj": [
+         3340
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide.",
+       "s": "Climb-over rockslide.",
+       "k": "climbOverRockslide3",
+       "at": [
+        2458,
+        9712,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide.",
+       "s": "Climb-over rockslide.",
+       "k": "climbOverRockslide2",
+       "at": [
+        2471,
+        9706,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide.",
+       "s": "Climb-over rockslide.",
+       "k": "climbOverRockslide1",
+       "at": [
+        2480,
+        9713,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Follow the path west to leave.",
+       "s": "Follow the path west to leave.",
+       "k": "leaveFallArea",
+       "at": [
+        2443,
+        9652,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3265
+        ]
+       }
+      },
+      {
+       "t": "Climb down the well.",
+       "s": "Climb down the well.",
+       "k": "climbDownWell",
+       "at": [
+        2417,
+        9675,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3264
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap5",
+       "at": [
+        2430,
+        9676,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap4",
+       "at": [
+        2432,
+        9676,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap3",
+       "at": [
+        2435,
+        9676,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap2",
+       "at": [
+        2440,
+        9678,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Either disable or walk past the traps.",
+       "s": "Either disable or walk past the traps.",
+       "k": "passTrap1",
+       "at": [
+        2443,
+        9678,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3234
+        ]
+       }
+      },
+      {
+       "t": "Take the first orb of light.",
+       "s": "Take the first orb of light.",
+       "k": "collectOrb1",
+       "hl": {
+        "obj": [
+         37326
+        ]
+       }
+      },
+      {
+       "t": "Use a plank on the flat rock to cross it.",
+       "s": "Use a plank on the flat rock to cross it.",
+       "k": "plankRock3",
+       "at": [
+        2416,
+        9689,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3230
+        ]
+       }
+      },
+      {
+       "t": "Use a plank on the flat rock to cross it.",
+       "s": "Use a plank on the flat rock to cross it.",
+       "k": "plankRock2",
+       "at": [
+        2418,
+        9685,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3230
+        ]
+       }
+      },
+      {
+       "t": "Use a plank on the flat rock to cross it.",
+       "s": "Use a plank on the flat rock to cross it.",
+       "k": "plankRock1",
+       "at": [
+        2418,
+        9681,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3230
+        ]
+       }
+      },
+      {
+       "t": "Take the second orb of light north west of the well.",
+       "s": "Take the second orb of light north west of the well.",
+       "k": "collectOrb2",
+       "at": [
+        2385,
+        9685,
+        0
+       ],
+       "hl": {
+        "obj": [
+         37325
+        ]
+       }
+      },
+      {
+       "t": "Take the third orb of light west of the well. Remember to use a plank on the flat rocks to cross them.",
+       "s": "Take the third orb of light west of the well; plank the flat rocks.",
+       "k": "collectOrb3",
+       "at": [
+        2386,
+        9677,
+        0
+       ],
+       "hl": {
+        "obj": [
+         37324
+        ]
+       }
+      },
+      {
+       "t": "Search the flat rock to remove the trap and take the fourth orb to the south west of the well.",
+       "s": "Search the flat rock to disarm the trap, then take the fourth orb.",
+       "k": "collectOrb4",
+       "at": [
+        2382,
+        9668,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3339
+        ]
+       }
+      },
+      {
+       "t": "Return to the furnace to the east, and use the orbs on it.",
+       "s": "Return to the furnace to the east, and use the orbs on it.",
+       "k": "orbsToFurnace",
+       "at": [
+        2455,
+        9683,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3294
+        ]
+       }
+      },
+      {
+       "t": "Pull the lever to raise the gate.",
+       "s": "Pull the lever to raise the gate.",
+       "k": "pullLeverAfterGrid",
+       "hl": {
+        "obj": [
+         3337
+        ]
+       }
+      },
+      {
+       "t": "Cross the grid by trial and error. Keep health above 15, and remember the path for Regicide.",
+       "s": "Cross the grid by trial and error; keep your health above 15.",
+       "k": "crossTheGrid"
+      },
+      {
+       "t": "Climb-over rockslide",
+       "s": "Climb-over rockslide",
+       "k": "climbOverRockslide5",
+       "at": [
+        2482,
+        9679,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Climb-over rockslide",
+       "s": "Climb-over rockslide",
+       "k": "climbOverRockslide4",
+       "at": [
+        2491,
+        9691,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3309
+        ]
+       }
+      },
+      {
+       "t": "Swing across the pit with a rope.",
+       "s": "Swing across the pit with a rope.",
+       "k": "crossThePit",
+       "at": [
+        2463,
+        9699,
+        0
+       ],
+       "hl": {
+        "obj": [
+         23125
+        ]
+       }
+      },
+      {
+       "t": "Pick up the plank in the north room.",
+       "s": "Pick up the plank in the north room.",
+       "k": "collectPlank",
+       "at": [
+        2435,
+        9726,
+        0
+       ]
+      },
+      {
+       "t": "Pick the lock to enter the cell.",
+       "s": "Pick the lock to enter the cell.",
+       "k": "pickCellLock",
+       "at": [
+        2393,
+        9655,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3266
+        ]
+       }
+      },
+      {
+       "t": "Search the unicorn cage.",
+       "s": "Search the unicorn cage.",
+       "k": "searchUnicornCage",
+       "at": [
+        2398,
+        9605,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3267
+        ]
+       }
+      },
+      {
+       "t": "Use the railing on the boulder.",
+       "s": "Use the railing on the boulder.",
+       "k": "useRailingOnBoulder",
+       "at": [
+        2397,
+        9596,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4543
+        ]
+       }
+      },
+      {
+       "t": "Dig the loose mud.",
+       "s": "Dig the loose mud.",
+       "k": "digMud",
+       "at": [
+        2393,
+        9650,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3216
+        ]
+       }
+      },
+      {
+       "t": "Cross the ledge.",
+       "s": "Cross the ledge.",
+       "k": "crossLedge",
+       "at": [
+        2374,
+        9644,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3238
+        ]
+       }
+      },
+      {
+       "t": "Navigate the maze, or use the shortcut to the south with 50 Thieving.",
+       "s": "Navigate the maze, or use the shortcut to the south with 50 Thieving.",
+       "k": "navigateMaze"
+      },
+      {
+       "t": "Enter the pipe to the next section.",
+       "s": "Enter the pipe to the next section.",
+       "k": "goThroughPipe",
+       "at": [
+        2418,
+        9605,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3237
+        ]
+       }
+      },
+      {
+       "t": "Enter the tunnel.",
+       "s": "Enter the tunnel.",
+       "k": "leaveUnicornArea",
+       "at": [
+        2375,
+        9611,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3219
+        ]
+       }
+      },
+      {
+       "t": "Open the door at the end of the path.",
+       "s": "Open the door at the end of the path.",
+       "k": "openIbansDoor",
+       "at": [
+        2369,
+        9720,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3221
+        ]
+       }
+      },
+      {
+       "t": "Ascend to the upper level of the cave again via the north west exit.",
+       "s": "Ascend to the upper level of the cave again via the north west exit.",
+       "k": "ascendToHalfSoulless",
+       "at": [
+        2304,
+        9915,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3223
+        ]
+       }
+      },
+      {
+       "t": "Travel along the pathways from the north west corner of the area to the middle. Kill a disciple of Iban and take their robes.",
+       "s": "Kill a disciple of Iban (level 13) in the middle and take its robes.",
+       "k": "killDisciple",
+       "at": [
+        2163,
+        4648,
+        1
+       ],
+       "hl": {
+        "npc": [
+         8997
+        ]
+       }
+      },
+      {
+       "t": "Enter the Temple of Iban wearing monk robes. Prepare to use Iban's doll on the well, as Iban can deal lots of damage quickly.",
+       "s": "Wearing the monk robes, enter the Temple of Iban with Iban's doll.",
+       "k": "enterTemple",
+       "at": [
+        2144,
+        4648,
+        1
+       ],
+       "hl": {
+        "obj": [
+         3333
+        ]
+       }
+      },
+      {
+       "t": "Right-click USE the doll on the well. Standing north of the well can prevent Iban from hitting.",
+       "s": "Use the doll on the well; stand north of it to avoid Iban's hits.",
+       "k": "useDollOnWell",
+       "at": [
+        2137,
+        4648,
+        1
+       ],
+       "hl": {
+        "obj": [
+         3359
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 10,
+     "do": [
+      {
+       "t": "Return to King Lathas to finish the quest.",
+       "s": "Return to King Lathas to finish the quest.",
+       "k": "talkToKingLathasAfterTemple",
+       "at": [
+        2578,
+        3293,
+        1
+       ],
+       "hl": {
+        "npc": [
+         9005
+        ]
+       }
+      },
+      {
+       "t": "Talk to Koftik.",
+       "s": "Talk to Koftik.",
+       "k": "talkToKoftikAfterTemple",
+       "at": [
+        2444,
+        9607,
+        0
+       ],
+       "hl": {
+        "npc": [
+         8976
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  "S9-67": {
+   "var": [
+    "varbit",
+    961
+   ],
+   "route": [
+    {
+     "title": "Starting out",
+     "steps": [
+      "Talk to Ellamaria at the garden east of the palace. Dialogue: \"Yes.\"",
+      "Talk to the Wise Old Man in Draynor Village with the Ring of Charos. Dialogue: \"Queen Ellamaria has sent me to seek your guidance.\"",
+      "Quiz answers:"
+     ]
+    },
+    {
+     "title": "Gathering seeds",
+     "steps": [
+      "See to the survival of your crops as you see fit. It is strongly recommended to compost all patches as the gardeners will refuse to watch over them.",
+      "Always have on you: A rake, seed dibber, spade, secateurs, watering can, gardening trowel, and Ring of Charos(a)."
+     ]
+    },
+    {
+     "title": "Lyra west of Port Phasmatys",
+     "steps": [
+      "Talk to Lyra west of Port Phasmatys, wearing the Ring of charos. Dialogue: \"Do you have any orchid seeds to spare?\", then choose every [Charm] option, ending with \"That's a deal - I'll grow a patch of onions for you.\"",
+      "Grow onions (takes 40 minutes, planting in both patches reduce chance of failure).",
+      "Once grown, talk to Lyra for the orchid seeds."
+     ]
+    },
+    {
+     "title": "Kragen north of Ardougne",
+     "steps": [
+      "Talk to Kragen north of East Ardougne. Dialogue: \"Do you have any snowdrop seeds to spare?\", \"[Charm] You seem to be a little irritable, my friend.\", \"[Charm] I don't like to see a fellow human being so upset.\", \"[Charm] So what ails you, my friend?\", \"[Charm] Well, is there anything I can do for you?\", \"[Charm] So what can I do for you?\", \"That's a deal - I'll let you know when your cabbages are ready.\"",
+      "Grow cabbages (takes 40 minutes, planting in both patches reduce chance of failure).",
+      "Once grown, talk to Kragen for the snowdrop seeds."
+     ]
+    },
+    {
+     "title": "Elstan south of Falador",
+     "steps": [
+      "Talk to Elstan south of Falador. Dialogue: \"Do you have any delphinium seeds to spare?\", \"[Charm] That is why I have come to an expert for advice.\", \"[Charm] Not just AN expert, Elstan - they say you are THE expert.\", \"[Charm] Oh no, I love listening to gardening stories...\", \"[Charm] Millions? Ah, just what I wanted to hear...\", \"Okay, I'll grow you some marigolds.\"",
+      "Grow marigolds in the patch (takes 20 minutes).",
+      "Once grown, give them to Elstan for the delphinium seeds."
+     ]
+    },
+    {
+     "title": "Dantaera in Catherby",
+     "steps": [
+      "Talk to Dantaera in Catherby. Dialogue: \"Do you know how I could grow a White Tree?\", \"[Charm] I think that there is something that you are not telling me.\", \"[Charm] A secret is a dreadful burden to have to keep to yourself.\", \"[Charm] Unless you allow me to do this she will die anyway.\"",
+      "Travel to Ice Mountain.",
+      "Use secateurs on the White Tree located on the northern part of the Ice Mountain to get the white tree shoot.",
+      "Put the cutting in your plant pot and water it."
+     ]
+    },
+    {
+     "title": "Brother Althric at the Edgeville monastery",
+     "steps": [
+      "Talk to Brother Althric at the Edgeville Monastery. Dialogue: \"[Charm] These are the most beautiful rosebushes I've ever seen.\"",
+      "Run over to Edgeville and throw the Ring of Charos(a) down the well.",
+      "Take 4 seeds from the red, pink, and white roses.",
+      "Retrieve your ring with the fishing rod."
+     ]
+    },
+    {
+     "title": "Bernald behind the Burthorpe pub",
+     "steps": [
+      "Talk to Bernald in Burthorpe. Dialogue: \"[Charm] But it is the only way that these vines will be cured.\", \"I accept the deal.\"",
+      "Use 1 plant cure on the vines.",
+      "Talk to Bernald again.",
+      "Talk to Alain by the Taverley tree patch. Dialogue: \"I need to ask you about strong plant cures.\", \"Are you sure there's nothing you can suggest?\"",
+      "Use a hammer or chisel on the rune/pure essence to get rune shards.",
+      "Use a pestle and mortar on the rune shards to get rune dust.",
+      "Use the rune dust on the other plant cure to get the strong plant cure, then use it on the vines.",
+      "Talk to Bernald to get the vine seeds."
+     ]
+    },
+    {
+     "title": "The statues",
+     "steps": [
+      "Talk to Ellamaria, ask about the statues to get a trolley. Dialogue: \"How am I supposed to move statues all the way here?\"",
+      "Use the trolley on the statue of a king.",
+      "Push the trolley east over the bridge.",
+      "Place the statue on the eastern plinth in the garden.",
+      "Use the trolley on the Saradomin statue.",
+      "Push the trolley north through the gate.",
+      "Watch the cutscene.",
+      "Place the statue on the southern plinth in the garden."
+     ]
+    },
+    {
+     "title": "Gardening",
+     "steps": [
+      "Return to Ellamaria's garden and fill the 2 plant pots with compost.",
+      "Plant everything. They take 10-15 minutes to grow and cannot die.",
+      "Talk to Ellamaria.",
+      "Talk to King Roald. Dialogue: \"Would you like to follow me for a minute?\", \"[Charm] Of course, your majesty - please forgive me.\", \"[Charm] The Queen asked me to bring you.\" (Make sure you have the Ring of Charos(a) equipped when talking to King Roald or he will not follow you into the garden.)",
+      "Watch the cutscene.",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Talk to Ellamaria east of Varrock Castle.",
+       "s": "Talk to Ellamaria east of Varrock Castle.",
+       "k": "talkToEllamaria",
+       "at": [
+        3230,
+        3478,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1390
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 10,
+     "do": [
+      {
+       "t": "Talk to the Wise Old Man in Draynor Village.",
+       "s": "Talk to the Wise Old Man in Draynor Village.",
+       "k": "talkToWom",
+       "at": [
+        3089,
+        3254,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2108
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 40,
+     "do": [
+      {
+       "t": "Talk to Elstan north west of Draynor Village.",
+       "s": "Talk to Elstan north west of Draynor Village.",
+       "k": "talkToElstan",
+       "at": [
+        3056,
+        3311,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2663
+        ]
+       }
+      },
+      {
+       "t": "Plant a marigold near to Elstan.",
+       "s": "Plant a marigold near to Elstan.",
+       "k": "plantMarigolds",
+       "at": [
+        3055,
+        3308,
+        0
+       ],
+       "hl": {
+        "obj": [
+         7847
+        ]
+       }
+      },
+      {
+       "t": "Talk to Lyra west of Port Phasmatys.",
+       "s": "Talk to Lyra west of Port Phasmatys.",
+       "k": "talkToLyra",
+       "at": [
+        3608,
+        3528,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2666
+        ]
+       }
+      },
+      {
+       "t": "Plant onions in a patch near Lyra. Plant in both for the best chance of one not dying.",
+       "s": "Plant onions in both patches near Lyra, so at least one survives.",
+       "k": "plantOnions",
+       "at": [
+        3601,
+        3529,
+        0
+       ],
+       "hl": {
+        "obj": [
+         8556
+        ]
+       }
+      },
+      {
+       "t": "Talk to Kragen northeast of Ardougne.",
+       "s": "Talk to Kragen northeast of Ardougne.",
+       "k": "talkToKragen",
+       "at": [
+        2668,
+        3376,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2665
+        ]
+       }
+      },
+      {
+       "t": "Plant cabbage seeds in the patches near Kragen. Plant in both to be safe.",
+       "s": "Plant cabbage seeds in both patches near Kragen, to be safe.",
+       "k": "plantCabbage",
+       "at": [
+        2669,
+        3378,
+        0
+       ],
+       "hl": {
+        "obj": [
+         8554
+        ]
+       }
+      },
+      {
+       "t": "Talk to Dantaera north of Catherby.",
+       "s": "Talk to Dantaera north of Catherby.",
+       "k": "talkToDantaera",
+       "at": [
+        2812,
+        3464,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2664
+        ]
+       }
+      },
+      {
+       "t": "Use secateurs on the white tree on top of Ice Mountain.",
+       "s": "Use secateurs on the white tree on top of Ice Mountain.",
+       "k": "useSecateursOnWhiteTree",
+       "at": [
+        3008,
+        3498,
+        0
+       ],
+       "hl": {
+        "obj": [
+         9263
+        ]
+       }
+      },
+      {
+       "t": "Use the shoot on a plant pot.",
+       "s": "Use the shoot on a plant pot.",
+       "k": "useShootOnPot"
+      },
+      {
+       "t": "Water the white tree shoot.",
+       "s": "Water the white tree shoot.",
+       "k": "useCanOnPot"
+      },
+      {
+       "t": "Talk to Brother Althric in the Edgeville Monastery.",
+       "s": "Talk to Brother Althric in the Edgeville Monastery.",
+       "k": "talkToAlthric",
+       "at": [
+        3052,
+        3502,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1397
+        ]
+       }
+      },
+      {
+       "t": "Use the Ring of charos(a) on the well in Edgeville.",
+       "s": "Use the Ring of charos(a) on the well in Edgeville.",
+       "k": "useCharosOnWell",
+       "at": [
+        3085,
+        3503,
+        0
+       ],
+       "hl": {
+        "obj": [
+         884
+        ]
+       }
+      },
+      {
+       "t": "Take some seeds from the white roses.",
+       "s": "Take some seeds from the white roses.",
+       "k": "pickWhiteRoses",
+       "at": [
+        3055,
+        3505,
+        0
+       ],
+       "hl": {
+        "obj": [
+         9262
+        ]
+       }
+      },
+      {
+       "t": "Take some seeds from the pink roses.",
+       "s": "Take some seeds from the pink roses.",
+       "k": "pickPinkRoses",
+       "at": [
+        3051,
+        3506,
+        0
+       ],
+       "hl": {
+        "obj": [
+         9261
+        ]
+       }
+      },
+      {
+       "t": "Take some seeds from the red roses.",
+       "s": "Take some seeds from the red roses.",
+       "k": "pickRedRoses",
+       "at": [
+        3048,
+        3505,
+        0
+       ],
+       "hl": {
+        "obj": [
+         9260
+        ]
+       }
+      },
+      {
+       "t": "Use a fishing rod on the well in Edgeville to retrieve the ring of charos. This can take a few attempts.",
+       "s": "Use a fishing rod on the Edgeville well to fish out the ring.",
+       "k": "fishForRing",
+       "at": [
+        3085,
+        3503,
+        0
+       ],
+       "hl": {
+        "obj": [
+         884
+        ]
+       }
+      },
+      {
+       "t": "Talk to Bernald in Burthorpe.",
+       "s": "Talk to Bernald in Burthorpe.",
+       "k": "talkToBernald",
+       "at": [
+        2915,
+        3534,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1389
+        ]
+       }
+      },
+      {
+       "t": "Use plant cure on Bernald's grapevines.",
+       "s": "Use plant cure on Bernald's grapevines.",
+       "k": "useCureOnVine",
+       "at": [
+        2915,
+        3534,
+        0
+       ],
+       "hl": {
+        "obj": [
+         9254
+        ]
+       }
+      },
+      {
+       "t": "Talk to Alain in Taverley with your ring of charos UNEQUIPPED.",
+       "s": "Talk to Alain in Taverley with your ring of charos UNEQUIPPED.",
+       "k": "talkToAlain",
+       "at": [
+        2933,
+        3441,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2678
+        ]
+       }
+      },
+      {
+       "t": "Use a hammer on some essence.",
+       "s": "Use a hammer on some essence.",
+       "k": "useHammerOnEssence"
+      },
+      {
+       "t": "Use a pestle and mortar on the essence shards.",
+       "s": "Use a pestle and mortar on the essence shards.",
+       "k": "usePestleOnShards"
+      },
+      {
+       "t": "Use the rune dust on some plant cure.",
+       "s": "Use the rune dust on some plant cure.",
+       "k": "useEssenceOnCure"
+      },
+      {
+       "t": "Use the enhanced plant cure on Bernald's grapevines.",
+       "s": "Use the enhanced plant cure on Bernald's grapevines.",
+       "k": "useMagicalCureOnVine",
+       "at": [
+        2915,
+        3534,
+        0
+       ],
+       "hl": {
+        "obj": [
+         9254
+        ]
+       }
+      },
+      {
+       "t": "Talk to Bernald for his seeds.",
+       "s": "Talk to Bernald for his seeds.",
+       "k": "talkToBernaldForSeeds",
+       "at": [
+        2915,
+        3534,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1389
+        ]
+       }
+      },
+      {
+       "t": "Harvest marigolds from the Falador Allotment patches. If yours died, you'll need to grow some more there.",
+       "s": "Harvest marigolds from the Falador allotment; replant if they died.",
+       "k": "collectMarigold",
+       "at": [
+        3055,
+        3308,
+        0
+       ],
+       "hl": {
+        "obj": [
+         7847
+        ]
+       }
+      },
+      {
+       "t": "Give Elstan a marigold for his seeds.",
+       "s": "Give Elstan a marigold for his seeds.",
+       "k": "giveElstanMarigold",
+       "at": [
+        3056,
+        3311,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2663
+        ]
+       }
+      },
+      {
+       "t": "Wait for your onions to finish growing. If they died you'll need to plant more in Lyra's patches.",
+       "s": "Wait for the onions to grow; replant in Lyra's patches if they died.",
+       "k": "waitForLyraToGrow",
+       "at": [
+        3601,
+        3529,
+        0
+       ],
+       "hl": {
+        "obj": [
+         8556
+        ]
+       }
+      },
+      {
+       "t": "Talk to Lyra west of Port Phasmatys again for her seeds.",
+       "s": "Talk to Lyra west of Port Phasmatys again for her seeds.",
+       "k": "talkToLyraAgain",
+       "at": [
+        3608,
+        3528,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2666
+        ]
+       }
+      },
+      {
+       "t": "Wait for your cabbages to finish growing. If they died you'll need to plant more in Kragen's patches.",
+       "s": "Wait for the cabbages to grow; replant in Kragen's if they died.",
+       "k": "waitForKragenToGrow",
+       "at": [
+        2669,
+        3378,
+        0
+       ],
+       "hl": {
+        "obj": [
+         8554
+        ]
+       }
+      },
+      {
+       "t": "Talk to Kragen northeast of Ardougne for his seeds.",
+       "s": "Talk to Kragen northeast of Ardougne for his seeds.",
+       "k": "talkToKragenAgain",
+       "at": [
+        2668,
+        3376,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2665
+        ]
+       }
+      },
+      {
+       "t": "Plant the rose seeds.",
+       "s": "Plant the rose seeds.",
+       "k": "plantWhiteRose",
+       "at": [
+        3232,
+        3472,
+        0
+       ],
+       "hl": {
+        "obj": [
+         9174
+        ]
+       }
+      },
+      {
+       "t": "Plant the rose seeds.",
+       "s": "Plant the rose seeds.",
+       "k": "plantRedRose",
+       "at": [
+        3229,
+        3472,
+        0
+       ],
+       "hl": {
+        "obj": [
+         9175
+        ]
+       }
+      },
+      {
+       "t": "Plant the rose seeds.",
+       "s": "Plant the rose seeds.",
+       "k": "plantPinkRose",
+       "at": [
+        3227,
+        3472,
+        0
+       ],
+       "hl": {
+        "obj": [
+         9176
+        ]
+       }
+      },
+      {
+       "t": "Plant the delphinum seeds.",
+       "s": "Plant the delphinum seeds.",
+       "k": "plantDelphinium",
+       "at": [
+        3226,
+        3477,
+        0
+       ],
+       "hl": {
+        "obj": [
+         9165
+        ]
+       }
+      },
+      {
+       "t": "Plant the white tree.",
+       "s": "Plant the white tree.",
+       "k": "plantWhiteTree",
+       "at": [
+        3230,
+        3475,
+        0
+       ],
+       "hl": {
+        "obj": [
+         9209
+        ]
+       }
+      },
+      {
+       "t": "Plant snowdrops in the east patch.",
+       "s": "Plant snowdrops in the east patch.",
+       "k": "plantSnowdrop",
+       "at": [
+        3232,
+        3483,
+        0
+       ],
+       "hl": {
+        "obj": [
+         9223
+        ]
+       }
+      },
+      {
+       "t": "Plant the vine seeds.",
+       "s": "Plant the vine seeds.",
+       "k": "plantVine",
+       "at": [
+        3227,
+        3483,
+        0
+       ],
+       "hl": {
+        "obj": [
+         9232
+        ]
+       }
+      },
+      {
+       "t": "Plant the yellow orchids in the marked plantpot.",
+       "s": "Plant the yellow orchids in the marked plantpot.",
+       "k": "plantYellowOrchid",
+       "at": [
+        3231,
+        3486,
+        0
+       ],
+       "hl": {
+        "obj": [
+         9198
+        ]
+       }
+      },
+      {
+       "t": "Plant the pink orchids in the marked plantpot.",
+       "s": "Plant the pink orchids in the marked plantpot.",
+       "k": "plantPinkOrchid",
+       "at": [
+        3229,
+        3486,
+        0
+       ],
+       "hl": {
+        "obj": [
+         9197
+        ]
+       }
+      },
+      {
+       "t": "Fill the plantpots in Ellamaria's garden with compost.",
+       "s": "Fill the plantpots in Ellamaria's garden with compost.",
+       "k": "fillPotWithCompost2",
+       "at": [
+        3231,
+        3486,
+        0
+       ],
+       "hl": {
+        "obj": [
+         9198
+        ]
+       }
+      },
+      {
+       "t": "Fill the plantpots in Ellamaria's garden with compost.",
+       "s": "Fill the plantpots in Ellamaria's garden with compost.",
+       "k": "fillPotWithCompost",
+       "at": [
+        3229,
+        3486,
+        0
+       ],
+       "hl": {
+        "obj": [
+         9197
+        ]
+       }
+      },
+      {
+       "t": "Talk to Ellamaria for a trolley.",
+       "s": "Talk to Ellamaria for a trolley.",
+       "k": "talkToEllamariaForTrolley",
+       "at": [
+        3230,
+        3478,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1390
+        ]
+       }
+      },
+      {
+       "t": "Use a trolley on the king statue outside Lumbridge Castle.",
+       "s": "Use a trolley on the king statue outside Lumbridge Castle.",
+       "k": "useTrolleyOnLumbridgeStatue",
+       "at": [
+        3231,
+        3217,
+        0
+       ],
+       "hl": {
+        "obj": [
+         9251
+        ]
+       }
+      },
+      {
+       "t": "Push the trolley across the River Lum, then to the marked plinth in the garden. Right-click 'place' the statue when it's next to the plinth.",
+       "s": "Push the trolley across the River Lum to the garden plinth; place it.",
+       "k": "pushLumbridgeStatue",
+       "at": [
+        3233,
+        3487,
+        0
+       ],
+       "hl": {
+        "obj": [
+         9252
+        ]
+       }
+      },
+      {
+       "t": "Use the trolley on the statue of Saradomin in Falador.",
+       "s": "Use the trolley on the statue of Saradomin in Falador.",
+       "k": "useTrolleyOnFaladorStatue",
+       "at": [
+        2965,
+        3381,
+        0
+       ],
+       "hl": {
+        "obj": [
+         9250
+        ]
+       }
+      },
+      {
+       "t": "Push the trolley out of Falador, then to the marked plinth in the garden. Right-click 'place' the statue when it's next to the plinth.",
+       "s": "Push the trolley out of Falador to the garden plinth; place it.",
+       "k": "pushFaladorStatue",
+       "at": [
+        3230,
+        3479,
+        0
+       ],
+       "hl": {
+        "obj": [
+         9253
+        ]
+       }
+      },
+      {
+       "t": "Talk to Ellamaria once everything's finished growing.",
+       "s": "Talk to Ellamaria once everything's finished growing.",
+       "k": "talkToEllmariaAfterGrown",
+       "at": [
+        3230,
+        3478,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1390
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 50,
+     "do": [
+      {
+       "t": "Talk to King Roald in Varrock Castle, watch the cutscene, then finish the dialog with Ellamaria to finish the quest!",
+       "s": "Talk to King Roald in Varrock Castle, then finish with Ellamaria.",
+       "k": "talkToRoald",
+       "at": [
+        3221,
+        3473,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5215
+        ]
+       }
+      }
+     ]
+    }
+   ]
   }
  }
 }

@@ -12355,5 +12355,479 @@
         "questName": "Shadow of the Storm"
       }
     }
+  },
+  {
+    "id": "S9-65",
+    "stage": 9,
+    "type": "quest",
+    "title": "Troll Romance",
+    "qp": 2,
+    "requires": [
+      "S9-28"
+    ],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Troll_Romance",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Troll_Romance/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2839,3690,0",
+    "mapLocation": {
+      "x": 2839,
+      "y": 3690,
+      "plane": 0,
+      "label": "Troll Stronghold entrance on Death Plateau"
+    },
+    "npc": {
+      "nameEn": "Ug",
+      "location": "The Troll Stronghold",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Ug"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Iron bar",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange: Dunstan makes the sled runners from it.",
+        "wikiItemId": 2351,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Iron_bar.png"
+      },
+      {
+        "nameEn": "Maple logs",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange: Dunstan makes the sled from it.",
+        "wikiItemId": 1517,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Maple_logs.png"
+      },
+      {
+        "nameEn": "Rope",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Ned in Draynor Village.",
+        "wikiItemId": 954,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Rope.png"
+      },
+      {
+        "nameEn": "Climbing boots",
+        "amount": 1,
+        "howToGet": "Buy from Tenzing in Burthorpe for 12 gp, or on the Grand Exchange.",
+        "wikiItemId": 3105,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Climbing_boots.png"
+      },
+      {
+        "nameEn": "Bucket of wax",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange; swamp tar turns it into the sled wax.",
+        "wikiItemId": 30,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bucket_of_wax.png"
+      },
+      {
+        "nameEn": "Cake tin",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from a general store.",
+        "wikiItemId": 1887,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Cake_tin.png"
+      },
+      {
+        "nameEn": "Swamp tar",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or pick it from the Lumbridge Swamp.",
+        "wikiItemId": 1939,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Swamp_tar.png"
+      },
+      {
+        "nameEn": "Staff of fire",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange: endless fire runes for Fire Bolt from the safespot.",
+        "wikiItemId": 1387,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Staff_of_fire.png"
+      },
+      {
+        "nameEn": "Chaos rune",
+        "amount": 60,
+        "howToGet": "Buy on the Grand Exchange: one per Fire Bolt; the estimate needs about 35 casts (up to 51), as his Magic defence makes many miss.",
+        "wikiItemId": 562,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Chaos_rune.png"
+      },
+      {
+        "nameEn": "Air rune",
+        "amount": 180,
+        "howToGet": "Buy on the Grand Exchange: three per Fire Bolt.",
+        "wikiItemId": 556,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Air_rune.png"
+      },
+      {
+        "nameEn": "Lobster",
+        "amount": 6,
+        "howToGet": "Buy on the Grand Exchange, for the hits you take while leading Arrg to the safespot (he hits up to 38).",
+        "wikiItemId": 379,
+        "heals": 12,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Lobster.png"
+      }
+    ],
+    "foes": [
+      "Arrg"
+    ],
+    "reward": "2 QP, 8,000 Agility XP, 4,000 Strength XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Ug"
+      ],
+      "dialogChoices": [
+        "Aww, you poor troll. What seems to be the problem?",
+        "Don't worry now, I'll see what I can do.",
+        "So... how's your... um... love life?",
+        "Errr... I've got to go.",
+        "Do you know where I can find Trollweiss?",
+        "What would I need to make such a sled?",
+        "Talk about a quest.",
+        "I need a sled!!",
+        "Yes.",
+        "I am here to kill you!"
+      ],
+      "highlightItems": [
+        "Iron bar",
+        "Maple logs",
+        "Rope",
+        "Climbing boots",
+        "Bucket of wax",
+        "Cake tin",
+        "Swamp tar",
+        "Staff of fire",
+        "Chaos rune",
+        "Air rune",
+        "Lobster"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Troll Romance"
+      }
+    }
+  },
+  {
+    "id": "S9-66",
+    "stage": 9,
+    "type": "quest",
+    "title": "Underground Pass",
+    "qp": 5,
+    "requires": [
+      "S9-45"
+    ],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Underground_Pass",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Underground_Pass/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2577,3293,0",
+    "mapLocation": {
+      "x": 2577,
+      "y": 3293,
+      "plane": 0,
+      "label": "King Lathas, 1st floor of Ardougne Castle"
+    },
+    "npc": {
+      "nameEn": "King Lathas",
+      "location": "The of Ardougne Castle",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/King_Lathas"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Rope",
+        "amount": 2,
+        "howToGet": "Buy on the Grand Exchange, or from Ned in Draynor Village: one for the pit, one spare if you fall.",
+        "wikiItemId": 954,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Rope.png"
+      },
+      {
+        "nameEn": "Shortbow",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange: any bow fires the lit arrow at the guide rope (Ranged 25 is required).",
+        "wikiItemId": 841,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Shortbow.png"
+      },
+      {
+        "nameEn": "Bronze arrow",
+        "amount": 5,
+        "howToGet": "Buy on the Grand Exchange: arrows with metal tips; one lit arrow cuts the guide rope, the rest are spares.",
+        "wikiItemId": 882,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_arrow_1.png"
+      },
+      {
+        "nameEn": "Spade",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from a general store.",
+        "wikiItemId": 952,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Spade.png"
+      },
+      {
+        "nameEn": "Bucket",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from a general store.",
+        "wikiItemId": 1925,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bucket.png"
+      },
+      {
+        "nameEn": "Tinderbox",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from a general store for 1 gp.",
+        "wikiItemId": 590,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Tinderbox.png"
+      },
+      {
+        "nameEn": "Lobster",
+        "amount": 20,
+        "howToGet": "Buy on the Grand Exchange: traps and the fights (paladins, demons and Kalrag hit up to 9) take food.",
+        "wikiItemId": 379,
+        "heals": 12,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Lobster.png"
+      }
+    ],
+    "foes": [
+      "Sir Jerro",
+      "Sir Carl",
+      "Sir Harry",
+      "Doomion",
+      "Holthion",
+      "Othainian",
+      "Kalrag",
+      "Disciple of Iban"
+    ],
+    "reward": "5 QP, 3,000 Agility XP, 3,000 Attack XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "King Lathas"
+      ],
+      "dialogChoices": [
+        "I am. What's our plan?",
+        "Yes.",
+        "I'll take my chances."
+      ],
+      "highlightItems": [
+        "Rope",
+        "Shortbow",
+        "Bronze arrow",
+        "Spade",
+        "Bucket",
+        "Tinderbox",
+        "Lobster"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Underground Pass"
+      }
+    }
+  },
+  {
+    "id": "S9-67",
+    "stage": 9,
+    "type": "quest",
+    "title": "Garden of Tranquillity",
+    "qp": 2,
+    "requires": [
+      "S8-07"
+    ],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Garden_of_Tranquillity",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Garden_of_Tranquillity/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3228,3477,0",
+    "mapLocation": {
+      "x": 3228,
+      "y": 3477,
+      "plane": 0,
+      "label": "The garden of Varrock Palace"
+    },
+    "npc": {
+      "nameEn": "Ellamaria",
+      "location": "The garden of Varrock Palace",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Ellamaria"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Ring of Charos",
+        "amount": 1,
+        "howToGet": "Kept from Creature of Fenkenstrain; the Wise Old Man activates it at the start of this quest.",
+        "wikiItemId": 4202,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Ring_of_Charos.png"
+      },
+      {
+        "nameEn": "Rake",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Lyra for 6 gp.",
+        "wikiItemId": 5341,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Rake.png"
+      },
+      {
+        "nameEn": "Seed dibber",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Lyra for 6 gp.",
+        "wikiItemId": 5343,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Seed_dibber.png"
+      },
+      {
+        "nameEn": "Spade",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Lumbridge General Store in Lumbridge for 3 gp.",
+        "wikiItemId": 952,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Spade.png"
+      },
+      {
+        "nameEn": "Secateurs",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Vanessa's Farming shop in Catherby for 5 gp.",
+        "wikiItemId": 5329,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Secateurs.png"
+      },
+      {
+        "nameEn": "Watering can",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Lyra for 8 gp.",
+        "wikiItemId": 5331,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Watering_can.png"
+      },
+      {
+        "nameEn": "Gardening trowel",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Lyra for 12 gp.",
+        "wikiItemId": 5325,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Gardening_trowel.png"
+      },
+      {
+        "nameEn": "Plant cure",
+        "amount": 2,
+        "howToGet": "Buy on the Grand Exchange, or from Lyra for 40 gp.",
+        "wikiItemId": 6036,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Plant_cure.png"
+      },
+      {
+        "nameEn": "Marigold seed",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Draynor Seed Market in Draynor Village for 2 gp.",
+        "wikiItemId": 5096,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Marigold_seed_1.png"
+      },
+      {
+        "nameEn": "Cabbage seed",
+        "amount": 3,
+        "howToGet": "Buy on the Grand Exchange, or from Draynor Seed Market in Draynor Village for 3 gp.",
+        "wikiItemId": 5324,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Cabbage_seed_1.png"
+      },
+      {
+        "nameEn": "Onion seed",
+        "amount": 3,
+        "howToGet": "Buy on the Grand Exchange, or from Draynor Seed Market in Draynor Village for 3 gp.",
+        "wikiItemId": 5319,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Onion_seed_1.png"
+      },
+      {
+        "nameEn": "Hammer",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Drogo's Mining Emporium in Dwarven Mines for 1 gp.",
+        "wikiItemId": 2347,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Hammer.png"
+      },
+      {
+        "nameEn": "Rune essence",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange.",
+        "wikiItemId": 1436,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Rune_essence.png"
+      },
+      {
+        "nameEn": "Pestle and mortar",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from The Lighthouse Store in Lighthouse for 4 gp.",
+        "wikiItemId": 233,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Pestle_and_mortar.png"
+      },
+      {
+        "nameEn": "Filled plant pot",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Vanessa's Farming shop in Catherby for 1 gp.",
+        "wikiItemId": 5354,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Filled_plant_pot.png"
+      },
+      {
+        "nameEn": "Ultracompost",
+        "amount": 2,
+        "howToGet": "Buy on the Grand Exchange.",
+        "wikiItemId": 21483,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Ultracompost.png"
+      },
+      {
+        "nameEn": "Fishing rod",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from a fishing shop: it fishes the Ring of Charos out of the Edgeville well.",
+        "wikiItemId": 307,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Fishing_rod.png"
+      }
+    ],
+    "reward": "2 QP, 5,000 Farming XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Ellamaria"
+      ],
+      "dialogChoices": [
+        "Yes.",
+        "Queen Ellamaria has sent me to seek your guidance.",
+        "Do you have any orchid seeds to spare?",
+        "[Charm] If you tell me your problems, I may be able to help you.",
+        "[Charm] Yes, I was wondering about that.",
+        "[Charm] Times must be very hard for you.",
+        "[Charm] Whatever you've done, I'm sure you had just cause.",
+        "[Charm] And what is the nature of this fee that you pay?",
+        "[Charm] If not yours, then whose blood are you offering?",
+        "[Charm] How can you deal with so much guilt?",
+        "That's a deal - I'll grow a patch of onions for you.",
+        "Do you have any snowdrop seeds to spare?",
+        "[Charm] You seem to be a little irritable, my friend.",
+        "[Charm] I don't like to see a fellow human being so upset.",
+        "[Charm] So what ails you, my friend?",
+        "[Charm] Well, is there anything I can do for you?",
+        "[Charm] So what can I do for you?",
+        "That's a deal - I'll let you know when your cabbages are ready.",
+        "Do you have any delphinium seeds to spare?",
+        "[Charm] That is why I have come to an expert for advice.",
+        "[Charm] Not just AN expert, Elstan - they say you are THE expert.",
+        "[Charm] Oh no, I love listening to gardening stories...",
+        "[Charm] Millions? Ah, just what I wanted to hear...",
+        "Okay, I'll grow you some marigolds.",
+        "Do you know how I could grow a White Tree?",
+        "[Charm] I think that there is something that you are not telling me.",
+        "[Charm] A secret is a dreadful burden to have to keep to yourself.",
+        "[Charm] Unless you allow me to do this she will die anyway.",
+        "[Charm] These are the most beautiful rosebushes I've ever seen.",
+        "[Charm] But it is the only way that these vines will be cured.",
+        "I accept the deal.",
+        "I need to ask you about strong plant cures.",
+        "Are you sure there's nothing you can suggest?",
+        "How am I supposed to move statues all the way here?",
+        "Would you like to follow me for a minute?",
+        "[Charm] Of course, your majesty - please forgive me.",
+        "[Charm] The Queen asked me to bring you."
+      ],
+      "highlightItems": [
+        "Ring of charos",
+        "rake",
+        "seed dibber",
+        "spade",
+        "Secateurs",
+        "watering can",
+        "gardening trowel",
+        "plant cure",
+        "marigold seed",
+        "cabbage seed",
+        "onion seed",
+        "hammer",
+        "rune essence",
+        "pestle and mortar",
+        "filled plant pot",
+        "ultracompost",
+        "Fishing rod"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Garden of Tranquillity"
+      }
+    }
   }
 ]

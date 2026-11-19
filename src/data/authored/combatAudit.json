@@ -2518,6 +2518,122 @@
       "evidence": [
         "OSRS Wiki Agrith Naar infobox and Shadow of the Storm quick guide, read 2026-11-19."
       ]
+    },
+    {
+      "stepId": "S9-65",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "safespot",
+      "objective": "Troll Romance: kill Arrg (level 113, 140 hitpoints) in the arena with Fire Bolt from the safespot behind the mountain wall to the west, by the fence.",
+      "enemies": [
+        {
+          "name": "Arrg",
+          "level": 113,
+          "maxHit": 38,
+          "table": true
+        }
+      ],
+      "lines": [
+        "3.1",
+        "3.2"
+      ],
+      "assumptions": [
+        "From the safespot he cannot reach you; six lobsters cover the hits taken while leading him there (up to 38 melee, 30 ranged)."
+      ],
+      "problems": [
+        "His Magic defence is 200, so many Fire Bolts miss: about 35 casts by the estimate (up to 51); the step plans runes for 60."
+      ],
+      "alternatives": [
+        "Protection prayers against his switching melee and ranged attacks, as the Wiki describes, instead of the safespot."
+      ],
+      "decision": "retain",
+      "changed": [
+        "2.150.0: new quest; Arrg is in combatFoes.json and fought from the safespot (fightMechanics.json)."
+      ],
+      "evidence": [
+        "OSRS Wiki Arrg infobox and Troll Romance quick guide, read 2026-11-19."
+      ]
+    },
+    {
+      "stepId": "S9-66",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "melee",
+      "objective": "Underground Pass: kill the three paladins (Sir Jerro, Sir Carl, Sir Harry, level 62), the three demons (Doomion, Holthion, Othainian, level 91), Kalrag (level 89) and a disciple of Iban (level 13).",
+      "enemies": [
+        {
+          "name": "Sir Jerro",
+          "level": 62,
+          "maxHit": 8,
+          "table": true
+        },
+        {
+          "name": "Sir Carl",
+          "level": 62,
+          "maxHit": 8,
+          "table": true
+        },
+        {
+          "name": "Sir Harry",
+          "level": 62,
+          "maxHit": 8,
+          "table": true
+        },
+        {
+          "name": "Doomion",
+          "level": 91,
+          "maxHit": 9,
+          "table": true
+        },
+        {
+          "name": "Holthion",
+          "level": 91,
+          "maxHit": 9,
+          "table": true
+        },
+        {
+          "name": "Othainian",
+          "level": 91,
+          "maxHit": 9,
+          "table": true
+        },
+        {
+          "name": "Kalrag",
+          "level": 89,
+          "maxHit": 9,
+          "table": true
+        },
+        {
+          "name": "Disciple of Iban",
+          "level": 13,
+          "maxHit": 2,
+          "table": true
+        }
+      ],
+      "lines": [
+        "1.13",
+        "2.4",
+        "3.7",
+        "4.0",
+        "5.1",
+        "5.3"
+      ],
+      "assumptions": [
+        "Every foe hits for at most 9; twenty lobsters (heals 12) cover the fights and the agility traps."
+      ],
+      "problems": [
+        "Kalrag stops hitting under Protect from Melee, which the estimate does not count."
+      ],
+      "alternatives": [
+        "The Wiki marks the paladins and demons as easy to safespot."
+      ],
+      "decision": "retain",
+      "changed": [
+        "2.150.0: new quest; all eight foes are in combatFoes.json."
+      ],
+      "evidence": [
+        "OSRS Wiki Underground Pass kills field and the foes' infoboxes, read 2026-11-19."
+      ]
     }
   ]
 }

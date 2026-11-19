@@ -15,6 +15,14 @@
         "A stake and a hammer in the inventory deal the killing blow; without them he heals to full health."
       ]
     },
+    "Arrg": {
+      "url": "https://oldschool.runescape.wiki/w/Arrg",
+      "safespot": { "spell": "Fire Bolt" },
+      "facts": [
+        "The wiki says Arrg can be safespotted in the arena by trapping him behind the mountain wall to the west and standing by the fence; Troll Romance fights him with Fire Bolt from there (combat audit).",
+        "He hits up to 38 with melee and 30 with ranged on the way to the safespot, and his Magic defence is 200, so many casts miss."
+      ]
+    },
     "Agrith Naar": {
       "url": "https://oldschool.runescape.wiki/w/Agrith_Naar",
       "weapon": { "item": "Silverlight" },

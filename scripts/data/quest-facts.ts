@@ -465,6 +465,31 @@ const REVIEWED_FLOWS: Record<string, { revision: number; flow: NonNullable<Quest
     receives: [{ name: 'Silverlight', count: 1, when: 'complete' }], unknownItems: ['Silverlight key'],
     uncertainReceipts: ['Trout'], partialDelivery: true, fromStartOnly: false,
   } },
+  // The silver bar, bronze wire and thread go into the creature and the coins to the gardener; you keep the Ring of Charos (Garden of Tranquillity needs it).
+  'Creature of Fenkenstrain': { revision: 15385731, flow: {
+    consumes: [{ name: 'Silver bar', count: 1 }, { name: 'Bronze wire', count: 3 }, { name: 'Thread', count: 5 }, { name: 'Coins', count: 50 }],
+    receives: [{ name: 'Ring of Charos', count: 1, when: 'complete' }], unknownItems: ['Marble amulet', 'Obsidian amulet', 'Star amulet', 'Decapitated head', 'Pickled brain', 'Cavern key', 'Tower key', 'Conductor mould', 'Lightning conductor'],
+    uncertainReceipts: ['Lobster'], partialDelivery: false, fromStartOnly: false,
+  } },
+  // The seeds, compost and cures grow the garden; the rune essence becomes the rune dust for the strong plant cure; tools stay.
+  'Garden of Tranquillity': { revision: 15403073, flow: {
+    consumes: [{ name: 'Marigold seed', count: 1 }, { name: 'Cabbage seed', count: 3 }, { name: 'Onion seed', count: 3 }, { name: 'Ultracompost', count: 2 }, { name: 'Rune essence', count: 1 }, { name: 'Filled plant pot', count: 1 }],
+    receives: [], unknownItems: ['Ring of charos(a)', 'Orchid seed', 'Snowdrop seed', 'Delphinium seed', 'White tree shoot', 'White tree sapling', 'Rose seed', 'Vine seed', 'Rune shards', 'Rune dust', 'Magic plant cure', 'Trolley'],
+    uncertainReceipts: ['Plant cure'], partialDelivery: false, fromStartOnly: false,
+  } },
+  // One lit arrow cuts the guide rope and a rope stays over the pit; everything else is found and used inside the pass.
+  'Underground Pass': { revision: 15392817, flow: {
+    consumes: [{ name: 'Bronze arrow', count: 1 }, { name: 'Rope', count: 1 }],
+    receives: [], unknownItems: ['Fire arrow', 'Plank', 'Orb of light', 'Railing', 'Unicorn horn', "Paladin's badge", "Witch's cat", 'Amulet of Doomion', 'Amulet of Holthion', 'Amulet of Othainian',
+      'Bucket of dwarf brew', "Klank's gauntlets", "Iban's dove", "Zamorak robe", 'Doll of Iban', "Iban's shadow", "Iban's conscience", "Iban's ashes"],
+    uncertainReceipts: ['Rope', 'Bronze arrow', 'Bucket', 'Lobster'], partialDelivery: false, fromStartOnly: false,
+  } },
+  // Dunstan builds the sled from the maple logs, iron bar and rope; the tar and wax are mixed in the cake tin and spread on it.
+  'Troll Romance': { revision: 15375194, flow: {
+    consumes: [{ name: 'Maple logs', count: 1 }, { name: 'Iron bar', count: 1 }, { name: 'Rope', count: 1 }, { name: 'Swamp tar', count: 1 }, { name: 'Bucket of wax', count: 1 }],
+    receives: [], unknownItems: ['Wax', 'Sled', 'Trollweiss'],
+    uncertainReceipts: ['Cake tin', 'Chaos rune', 'Air rune', 'Lobster'], partialDelivery: false, fromStartOnly: false,
+  } },
   // The silver bar becomes the demonic sigil; two vials of black dye turn the desert shirt and robe black; Silverlight becomes Darklight, which you keep.
   'Shadow of the Storm': { revision: 15375058, flow: {
     consumes: [{ name: 'Silver bar', count: 1 }, { name: 'Shantay pass', count: 1 }, { name: 'Silverlight', count: 1 }, { name: 'Vial', count: 2 }, { name: 'Desert shirt', count: 1 }, { name: 'Desert robe', count: 1 }],
@@ -566,6 +591,7 @@ const REVIEWED_CLAUSES = new Set([
   'Ability to defeat a level-69 [[Draugen]]',
   'The ability to defeat a level 100 monster',
   'The ability to defeat a level 100 demon',
+  'The ability to defeat a level 113 [[Arrg|troll]]',
   'The ability to defeat 5 level 30 monsters.',
   "The ability to defeat a level 13 [[icefiend]] if you don't have the [[ice gloves]].",
   'Ability to defeat a [[Koschei|fairly strong warrior]] without [[armour]], [[weapons]], or [[spells]]',
