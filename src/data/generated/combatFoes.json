@@ -2841,6 +2841,54 @@
       "aggressive": true
     },
     {
+      "name": "Tormented Soul",
+      "combat": 16,
+      "members": true,
+      "hitpoints": 20,
+      "attackLevel": 16,
+      "strengthLevel": 12,
+      "defenceLevel": 10,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "crush",
+      "maxHit": 2,
+      "speedTicks": 4,
+      "aggressive": true
+    },
+    {
+      "name": "Trapped Soul",
+      "combat": 30,
+      "members": true,
+      "hitpoints": 30,
+      "attackLevel": 25,
+      "strengthLevel": 29,
+      "defenceLevel": 20,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "crush",
+      "maxHit": 4,
+      "speedTicks": 4,
+      "aggressive": true,
+      "weakness": {
+        "element": "air",
+        "percent": 15
+      }
+    },
+    {
       "name": "Cow",
       "version": "1",
       "combat": 2,

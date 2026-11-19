@@ -13324,5 +13324,218 @@
         "questName": "Skippy and the Mogres"
       }
     }
+  },
+  {
+    "id": "S9-73",
+    "stage": 9,
+    "type": "quest",
+    "title": "Temple of the Eye",
+    "qp": 1,
+    "requires": [
+      "S9-29"
+    ],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Temple_of_the_Eye",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Temple_of_the_Eye/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3286,3232,0",
+    "mapLocation": {
+      "x": 3286,
+      "y": 3232,
+      "plane": 0,
+      "label": "The gate from Lumbridge"
+    },
+    "npc": {
+      "nameEn": "Wizard Persten",
+      "location": "The gate from Lumbridge",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Wizard_Persten"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Bucket of water",
+        "amount": 1,
+        "howToGet": "Fill a bucket at any well, fountain or sink: it makes the strong tea.",
+        "wikiItemId": 1929,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bucket_of_water.png"
+      },
+      {
+        "nameEn": "Chisel",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or take the one handed out during the quest.",
+        "wikiItemId": 1755,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Chisel.png"
+      },
+      {
+        "nameEn": "Bronze pickaxe",
+        "amount": 1,
+        "howToGet": "Any pickaxe from the bank, or the one handed out during the quest.",
+        "wikiItemId": 1265,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_pickaxe.png"
+      }
+    ],
+    "reward": "1 QP, 5,000 Runecraft XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Wizard Persten"
+      ],
+      "dialogChoices": [
+        "What's a wizard doing in Al Kharid?",
+        "Yes.",
+        "Could I have a strong cup of tea?",
+        "I need your apprentices to help with an incantation.",
+        "I think I know what a thingummywut is!",
+        "Let's do it."
+      ],
+      "highlightItems": [
+        "Bucket of water",
+        "Chisel",
+        "Bronze pickaxe"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Temple of the Eye"
+      }
+    }
+  },
+  {
+    "id": "S9-74",
+    "stage": 9,
+    "type": "quest",
+    "title": "Recipe for Disaster/Freeing the Lumbridge Guide",
+    "qp": 1,
+    "requires": [
+      "S9-12",
+      "S9-45",
+      "S3-03",
+      "S9-36",
+      "S8-02",
+      "S9-05",
+      "S7-07"
+    ],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Recipe_for_Disaster/Freeing_the_Lumbridge_Guide",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Recipe_for_Disaster/Freeing_the_Lumbridge_Guide/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3213,3221,0",
+    "mapLocation": {
+      "x": 3213,
+      "y": 3221,
+      "plane": 0,
+      "label": "Lumbridge Guide"
+    },
+    "npc": {
+      "nameEn": "Lumbridge Guide",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Lumbridge_Guide"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Bucket of milk",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or milk a dairy cow with a bucket: Traiborn enchants it.",
+        "wikiItemId": 1927,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bucket_of_milk.png"
+      },
+      {
+        "nameEn": "Egg",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or take one from a chicken farm: Traiborn enchants it.",
+        "wikiItemId": 1944,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Egg.png"
+      },
+      {
+        "nameEn": "Pot of flour",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or grind wheat at a windmill: Traiborn enchants it.",
+        "wikiItemId": 1933,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Pot_of_flour.png"
+      },
+      {
+        "nameEn": "Cake tin",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from a general store: the enchanted cake is mixed in it.",
+        "wikiItemId": 1887,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Cake_tin.png"
+      }
+    ],
+    "reward": "1 QP, 2,500 Cooking XP, 2,500 Magic XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Lumbridge Guide"
+      ],
+      "dialogChoices": [],
+      "highlightItems": [
+        "Bucket of milk",
+        "Egg",
+        "Pot of flour",
+        "Cake tin"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Recipe for Disaster - Lumbridge Guide"
+      }
+    }
+  },
+  {
+    "id": "S9-75",
+    "stage": 9,
+    "type": "quest",
+    "title": "The Ascent of Arceuus",
+    "qp": 1,
+    "requires": [
+      "S9-07"
+    ],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/The_Ascent_of_Arceuus",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/The_Ascent_of_Arceuus/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=1700,3742,0",
+    "mapLocation": {
+      "x": 1700,
+      "y": 3742,
+      "plane": 0,
+      "label": "Arceuus"
+    },
+    "npc": {
+      "nameEn": "Mori",
+      "location": "Arceuus",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Mori"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Lobster",
+        "amount": 3,
+        "howToGet": "Buy on the Grand Exchange: five Tormented Souls (max hit 2) and the Trapped Soul (max hit 4).",
+        "wikiItemId": 379,
+        "heals": 12,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Lobster.png"
+      }
+    ],
+    "foes": [
+      "Tormented Soul",
+      "Trapped Soul"
+    ],
+    "reward": "1 QP, 1,500 Hunter XP, 500 Runecraft XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Mori"
+      ],
+      "dialogChoices": [
+        "What can I do to help?",
+        "We should let someone know about this.",
+        "Yes.",
+        "There's been a death in Arceuus.",
+        "What should we do now?"
+      ],
+      "highlightItems": [
+        "Lobster"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "The Ascent of Arceuus"
+      }
+    }
   }
 ]

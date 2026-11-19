@@ -96097,6 +96097,1738 @@
      ]
     }
    ]
+  },
+  "S9-73": {
+   "var": [
+    "varbit",
+    13738
+   ],
+   "route": [
+    {
+     "title": "An Eye for a Favour",
+     "steps": [
+      "Speak with Wizard Persten west of the Emir's Arena to obtain the eye amulet. Dialogue: \"What's a wizard doing in Al Kharid?\", \"Yes.\"",
+      "Go to the Mage of Zamorak at the Altar of Chaos in south-eastern Varrock; use the eye amulet on him.",
+      "Speak to the Tea Seller at the eastern entrance to Varrock. Dialogue: \"Could I have a strong cup of tea?\"",
+      "Use the strong cup of tea on the Mage of Zamorak, and accept the teleport to the Abyss. Dialogue: \"Yes.\"",
+      "Use the eye amulet on the Dark Mage.",
+      "Now there will be runic energies surrounding the rift. Touch each colour until they all turn white; the order is random for every player. Remember the order as you try out different combinations as it will reset with each failed order.",
+      "Speak to the Dark Mage to receive an abyssal incantation."
+     ]
+    },
+    {
+     "title": "Help from Some Wizards",
+     "steps": [
+      "Go back to Wizard Persten in Al Kharid (Recommend exiting the abyss via Fire Altar, will place you just east of Persten) talk to him and accept the teleport to the Wizards' Tower. Dialogue: \"Yes.\"",
+      "Go to the basement and use the abyssal incantation on Archmage Sedridor.",
+      "Climb up the ladder and stairs once, then speak to Wizard Traiborn. Dialogue: \"I need your apprentices to help with an incantation.\"",
+      "Speak with the three apprentice wizards on the of the wizards tower, Apprentice Felix, Tamara, and Cordelia, in no particular order and view their riddles.",
+      "Speak to Traiborn, and answer 11 when prompted. Dialogue: \"I think I know what a thingummywut is!\"",
+      "Speak to Archmage Sedridor or Wizard Persten in the basement. Dialogue: \"Let's do it.\""
+     ]
+    },
+    {
+     "title": "Guardians of the Rift",
+     "steps": [
+      "Speak to each of the apprentices in no particular order.",
+      "Speak to Wizard Persten. The Guardians of the Rift tutorial begins after this step.",
+      "Speak to Apprentice Cordelia.",
+      "Speak to Apprentice Felix, then take a weak cell from the table.",
+      "Speak to Apprentice Tamara, then place the weak cell on the inactive cell tile near her.",
+      "Speak to Apprentice Felix.",
+      "Take a weak cell from the table, then click on the essence pile to assemble a guardian.",
+      "Repeat the previous step for the other essence pile.",
+      "Speak to Apprentice Tamara.",
+      "Mine five guardian fragments from the guardian remains.",
+      "Speak to Apprentice Felix.",
+      "Work at the workbench to turn guardian fragments into guardian essence.",
+      "Speak to Apprentice Tamara.",
+      "Take an uncharged cell from the table.",
+      "Enter the Mind Altar and click the altar.",
+      "Speak to Apprentice Tamara.",
+      "Click the weak cell tile, then power-up The Great Guardian.",
+      "Speak to Apprentice Tamara.",
+      "Repeat the process of mining five guardian fragments and turning them into guardian essence.",
+      "Enter the Water Altar and click the altar",
+      "Power-up The Great Guardian.",
+      "Speak to Apprentice Tamara.",
+      "Click on the Essence pile again to assemble another guardian.",
+      "Speak to Apprentice Tamara.",
+      "Repeat the process of mining guardian fragments and turning them into guardian essence.",
+      "Take an uncharged cell from the table and use the water portal talisman on the water guardian.",
+      "Click the Water Altar.",
+      "Leave the altar and speak to Apprentice Tamara.",
+      "Place the cell you made on the cell tile.",
+      "Speak to Apprentice Tamara.",
+      "Power-up The Great Guardian.",
+      "Upon completion of the tutorial, you will automatically exit and speak to Archmage Sedridor.",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Talk to Wizard Persten east of the Al Kharid gate.",
+       "s": "Talk to Wizard Persten east of the Al Kharid gate.",
+       "k": "talkToPersten1",
+       "at": [
+        3285,
+        3232,
+        0
+       ],
+       "hl": {
+        "npc": [
+         11436
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 5,
+     "do": [
+      {
+       "t": "Talk to Wizard Persten east of the Al Kharid gate.",
+       "s": "Talk to Wizard Persten east of the Al Kharid gate.",
+       "k": "finishTalkToPersten1",
+       "at": [
+        3285,
+        3232,
+        0
+       ],
+       "hl": {
+        "npc": [
+         11436
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 10,
+     "do": [
+      {
+       "t": "Talk to Mage of Zamorak in the Varrock chaos temple.",
+       "s": "Talk to Mage of Zamorak in the Varrock chaos temple.",
+       "k": "talkToMage1",
+       "at": [
+        3258,
+        3383,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2582
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 15,
+     "do": [
+      {
+       "t": "Talk to Tea Seller near the Varrock east gate.",
+       "s": "Talk to Tea Seller near the Varrock east gate.",
+       "k": "getTeaForMage",
+       "at": [
+        3271,
+        3411,
+        0
+       ],
+       "hl": {
+        "npc": [
+         8687
+        ]
+       }
+      },
+      {
+       "t": "Give the strong tea to the Mage of Zamorak in the Varrock chaos temple.",
+       "s": "Give the strong tea to the Mage of Zamorak in Varrock's chaos temple.",
+       "k": "talkToMage2",
+       "at": [
+        3258,
+        3383,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2582
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 20,
+     "do": [
+      {
+       "t": "Talk to Mage of Zamorak in the Varrock chaos temple.",
+       "s": "Talk to Mage of Zamorak in the Varrock chaos temple.",
+       "k": "finishTalkToMage2",
+       "at": [
+        3258,
+        3383,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2582
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 25,
+     "do": [
+      {
+       "t": "Return to the Abyss by talking to the Mage of Zamorak in the Wilderness north of Edgeville. BRING NOTHING BUT QUEST ITEMS AS YOU CAN BE KILLED BY OTHER PLAYERS HERE.",
+       "s": "Talk to the Zamorak mage north of Edgeville; bring only quest items.",
+       "k": "talkToMageInWildy",
+       "at": [
+        3102,
+        3557,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2581
+        ]
+       }
+      },
+      {
+       "t": "Ask the Mage of Zamorak in Varrock to teleport you to the Abyss (this can only be used once).",
+       "s": "Ask the Varrock Mage of Zamorak to teleport you to the Abyss (once).",
+       "k": "teleportViaHerbert",
+       "at": [
+        3258,
+        3383,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2582
+        ]
+       }
+      },
+      {
+       "t": "Talk to Dark Mage in the Abyss.",
+       "s": "Talk to Dark Mage in the Abyss.",
+       "k": "talkToDarkMage1",
+       "at": [
+        3039,
+        4834,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2583
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 30,
+     "do": [
+      {
+       "t": "Return to the Abyss by talking to the Mage of Zamorak in the Wilderness north of Edgeville. BRING NOTHING BUT QUEST ITEMS AS YOU CAN BE KILLED BY OTHER PLAYERS HERE.",
+       "s": "Talk to the Zamorak mage north of Edgeville; bring only quest items.",
+       "k": "talkToMageInWildy",
+       "at": [
+        3102,
+        3557,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2581
+        ]
+       }
+      },
+      {
+       "t": "Talk to Dark Mage in the Abyss.",
+       "s": "Talk to Dark Mage in the Abyss.",
+       "k": "finishTalkToDarkMage1",
+       "at": [
+        3039,
+        4834,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2583
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 35,
+     "do": [
+      {
+       "t": "Return to the Abyss by talking to the Mage of Zamorak in the Wilderness north of Edgeville. BRING NOTHING BUT QUEST ITEMS AS YOU CAN BE KILLED BY OTHER PLAYERS HERE.",
+       "s": "Talk to the Zamorak mage north of Edgeville; bring only quest items.",
+       "k": "talkToMageInWildy",
+       "at": [
+        3102,
+        3557,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2581
+        ]
+       }
+      },
+      {
+       "t": "Touch the runes in the order the Guardian shows you.",
+       "s": "Touch the runes in the order the Guardian shows you.",
+       "k": "touchRunes"
+      }
+     ]
+    },
+    {
+     "at": 40,
+     "do": [
+      {
+       "t": "Return to the Abyss by talking to the Mage of Zamorak in the Wilderness north of Edgeville. BRING NOTHING BUT QUEST ITEMS AS YOU CAN BE KILLED BY OTHER PLAYERS HERE.",
+       "s": "Talk to the Zamorak mage north of Edgeville; bring only quest items.",
+       "k": "talkToMageInWildy",
+       "at": [
+        3102,
+        3557,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2581
+        ]
+       }
+      },
+      {
+       "t": "Talk to Dark Mage in the Abyss.",
+       "s": "Talk to Dark Mage in the Abyss.",
+       "k": "talkToDarkMage2",
+       "at": [
+        3039,
+        4834,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2583
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 45,
+     "do": [
+      {
+       "t": "Talk to Wizard Persten east of the Al Kharid gate.",
+       "s": "Talk to Wizard Persten east of the Al Kharid gate.",
+       "k": "talkToPersten2",
+       "at": [
+        3285,
+        3232,
+        0
+       ],
+       "hl": {
+        "npc": [
+         11436
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 50,
+     "do": [
+      {
+       "t": "Talk to Wizard Persten east of the Al Kharid gate.",
+       "s": "Talk to Wizard Persten east of the Al Kharid gate.",
+       "k": "talkToPersten2",
+       "at": [
+        3285,
+        3232,
+        0
+       ],
+       "hl": {
+        "npc": [
+         11436
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 55,
+     "do": [
+      {
+       "t": "Talk to Wizard Persten east of the Al Kharid gate.",
+       "s": "Talk to Wizard Persten east of the Al Kharid gate.",
+       "k": "finishTalkToPersten2",
+       "at": [
+        3285,
+        3232,
+        0
+       ],
+       "hl": {
+        "npc": [
+         11436
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 60,
+     "do": [
+      {
+       "t": "Bring the Abyssal Incantation to Sedridor in the Wizard Tower's basement.",
+       "s": "Bring the Abyssal Incantation to Sedridor, Wizards' Tower basement.",
+       "k": "goDownToArchmage",
+       "at": [
+        3104,
+        3162,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2147
+        ]
+       }
+      },
+      {
+       "t": "Bring the Abyssal Incantation to Sedridor in the Wizard Tower's basement.",
+       "s": "Bring the Abyssal Incantation to Sedridor, Wizards' Tower basement.",
+       "k": "talktoArchmage1",
+       "at": [
+        3104,
+        9571,
+        0
+       ],
+       "hl": {
+        "npc": [
+         11433
+        ]
+       }
+      },
+      {
+       "t": "Ask Wizard Persten to teleport you to the Wizards' Tower.",
+       "s": "Ask Wizard Persten to teleport you to the Wizards' Tower.",
+       "k": "teleportToArchmage",
+       "at": [
+        3285,
+        3232,
+        0
+       ],
+       "hl": {
+        "npc": [
+         11436
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 65,
+     "do": [
+      {
+       "t": "Finish listening to Sedridor.",
+       "s": "Finish listening to Sedridor.",
+       "k": "finishTalkingToArchmage1",
+       "at": [
+        3104,
+        9571,
+        0
+       ],
+       "hl": {
+        "npc": [
+         11433
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 70,
+     "do": [
+      {
+       "t": "Speak to Wizard Traiborn on the Wizards' Tower 1st floor.",
+       "s": "Speak to Wizard Traiborn on the Wizards' Tower 1st floor.",
+       "k": "goUpToTraiborn",
+       "at": [
+        3103,
+        3159,
+        0
+       ],
+       "hl": {
+        "obj": [
+         12536
+        ]
+       }
+      },
+      {
+       "t": "Speak to Wizard Traiborn on the Wizards' Tower 1st floor.",
+       "s": "Speak to Wizard Traiborn on the Wizards' Tower 1st floor.",
+       "k": "talktoTrailborn1",
+       "at": [
+        3112,
+        3162,
+        1
+       ],
+       "hl": {
+        "npc": [
+         5081
+        ]
+       }
+      },
+      {
+       "t": "Speak to Wizard Traiborn on the Wizards' Tower 1st floor.",
+       "s": "Speak to Wizard Traiborn on the Wizards' Tower 1st floor.",
+       "k": "goUpToTraibornBasement",
+       "at": [
+        3103,
+        9576,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2148
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 75,
+     "do": [
+      {
+       "t": "Speak to Wizard Traiborn on the Wizards' Tower 1st floor.",
+       "s": "Speak to Wizard Traiborn on the Wizards' Tower 1st floor.",
+       "k": "goUpToTraiborn",
+       "at": [
+        3103,
+        3159,
+        0
+       ],
+       "hl": {
+        "obj": [
+         12536
+        ]
+       }
+      },
+      {
+       "t": "Get puzzle from Apprentice Cordelia.",
+       "s": "Get puzzle from Apprentice Cordelia.",
+       "k": "talkToCordelia",
+       "at": [
+        3112,
+        3162,
+        1
+       ],
+       "hl": {
+        "npc": [
+         11443
+        ]
+       }
+      },
+      {
+       "t": "Get puzzle from Apprentice Tamara.",
+       "s": "Get puzzle from Apprentice Tamara.",
+       "k": "talkToTamara",
+       "at": [
+        3112,
+        3162,
+        1
+       ],
+       "hl": {
+        "npc": [
+         11440
+        ]
+       }
+      },
+      {
+       "t": "Get puzzle from Apprentice Felix.",
+       "s": "Get puzzle from Apprentice Felix.",
+       "k": "talkToFelix",
+       "at": [
+        3112,
+        3162,
+        1
+       ],
+       "hl": {
+        "npc": [
+         11446
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 80,
+     "do": [
+      {
+       "t": "Speak to Wizard Traiborn on the Wizards' Tower 1st floor.",
+       "s": "Speak to Wizard Traiborn on the Wizards' Tower 1st floor.",
+       "k": "goUpToTraiborn",
+       "at": [
+        3103,
+        3159,
+        0
+       ],
+       "hl": {
+        "obj": [
+         12536
+        ]
+       }
+      },
+      {
+       "t": "Tell Wizard Traiborn the solution to his puzzle is: 11",
+       "s": "Tell Wizard Traiborn the solution to his puzzle is: 11",
+       "k": "talktoTrailborn2",
+       "at": [
+        3112,
+        3162,
+        1
+       ],
+       "hl": {
+        "npc": [
+         5081
+        ]
+       }
+      },
+      {
+       "t": "Speak to Wizard Traiborn on the Wizards' Tower 1st floor.",
+       "s": "Speak to Wizard Traiborn on the Wizards' Tower 1st floor.",
+       "k": "goUpToTraibornBasement",
+       "at": [
+        3103,
+        9576,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2148
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 85,
+     "do": [
+      {
+       "t": "Speak to Archmage Sedridor in the Wizard's Tower basement.",
+       "s": "Speak to Archmage Sedridor in the Wizard's Tower basement.",
+       "k": "goDownToArchmage2",
+       "at": [
+        3104,
+        3162,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2147
+        ]
+       }
+      },
+      {
+       "t": "Speak to Archmage Sedridor in the Wizard's Tower basement.",
+       "s": "Speak to Archmage Sedridor in the Wizard's Tower basement.",
+       "k": "talktoArchmage2",
+       "at": [
+        3104,
+        9571,
+        0
+       ],
+       "hl": {
+        "npc": [
+         11433
+        ]
+       }
+      },
+      {
+       "t": "Speak to Archmage Sedridor in the Wizard's Tower basement.",
+       "s": "Speak to Archmage Sedridor in the Wizard's Tower basement.",
+       "k": "goDownToArchmageFloorOne",
+       "at": [
+        3103,
+        3159,
+        1
+       ],
+       "hl": {
+        "obj": [
+         12537
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 90,
+     "do": [
+      {
+       "t": "Speak to Archmage Sedridor in the Wizard's Tower basement.",
+       "s": "Speak to Archmage Sedridor in the Wizard's Tower basement.",
+       "k": "goDownToArchmage2",
+       "at": [
+        3104,
+        3162,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2147
+        ]
+       }
+      },
+      {
+       "t": "Speak to Archmage Sedridor to begin the incantation.",
+       "s": "Speak to Archmage Sedridor to begin the incantation.",
+       "k": "performIncantation",
+       "at": [
+        3104,
+        9571,
+        0
+       ],
+       "hl": {
+        "npc": [
+         11433
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 95,
+     "do": [
+      {
+       "t": "Enter the Temple of the Eye.",
+       "s": "Enter the Temple of the Eye.",
+       "k": "templeCutscene1"
+      }
+     ]
+    },
+    {
+     "at": 100,
+     "do": [
+      {
+       "t": "Go to the Wizard's Tower basement.",
+       "s": "Go to the Wizard's Tower basement.",
+       "k": "enterWizardBasement",
+       "at": [
+        3104,
+        3162,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2147
+        ]
+       }
+      },
+      {
+       "t": "Talk to Apprentice Cordelia.",
+       "s": "Talk to Apprentice Cordelia.",
+       "k": "talkToCordelia2",
+       "at": [
+        2397,
+        5677,
+        0
+       ],
+       "hl": {
+        "npc": [
+         11445
+        ]
+       }
+      },
+      {
+       "t": "Talk to Apprentice Tamara.",
+       "s": "Talk to Apprentice Tamara.",
+       "k": "talkToTamara2",
+       "at": [
+        2385,
+        5659,
+        0
+       ],
+       "hl": {
+        "npc": [
+         11442
+        ]
+       }
+      },
+      {
+       "t": "Talk to Apprentice Felix.",
+       "s": "Talk to Apprentice Felix.",
+       "k": "talkToFelix2",
+       "at": [
+        2401,
+        5643,
+        0
+       ],
+       "hl": {
+        "npc": [
+         11448
+        ]
+       }
+      },
+      {
+       "t": "Enter the portal to the Temple of the Eye.",
+       "s": "Enter the portal to the Temple of the Eye.",
+       "k": "enterPortal",
+       "at": [
+        3104,
+        9574,
+        0
+       ],
+       "hl": {
+        "obj": [
+         43765
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 105,
+     "do": [
+      {
+       "t": "Go to the Wizard's Tower basement.",
+       "s": "Go to the Wizard's Tower basement.",
+       "k": "enterWizardBasement",
+       "at": [
+        3104,
+        3162,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2147
+        ]
+       }
+      },
+      {
+       "t": "Experience the vision.",
+       "s": "Experience the vision.",
+       "k": "templeCutscene2"
+      },
+      {
+       "t": "Speak with Wizard Persten.",
+       "s": "Speak with Wizard Persten.",
+       "k": "talkToPersten3",
+       "at": [
+        2400,
+        5667,
+        0
+       ],
+       "hl": {
+        "npc": [
+         11439
+        ]
+       }
+      },
+      {
+       "t": "Enter the portal to the Temple of the Eye.",
+       "s": "Enter the portal to the Temple of the Eye.",
+       "k": "enterPortal",
+       "at": [
+        3104,
+        9574,
+        0
+       ],
+       "hl": {
+        "obj": [
+         43765
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 110,
+     "do": [
+      {
+       "t": "Go to the Wizard's Tower basement.",
+       "s": "Go to the Wizard's Tower basement.",
+       "k": "enterWizardBasement",
+       "at": [
+        3104,
+        3162,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2147
+        ]
+       }
+      },
+      {
+       "t": "Debrief with Wizard Persten and the apprentices.",
+       "s": "Debrief with Wizard Persten and the apprentices.",
+       "k": "debrief"
+      },
+      {
+       "t": "Enter the portal to the Temple of the Eye.",
+       "s": "Enter the portal to the Temple of the Eye.",
+       "k": "enterPortal",
+       "at": [
+        3104,
+        9574,
+        0
+       ],
+       "hl": {
+        "obj": [
+         43765
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 115,
+     "do": [
+      {
+       "t": "Go to the Wizard's Tower basement.",
+       "s": "Go to the Wizard's Tower basement.",
+       "k": "enterWizardBasement",
+       "at": [
+        3104,
+        3162,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2147
+        ]
+       }
+      },
+      {
+       "t": "Complete the Guardians of the Rift tutorial.",
+       "s": "Complete the Guardians of the Rift tutorial.",
+       "k": "guardiansTutorial"
+      },
+      {
+       "t": "Enter the portal to the Temple of the Eye.",
+       "s": "Enter the portal to the Temple of the Eye.",
+       "k": "enterPortal",
+       "at": [
+        3104,
+        9574,
+        0
+       ],
+       "hl": {
+        "obj": [
+         43765
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 120,
+     "do": [
+      {
+       "t": "Go to the Wizard's Tower basement.",
+       "s": "Go to the Wizard's Tower basement.",
+       "k": "enterWizardBasement",
+       "at": [
+        3104,
+        3162,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2147
+        ]
+       }
+      },
+      {
+       "t": "Listen to the Great Guardian.",
+       "s": "Listen to the Great Guardian.",
+       "k": "templeCutscene3"
+      },
+      {
+       "t": "Enter the portal to the Temple of the Eye.",
+       "s": "Enter the portal to the Temple of the Eye.",
+       "k": "enterPortal",
+       "at": [
+        3104,
+        9574,
+        0
+       ],
+       "hl": {
+        "obj": [
+         43765
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 125,
+     "do": [
+      {
+       "t": "Go to the Wizard's Tower basement.",
+       "s": "Go to the Wizard's Tower basement.",
+       "k": "enterWizardBasement",
+       "at": [
+        3104,
+        3162,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2147
+        ]
+       }
+      },
+      {
+       "t": "Speak to Archmage Sedridor in the Wizard's Tower basement to finish the quest.",
+       "s": "Speak to Archmage Sedridor in the Wizards' Tower basement to finish.",
+       "k": "finishQuest",
+       "at": [
+        3104,
+        9571,
+        0
+       ],
+       "hl": {
+        "npc": [
+         11433
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  "S9-74": {
+   "var": [
+    "varbit",
+    1896
+   ],
+   "route": [],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Go inspect the Lumbridge Guide in the Lumbridge Castle dining room.",
+       "s": "Go inspect the Lumbridge Guide in the Lumbridge Castle dining room.",
+       "k": "enterDiningRoom",
+       "at": [
+        3213,
+        3221,
+        0
+       ],
+       "hl": {
+        "obj": [
+         12349
+        ]
+       }
+      },
+      {
+       "t": "Inspect the Lumbridge Guide in the Lumbridge Castle dining room.",
+       "s": "Inspect the Lumbridge Guide in the Lumbridge Castle dining room.",
+       "k": "inspectLumbridgeGuide",
+       "at": [
+        1865,
+        5325,
+        0
+       ],
+       "hl": {
+        "obj": [
+         12339
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 1,
+     "do": [
+      {
+       "t": "Go talk to Traiborn in the Wizards' Tower.",
+       "s": "Go talk to Traiborn in the Wizards' Tower.",
+       "k": "goUpToTraiborn",
+       "at": [
+        3104,
+        3160,
+        0
+       ],
+       "hl": {
+        "obj": [
+         12536
+        ]
+       }
+      },
+      {
+       "t": "Talk to Wizard Traiborn on the 1st floor of the Wizards' Tower for the enchanted ingredients.",
+       "s": "Ask Traiborn, 1st floor of the Wizards' Tower, for the ingredients.",
+       "k": "talkToTraiborn"
+      }
+     ]
+    },
+    {
+     "at": 2,
+     "do": [
+      {
+       "t": "Go talk to Traiborn in the Wizards' Tower.",
+       "s": "Go talk to Traiborn in the Wizards' Tower.",
+       "k": "goUpToTraiborn",
+       "at": [
+        3104,
+        3160,
+        0
+       ],
+       "hl": {
+        "obj": [
+         12536
+        ]
+       }
+      },
+      {
+       "t": "Talk to Wizard Traiborn on the 1st floor of the Wizards' Tower for the enchanted ingredients.",
+       "s": "Ask Traiborn, 1st floor of the Wizards' Tower, for the ingredients.",
+       "k": "talkToTraiborn"
+      }
+     ]
+    },
+    {
+     "at": 3,
+     "do": [
+      {
+       "t": "Talk to Traiborn for the enchanted ingredients, then mix them in a tin.",
+       "s": "Get the enchanted ingredients from Traiborn, then mix them in a tin.",
+       "k": "mixIngredients"
+      },
+      {
+       "t": "Cook the Guidance Cake.",
+       "s": "Cook the Guidance Cake.",
+       "k": "cookCake"
+      },
+      {
+       "t": "Use the Guidance Cake on the Lumbridge Guide to finish the quest.",
+       "s": "Use the Guidance Cake on the Lumbridge Guide to finish the quest.",
+       "k": "enterDiningRoomAgain",
+       "at": [
+        3207,
+        3217,
+        0
+       ],
+       "hl": {
+        "obj": [
+         12348
+        ]
+       }
+      },
+      {
+       "t": "Use the Guidance Cake on the Lumbridge Guide to finish the quest.",
+       "s": "Use the Guidance Cake on the Lumbridge Guide to finish the quest.",
+       "k": "useCakeOnLumbridgeGuide",
+       "at": [
+        1865,
+        5325,
+        0
+       ],
+       "hl": {
+        "obj": [
+         12339
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 4,
+     "do": [
+      {
+       "t": "Talk to Traiborn for the enchanted ingredients, then mix them in a tin.",
+       "s": "Get the enchanted ingredients from Traiborn, then mix them in a tin.",
+       "k": "mixIngredients"
+      },
+      {
+       "t": "Cook the Guidance Cake.",
+       "s": "Cook the Guidance Cake.",
+       "k": "cookCake"
+      },
+      {
+       "t": "Use the Guidance Cake on the Lumbridge Guide to finish the quest.",
+       "s": "Use the Guidance Cake on the Lumbridge Guide to finish the quest.",
+       "k": "enterDiningRoomAgain",
+       "at": [
+        3207,
+        3217,
+        0
+       ],
+       "hl": {
+        "obj": [
+         12348
+        ]
+       }
+      },
+      {
+       "t": "Use the Guidance Cake on the Lumbridge Guide to finish the quest.",
+       "s": "Use the Guidance Cake on the Lumbridge Guide to finish the quest.",
+       "k": "useCakeOnLumbridgeGuide",
+       "at": [
+        1865,
+        5325,
+        0
+       ],
+       "hl": {
+        "obj": [
+         12339
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  "S9-75": {
+   "var": [
+    "varbit",
+    7856
+   ],
+   "route": [
+    {
+     "title": "Walkthrough",
+     "steps": [
+      "Speak to Mori in the centre of Arceuus. Dialogue: \"What can I do to help?\", \"We should let someone know about this.\", \"Yes.\"",
+      "Head south-west to Kourend Castle and speak to Councillor Andrews on east side of the . Dialogue: \"There's been a death in Arceuus.\"",
+      "Return and speak to Mori. Dialogue: \"What should we do now?\"",
+      "Walk north-west to the Tower of Magic west of the Arceuus Library and speak to the Tower Mage outside the doors.",
+      "Enter the tower and defeat the 5 Tormented Souls.",
+      "After the fight, head upstairs.",
+      "Speak to Asteros Arceuus.",
+      "Head to Mount Karuulm. (Fairy ring code )",
+      "Go to the centre of Mount Karuulm and activate the elevator.",
+      "Speak to Kaal-Xil-Dar.",
+      "Exit to the south and head to the grave located south-east of the mountain, just west of the Battlefront. It is south of the water source. (By the Battlefront teleport tablet or Arceuus spell location.)",
+      "Inspect the Ancient Grave then follow the tracks, searching bushes and plants nearby to where the tracks end.",
+      "Eventually you'll reach the hiding spot of the Trapped Soul. Defeat it.",
+      "Return to Mount Karuulm and speak to Kaal-Xil-Dar once more.",
+      "Head to the Dark Altar north of Arceuus (fairy ring code , or use a games necklace teleport to Wintertodt then run south) and inspect the rocks that surround the altar until you find a device; it will automatically be destroyed upon being found.",
+      "Return to the Tower of Magic and head upstairs, talk to Lord Trobin Arceuus.",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Talk to Mori in Arceuus.",
+       "s": "Talk to Mori in Arceuus.",
+       "k": "talkToMori",
+       "at": [
+        1698,
+        3742,
+        0
+       ],
+       "hl": {
+        "npc": [
+         8501
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 1,
+     "do": [
+      {
+       "t": "Talk to Councillor Andrews in Kourend Castle.",
+       "s": "Talk to Councillor Andrews in Kourend Castle.",
+       "k": "goUpToAndrews",
+       "at": [
+        1616,
+        3681,
+        0
+       ],
+       "hl": {
+        "obj": [
+         11807
+        ]
+       }
+      },
+      {
+       "t": "Talk to Councillor Andrews in Kourend Castle.",
+       "s": "Talk to Councillor Andrews in Kourend Castle.",
+       "k": "talkToAndrews",
+       "at": [
+        1620,
+        3673,
+        1
+       ],
+       "hl": {
+        "npc": [
+         11152
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 2,
+     "do": [
+      {
+       "t": "Return to Mori in Arceuus.",
+       "s": "Return to Mori in Arceuus.",
+       "k": "returnToMori",
+       "at": [
+        1698,
+        3742,
+        0
+       ],
+       "hl": {
+        "npc": [
+         8501
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 3,
+     "do": [
+      {
+       "t": "Enter the Tower of Magic in Arceuus, ready to fight some level 16 Tormented Souls.",
+       "s": "Enter Arceuus's Tower of Magic, ready for level 16 Tormented Souls.",
+       "k": "enterTowerOfMagic",
+       "at": [
+        1596,
+        3820,
+        0
+       ],
+       "hl": {
+        "obj": [
+         33570
+        ]
+       }
+      },
+      {
+       "t": "Defeat the tormented souls.",
+       "s": "Defeat the tormented souls.",
+       "k": "killTormentedSouls",
+       "at": [
+        1585,
+        3821,
+        0
+       ],
+       "hl": {
+        "npc": [
+         8512
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 4,
+     "do": [
+      {
+       "t": "Enter the Tower of Magic in Arceuus, ready to fight some level 16 Tormented Souls.",
+       "s": "Enter Arceuus's Tower of Magic, ready for level 16 Tormented Souls.",
+       "k": "enterTowerOfMagic",
+       "at": [
+        1596,
+        3820,
+        0
+       ],
+       "hl": {
+        "obj": [
+         33570
+        ]
+       }
+      },
+      {
+       "t": "Defeat the tormented souls.",
+       "s": "Defeat the tormented souls.",
+       "k": "killTormentedSouls",
+       "at": [
+        1585,
+        3821,
+        0
+       ],
+       "hl": {
+        "npc": [
+         8512
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 5,
+     "do": [
+      {
+       "t": "Go up the stairs in the Tower of Magic.",
+       "s": "Go up the stairs in the Tower of Magic.",
+       "k": "goUpstairsTowerOfMagic",
+       "at": [
+        1585,
+        3821,
+        0
+       ],
+       "hl": {
+        "obj": [
+         33575
+        ]
+       }
+      },
+      {
+       "t": "Talk to Lord Trobin Arceuus.",
+       "s": "Talk to Lord Trobin Arceuus.",
+       "k": "talkToArceuus",
+       "at": [
+        1580,
+        3821,
+        1
+       ],
+       "hl": {
+        "npc": [
+         8504
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 6,
+     "do": [
+      {
+       "t": "Go up the stairs in the Tower of Magic.",
+       "s": "Go up the stairs in the Tower of Magic.",
+       "k": "goUpstairsTowerOfMagic",
+       "at": [
+        1585,
+        3821,
+        0
+       ],
+       "hl": {
+        "obj": [
+         33575
+        ]
+       }
+      },
+      {
+       "t": "Talk to Lord Trobin Arceuus.",
+       "s": "Talk to Lord Trobin Arceuus.",
+       "k": "talkToArceuus",
+       "at": [
+        1580,
+        3821,
+        1
+       ],
+       "hl": {
+        "npc": [
+         8504
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 7,
+     "do": [
+      {
+       "t": "Go down the elevator on Mount Karuulm.",
+       "s": "Go down the elevator on Mount Karuulm.",
+       "k": "enterKaruulm",
+       "at": [
+        1311,
+        3807,
+        0
+       ],
+       "hl": {
+        "obj": [
+         34359
+        ]
+       }
+      },
+      {
+       "t": "Talk to Kaal-Ket-Jor.",
+       "s": "Talk to Kaal-Ket-Jor.",
+       "k": "talkToKaal",
+       "at": [
+        1312,
+        10211,
+        0
+       ],
+       "hl": {
+        "npc": [
+         8602
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 8,
+     "do": [
+      {
+       "t": "Inspect the ancient grave south of Mount Karuulm.",
+       "s": "Inspect the ancient grave south of Mount Karuulm.",
+       "k": "inspectGrave",
+       "at": [
+        1349,
+        3737,
+        0
+       ],
+       "hl": {
+        "obj": [
+         34602
+        ]
+       }
+      },
+      {
+       "t": "Inspect the ancient grave south of Mount Karuulm.",
+       "s": "Inspect the ancient grave south of Mount Karuulm.",
+       "k": "leaveKaal",
+       "at": [
+        1312,
+        10186,
+        0
+       ],
+       "hl": {
+        "obj": [
+         34514
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 9,
+     "do": [
+      {
+       "t": "Inspect plants and bushes until you uncover the full path.",
+       "s": "Inspect plants and bushes until you uncover the full path.",
+       "k": "inspectTrack1",
+       "at": [
+        1335,
+        3743,
+        0
+       ],
+       "hl": {
+        "obj": [
+         34622
+        ]
+       }
+      },
+      {
+       "t": "Inspect plants and bushes until you uncover the full path.",
+       "s": "Inspect plants and bushes until you uncover the full path.",
+       "k": "inspectTrack2",
+       "at": [
+        1317,
+        3750,
+        0
+       ],
+       "hl": {
+        "obj": [
+         34623
+        ]
+       }
+      },
+      {
+       "t": "Inspect plants and bushes until you uncover the full path.",
+       "s": "Inspect plants and bushes until you uncover the full path.",
+       "k": "inspectTrack3",
+       "at": [
+        1305,
+        3750,
+        0
+       ],
+       "hl": {
+        "obj": [
+         34623
+        ]
+       }
+      },
+      {
+       "t": "Inspect plants and bushes until you uncover the full path.",
+       "s": "Inspect plants and bushes until you uncover the full path.",
+       "k": "inspectTrack4",
+       "at": [
+        1288,
+        3751,
+        0
+       ],
+       "hl": {
+        "obj": [
+         34621
+        ]
+       }
+      },
+      {
+       "t": "Inspect plants and bushes until you uncover the full path.",
+       "s": "Inspect plants and bushes until you uncover the full path.",
+       "k": "inspectTrack5",
+       "at": [
+        1286,
+        3738,
+        0
+       ],
+       "hl": {
+        "obj": [
+         34624
+        ]
+       }
+      },
+      {
+       "t": "Inspect the final plant and kill the Trapped Soul (level 30) which appears.",
+       "s": "Inspect the last plant and kill the Trapped Soul (level 30).",
+       "k": "inspectTrack6",
+       "at": [
+        1282,
+        3726,
+        0
+       ],
+       "hl": {
+        "obj": [
+         34625
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 10,
+     "do": [
+      {
+       "t": "Inspect the final plant and kill the Trapped Soul (level 30) which appears.",
+       "s": "Inspect the last plant and kill the Trapped Soul (level 30).",
+       "k": "inspectTrack6",
+       "at": [
+        1282,
+        3726,
+        0
+       ],
+       "hl": {
+        "obj": [
+         34625
+        ]
+       }
+      },
+      {
+       "t": "Kill the Trapped Soul.",
+       "s": "Kill the Trapped Soul.",
+       "k": "killTrappedSoul",
+       "at": [
+        1281,
+        3724,
+        0
+       ],
+       "hl": {
+        "npc": [
+         8514
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 11,
+     "do": [
+      {
+       "t": "Return to Kaal-Ket-Jor.",
+       "s": "Return to Kaal-Ket-Jor.",
+       "k": "enterKaruulmAgain",
+       "at": [
+        1311,
+        3807,
+        0
+       ],
+       "hl": {
+        "obj": [
+         34359
+        ]
+       }
+      },
+      {
+       "t": "Return to Kaal-Ket-Jor.",
+       "s": "Return to Kaal-Ket-Jor.",
+       "k": "talkToKaalAgain",
+       "at": [
+        1312,
+        10211,
+        0
+       ],
+       "hl": {
+        "npc": [
+         8602
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 12,
+     "do": [
+      {
+       "t": "Inspect the rocks near the Arceuus Altar until you find a device.",
+       "s": "Inspect the rocks near the Arceuus Altar until you find a device.",
+       "k": "searchRocks",
+       "at": [
+        1710,
+        3882,
+        0
+       ],
+       "hl": {
+        "obj": [
+         33595
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 13,
+     "do": [
+      {
+       "t": "Return to Lord Trobin Arceuus to finish the quest.",
+       "s": "Return to Lord Trobin Arceuus to finish the quest.",
+       "k": "goUpstairsInTowerToFinish",
+       "at": [
+        1585,
+        3821,
+        0
+       ],
+       "hl": {
+        "obj": [
+         33575
+        ]
+       }
+      },
+      {
+       "t": "Talk to Lord Trobin Arceuus to finish the quest.",
+       "s": "Talk to Lord Trobin Arceuus to finish the quest.",
+       "k": "talkToArceuusToFinish",
+       "at": [
+        1580,
+        3821,
+        1
+       ],
+       "hl": {
+        "npc": [
+         8505
+        ]
+       }
+      }
+     ]
+    }
+   ]
   }
  }
 }

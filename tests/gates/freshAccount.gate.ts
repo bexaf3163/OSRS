@@ -47,7 +47,7 @@ const walk: RuntimePlanInput['walk'] = (from, to) => {
 const F2P_SKILLS = ['attack', 'strength', 'defence', 'hitpoints', 'ranged', 'prayer', 'magic', 'cooking', 'woodcutting', 'fletching', 'fishing',
   'firemaking', 'crafting', 'smithing', 'mining', 'runecraft'];
 const MELEE = new Set(['attack', 'strength', 'defence']);
-const MAX_TURNS: Record<GameMode, number> = { f2p: 300, members: 1000 };
+const MAX_TURNS: Record<GameMode, number> = { f2p: 300, members: 1300 };
 const UNKNOWN_TIME_DEBT = 0;
 // A fresh Members account finishes every quest; the turns whose remaining time is unknown are known debt. Lower it as it
 // shrinks, never raise it.

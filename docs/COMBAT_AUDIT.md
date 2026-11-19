@@ -4,7 +4,7 @@ Written by `tests/combatAudit.test.ts` from `src/data/authored/combatAudit.json`
 
 Every stage of the route where the player fights or can be attacked, checked against the route text, the quest stage lines (Quest Helper), the OSRS Wiki infoboxes in combatFoes.json and the danger zones. The rule for a fight the quest cannot go on without: its food is a required item (readiness and the game check it before leaving), the app estimates it with the player's kit where it has the opponent's numbers, and an unread kit or bag is reported as not checked, never as ready.
 
-78 stages: 50 retained, 27 revised, 0 with a branch, 1 deferred.
+79 stages: 51 retained, 27 revised, 0 with a branch, 1 deferred.
 
 | Step | Kind | Mandatory | Opponents | Method | Estimate | Food in the item list | Decision |
 |---|---|---|---|---|---|---|---|
@@ -86,6 +86,7 @@ Every stage of the route where the player fights or can be attacked, checked aga
 | S9-69 Roving Elves | quest-fight | yes | Moss Guardian (84) | melee | Moss Guardian | Lobster 12 | Retain |
 | S9-70 Recruitment Drive | quest-fight | yes | Sir Leye (20) | melee | Sir Leye | - | Retain |
 | S9-71 Wanted! | quest-fight | yes | Black Knight (Wanted!) (32) | melee | Black Knight (Wanted!) | Lobster 4 | Retain |
+| S9-75 The Ascent of Arceuus | quest-fight | yes | Tormented Soul (16), Trapped Soul (30) | melee | Tormented Soul, Trapped Soul | Lobster 3 | Retain |
 
 ## S1-06 The Restless Ghost
 
@@ -1872,4 +1873,26 @@ Changed:
 Evidence:
 
 - OSRS Wiki Black Knight (Wanted!) and Solus Dellagar infoboxes, Wanted! walkthrough, read 2026-11-19.
+
+## S9-75 The Ascent of Arceuus
+
+**Retain.** The Ascent of Arceuus: kill five Tormented Souls (level 16, max hit 2) and then the Trapped Soul (level 30, max hit 4) for Mori.
+
+Quest stage lines: 0.4, 0.5, 0.12.
+
+Assumptions:
+
+- Three lobsters cover the souls; the Trapped Soul sets the kit.
+
+Alternatives:
+
+- Any melee kit that beats the Trapped Soul; it is weak to air spells.
+
+Changed:
+
+- 2.153.0: new quest; both souls are in combatFoes.json.
+
+Evidence:
+
+- OSRS Wiki Tormented Soul and Trapped Soul infoboxes, The Ascent of Arceuus quick guide, read 2026-11-19.
 

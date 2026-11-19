@@ -2734,6 +2734,42 @@
       "evidence": [
         "OSRS Wiki Black Knight (Wanted!) and Solus Dellagar infoboxes, Wanted! walkthrough, read 2026-11-19."
       ]
+    },
+    {
+      "stepId": "S9-75",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "melee",
+      "objective": "The Ascent of Arceuus: kill five Tormented Souls (level 16, max hit 2) and then the Trapped Soul (level 30, max hit 4) for Mori.",
+      "enemies": [
+        {
+          "name": "Tormented Soul",
+          "level": 16,
+          "maxHit": 2,
+          "table": true
+        },
+        {
+          "name": "Trapped Soul",
+          "level": 30,
+          "maxHit": 4,
+          "table": true
+        }
+      ],
+      "lines": ["0.4", "0.5", "0.12"],
+      "assumptions": [
+        "Three lobsters cover the souls; the Trapped Soul sets the kit."
+      ],
+      "problems": [],
+      "alternatives": [
+        "Any melee kit that beats the Trapped Soul; it is weak to air spells."
+      ],
+      "decision": "retain",
+      "changed": [
+        "2.153.0: new quest; both souls are in combatFoes.json."
+      ],
+      "evidence": [
+        "OSRS Wiki Tormented Soul and Trapped Soul infoboxes, The Ascent of Arceuus quick guide, read 2026-11-19."
+      ]
     }
   ]
 }
