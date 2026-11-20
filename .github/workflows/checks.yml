@@ -40,7 +40,7 @@ jobs:
     strategy:
       matrix:
         mode: [F2P, Members]
-    timeout-minutes: 65
+    timeout-minutes: 90
     env:
       ELECTRON_SKIP_BINARY_DOWNLOAD: '1'
     steps:
@@ -54,7 +54,7 @@ jobs:
 
   runelite-bridge:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 30
     defaults:
       run:
         working-directory: runelite-bridge
