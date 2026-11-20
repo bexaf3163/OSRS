@@ -113,7 +113,8 @@ describe('complete encounter strategy comparison', () => {
     expect(result.encounter?.reasons.join(' ')).toContain('Mithril scimitar');
   });
   it('trains first, then upgrades equipment when the actual unlock is the faster strategy', () => {
-    const input = fixture(19);
+    // 2,000 coins buy the scimitar but not the black platebody (Heroes' Quest gear), so the comparison stays between training and the scimitar.
+    const input = fixture(19, 2000);
     const result = createTacticalResolver(input).resolve(fight, 'test');
     expect(result.action).toMatchObject({ kind: 'TRAIN', id: expect.stringContaining(':TRAIN:attack:20:') });
     expect(result.encounter?.reasons[0]).toContain('Train attack to 20, then Mithril scimitar');

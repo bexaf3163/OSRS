@@ -77,7 +77,8 @@ export function projectedQuestPoints(snapshot: PlanningSnapshot, projection: Pro
  */
 export function setAsideQuests(catalogue: readonly QuestFact[], steps: readonly Step[], progress: Progress, quests: Readonly<Record<string, Pick<QuestEvidence, 'state'>>>): Set<string> {
   const byId = new Map(steps.map(step => [step.id, step]));
-  const open = catalogue.filter(quest => quests[quest.id]?.state !== 'COMPLETED');
+  // Only quests on this route count: a Members quest (Heroes' Quest) does not hold Shield of Arrav open on the F2P route.
+  const open = catalogue.filter(quest => quests[quest.id]?.state !== 'COMPLETED' && quest.stepIds.some(id => byId.has(id)));
   return new Set(open.filter(quest => quest.stepIds.length > 0 && quest.stepIds.every(id => byId.get(id)?.optional && isClosed(progress, id))
     && !open.some(other => other.requirements.quests.includes(quest.id))).map(quest => quest.id));
 }

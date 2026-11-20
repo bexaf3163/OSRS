@@ -2803,6 +2803,90 @@
       "evidence": [
         "OSRS Wiki Giant scarab and Contact! quick guide, read 2026-11-20."
       ]
+    },
+    {
+      "stepId": "S9-79",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "melee",
+      "objective": "Heroes' Quest: kill the level 47 Jailer in the Black Knights' base for the jail key, the level 111 Ice Queen under White Wolf Mountain for the ice gloves, and the level 2 Entrana firebird bare-handed for the fire feather.",
+      "enemies": [
+        {
+          "name": "Ice Queen",
+          "level": 111,
+          "maxHit": 10,
+          "table": true
+        },
+        {
+          "name": "Jailer",
+          "level": 47,
+          "maxHit": 5,
+          "table": true
+        },
+        {
+          "name": "Entrana firebird",
+          "level": 2,
+          "maxHit": 1,
+          "table": true
+        }
+      ],
+      "lines": ["3.3"],
+      "assumptions": [
+        "Ten lobsters cover the Jailer and the Ice Queen; the Ice Queen sets the kit.",
+        "Entrana allows no weapons or armour, so the firebird is fought bare-handed (fightMechanics.json bare)."
+      ],
+      "problems": [
+        "Phoenix Gang members also kill Grip (level 26, max hit 3) with Ranged or Magic; the step leaves him out because Black Arm members never fight him."
+      ],
+      "alternatives": [
+        "Black Arm Gang members skip Grip; their partner kills him."
+      ],
+      "decision": "retain",
+      "changed": [
+        "2.155.0: new quest; the Jailer, Ice Queen and Entrana firebird are in combatFoes.json."
+      ],
+      "evidence": [
+        "OSRS Wiki Heroes' Quest quick guide, Ice Queen, Jailer, Entrana firebird and Grip infoboxes, read 2026-11-20."
+      ]
+    },
+    {
+      "stepId": "S9-81",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "melee",
+      "objective": "Lunar Diplomacy: kill level 111 Suqahs outside the Lunar Isle town for a tooth, a special tiara and 4 hides, then defeat Me (level 79) in the Dream World.",
+      "enemies": [
+        {
+          "name": "Suqah",
+          "level": 111,
+          "maxHit": 10,
+          "table": true
+        },
+        {
+          "name": "Me",
+          "level": 79,
+          "maxHit": 9,
+          "table": true
+        }
+      ],
+      "lines": ["3.2", "5.7", "13.0", "13.1"],
+      "assumptions": [
+        "Fifteen lobsters cover several Suqahs and Me; the Suqahs set the kit.",
+        "Me can be safespotted, and gear cannot be changed once the fight starts (OSRS Wiki)."
+      ],
+      "problems": [
+        "How many Suqahs drop the tooth, the tiara and 4 hides is random, so the food is an estimate."
+      ],
+      "alternatives": [
+        "Safespot Me with Ranged or Magic, equipped before entering the Dream World."
+      ],
+      "decision": "retain",
+      "changed": [
+        "2.155.0: new quest; the Suqah and Me are in combatFoes.json."
+      ],
+      "evidence": [
+        "OSRS Wiki Lunar Diplomacy quick guide, Suqah and Me infoboxes, read 2026-11-20."
+      ]
     }
   ]
 }

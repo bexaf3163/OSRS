@@ -4,7 +4,7 @@ Written by `tests/combatAudit.test.ts` from `src/data/authored/combatAudit.json`
 
 Every stage of the route where the player fights or can be attacked, checked against the route text, the quest stage lines (Quest Helper), the OSRS Wiki infoboxes in combatFoes.json and the danger zones. The rule for a fight the quest cannot go on without: its food is a required item (readiness and the game check it before leaving), the app estimates it with the player's kit where it has the opponent's numbers, and an unread kit or bag is reported as not checked, never as ready.
 
-80 stages: 52 retained, 27 revised, 0 with a branch, 1 deferred.
+82 stages: 54 retained, 27 revised, 0 with a branch, 1 deferred.
 
 | Step | Kind | Mandatory | Opponents | Method | Estimate | Food in the item list | Decision |
 |---|---|---|---|---|---|---|---|
@@ -88,6 +88,8 @@ Every stage of the route where the player fights or can be attacked, checked aga
 | S9-71 Wanted! | quest-fight | yes | Black Knight (Wanted!) (32) | melee | Black Knight (Wanted!) | Lobster 4 | Retain |
 | S9-75 The Ascent of Arceuus | quest-fight | yes | Tormented Soul (16), Trapped Soul (30) | melee | Tormented Soul, Trapped Soul | Lobster 3 | Retain |
 | S9-77 Contact! | quest-fight | yes | Giant Scarab (191) | melee | Giant Scarab | Lobster 15 | Retain |
+| S9-79 Heroes' Quest | quest-fight | yes | Ice Queen (111), Jailer (47), Entrana firebird (2) | melee | Ice Queen, Entrana firebird, Jailer | Lobster 10 | Retain |
+| S9-81 Lunar Diplomacy | quest-fight | yes | Suqah (111), Me (79) | melee | Suqah, Me | Lobster 15 | Retain |
 
 ## S1-06 The Restless Ghost
 
@@ -1923,4 +1925,58 @@ Changed:
 Evidence:
 
 - OSRS Wiki Giant scarab and Contact! quick guide, read 2026-11-20.
+
+## S9-79 Heroes' Quest
+
+**Retain.** Heroes' Quest: kill the level 47 Jailer in the Black Knights' base for the jail key, the level 111 Ice Queen under White Wolf Mountain for the ice gloves, and the level 2 Entrana firebird bare-handed for the fire feather.
+
+Quest stage lines: 3.3.
+
+Assumptions:
+
+- Ten lobsters cover the Jailer and the Ice Queen; the Ice Queen sets the kit.
+- Entrana allows no weapons or armour, so the firebird is fought bare-handed (fightMechanics.json bare).
+
+Problems:
+
+- Phoenix Gang members also kill Grip (level 26, max hit 3) with Ranged or Magic; the step leaves him out because Black Arm members never fight him.
+
+Alternatives:
+
+- Black Arm Gang members skip Grip; their partner kills him.
+
+Changed:
+
+- 2.155.0: new quest; the Jailer, Ice Queen and Entrana firebird are in combatFoes.json.
+
+Evidence:
+
+- OSRS Wiki Heroes' Quest quick guide, Ice Queen, Jailer, Entrana firebird and Grip infoboxes, read 2026-11-20.
+
+## S9-81 Lunar Diplomacy
+
+**Retain.** Lunar Diplomacy: kill level 111 Suqahs outside the Lunar Isle town for a tooth, a special tiara and 4 hides, then defeat Me (level 79) in the Dream World.
+
+Quest stage lines: 3.2, 5.7, 13.0, 13.1.
+
+Assumptions:
+
+- Fifteen lobsters cover several Suqahs and Me; the Suqahs set the kit.
+- Me can be safespotted, and gear cannot be changed once the fight starts (OSRS Wiki).
+
+Problems:
+
+- How many Suqahs drop the tooth, the tiara and 4 hides is random, so the food is an estimate.
+
+Alternatives:
+
+- Safespot Me with Ranged or Magic, equipped before entering the Dream World.
+
+Changed:
+
+- 2.155.0: new quest; the Suqah and Me are in combatFoes.json.
+
+Evidence:
+
+- OSRS Wiki Lunar Diplomacy quick guide, Suqah and Me infoboxes, read 2026-11-20.
 

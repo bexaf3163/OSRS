@@ -55,7 +55,7 @@ export function questFacts(article: WikiArticle, stepIds: string[], retrievedAt:
     return /^\*\*(?!\*)/.test(line) ? firstLink(line) : [];
   });
   const quests = [...new Set([...templates(requirements, 'Questreq').map(t => t['1']).filter((v): v is string => !!v), ...listed])];
-  const manual = /\btrustworthy friend or partner\b/i.test(requirements) ? ['partner'] : [];
+  const manual = /\b(?:trustworthy friend or )?partner\b/i.test(requirements) ? ['partner'] : [];
   const capabilities: string[] = [];
   const alternativeEscape = /\b(?:defeat|killing) or run(?:ning)? away\b/i.test(requirements);
   if (alternativeEscape) capabilities.push('survival'); // Fighting OR escaping, never an invented requirement to do both.
@@ -489,6 +489,26 @@ const REVIEWED_FLOWS: Record<string, { revision: number; flow: NonNullable<Quest
     unknownItems: ['Enchanted milk', 'Enchanted egg', 'Enchanted flour', 'Raw guide cake', 'Cake of guidance'],
     uncertainReceipts: ['Cake tin'], partialDelivery: false, fromStartOnly: false,
   } },
+  // The unfinished potion and slime make the oil that turns the rod oily; the bait catches the eel; the eel, feather and armband go to Achietties; gloves, key and armour stay.
+  "Heroes' Quest": { revision: 15385698, flow: {
+    consumes: [{ name: 'Harralander potion (unf)', count: 1 }, { name: 'Fishing rod', count: 1 }, { name: 'Fishing bait', count: 1 }],
+    receives: [{ name: 'Ice gloves', count: 1, when: 'complete' }],
+    unknownItems: ['Blamish snail slime', 'Blamish oil', 'Oily fishing rod', 'Raw lava eel', 'Lava eel', 'Fire feather', 'Jail key', 'Miscellaneous key', 'Candlestick', "Thieves' armband"],
+    uncertainReceipts: [], partialDelivery: false, fromStartOnly: false,
+  } },
+  // The coins buy the flowers and the support; the ring is given away; the bar becomes the nib and the logs the pen. Only the chosen royal keeps the bow or eats the cake.
+  'Throne of Miscellania': { revision: 15403898, flow: {
+    consumes: [{ name: 'Coins', count: 1905 }, { name: 'Gold ring', count: 1 }, { name: 'Iron bar', count: 1 }, { name: 'Logs', count: 1 }],
+    receives: [], unknownItems: ['Flowers', 'Mixed flowers', 'Giant nib', 'Giant pen', 'Awful anthem', 'Good anthem', 'Treaty'],
+    uncertainReceipts: ['Shortbow', 'Cake'], partialDelivery: false, fromStartOnly: false,
+  } },
+  // The altars turn the dramen staff into the lunar staff; the herbs go into the potion; the thread sews the clothes. Tools, talismans and the lantern stay.
+  'Lunar Diplomacy': { revision: 15400334, flow: {
+    consumes: [{ name: 'Dramen staff', count: 1 }, { name: 'Guam leaf', count: 1 }, { name: 'Marrentill', count: 1 }, { name: 'Thread', count: 2 }],
+    receives: [],
+    unknownItems: ['Lunar staff', 'Emerald lens', 'Emerald lantern', 'Suqah tooth', 'Suqah hide', 'Suqah leather', 'Lunar ore', 'Lunar bar', 'Lunar helm', 'Lunar torso', 'Lunar gloves', 'Lunar boots', 'Lunar legs', 'Lunar amulet', 'Lunar ring', 'Lunar cape', 'Special vial', 'Waking sleep vial', 'Seal of passage'],
+    uncertainReceipts: ['Coins'], partialDelivery: false, fromStartOnly: false,
+  } },
   // Nothing is used up: the lantern and tinderbox stay, and the keris is the prize from the chasm.
   'Contact!': { revision: 15327950, flow: {
     consumes: [], receives: [{ name: 'Keris', count: 1, when: 'complete' }], unknownItems: ["Kaleef's parchment"], uncertainReceipts: [], partialDelivery: false, fromStartOnly: false,
@@ -667,4 +687,7 @@ const REVIEWED_CLAUSES = new Set([
   'The ability to defeat 5 level 30 monsters.',
   "The ability to defeat a level 13 [[icefiend]] if you don't have the [[ice gloves]].",
   'Ability to defeat a [[Koschei|fairly strong warrior]] without [[armour]], [[weapons]], or [[spells]]',
+  'The ability to kill multiple level 111 monsters.',
+  'A partner',
+  'Access to each of the elemental [[runic altars]] ([[Air Altar|Air]], [[Fire Altar|Fire]], [[Water Altar|Water]], [[Earth Altar|Earth]])',
 ].map(clause => clause.toLowerCase()));

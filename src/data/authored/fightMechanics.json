@@ -15,7 +15,14 @@
         "A stake and a hammer in the inventory deal the killing blow; without them he heals to full health."
       ]
     },
-    "Sir Leye": {
+    "Entrana firebird": {
+    "url": "https://oldschool.runescape.wiki/w/Entrana_firebird",
+    "bare": true,
+    "facts": [
+      "Entrana allows no weapons or armour, so the level 2 firebird is fought bare-handed; it has 5 hitpoints and hits up to 1 (OSRS Wiki Entrana firebird, Heroes' Quest)."
+    ]
+  },
+  "Sir Leye": {
       "url": "https://oldschool.runescape.wiki/w/Sir_Leye",
       "bare": true,
       "noFood": true,

@@ -1,6 +1,6 @@
 {
   "source": "OSRS Wiki: Infobox Monster of each article, every version (scripts/data/build-combat-foes.ts)",
-  "generatedAt": "2026-11-19",
+  "generatedAt": "2026-11-20",
   "foes": [
     {
       "name": "Count Draynor",
@@ -2916,200 +2916,129 @@
       }
     },
     {
-      "name": "Locust rider",
-      "version": "Ranger",
-      "combat": 98,
+      "name": "Suqah",
+      "version": "1",
+      "combat": 111,
       "members": true,
-      "hitpoints": 90,
-      "attackLevel": 90,
-      "strengthLevel": 90,
-      "defenceLevel": 50,
+      "hitpoints": 105,
+      "attackLevel": 95,
+      "strengthLevel": 95,
+      "defenceLevel": 95,
       "magicLevel": 1,
-      "attackBonus": 80,
+      "attackBonus": 0,
       "defence": {
         "stab": 50,
-        "slash": 90,
-        "crush": 50,
-        "magic": 34,
-        "ranged": 66
+        "slash": 70,
+        "crush": 70,
+        "magic": 90,
+        "ranged": 30
       },
-      "attackStyle": "ranged",
-      "maxHit": 22,
+      "attackStyle": "stab",
+      "maxHit": 10,
       "speedTicks": 6,
       "aggressive": true,
       "xpBonus": 2,
       "weakness": {
-        "element": "fire",
-        "percent": 40
+        "element": "earth",
+        "percent": 20
       }
     },
     {
-      "name": "Locust rider",
-      "version": "Ranger (Quest)",
-      "combat": 68,
+      "name": "Me",
+      "version": "Type A",
+      "combat": 79,
       "members": true,
-      "hitpoints": 90,
-      "attackLevel": 90,
-      "strengthLevel": 90,
-      "defenceLevel": 50,
+      "hitpoints": 45,
+      "attackLevel": 75,
+      "strengthLevel": 78,
+      "defenceLevel": 74,
       "magicLevel": 1,
-      "attackBonus": 80,
-      "defence": {
-        "stab": 50,
-        "slash": 90,
-        "crush": 50,
-        "magic": 34,
-        "ranged": 66
-      },
-      "attackStyle": "ranged",
-      "maxHit": 22,
-      "speedTicks": 6,
-      "aggressive": true,
-      "xpBonus": 2,
-      "weakness": {
-        "element": "fire",
-        "percent": 40
-      }
-    },
-    {
-      "name": "Locust rider",
-      "version": "Lancer",
-      "combat": 106,
-      "members": true,
-      "hitpoints": 90,
-      "attackLevel": 100,
-      "strengthLevel": 90,
-      "defenceLevel": 90,
-      "magicLevel": 1,
-      "attackBonus": 0,
-      "defence": {
-        "stab": 90,
-        "slash": 90,
-        "crush": 40,
-        "magic": 0,
-        "ranged": 0
-      },
-      "attackStyle": "crush",
-      "maxHit": 15,
-      "speedTicks": 4,
-      "aggressive": true,
-      "xpBonus": 2,
-      "weakness": {
-        "element": "fire",
-        "percent": 40
-      }
-    },
-    {
-      "name": "Locust rider",
-      "version": "Lancer (Quest)",
-      "combat": 68,
-      "members": true,
-      "hitpoints": 90,
-      "attackLevel": 100,
-      "strengthLevel": 90,
-      "defenceLevel": 90,
-      "magicLevel": 1,
-      "attackBonus": 0,
-      "defence": {
-        "stab": 90,
-        "slash": 90,
-        "crush": 40,
-        "magic": 0,
-        "ranged": 0
-      },
-      "attackStyle": "crush",
-      "maxHit": 15,
-      "speedTicks": 4,
-      "aggressive": true,
-      "xpBonus": 2,
-      "weakness": {
-        "element": "fire",
-        "percent": 40
-      }
-    },
-    {
-      "name": "Scarab Mage",
-      "version": "Level 66 (Contact!)",
-      "combat": 66,
-      "members": true,
-      "hitpoints": 50,
-      "attackLevel": 90,
-      "strengthLevel": 90,
-      "defenceLevel": 90,
-      "magicLevel": 70,
-      "attackBonus": 0,
-      "defence": {
-        "stab": 40,
-        "slash": 90,
-        "crush": 90,
-        "magic": 34,
-        "ranged": 0
-      },
-      "attackStyle": "magic",
-      "maxHit": 17,
-      "speedTicks": 15,
-      "aggressive": true,
-      "xpBonus": 2,
-      "weakness": {
-        "element": "fire",
-        "percent": 50
-      }
-    },
-    {
-      "name": "Scarab Mage",
-      "version": "Level 93",
-      "combat": 93,
-      "members": true,
-      "hitpoints": 50,
-      "attackLevel": 90,
-      "strengthLevel": 90,
-      "defenceLevel": 90,
-      "magicLevel": 70,
-      "attackBonus": 0,
-      "defence": {
-        "stab": 40,
-        "slash": 90,
-        "crush": 90,
-        "magic": 34,
-        "ranged": 0
-      },
-      "attackStyle": "magic",
-      "maxHit": 17,
-      "speedTicks": 15,
-      "aggressive": true,
-      "xpBonus": 2,
-      "weakness": {
-        "element": "fire",
-        "percent": 50
-      }
-    },
-    {
-      "name": "Scarab Mage",
-      "version": "Level 119 (Beneath Cursed Sands)",
-      "combat": 119,
-      "members": true,
-      "hitpoints": 120,
-      "attackLevel": 1,
-      "strengthLevel": 1,
-      "defenceLevel": 60,
-      "magicLevel": 100,
       "attackBonus": 0,
       "defence": {
         "stab": 0,
-        "slash": 20,
-        "crush": 20,
-        "magic": 30,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
         "ranged": 0
       },
-      "attackStyle": "magic",
-      "maxHit": 16,
-      "speedTicks": 5,
-      "aggressive": true,
-      "xpBonus": 2,
+      "attackStyle": "crush",
+      "maxHit": 9,
+      "speedTicks": 4,
+      "aggressive": true
+    },
+    {
+      "name": "Ice Queen",
+      "combat": 111,
+      "members": true,
+      "hitpoints": 104,
+      "attackLevel": 95,
+      "strengthLevel": 94,
+      "defenceLevel": 95,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 30,
+        "slash": 40,
+        "crush": 20,
+        "magic": 10,
+        "ranged": 30
+      },
+      "attackStyle": "crush",
+      "maxHit": 10,
+      "speedTicks": 4,
+      "aggressive": false,
       "weakness": {
         "element": "fire",
-        "percent": 50
+        "percent": 100
       }
+    },
+    {
+      "name": "Entrana firebird",
+      "combat": 2,
+      "members": true,
+      "hitpoints": 5,
+      "attackLevel": 1,
+      "strengthLevel": 1,
+      "defenceLevel": 1,
+      "magicLevel": 1,
+      "attackBonus": -31,
+      "defence": {
+        "stab": -26,
+        "slash": -26,
+        "crush": -26,
+        "magic": -26,
+        "ranged": -26
+      },
+      "attackStyle": "stab",
+      "maxHit": 1,
+      "speedTicks": 4,
+      "aggressive": false,
+      "weakness": {
+        "element": "water",
+        "percent": 100
+      }
+    },
+    {
+      "name": "Grip",
+      "combat": 22,
+      "members": true,
+      "hitpoints": 25,
+      "attackLevel": 18,
+      "strengthLevel": 17,
+      "defenceLevel": 18,
+      "magicLevel": 1,
+      "attackBonus": 5,
+      "defence": {
+        "stab": 16,
+        "slash": 27,
+        "crush": 22,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "slash",
+      "maxHit": 3,
+      "speedTicks": 4,
+      "aggressive": false
     },
     {
       "name": "Cow",

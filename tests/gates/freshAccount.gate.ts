@@ -51,7 +51,7 @@ const MAX_TURNS: Record<GameMode, number> = { f2p: 300, members: 1300 };
 const UNKNOWN_TIME_DEBT = 0;
 // A fresh Members account finishes every quest; the turns whose remaining time is unknown are known debt. Lower it as it
 // shrinks, never raise it.
-const MEMBERS_UNKNOWN_TIME_DEBT = 2;
+const MEMBERS_UNKNOWN_TIME_DEBT = 0;
 
 // One fresh account played through the route of a mode; it stops at the first check and returns what is left.
 function play(mode: GameMode) {
@@ -86,7 +86,7 @@ function play(mode: GameMode) {
     const qp = questCatalogue.filter(q => done.includes(q.id)).reduce((s, q) => s + (q.rewards.questPoints ?? 0), 0);
     const snapshot = { scope: { characterId: 'Gate', mode, gameSessionId: 'gate', snapshotRevision: turn + 1 }, player, combat: { stats, gear },
       bankRead: { kind: 'current' }, xp: Object.fromEntries(SKILLS.map(s => [s, { known: true, value: xp[s], source: 'game' }])),
-      manual: { 'Shield of Arrav:partner': true }, questPoints: { known: true, value: qp, source: 'game' },
+      manual: { 'Shield of Arrav:partner': true, "Heroes' Quest:partner": true }, questPoints: { known: true, value: qp, source: 'game' },
       quests: Object.fromEntries(Object.entries(quests).map(([id, q]) => [id, { ...q, source: 'game' }])) } as unknown as PlanningSnapshot;
     const earn: RuntimePlanInput['earn'] = (step, gp, _budget, goalId) => earnAction(snapshot, step, goalId, gp, mode === 'members' ? ranked(stats, done, coins) : rate);
     const d = runtimeDecision({ snapshot, intent: { kind: 'auto' }, previous, progress: emptyProgress(), prices, steps,

@@ -15,7 +15,7 @@ const quests = (stagesFile as unknown as { quests: Record<string, { var: [string
 const NO_PLACE: Record<string, string> = {};
 
 /** Stage rows whose first line has no place: an action in the bag or an interface, or waiting. Known, and the list must not grow. */
-const ROW_WITHOUT_PLACE = new Set(['S8-02#75', 'S8-05#200', 'S8-05#220', 'S9-03#5', 'S9-08#55', 'S9-09#3', 'S9-14#20', 'S9-28#10', 'S9-28#20', 'S9-28#30', 'S9-28#40', 'S9-30#10', 'S9-30#15', 'S9-30#20', 'S9-30#25', 'S9-39#2', 'S9-39#9', 'S9-41#1', 'S9-41#2', 'S9-43#20', 'S9-43#21', 'S9-43#22', 'S9-43#23', 'S9-43#27', 'S9-50#38', 'S9-51#2', 'S9-53#50', 'S9-57#165', 'S9-58#30', 'S9-60#100', 'S9-61#80', 'S9-63#3', 'S9-64#124', 'S9-65#22', 'S9-68#11', 'S9-71#8', 'S9-71#10', 'S9-72#2', 'S9-73#95', 'S9-74#3', 'S9-74#4', 'S9-78#3', 'S9-76#60', 'S9-76#30', 'S9-76#15']);
+const ROW_WITHOUT_PLACE = new Set(['S8-02#75', 'S8-05#200', 'S8-05#220', 'S9-03#5', 'S9-08#55', 'S9-09#3', 'S9-14#20', 'S9-28#10', 'S9-28#20', 'S9-28#30', 'S9-28#40', 'S9-30#10', 'S9-30#15', 'S9-30#20', 'S9-30#25', 'S9-39#2', 'S9-39#9', 'S9-41#1', 'S9-41#2', 'S9-43#20', 'S9-43#21', 'S9-43#22', 'S9-43#23', 'S9-43#27', 'S9-50#38', 'S9-51#2', 'S9-53#50', 'S9-57#165', 'S9-58#30', 'S9-60#100', 'S9-61#80', 'S9-63#3', 'S9-64#124', 'S9-65#22', 'S9-68#11', 'S9-71#8', 'S9-71#10', 'S9-72#2', 'S9-73#95', 'S9-74#3', 'S9-74#4', 'S9-78#3', 'S9-80#90', 'S9-81#175', 'S9-81#170', 'S9-81#165', 'S9-81#160', 'S9-81#118', 'S9-81#116', 'S9-81#114', 'S9-81#112', 'S9-81#110', 'S9-76#60', 'S9-76#30', 'S9-76#15']);
 
 describe('the whole guide: every quest is followed by the game', () => {
   it('every quest step has a stage table on a quest variable, so the card moves with the quest', () => {

@@ -13838,5 +13838,452 @@
         "questName": "Recipe for Disaster - Evil Dave"
       }
     }
+  },
+  {
+    "id": "S9-79",
+    "stage": 9,
+    "type": "quest",
+    "title": "Heroes' Quest",
+    "qp": 1,
+    "requires": [
+      "S9-01",
+      "S7-17",
+      "S5-09"
+    ],
+    "optional": true,
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Heroes'_Quest",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Heroes'_Quest/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2904,3511,0",
+    "mapLocation": {
+      "x": 2904,
+      "y": 3511,
+      "plane": 0,
+      "label": "Achietties"
+    },
+    "npc": {
+      "nameEn": "Achietties",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Achietties"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Harralander potion (unf)",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or make it from a clean harralander and a vial of water.",
+        "wikiItemId": 97,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Harralander_potion_(unf).png"
+      },
+      {
+        "nameEn": "Fishing rod",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Gerrant's Fishy Business in Port Sarim for 5 gp.",
+        "wikiItemId": 307,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Fishing_rod.png"
+      },
+      {
+        "nameEn": "Fishing bait",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Gerrant's Fishy Business in Port Sarim for 3 gp.",
+        "wikiItemId": 313,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Fishing_bait.png"
+      },
+      {
+        "nameEn": "Bronze pickaxe",
+        "amount": 1,
+        "howToGet": "Any pickaxe from the bank: you mine the rockslide on White Wolf Mountain.",
+        "wikiItemId": 1265,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_pickaxe.png"
+      },
+      {
+        "nameEn": "Dusty key",
+        "amount": 1,
+        "howToGet": "Buy from Velrak the explorer for 0 gp.",
+        "wikiItemId": 1590,
+        "inStep": true,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Dusty_key.png"
+      },
+      {
+        "nameEn": "Ice gloves",
+        "amount": 1,
+        "howToGet": "The Ice Queen drops them under White Wolf Mountain; wear them to pick up the fire feather.",
+        "wikiItemId": 1580,
+        "inStep": true,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Ice_gloves.png"
+      },
+      {
+        "nameEn": "Black full helm",
+        "amount": 1,
+        "howToGet": "Black Arm Gang members only: buy on the Grand Exchange and wear it in Scarface Pete's mansion. Trimmed pieces do not work.",
+        "wikiItemId": 1165,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Black_full_helm.png"
+      },
+      {
+        "nameEn": "Black platebody",
+        "amount": 1,
+        "howToGet": "Black Arm Gang members only: buy on the Grand Exchange and wear it in Scarface Pete's mansion. Trimmed pieces do not work.",
+        "wikiItemId": 1125,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Black_platebody.png"
+      },
+      {
+        "nameEn": "Black platelegs",
+        "amount": 1,
+        "howToGet": "Black Arm Gang members only: buy on the Grand Exchange and wear them in Scarface Pete's mansion. A plateskirt does not work.",
+        "wikiItemId": 1077,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Black_platelegs.png"
+      },
+      {
+        "nameEn": "Lobster",
+        "amount": 10,
+        "howToGet": "Buy on the Grand Exchange: the Jailer, the Ice Queen and, for Phoenix Gang members, Grip.",
+        "wikiItemId": 379,
+        "heals": 12,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Lobster.png"
+      }
+    ],
+    "foes": [
+      "Ice Queen",
+      "Entrana firebird",
+      "Jailer"
+    ],
+    "reward": "1 QP, 3,075 Attack XP, 3,075 Defence XP, 3,075 Strength XP, 3,075 Hitpoints XP, 2,075 Ranged XP, 2,725 Fishing XP, 2,825 Cooking XP, 1,575 Woodcutting XP, 1,575 Firemaking XP, 2,275 Smithing XP, 2,575 Mining XP, 1,325 Herblore XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Achietties"
+      ],
+      "dialogChoices": [
+        "I'm a hero, may I apply to join?",
+        "I'll start looking for all those things then.",
+        "I want to find out how to catch a lava eel.",
+        "Is there any way I can get the rank of master thief?",
+        "So can you help me get Scarface Pete's candlesticks?",
+        "I volunteer to undertake that mission!",
+        "So what do my duties involve?",
+        "Anything I can do now?",
+        "Do you sell Gherkins?",
+        "I'm looking for a gherkin...",
+        "I want to steal Scarface Pete's candlesticks.",
+        "He won't notice me having a quick look.",
+        "I have a candlestick now."
+      ],
+      "highlightItems": [
+        "Harralander potion (unf)",
+        "Fishing rod",
+        "Fishing bait",
+        "Bronze pickaxe",
+        "Dusty key",
+        "Ice gloves",
+        "Black full helm",
+        "Black platebody",
+        "Black platelegs",
+        "Lobster"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Heroes' Quest"
+      }
+    }
+  },
+  {
+    "id": "S9-80",
+    "stage": 9,
+    "type": "quest",
+    "title": "Throne of Miscellania",
+    "qp": 1,
+    "requires": [
+      "S9-55"
+    ],
+    "optional": true,
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Throne_of_Miscellania",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Throne_of_Miscellania/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2501,3859,0",
+    "mapLocation": {
+      "x": 2501,
+      "y": 3859,
+      "plane": 0,
+      "label": "The Miscellania Castle"
+    },
+    "npc": {
+      "nameEn": "King Vargas",
+      "location": "The Miscellania Castle",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/King_Vargas"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Coins",
+        "amount": 1905,
+        "howToGet": "15 gp for each of the 2 flowers, and about 1,875 gp of mixed flowers from the Flower Girl to raise the kingdom's support from 25% to 75%.",
+        "wikiItemId": 995,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Coins_1.png"
+      },
+      {
+        "nameEn": "Gold ring",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange. Any gold, sapphire, emerald, ruby or diamond ring; silver and pineapple rings do not work.",
+        "wikiItemId": 1635,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Gold_ring.png"
+      },
+      {
+        "nameEn": "Shortbow",
+        "amount": 1,
+        "howToGet": "Princess Astrid's route: buy on the Grand Exchange. A plain shortbow or longbow; Astrid keeps it.",
+        "wikiItemId": 841,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Shortbow.png"
+      },
+      {
+        "nameEn": "Cake",
+        "amount": 1,
+        "howToGet": "Prince Brand's route: buy on the Grand Exchange, or bake one. A chocolate cake works too.",
+        "wikiItemId": 1891,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Cake.png"
+      },
+      {
+        "nameEn": "Iron bar",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange. Derrik turns it into the giant nib.",
+        "wikiItemId": 2351,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Iron_bar.png"
+      },
+      {
+        "nameEn": "Logs",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or chop a tree on Miscellania. The giant nib goes on them to make the giant pen.",
+        "wikiItemId": 1511,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Logs.png"
+      }
+    ],
+    "reward": "1 QP, 1,000 Woodcutting XP, 1,000 Mining XP, 1,000 Fishing XP, 1,000 Farming XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "King Vargas"
+      ],
+      "dialogChoices": [],
+      "highlightItems": [
+        "Coins",
+        "Gold ring",
+        "Shortbow",
+        "Cake",
+        "Iron bar",
+        "Logs"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Throne of Miscellania"
+      }
+    }
+  },
+  {
+    "id": "S9-81",
+    "stage": 9,
+    "type": "quest",
+    "title": "Lunar Diplomacy",
+    "qp": 2,
+    "requires": [
+      "S9-55",
+      "S9-01",
+      "S2-06",
+      "S9-44"
+    ],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Lunar_Diplomacy",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Lunar_Diplomacy/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2620,3689,0",
+    "mapLocation": {
+      "x": 2620,
+      "y": 3689,
+      "plane": 0,
+      "label": "The westernmost dock of Rellekka"
+    },
+    "npc": {
+      "nameEn": "Lokar Searunner",
+      "location": "The westernmost dock of Rellekka",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Lokar_Searunner"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Tinderbox",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Rimmington General Store in Rimmington for 1 gp.",
+        "wikiItemId": 590,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Tinderbox.png"
+      },
+      {
+        "nameEn": "Coins",
+        "amount": 1000,
+        "howToGet": "A few coins on Lunar Isle; 1,000 is enough.",
+        "wikiItemId": 995,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Coins_1.png"
+      },
+      {
+        "nameEn": "Guam leaf",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or a Suqah drops one during the quest.",
+        "wikiItemId": 249,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Guam_leaf.png"
+      },
+      {
+        "nameEn": "Marrentill",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or a Suqah drops one during the quest.",
+        "wikiItemId": 251,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Marrentill.png"
+      },
+      {
+        "nameEn": "Pestle and mortar",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from The Lighthouse Store in Lighthouse for 4 gp.",
+        "wikiItemId": 233,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Pestle_and_mortar.png"
+      },
+      {
+        "nameEn": "Hammer",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Drogo's Mining Emporium in Dwarven Mines for 1 gp.",
+        "wikiItemId": 2347,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Hammer.png"
+      },
+      {
+        "nameEn": "Needle",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Dommik's Crafting Store in Al Kharid for 1 gp.",
+        "wikiItemId": 1733,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Needle.png"
+      },
+      {
+        "nameEn": "Thread",
+        "amount": 2,
+        "howToGet": "Buy on the Grand Exchange: the needle sews the lunar clothes with it.",
+        "wikiItemId": 1734,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Thread.png"
+      },
+      {
+        "nameEn": "Bronze axe",
+        "amount": 1,
+        "howToGet": "Any axe from the bank; a bronze axe is also found during the quest.",
+        "wikiItemId": 1351,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_axe.png"
+      },
+      {
+        "nameEn": "Bronze pickaxe",
+        "amount": 1,
+        "howToGet": "Any pickaxe from the bank: you mine the lunar ore.",
+        "wikiItemId": 1265,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_pickaxe.png"
+      },
+      {
+        "nameEn": "Spade",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Lumbridge General Store in Lumbridge for 3 gp.",
+        "wikiItemId": 952,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Spade.png"
+      },
+      {
+        "nameEn": "Bullseye lantern",
+        "amount": 1,
+        "howToGet": "A finished, lit bullseye lantern: buy on the Grand Exchange and light it with the tinderbox. The emerald lens replaces its lens.",
+        "wikiItemId": 4548,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bullseye_lantern.png"
+      },
+      {
+        "nameEn": "Air talisman",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange. An air tiara works too.",
+        "wikiItemId": 1438,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Air_talisman.png"
+      },
+      {
+        "nameEn": "Water talisman",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange. A water tiara works too.",
+        "wikiItemId": 1444,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Water_talisman.png"
+      },
+      {
+        "nameEn": "Earth talisman",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange. An earth tiara works too.",
+        "wikiItemId": 1440,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Earth_talisman.png"
+      },
+      {
+        "nameEn": "Fire talisman",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange. A fire tiara works too.",
+        "wikiItemId": 1442,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Fire_talisman.png"
+      },
+      {
+        "nameEn": "Dramen staff",
+        "amount": 1,
+        "howToGet": "Kept from Lost City; cut another from the dramen tree under Entrana. The altars turn it into the lunar staff.",
+        "wikiItemId": 772,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Dramen_staff.png"
+      },
+      {
+        "nameEn": "Lobster",
+        "amount": 15,
+        "howToGet": "Buy on the Grand Exchange: the level 111 Suqahs and Me, your own double in the Dream World.",
+        "wikiItemId": 379,
+        "heals": 12,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Lobster.png"
+      }
+    ],
+    "foes": [
+      "Suqah",
+      "Me"
+    ],
+    "reward": "2 QP, 5,000 Magic XP, 5,000 Runecraft XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Lokar Searunner"
+      ],
+      "dialogChoices": [
+        "You've been away from these parts a while?",
+        "Why did you leave?",
+        "Why not, I've always wondered what the state of my innards are!",
+        "Ask about a Seal of Passage.",
+        "Arrr! Yar! Let's be on our way, yar!",
+        "Can we sail to Lunar Isle now?",
+        "Perhaps it's the Navigator's fault?",
+        "The Oneiromancer told me you may be able to help...",
+        "You know the ceremonial clothes?",
+        "That seems like a fair deal.",
+        "I'm looking for a ring.",
+        "Ok, let's go!",
+        "Ok.",
+        "Suppose I may as well have a go.",
+        "Of course. I'm ready."
+      ],
+      "highlightItems": [
+        "Tinderbox",
+        "Coins",
+        "Guam leaf",
+        "Marrentill",
+        "Pestle and mortar",
+        "Hammer",
+        "Needle",
+        "Thread",
+        "Bronze axe",
+        "Bronze pickaxe",
+        "Spade",
+        "Bullseye lantern",
+        "Air talisman",
+        "Water talisman",
+        "Earth talisman",
+        "Fire talisman",
+        "Dramen staff",
+        "Lobster"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Lunar Diplomacy"
+      }
+    }
   }
 ]

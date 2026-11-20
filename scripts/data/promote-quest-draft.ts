@@ -7,6 +7,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { collisionSubset } from '../../src/domain/travel/worldRouting.ts';
 import { checkDraft, plain, replayStages, type QhFacts, type QuestDraft } from './quest-draft.ts';
+import { deriveQuests } from '../../src/data/quests.ts';
 
 const [slug, id] = process.argv.slice(2);
 if (!slug || !/^S\d+-\d\d$/.test(id ?? '')) throw new Error('usage: npm run quest-promote -- <DraftName> <S7-06>');
@@ -27,9 +28,11 @@ if (steps.some((s) => s.id === id) || read('src/domain/persistence/progress.ts')
 if (steps.some((s) => s.title === draft.quest)) throw new Error(`${draft.quest} is already on the route`);
 const requires = draft.facts.requirements.quests.map((quest) => {
   // Recipe for Disaster parts are titled "Recipe for Disaster — X" on the route and "Recipe for Disaster/X" on the Wiki.
-  const step = steps.find((s) => s.title === quest || s.title === quest.replace('/', ' — '));
-  if (!step) throw new Error(`${draft.quest} needs ${quest}, which is not on the route`);
-  return step.id;
+  // A quest of several steps (Dragon Slayer I) is named after its wiki page, not a step title.
+  const id = steps.find((s) => s.title === quest || s.title === quest.replace('/', ' — '))?.id
+    ?? deriveQuests(steps as never).find((q) => q.title === quest)?.stepId;
+  if (!id) throw new Error(`${draft.quest} needs ${quest}, which is not on the route`);
+  return id;
 });
 
 const { step, facts, stages } = draft;

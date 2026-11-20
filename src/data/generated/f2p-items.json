@@ -1856,6 +1856,141 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Black_cape"
   },
   {
+    "id": 1165,
+    "nameEn": "Black full helm",
+    "examine": "A full face helmet.",
+    "members": false,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Black_full_helm.png",
+    "value": 1056,
+    "highAlch": 633,
+    "lowAlch": 422,
+    "buyLocations": [
+      {
+        "shopName": "Valaine's Shop of Champions.",
+        "location": "1st floor of Champions' Guild",
+        "owner": "Valaine",
+        "price": 1372,
+        "stock": 1,
+        "members": false
+      }
+    ],
+    "dropSources": [
+      {
+        "monster": "Lesser demon#Wilderness Slayer Cave",
+        "combatLevel": null,
+        "rate": "4/39"
+      },
+      {
+        "monster": "Cyclops#Warriors' Guild Basement",
+        "combatLevel": null,
+        "rate": "5/100"
+      },
+      {
+        "monster": "Animated Black Armour",
+        "combatLevel": 69,
+        "rate": "Always"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Black_full_helm"
+  },
+  {
+    "id": 1125,
+    "nameEn": "Black platebody",
+    "examine": "Provides excellent protection.",
+    "members": false,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Black_platebody.png",
+    "value": 3840,
+    "highAlch": 2304,
+    "lowAlch": 1536,
+    "buyLocations": [
+      {
+        "shopName": "Horvik's Armour Shop.",
+        "location": "Varrock",
+        "owner": "Horvik",
+        "price": 3840,
+        "stock": 1,
+        "members": false
+      },
+      {
+        "shopName": "Zenesha's Plate Mail Body Shop.",
+        "location": "East Ardougne",
+        "owner": "Zenesha",
+        "price": 3840,
+        "stock": 1,
+        "members": true
+      }
+    ],
+    "dropSources": [
+      {
+        "monster": "Animated Black Armour",
+        "combatLevel": 69,
+        "rate": "Always"
+      },
+      {
+        "monster": "Giant Rock Crab",
+        "combatLevel": 137,
+        "rate": "5/128"
+      },
+      {
+        "monster": "King Sand Crab",
+        "combatLevel": 107,
+        "rate": "5/128"
+      },
+      {
+        "monster": "Ice troll",
+        "combatLevel": 124,
+        "rate": "4/128"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Black_platebody"
+  },
+  {
+    "id": 1077,
+    "nameEn": "Black platelegs",
+    "examine": "Big, black and heavy looking.",
+    "members": false,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Black_platelegs.png",
+    "value": 1920,
+    "highAlch": 1152,
+    "lowAlch": 768,
+    "buyLocations": [
+      {
+        "shopName": "Louie's Armoured Legs Bazaar.",
+        "location": "Al Kharid",
+        "owner": "Louie Legs",
+        "price": 1920,
+        "stock": 1,
+        "members": false
+      },
+      {
+        "shopName": "Valaine's Shop of Champions.",
+        "location": "1st floor of Champions' Guild",
+        "owner": "Valaine",
+        "price": 2496,
+        "stock": 1,
+        "members": false
+      }
+    ],
+    "dropSources": [
+      {
+        "monster": "Animated Black Armour",
+        "combatLevel": 69,
+        "rate": "Always"
+      },
+      {
+        "monster": "Deviant spectre",
+        "combatLevel": 169,
+        "rate": "5/128"
+      },
+      {
+        "monster": "Repugnant spectre",
+        "combatLevel": 335,
+        "rate": "5/128"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Black_platelegs"
+  },
+  {
     "id": 1767,
     "nameEn": "Blue dye",
     "examine": "A little bottle of blue dye.",
@@ -4019,6 +4154,125 @@
       }
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Cadava_berries"
+  },
+  {
+    "id": 1891,
+    "nameEn": "Cake",
+    "examine": "A plain sponge cake.",
+    "members": false,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Cake.png",
+    "value": 50,
+    "highAlch": 30,
+    "lowAlch": 20,
+    "buyLocations": [
+      {
+        "shopName": "Ardougne Baker's Stall.",
+        "location": "East Ardougne",
+        "owner": "Baker",
+        "price": 50,
+        "stock": 3,
+        "members": true
+      },
+      {
+        "shopName": "Nathifa's Bake Stall.",
+        "location": "Sophanem",
+        "owner": "Nathifa",
+        "price": 50,
+        "stock": 3,
+        "members": true
+      },
+      {
+        "shopName": "Kourend Castle Baker's Stall.",
+        "location": "Kourend Castle",
+        "owner": "Baker",
+        "price": 50,
+        "stock": 10,
+        "members": true
+      },
+      {
+        "shopName": "Prifddinas Foodstuffs",
+        "location": "Prifddinas",
+        "owner": "Derwen",
+        "price": 50,
+        "stock": 5,
+        "members": true
+      },
+      {
+        "shopName": "Yarnio's Baked Goods",
+        "location": "Cam Torum",
+        "owner": "Yarnio",
+        "price": 50,
+        "stock": 5,
+        "members": true
+      },
+      {
+        "shopName": "Fortis Baker's Stall",
+        "location": "Civitas illa Fortis",
+        "owner": "Baker",
+        "price": 50,
+        "stock": 5,
+        "members": true
+      },
+      {
+        "shopName": "Lletya Food Store",
+        "location": "Lletya",
+        "owner": "Gethin",
+        "price": 65,
+        "stock": 5,
+        "members": true
+      },
+      {
+        "shopName": "Keldagrim's Best Bread",
+        "location": "Keldagrim Palace",
+        "owner": "Randivor",
+        "price": 75,
+        "stock": 3,
+        "members": true
+      }
+    ],
+    "dropSources": [
+      {
+        "monster": "Black Guard#Level 48",
+        "combatLevel": null,
+        "rate": "4/128"
+      },
+      {
+        "monster": "Flambeed",
+        "combatLevel": 149,
+        "rate": "Always"
+      },
+      {
+        "monster": "Culinaromancer",
+        "combatLevel": 75,
+        "rate": "Always"
+      },
+      {
+        "monster": "Culinaromancer (Nightmare Zone)",
+        "combatLevel": 209,
+        "rate": "Always"
+      },
+      {
+        "monster": "Flambeed (Nightmare Zone)",
+        "combatLevel": 238,
+        "rate": "Always"
+      },
+      {
+        "monster": "Warrior (Rellekka)",
+        "combatLevel": 48,
+        "rate": "4/128"
+      },
+      {
+        "monster": "Black Guard Berserker",
+        "combatLevel": 66,
+        "rate": "4/128"
+      },
+      {
+        "monster": "Market Guard",
+        "combatLevel": 48,
+        "rate": "4/128"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Cake"
   },
   {
     "id": 1887,
@@ -8047,6 +8301,61 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Gold_ore"
   },
   {
+    "id": 1635,
+    "nameEn": "Gold ring",
+    "examine": "A valuable ring.",
+    "members": false,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Gold_ring.png",
+    "value": 350,
+    "highAlch": 210,
+    "lowAlch": 140,
+    "buyLocations": [
+      {
+        "shopName": "Grum's Gold Exchange.",
+        "location": "Port Sarim",
+        "owner": "Grum",
+        "price": 350,
+        "stock": 0,
+        "members": false
+      },
+      {
+        "shopName": "Conara's Jewels",
+        "location": "Cam Torum",
+        "owner": "Conara",
+        "price": 350,
+        "stock": 3,
+        "members": true
+      }
+    ],
+    "freeSpawns": [
+      "Corsair Cove Dungeon (unobtainable)",
+      "King Black Dragon Lair (members only)",
+      "Scabaras Dungeon (members only)",
+      "Hallowed Sepulchre - floor 2 (members only)",
+      "Hallowed Sepulchre - floor 3 (members only)",
+      "Hallowed Sepulchre - floor 4 (members only)",
+      "Hallowed Sepulchre - floor 5 (members only)"
+    ],
+    "dropSources": [
+      {
+        "monster": "Mummy (Ancient Pyramid)",
+        "combatLevel": 103,
+        "rate": "40/513"
+      },
+      {
+        "monster": "Crawling Hand",
+        "combatLevel": 8,
+        "rate": "3/128"
+      },
+      {
+        "monster": "Crushing hand",
+        "combatLevel": 45,
+        "rate": "3/128"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Gold_ring"
+  },
+  {
     "id": 1947,
     "nameEn": "Grain",
     "examine": "Some wheat heads.",
@@ -8346,6 +8655,17 @@
       }
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Greenman's_ale"
+  },
+  {
+    "id": 249,
+    "nameEn": "Guam leaf",
+    "examine": "A bitter green herb.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Guam_leaf.png",
+    "value": 3,
+    "highAlch": 1,
+    "lowAlch": 1,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Guam_leaf"
   },
   {
     "id": 91,
@@ -8778,6 +9098,17 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Harpoon"
   },
   {
+    "id": 97,
+    "nameEn": "Harralander potion (unf)",
+    "examine": "I need another ingredient to finish this Harralander potion.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Harralander_potion_(unf).png",
+    "value": 20,
+    "highAlch": 12,
+    "lowAlch": 8,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Harralander_potion_(unf)"
+  },
+  {
     "id": 1718,
     "nameEn": "Holy symbol",
     "examine": "A blessed holy symbol of Saradomin.",
@@ -8797,6 +9128,23 @@
       }
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Holy_symbol"
+  },
+  {
+    "id": 1580,
+    "nameEn": "Ice gloves",
+    "examine": "These will keep my hands cold!",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Ice_gloves.png",
+    "value": 6,
+    "highAlch": 3,
+    "dropSources": [
+      {
+        "monster": "Ice Queen",
+        "combatLevel": 111,
+        "rate": "Always"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Ice_gloves"
   },
   {
     "id": 10010,
@@ -11098,6 +11446,17 @@
       }
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Marigold_seed"
+  },
+  {
+    "id": 251,
+    "nameEn": "Marrentill",
+    "examine": "A herb used in poison cures.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Marrentill.png",
+    "value": 5,
+    "highAlch": 3,
+    "lowAlch": 2,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Marrentill"
   },
   {
     "id": 1542,
@@ -21991,6 +22350,59 @@
       }
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Water_rune"
+  },
+  {
+    "id": 1444,
+    "nameEn": "Water talisman",
+    "examine": "A mysterious power emanates from the talisman...",
+    "members": false,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Water_talisman.png",
+    "value": 4,
+    "highAlch": 2,
+    "lowAlch": 1,
+    "dropSources": [
+      {
+        "monster": "Water wizard",
+        "combatLevel": 13,
+        "rate": "1/20"
+      },
+      {
+        "monster": "Amoxliatl#Post-quest",
+        "combatLevel": null,
+        "rate": "2/58"
+      },
+      {
+        "monster": "Wizard",
+        "combatLevel": 9,
+        "rate": "3/128"
+      },
+      {
+        "monster": "Dark wizard#High level",
+        "combatLevel": null,
+        "rate": "2/128"
+      },
+      {
+        "monster": "Dark wizard#Low level",
+        "combatLevel": null,
+        "rate": "1/128"
+      },
+      {
+        "monster": "Big frog#Level 24",
+        "combatLevel": null,
+        "rate": "1/128"
+      },
+      {
+        "monster": "Dagannoth (Waterbirth Island)#Level 88",
+        "combatLevel": null,
+        "rate": "1/179.2"
+      },
+      {
+        "monster": "Dagannoth (Waterbirth Island)#Level 90",
+        "combatLevel": null,
+        "rate": "1/224"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Water_talisman"
   },
   {
     "id": 5331,
