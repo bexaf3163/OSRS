@@ -4223,6 +4223,15 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Candle"
   },
   {
+    "id": 4677,
+    "nameEn": "Catspeak amulet",
+    "examine": "It's an amulet of cat speak. It makes vague purring noises.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Catspeak_amulet.png",
+    "value": 1,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Catspeak_amulet"
+  },
+  {
     "id": 562,
     "nameEn": "Chaos rune",
     "examine": "Used for low level missile spells.",
@@ -4819,6 +4828,44 @@
       "Kastori (1st floor) (members only)"
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Chocolate_bar"
+  },
+  {
+    "id": 1897,
+    "nameEn": "Chocolate cake",
+    "examine": "This looks very tasty.",
+    "members": false,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Chocolate_cake.png",
+    "value": 70,
+    "highAlch": 42,
+    "lowAlch": 28,
+    "dropSources": [
+      {
+        "monster": "Black dragon#Regular",
+        "combatLevel": null,
+        "rate": "3/128"
+      },
+      {
+        "monster": "Kamil",
+        "combatLevel": 154,
+        "rate": "Always"
+      },
+      {
+        "monster": "Kamil (Nightmare Zone)",
+        "combatLevel": 273,
+        "rate": "Always"
+      },
+      {
+        "monster": "Red dragon",
+        "combatLevel": 152,
+        "rate": "3/128"
+      },
+      {
+        "monster": "Lava dragon",
+        "combatLevel": 252,
+        "rate": "3/128"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Chocolate_cake"
   },
   {
     "id": 1975,
@@ -13495,6 +13542,85 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Pot_of_flour"
   },
   {
+    "id": 5318,
+    "nameEn": "Potato seed",
+    "examine": "A potato seed - plant in an allotment.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Potato_seed_1.png",
+    "value": 2,
+    "highAlch": 1,
+    "lowAlch": 1,
+    "buyLocations": [
+      {
+        "shopName": "Draynor Seed Market",
+        "location": "Draynor Village",
+        "owner": "Olivia",
+        "price": 2,
+        "stock": 20,
+        "members": true
+      },
+      {
+        "shopName": "Amelia's Seed Shop",
+        "location": "Farming Guild",
+        "owner": "Amelia",
+        "price": 2,
+        "stock": 20,
+        "members": true
+      },
+      {
+        "shopName": "Port Roberts Veg Stall",
+        "location": "Port Roberts",
+        "owner": "Marla",
+        "price": 2,
+        "stock": 20,
+        "members": true
+      }
+    ],
+    "dropSources": [
+      {
+        "monster": "Farmer#Members",
+        "combatLevel": null,
+        "rate": "1/9.5"
+      },
+      {
+        "monster": "White Knight#Level 42",
+        "combatLevel": null,
+        "rate": "1/12"
+      },
+      {
+        "monster": "Guard",
+        "combatLevel": 21,
+        "rate": "1/19"
+      },
+      {
+        "monster": "Hobgoblin#Unarmed",
+        "combatLevel": null,
+        "rate": "1/19"
+      },
+      {
+        "monster": "White Knight#Level 38",
+        "combatLevel": null,
+        "rate": "1/19"
+      },
+      {
+        "monster": "White Knight#Level 39",
+        "combatLevel": null,
+        "rate": "1/19"
+      },
+      {
+        "monster": "Hill Giant",
+        "combatLevel": 28,
+        "rate": "1/19"
+      },
+      {
+        "monster": "Black Knight",
+        "combatLevel": 33,
+        "rate": "1/19"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Potato_seed"
+  },
+  {
     "id": 5438,
     "nameEn": "Potatoes(10)",
     "examine": "There are 10 potatoes in this sack.",
@@ -21482,6 +21608,144 @@
       }
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Vial"
+  },
+  {
+    "id": 227,
+    "nameEn": "Vial of water",
+    "examine": "A glass vial containing water.",
+    "members": false,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Vial_of_water.png",
+    "value": 2,
+    "highAlch": 1,
+    "lowAlch": 1,
+    "buyLocations": [
+      {
+        "shopName": "Aemad's Adventuring Supplies.",
+        "location": "East Ardougne",
+        "owner": "Aemad",
+        "price": 2,
+        "stock": 500,
+        "members": true
+      },
+      {
+        "shopName": "The Lighthouse Store",
+        "location": "Lighthouse",
+        "owner": "Jossik",
+        "price": 2,
+        "stock": 100,
+        "members": true
+      },
+      {
+        "shopName": "Frincos' Fabulous Herb Store.",
+        "location": "Entrana",
+        "owner": "Frincos",
+        "price": 2,
+        "stock": 45,
+        "members": true
+      },
+      {
+        "shopName": "Grud's Herblore Stall.",
+        "location": "Gu'Tanoth",
+        "owner": "Ogre merchant",
+        "price": 2,
+        "stock": 45,
+        "members": true
+      },
+      {
+        "shopName": "Jatix's Herblore Shop.",
+        "location": "Taverley",
+        "owner": "Jatix",
+        "price": 2,
+        "stock": 750,
+        "members": true
+      },
+      {
+        "shopName": "Razmire General Store.",
+        "location": "Mort'ton",
+        "owner": "Razmire Keelgan",
+        "price": 2,
+        "stock": 100,
+        "members": true
+      },
+      {
+        "shopName": "Obli's General Store.",
+        "location": "Shilo Village",
+        "owner": "Obli",
+        "price": 2,
+        "stock": 50,
+        "members": true
+      },
+      {
+        "shopName": "Jiminua's Jungle Store.",
+        "location": "Karamja",
+        "owner": "Jiminua",
+        "price": 2,
+        "stock": 50,
+        "members": true
+      },
+      {
+        "shopName": "Sigmund the Merchant (shop)",
+        "location": "Rellekka",
+        "owner": "Sigmund the Merchant",
+        "price": 2,
+        "stock": 10,
+        "members": true
+      },
+      {
+        "shopName": "Little Shop of Horace",
+        "location": "Hosidius",
+        "owner": "Horace",
+        "price": 2,
+        "stock": 60,
+        "members": true
+      }
+    ],
+    "freeSpawns": [
+      "Outer Fortis (members only)"
+    ],
+    "dropSources": [
+      {
+        "monster": "Skeleton (Tarn's Lair)#Low level",
+        "combatLevel": null,
+        "rate": "5/128"
+      },
+      {
+        "monster": "Water elemental",
+        "combatLevel": 34,
+        "rate": "Always"
+      },
+      {
+        "monster": "Lev",
+        "combatLevel": 24,
+        "rate": "50/512"
+      },
+      {
+        "monster": "Lanzig",
+        "combatLevel": 48,
+        "rate": "50/512"
+      },
+      {
+        "monster": "Freidir",
+        "combatLevel": 48,
+        "rate": "50/512"
+      },
+      {
+        "monster": "Borrokar",
+        "combatLevel": 48,
+        "rate": "50/512"
+      },
+      {
+        "monster": "Lensa",
+        "combatLevel": 48,
+        "rate": "50/512"
+      },
+      {
+        "monster": "Yuri",
+        "combatLevel": 24,
+        "rate": "50/512"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Vial_of_water"
   },
   {
     "id": 2015,

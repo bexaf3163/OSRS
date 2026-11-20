@@ -2770,6 +2770,39 @@
       "evidence": [
         "OSRS Wiki Tormented Soul and Trapped Soul infoboxes, The Ascent of Arceuus quick guide, read 2026-11-19."
       ]
+    },
+    {
+      "stepId": "S9-77",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "melee",
+      "objective": "Contact!: kill the level 191 Giant Scarab (130 hitpoints, max hit 20) by the chasm under Sophanem; it summons level 68 scarab mages, locust rangers and locust lancers in turn.",
+      "enemies": [
+        {
+          "name": "Giant Scarab",
+          "level": 191,
+          "maxHit": 20,
+          "table": true
+        }
+      ],
+      "lines": ["0.14"],
+      "assumptions": [
+        "Fifteen lobsters cover the scarab; Protect from Melee up close cuts its own hits.",
+        "The dungeon's locust riders and scarab mages are passed under protection prayers, not fought."
+      ],
+      "problems": [
+        "The summoned minions add hits the estimate does not count: mages up to 17, rangers up to 22, lancers up to 15 (OSRS Wiki)."
+      ],
+      "alternatives": [
+        "Ranged or Magic from the south-west corner with Protect from Missiles, where the melee lancers cannot reach (OSRS Wiki)."
+      ],
+      "decision": "retain",
+      "changed": [
+        "2.154.0: new quest; the Giant Scarab is in combatFoes.json."
+      ],
+      "evidence": [
+        "OSRS Wiki Giant scarab and Contact! quick guide, read 2026-11-20."
+      ]
     }
   ]
 }

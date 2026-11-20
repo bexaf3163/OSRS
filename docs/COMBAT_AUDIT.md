@@ -4,7 +4,7 @@ Written by `tests/combatAudit.test.ts` from `src/data/authored/combatAudit.json`
 
 Every stage of the route where the player fights or can be attacked, checked against the route text, the quest stage lines (Quest Helper), the OSRS Wiki infoboxes in combatFoes.json and the danger zones. The rule for a fight the quest cannot go on without: its food is a required item (readiness and the game check it before leaving), the app estimates it with the player's kit where it has the opponent's numbers, and an unread kit or bag is reported as not checked, never as ready.
 
-79 stages: 51 retained, 27 revised, 0 with a branch, 1 deferred.
+80 stages: 52 retained, 27 revised, 0 with a branch, 1 deferred.
 
 | Step | Kind | Mandatory | Opponents | Method | Estimate | Food in the item list | Decision |
 |---|---|---|---|---|---|---|---|
@@ -87,6 +87,7 @@ Every stage of the route where the player fights or can be attacked, checked aga
 | S9-70 Recruitment Drive | quest-fight | yes | Sir Leye (20) | melee | Sir Leye | - | Retain |
 | S9-71 Wanted! | quest-fight | yes | Black Knight (Wanted!) (32) | melee | Black Knight (Wanted!) | Lobster 4 | Retain |
 | S9-75 The Ascent of Arceuus | quest-fight | yes | Tormented Soul (16), Trapped Soul (30) | melee | Tormented Soul, Trapped Soul | Lobster 3 | Retain |
+| S9-77 Contact! | quest-fight | yes | Giant Scarab (191) | melee | Giant Scarab | Lobster 15 | Retain |
 
 ## S1-06 The Restless Ghost
 
@@ -1895,4 +1896,31 @@ Changed:
 Evidence:
 
 - OSRS Wiki Tormented Soul and Trapped Soul infoboxes, The Ascent of Arceuus quick guide, read 2026-11-19.
+
+## S9-77 Contact!
+
+**Retain.** Contact!: kill the level 191 Giant Scarab (130 hitpoints, max hit 20) by the chasm under Sophanem; it summons level 68 scarab mages, locust rangers and locust lancers in turn.
+
+Quest stage lines: 0.14.
+
+Assumptions:
+
+- Fifteen lobsters cover the scarab; Protect from Melee up close cuts its own hits.
+- The dungeon's locust riders and scarab mages are passed under protection prayers, not fought.
+
+Problems:
+
+- The summoned minions add hits the estimate does not count: mages up to 17, rangers up to 22, lancers up to 15 (OSRS Wiki).
+
+Alternatives:
+
+- Ranged or Magic from the south-west corner with Protect from Missiles, where the melee lancers cannot reach (OSRS Wiki).
+
+Changed:
+
+- 2.154.0: new quest; the Giant Scarab is in combatFoes.json.
+
+Evidence:
+
+- OSRS Wiki Giant scarab and Contact! quick guide, read 2026-11-20.
 

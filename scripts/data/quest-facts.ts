@@ -221,10 +221,10 @@ const REVIEWED_FLOWS: Record<string, { revision: number; flow: NonNullable<Quest
   'Scorpion Catcher': { revision: 15363122, flow: {
     consumes: [], receives: [], unknownItems: ['Scorpion cage', 'Jail key'], partialDelivery: false, fromStartOnly: true,
   } },
-  // The logs, salt, sap, linen and a waterskin go into the embalming and the guardian; the gate keeps the pass; the kitten stays yours.
-  "Icthlarin's Little Helper": { revision: 15401645, flow: {
+  // The logs, salt, sap, linen and a waterskin go into the embalming and the guardian; the gate keeps the pass; the kitten stays yours and the catspeak amulet is the reward.
+  "Icthlarin's Little Helper": { revision: 15401465, flow: {
     consumes: [{ name: 'Willow logs', count: 1 }, { name: 'Bag of salt', count: 1 }, { name: 'Bucket of sap', count: 1 }, { name: 'Linen', count: 1 },
-      { name: 'Waterskin(4)', count: 1 }, { name: 'Shantay pass', count: 1 }], receives: [],
+      { name: 'Waterskin(4)', count: 1 }, { name: 'Shantay pass', count: 1 }], receives: [{ name: 'Catspeak amulet', count: 1, when: 'complete' }],
     unknownItems: ['Holy symbol', 'Canopic jar', 'Crondis canopic jar', 'Het canopic jar', 'Apmeken canopic jar', 'Scabaras canopic jar'], partialDelivery: true, fromStartOnly: true,
   } },
   // The coins buy the clothes; the runes cast Telekinetic Grab; logs, coal and the bar feed the spinning machine and the axe; the pie and sapphires are handed in.
@@ -488,6 +488,20 @@ const REVIEWED_FLOWS: Record<string, { revision: number; flow: NonNullable<Quest
     consumes: [{ name: 'Bucket of milk', count: 1 }, { name: 'Egg', count: 1 }, { name: 'Pot of flour', count: 1 }], receives: [],
     unknownItems: ['Enchanted milk', 'Enchanted egg', 'Enchanted flour', 'Raw guide cake', 'Cake of guidance'],
     uncertainReceipts: ['Cake tin'], partialDelivery: false, fromStartOnly: false,
+  } },
+  // Nothing is used up: the lantern and tinderbox stay, and the keris is the prize from the chasm.
+  'Contact!': { revision: 15327950, flow: {
+    consumes: [], receives: [{ name: 'Keris', count: 1, when: 'complete' }], unknownItems: ["Kaleef's parchment"], uncertainReceipts: [], partialDelivery: false, fromStartOnly: false,
+  } },
+  // Hild's enchantment takes the death runes; the cake, milk, logs and seeds go into Unferth's chores; tools, clothes, cat and amulet stay.
+  'A Tail of Two Cats': { revision: 15394232, flow: {
+    consumes: [{ name: 'Death rune', count: 5 }, { name: 'Chocolate cake', count: 1 }, { name: 'Bucket of milk', count: 1 }, { name: 'Logs', count: 1 }, { name: 'Potato seed', count: 4 }],
+    receives: [], unknownItems: ['Catspeak amulet (e)', "Doctor's hat", 'Nurse hat'], uncertainReceipts: ['Vial of water'], partialDelivery: false, fromStartOnly: false,
+  } },
+  // The cat's hell-rat spices season the stew, which Dave eats; the cat stays yours.
+  'Recipe for Disaster/Freeing Evil Dave': { revision: 15366289, flow: {
+    consumes: [{ name: 'Stew', count: 1 }], receives: [],
+    unknownItems: ['Red spice', 'Orange spice', 'Brown spice', 'Yellow spice', 'Spicy stew'], uncertainReceipts: [], partialDelivery: false, fromStartOnly: false,
   } },
   // The water douses Skippy and he drinks the nettle tea; the dust, milk and snape grass make the hangover cure; gloves stay.
   'Skippy and the Mogres': { revision: 15396629, flow: {

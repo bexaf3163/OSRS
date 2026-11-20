@@ -13537,5 +13537,306 @@
         "questName": "The Ascent of Arceuus"
       }
     }
+  },
+  {
+    "id": "S9-76",
+    "stage": 9,
+    "type": "quest",
+    "title": "A Tail of Two Cats",
+    "qp": 2,
+    "requires": [
+      "S9-25"
+    ],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/A_Tail_of_Two_Cats",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/A_Tail_of_Two_Cats/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2919,3558,0",
+    "mapLocation": {
+      "x": 2919,
+      "y": 3558,
+      "plane": 0,
+      "label": "His house in Burthorpe"
+    },
+    "npc": {
+      "nameEn": "Unferth",
+      "location": "His house in Burthorpe",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Unferth"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Pet kitten",
+        "amount": 1,
+        "howToGet": "The kitten from Gertrude's Cat; a grown cat works too.",
+        "wikiItemId": 1558,
+        "inStep": true,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Pet_kitten_(black).png"
+      },
+      {
+        "nameEn": "Catspeak amulet",
+        "amount": 1,
+        "howToGet": "From Icthlarin's Little Helper; the Sphinx in Sophanem replaces a lost one while a cat follows you.",
+        "wikiItemId": 4677,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Catspeak_amulet.png"
+      },
+      {
+        "nameEn": "Death rune",
+        "amount": 5,
+        "howToGet": "Buy on the Grand Exchange, or from Aubury's Rune Shop in Varrock for 180 gp.",
+        "wikiItemId": 560,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Death_rune.png"
+      },
+      {
+        "nameEn": "Chocolate cake",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange.",
+        "wikiItemId": 1897,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Chocolate_cake.png"
+      },
+      {
+        "nameEn": "Logs",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange.",
+        "wikiItemId": 1511,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Logs.png"
+      },
+      {
+        "nameEn": "Tinderbox",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Rimmington General Store in Rimmington for 1 gp.",
+        "wikiItemId": 590,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Tinderbox.png"
+      },
+      {
+        "nameEn": "Bucket of milk",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Culinaromancer's Chest in Lumbridge Castle basement for 6 gp.",
+        "wikiItemId": 1927,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bucket_of_milk.png"
+      },
+      {
+        "nameEn": "Shears",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Rimmington General Store in Rimmington for 1 gp.",
+        "wikiItemId": 1735,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Shears.png"
+      },
+      {
+        "nameEn": "Potato seed",
+        "amount": 4,
+        "howToGet": "Buy on the Grand Exchange, or from Draynor Seed Market in Draynor Village for 2 gp.",
+        "wikiItemId": 5318,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Potato_seed_1.png"
+      },
+      {
+        "nameEn": "Rake",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Lyra for 6 gp.",
+        "wikiItemId": 5341,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Rake.png"
+      },
+      {
+        "nameEn": "Seed dibber",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Lyra for 6 gp.",
+        "wikiItemId": 5343,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Seed_dibber.png"
+      },
+      {
+        "nameEn": "Vial of water",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Aemad's Adventuring Supplies in East Ardougne for 2 gp.",
+        "wikiItemId": 227,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Vial_of_water.png"
+      },
+      {
+        "nameEn": "Desert shirt",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Pollnivneach general store in Pollnivneach for 40 gp.",
+        "wikiItemId": 1833,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Desert_shirt.png"
+      },
+      {
+        "nameEn": "Desert robe",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Shantay Pass Shop in Shantay Pass for 40 gp.",
+        "wikiItemId": 1835,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Desert_robe.png"
+      }
+    ],
+    "reward": "2 QP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Unferth"
+      ],
+      "dialogChoices": [
+        "I'll help you.",
+        "Ask about Bob's parents.",
+        "Ask about Robert the Strong.",
+        "Ask the Sphinx for help for Bob.",
+        "Talk about A Tail of Two Cats."
+      ],
+      "highlightItems": [
+        "Pet kitten",
+        "Catspeak amulet",
+        "Death rune",
+        "Chocolate cake",
+        "Logs",
+        "Tinderbox",
+        "Bucket of milk",
+        "Shears",
+        "Potato seed",
+        "Rake",
+        "Seed dibber",
+        "Vial of water",
+        "Desert shirt",
+        "Desert robe"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "A Tail of Two Cats"
+      }
+    }
+  },
+  {
+    "id": "S9-77",
+    "stage": 9,
+    "type": "quest",
+    "title": "Contact!",
+    "qp": 1,
+    "requires": [
+      "S2-10",
+      "S9-25"
+    ],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Contact!",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Contact!/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3281,2771,0",
+    "mapLocation": {
+      "x": 3281,
+      "y": 2771,
+      "plane": 0,
+      "label": "Sophanem"
+    },
+    "npc": {
+      "nameEn": "High Priest (Sophanem)",
+      "location": "Sophanem",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/High_Priest_(Sophanem)"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Bullseye lantern",
+        "amount": 1,
+        "howToGet": "Any light the Giant Scarab can put out; buy a bullseye lantern on the Grand Exchange and light it with the tinderbox.",
+        "wikiItemId": 4548,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bullseye_lantern.png"
+      },
+      {
+        "nameEn": "Tinderbox",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Rimmington General Store in Rimmington for 1 gp. Relights the lantern when the scarab puts it out.",
+        "wikiItemId": 590,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Tinderbox.png"
+      },
+      {
+        "nameEn": "Lobster",
+        "amount": 15,
+        "howToGet": "Buy on the Grand Exchange: the Giant Scarab (max hit 20) and the mages, rangers and lancers it summons.",
+        "wikiItemId": 379,
+        "heals": 12,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Lobster.png"
+      }
+    ],
+    "foes": [
+      "Giant Scarab"
+    ],
+    "reward": "1 QP, 7,000 Thieving XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "High Priest (Sophanem)"
+      ],
+      "dialogChoices": [
+        "Sounds like a quest for me; I can't turn that down!",
+        "Is there any way into Menaphos from below?",
+        "Better get down there.",
+        "Draynor Village",
+        "Leela",
+        "I want to talk to you about Sophanem",
+        "It would drive a wedge between the Menaphite cities.",
+        "I know of a secret entrance to the north."
+      ],
+      "highlightItems": [
+        "Bullseye lantern",
+        "Tinderbox"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Contact!"
+      }
+    }
+  },
+  {
+    "id": "S9-78",
+    "stage": 9,
+    "type": "quest",
+    "title": "Recipe for Disaster/Freeing Evil Dave",
+    "qp": 1,
+    "requires": [
+      "S7-12",
+      "S9-05",
+      "S9-64"
+    ],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Recipe_for_Disaster/Freeing_Evil_Dave",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Recipe_for_Disaster/Freeing_Evil_Dave/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3208,3222,0",
+    "mapLocation": {
+      "x": 3208,
+      "y": 3222,
+      "plane": 0,
+      "label": "The Lumbridge Castle dining room"
+    },
+    "npc": {
+      "nameEn": "Evil Dave",
+      "location": "The Lumbridge Castle dining room",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Evil_Dave"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Pet kitten",
+        "amount": 1,
+        "howToGet": "The kitten from Gertrude's Cat; a grown cat works too.",
+        "wikiItemId": 1558,
+        "inStep": true,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Pet_kitten_(black).png"
+      },
+      {
+        "nameEn": "Stew",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Barmaid for 20 gp.",
+        "wikiItemId": 2003,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Stew.png"
+      }
+    ],
+    "reward": "1 QP, 7,000 Cooking XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Evil Dave"
+      ],
+      "dialogChoices": [],
+      "highlightItems": [
+        "Pet kitten",
+        "Stew"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Recipe for Disaster - Evil Dave"
+      }
+    }
   }
 ]

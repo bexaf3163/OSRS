@@ -2889,6 +2889,229 @@
       }
     },
     {
+      "name": "Giant Scarab",
+      "combat": 191,
+      "members": true,
+      "hitpoints": 130,
+      "attackLevel": 169,
+      "strengthLevel": 190,
+      "defenceLevel": 169,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 70,
+        "slash": 99,
+        "crush": 99,
+        "magic": 159,
+        "ranged": 103
+      },
+      "attackStyle": "stab",
+      "maxHit": 20,
+      "speedTicks": 4,
+      "aggressive": true,
+      "xpBonus": 5,
+      "weakness": {
+        "element": "fire",
+        "percent": 50
+      }
+    },
+    {
+      "name": "Locust rider",
+      "version": "Ranger",
+      "combat": 98,
+      "members": true,
+      "hitpoints": 90,
+      "attackLevel": 90,
+      "strengthLevel": 90,
+      "defenceLevel": 50,
+      "magicLevel": 1,
+      "attackBonus": 80,
+      "defence": {
+        "stab": 50,
+        "slash": 90,
+        "crush": 50,
+        "magic": 34,
+        "ranged": 66
+      },
+      "attackStyle": "ranged",
+      "maxHit": 22,
+      "speedTicks": 6,
+      "aggressive": true,
+      "xpBonus": 2,
+      "weakness": {
+        "element": "fire",
+        "percent": 40
+      }
+    },
+    {
+      "name": "Locust rider",
+      "version": "Ranger (Quest)",
+      "combat": 68,
+      "members": true,
+      "hitpoints": 90,
+      "attackLevel": 90,
+      "strengthLevel": 90,
+      "defenceLevel": 50,
+      "magicLevel": 1,
+      "attackBonus": 80,
+      "defence": {
+        "stab": 50,
+        "slash": 90,
+        "crush": 50,
+        "magic": 34,
+        "ranged": 66
+      },
+      "attackStyle": "ranged",
+      "maxHit": 22,
+      "speedTicks": 6,
+      "aggressive": true,
+      "xpBonus": 2,
+      "weakness": {
+        "element": "fire",
+        "percent": 40
+      }
+    },
+    {
+      "name": "Locust rider",
+      "version": "Lancer",
+      "combat": 106,
+      "members": true,
+      "hitpoints": 90,
+      "attackLevel": 100,
+      "strengthLevel": 90,
+      "defenceLevel": 90,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 90,
+        "slash": 90,
+        "crush": 40,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "crush",
+      "maxHit": 15,
+      "speedTicks": 4,
+      "aggressive": true,
+      "xpBonus": 2,
+      "weakness": {
+        "element": "fire",
+        "percent": 40
+      }
+    },
+    {
+      "name": "Locust rider",
+      "version": "Lancer (Quest)",
+      "combat": 68,
+      "members": true,
+      "hitpoints": 90,
+      "attackLevel": 100,
+      "strengthLevel": 90,
+      "defenceLevel": 90,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 90,
+        "slash": 90,
+        "crush": 40,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "crush",
+      "maxHit": 15,
+      "speedTicks": 4,
+      "aggressive": true,
+      "xpBonus": 2,
+      "weakness": {
+        "element": "fire",
+        "percent": 40
+      }
+    },
+    {
+      "name": "Scarab Mage",
+      "version": "Level 66 (Contact!)",
+      "combat": 66,
+      "members": true,
+      "hitpoints": 50,
+      "attackLevel": 90,
+      "strengthLevel": 90,
+      "defenceLevel": 90,
+      "magicLevel": 70,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 40,
+        "slash": 90,
+        "crush": 90,
+        "magic": 34,
+        "ranged": 0
+      },
+      "attackStyle": "magic",
+      "maxHit": 17,
+      "speedTicks": 15,
+      "aggressive": true,
+      "xpBonus": 2,
+      "weakness": {
+        "element": "fire",
+        "percent": 50
+      }
+    },
+    {
+      "name": "Scarab Mage",
+      "version": "Level 93",
+      "combat": 93,
+      "members": true,
+      "hitpoints": 50,
+      "attackLevel": 90,
+      "strengthLevel": 90,
+      "defenceLevel": 90,
+      "magicLevel": 70,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 40,
+        "slash": 90,
+        "crush": 90,
+        "magic": 34,
+        "ranged": 0
+      },
+      "attackStyle": "magic",
+      "maxHit": 17,
+      "speedTicks": 15,
+      "aggressive": true,
+      "xpBonus": 2,
+      "weakness": {
+        "element": "fire",
+        "percent": 50
+      }
+    },
+    {
+      "name": "Scarab Mage",
+      "version": "Level 119 (Beneath Cursed Sands)",
+      "combat": 119,
+      "members": true,
+      "hitpoints": 120,
+      "attackLevel": 1,
+      "strengthLevel": 1,
+      "defenceLevel": 60,
+      "magicLevel": 100,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 20,
+        "crush": 20,
+        "magic": 30,
+        "ranged": 0
+      },
+      "attackStyle": "magic",
+      "maxHit": 16,
+      "speedTicks": 5,
+      "aggressive": true,
+      "xpBonus": 2,
+      "weakness": {
+        "element": "fire",
+        "percent": 50
+      }
+    },
+    {
       "name": "Cow",
       "version": "1",
       "combat": 2,

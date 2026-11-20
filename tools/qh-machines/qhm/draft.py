@@ -23,13 +23,15 @@ REPO = os.path.join(WORK, 'quest-helper')
 ENUM = os.path.join(REPO, 'src', 'main', 'java', 'com', 'questhelper', 'questinfo', 'QuestHelperQuest.java')
 
 
-# Wiki subquest titles whose Quest Helper entry is named after the freed character.
+# Wiki titles whose Quest Helper entry is named differently (subquests after the freed character).
 SUBQUESTS = {
+    'Fairytale I - Growing Pains': 'FAIRYTALE_I__GROWING_PAINS',
     'Recipe for Disaster/Freeing the Goblin generals': 'RECIPE_FOR_DISASTER_WARTFACE_AND_BENTNOZE',
     'Recipe for Disaster/Freeing the Mountain Dwarf': 'RECIPE_FOR_DISASTER_DWARF',
     'Recipe for Disaster/Freeing Pirate Pete': 'RECIPE_FOR_DISASTER_PIRATE_PETE',
     'Recipe for Disaster/Freeing Skrach Uglogwee': 'RECIPE_FOR_DISASTER_SKRACH_UGLOGWEE',
     'Recipe for Disaster/Freeing the Lumbridge Guide': 'RECIPE_FOR_DISASTER_LUMBRIDGE_GUIDE',
+    'Recipe for Disaster/Freeing Evil Dave': 'RECIPE_FOR_DISASTER_EVIL_DAVE',
 }
 
 
