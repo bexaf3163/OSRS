@@ -109707,6 +109707,1533 @@
      ]
     }
    ]
+  },
+  "S9-82": {
+   "var": [
+    "varp",
+    26
+   ],
+   "route": [
+    {
+     "title": "Starting",
+     "steps": [
+      "Speak to Lucien in the Flying Horse Inn in the north-west corner of East Ardougne. Dialogue: \"Why can't you get it yourself?\", \"Yes.\""
+     ]
+    },
+    {
+     "title": "The temple",
+     "steps": [
+      "Enter the temple directly south of the Ranging Guild by climbing down the ladder.",
+      "Go west down the stairs, slash the web, and take the boots of lightness (light source and knife or slash weapon required).",
+      "Go back upstairs, then through the north gate with the pendant of Lucien equipped.",
+      "Cross the lava bridge wearing the boots of lightness (weight must be -1&nbsp;kg or less or you will not be able to cross and take 20 damage from falling), open the Large door, and take the lever.",
+      "Cross the lava bridge again and attach the lever to the lever-bracket on the wall a bit west of the ladder you climbed to enter the dungeon.",
+      "Pull the lever after attaching it. You will receive the prompt: \"You hear the clunking of some hidden machinery.\"",
+      "Go through the south gate and follow the path.",
+      "Search chests along the icy path to obtain ice arrows. 16 with Ava's device and 60+ Ranged is enough."
+     ]
+    },
+    {
+     "title": "Killing the Fire Warrior",
+     "steps": [
+      "Go back through the north gate with the pendant of Lucien equipped.",
+      "Continue straight north to a small room containing a lever.",
+      "Right-click the lever and search for traps. (Requires 42 Thieving) Then pull the lever.",
+      "Go west then north through the doors.",
+      "A Fire Warrior of Lesarkus will spawn in the room upon attempting to enter the second door.",
+      "Kill him with your ice arrows.",
+      "Give Winelda 20 unnoted limpwurt roots all at once. She will teleport you to the other side of the lava.",
+      "Optional: follow the path to its end and take the shiny key to access this dungeon from McGrubor's Wood.",
+      "Push the wall to the north leading to a room full of Guardians of Armadyl.",
+      "Pick the good or evil path."
+     ]
+    },
+    {
+     "title": "Good path",
+     "steps": [
+      "Remove your pendant of Lucien and talk to a Guardian of Armadyl. Dialogue: \"I seek the Staff of Armadyl.\", \"Lucien will give me a grand reward for it!\", \"You're right, it's time for my yearly bath.\", \"Ok! I'll help!\"",
+      "Enter the building west of the Grand Exchange wearing your Armadyl pendant and kill Lucien (level 14)."
+     ]
+    },
+    {
+     "title": "Evil path",
+     "steps": [
+      "Take the Staff of Armadyl from the table, you may have to kill a level 43 Guardian of Armadyl.",
+      "Enter the building west of the Grand Exchange and give Lucien the Staff of Armadyl.",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Talk to Lucien in the pub north of East Ardougne castle.",
+       "s": "Talk to Lucien in the pub north of East Ardougne castle.",
+       "k": "talkToLucien",
+       "at": [
+        2573,
+        3321,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "at": 10,
+     "do": [
+      {
+       "t": "Get your weight below 0 kg: bank everything heavy and carry little.",
+       "s": "Get your weight below 0 kg.",
+       "k": "prepare"
+      },
+      {
+       "t": "Enter the Temple of Ikov north of East Ardougne. The boots of lightness (-4.5 kg) are inside.",
+       "s": "Enter the Temple of Ikov for the boots of lightness.",
+       "k": "enterDungeonForBoots",
+       "at": [
+        2677,
+        3405,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17384
+        ]
+       }
+      },
+      {
+       "t": "Get your weight below 0kg.",
+       "s": "Get your weight below 0kg.",
+       "k": "prepareBelow0"
+      },
+      {
+       "t": "Enter the Temple of Ikov north of East Ardougne.",
+       "s": "Enter the Temple of Ikov north of East Ardougne.",
+       "k": "enterDungeon",
+       "at": [
+        2677,
+        3405,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17384
+        ]
+       }
+      },
+      {
+       "t": "Go down the west stairs to get boots of lightness.",
+       "s": "Go down the west stairs to get boots of lightness.",
+       "k": "goDownToBoots",
+       "at": [
+        2651,
+        9805,
+        0
+       ],
+       "hl": {
+        "obj": [
+         98
+        ]
+       }
+      },
+      {
+       "t": "Get the boots of lightness in the north east corner.",
+       "s": "Get the boots of lightness in the north east corner.",
+       "has": "Boots of lightness",
+       "k": "getBoots"
+      },
+      {
+       "t": "Go back upstairs.",
+       "s": "Go back upstairs.",
+       "k": "goUpFromBoots",
+       "at": [
+        2639,
+        9764,
+        0
+       ],
+       "hl": {
+        "obj": [
+         96
+        ]
+       }
+      },
+      {
+       "t": "Cross the bridge in the north room and pick up the lever while you weigh less than 0 kg.",
+       "s": "Under 0 kg, cross the bridge and pick up the lever.",
+       "k": "pickUpLever",
+       "at": [
+        2637,
+        9819,
+        0
+       ]
+      },
+      {
+       "t": "Use the lever on the lever bracket in the entrance room.",
+       "s": "Use the lever on the lever bracket in the entrance room.",
+       "k": "useLeverOnHole",
+       "at": [
+        2671,
+        9804,
+        0
+       ],
+       "hl": {
+        "obj": [
+         86
+        ]
+       }
+      },
+      {
+       "t": "Pull the lever.",
+       "s": "Pull the lever.",
+       "k": "pullLever",
+       "at": [
+        2671,
+        9804,
+        0
+       ],
+       "hl": {
+        "obj": [
+         87
+        ]
+       }
+      },
+      {
+       "t": "Enter the south gate.",
+       "s": "Enter the south gate.",
+       "k": "enterArrowRoom",
+       "at": [
+        2662,
+        9803,
+        0
+       ],
+       "hl": {
+        "obj": [
+         89
+        ]
+       }
+      },
+      {
+       "t": "Search the chests in this room's ice area until you have at least 20 ice arrows; each chest gives 1 to 5.",
+       "s": "Search the chests until you have 20 ice arrows.",
+       "k": "collectArrows",
+       "hl": {
+        "obj": [
+         103
+        ]
+       }
+      },
+      {
+       "t": "Return back to the entry room when you have enough arrows.",
+       "s": "Return back to the entry room when you have enough arrows.",
+       "k": "returnToMainRoom",
+       "at": [
+        2662,
+        9803,
+        0
+       ],
+       "hl": {
+        "obj": [
+         89
+        ]
+       }
+      },
+      {
+       "t": "Go into the north room, then right-click search the lever on its north side for traps, and pull it.",
+       "s": "Search the north room's lever for traps, then pull it.",
+       "k": "goSearchThievingLever",
+       "at": [
+        2665,
+        9855,
+        0
+       ],
+       "hl": {
+        "obj": [
+         91
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 20,
+     "do": [
+      {
+       "t": "Get your weight below 0 kg: bank everything heavy and carry little.",
+       "s": "Get your weight below 0 kg.",
+       "k": "prepare"
+      },
+      {
+       "t": "Enter the Temple of Ikov north of East Ardougne. The boots of lightness (-4.5 kg) are inside.",
+       "s": "Enter the Temple of Ikov for the boots of lightness.",
+       "k": "enterDungeonForBoots",
+       "at": [
+        2677,
+        3405,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17384
+        ]
+       }
+      },
+      {
+       "t": "Get your weight below 0kg.",
+       "s": "Get your weight below 0kg.",
+       "k": "prepareBelow0"
+      },
+      {
+       "t": "Enter the Temple of Ikov north of East Ardougne.",
+       "s": "Enter the Temple of Ikov north of East Ardougne.",
+       "k": "enterDungeon",
+       "at": [
+        2677,
+        3405,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17384
+        ]
+       }
+      },
+      {
+       "t": "Go down the west stairs to get boots of lightness.",
+       "s": "Go down the west stairs to get boots of lightness.",
+       "k": "goDownToBoots",
+       "at": [
+        2651,
+        9805,
+        0
+       ],
+       "hl": {
+        "obj": [
+         98
+        ]
+       }
+      },
+      {
+       "t": "Get the boots of lightness in the north east corner.",
+       "s": "Get the boots of lightness in the north east corner.",
+       "has": "Boots of lightness",
+       "k": "getBoots"
+      },
+      {
+       "t": "Go back upstairs.",
+       "s": "Go back upstairs.",
+       "k": "goUpFromBoots",
+       "at": [
+        2639,
+        9764,
+        0
+       ],
+       "hl": {
+        "obj": [
+         96
+        ]
+       }
+      },
+      {
+       "t": "Cross the bridge in the north room and pick up the lever while you weigh less than 0 kg.",
+       "s": "Under 0 kg, cross the bridge and pick up the lever.",
+       "k": "pickUpLever",
+       "at": [
+        2637,
+        9819,
+        0
+       ]
+      },
+      {
+       "t": "Use the lever on the lever bracket in the entrance room.",
+       "s": "Use the lever on the lever bracket in the entrance room.",
+       "k": "useLeverOnHole",
+       "at": [
+        2671,
+        9804,
+        0
+       ],
+       "hl": {
+        "obj": [
+         86
+        ]
+       }
+      },
+      {
+       "t": "Pull the lever.",
+       "s": "Pull the lever.",
+       "k": "pullLever",
+       "at": [
+        2671,
+        9804,
+        0
+       ],
+       "hl": {
+        "obj": [
+         87
+        ]
+       }
+      },
+      {
+       "t": "Search the chests in this room's ice area until you have at least 20 ice arrows; each chest gives 1 to 5.",
+       "s": "Search the chests until you have 20 ice arrows.",
+       "k": "collectArrows",
+       "hl": {
+        "obj": [
+         103
+        ]
+       }
+      },
+      {
+       "t": "Return back to the entry room when you have enough arrows.",
+       "s": "Return back to the entry room when you have enough arrows.",
+       "k": "returnToMainRoom",
+       "at": [
+        2662,
+        9803,
+        0
+       ],
+       "hl": {
+        "obj": [
+         89
+        ]
+       }
+      },
+      {
+       "t": "Go into the north room, then on the north side pull the lever.",
+       "s": "Go into the north room, then on the north side pull the lever.",
+       "k": "goPullThievingLever",
+       "at": [
+        2665,
+        9855,
+        0
+       ],
+       "hl": {
+        "obj": [
+         91
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 30,
+     "do": [
+      {
+       "t": "Get your weight below 0 kg: bank everything heavy and carry little.",
+       "s": "Get your weight below 0 kg.",
+       "k": "prepare"
+      },
+      {
+       "t": "Enter the Temple of Ikov north of East Ardougne. The boots of lightness (-4.5 kg) are inside.",
+       "s": "Enter the Temple of Ikov for the boots of lightness.",
+       "k": "enterDungeonForBoots",
+       "at": [
+        2677,
+        3405,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17384
+        ]
+       }
+      },
+      {
+       "t": "Get your weight below 0kg.",
+       "s": "Get your weight below 0kg.",
+       "k": "prepareBelow0"
+      },
+      {
+       "t": "Enter the Temple of Ikov north of East Ardougne.",
+       "s": "Enter the Temple of Ikov north of East Ardougne.",
+       "k": "enterDungeon",
+       "at": [
+        2677,
+        3405,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17384
+        ]
+       }
+      },
+      {
+       "t": "Go down the west stairs to get boots of lightness.",
+       "s": "Go down the west stairs to get boots of lightness.",
+       "k": "goDownToBoots",
+       "at": [
+        2651,
+        9805,
+        0
+       ],
+       "hl": {
+        "obj": [
+         98
+        ]
+       }
+      },
+      {
+       "t": "Get the boots of lightness in the north east corner.",
+       "s": "Get the boots of lightness in the north east corner.",
+       "has": "Boots of lightness",
+       "k": "getBoots"
+      },
+      {
+       "t": "Go back upstairs.",
+       "s": "Go back upstairs.",
+       "k": "goUpFromBoots",
+       "at": [
+        2639,
+        9764,
+        0
+       ],
+       "hl": {
+        "obj": [
+         96
+        ]
+       }
+      },
+      {
+       "t": "Cross the bridge in the north room and pick up the lever while you weigh less than 0 kg.",
+       "s": "Under 0 kg, cross the bridge and pick up the lever.",
+       "k": "pickUpLever",
+       "at": [
+        2637,
+        9819,
+        0
+       ]
+      },
+      {
+       "t": "Use the lever on the lever bracket in the entrance room.",
+       "s": "Use the lever on the lever bracket in the entrance room.",
+       "k": "useLeverOnHole",
+       "at": [
+        2671,
+        9804,
+        0
+       ],
+       "hl": {
+        "obj": [
+         86
+        ]
+       }
+      },
+      {
+       "t": "Pull the lever.",
+       "s": "Pull the lever.",
+       "k": "pullLever",
+       "at": [
+        2671,
+        9804,
+        0
+       ],
+       "hl": {
+        "obj": [
+         87
+        ]
+       }
+      },
+      {
+       "t": "Search the chests in this room's ice area until you have at least 20 ice arrows; each chest gives 1 to 5.",
+       "s": "Search the chests until you have 20 ice arrows.",
+       "k": "collectArrows",
+       "hl": {
+        "obj": [
+         103
+        ]
+       }
+      },
+      {
+       "t": "Return back to the entry room when you have enough arrows.",
+       "s": "Return back to the entry room when you have enough arrows.",
+       "k": "returnToMainRoom",
+       "at": [
+        2662,
+        9803,
+        0
+       ],
+       "hl": {
+        "obj": [
+         89
+        ]
+       }
+      },
+      {
+       "t": "Try the far north door. Be ready to fight the Fire Warrior of Lesarkus: only ice arrows from a yew shortbow or better hurt him.",
+       "s": "Try the far north door; ready the yew bow and ice arrows.",
+       "k": "tryToEnterWitchRoom",
+       "at": [
+        2646,
+        9870,
+        0
+       ],
+       "hl": {
+        "obj": [
+         93
+        ]
+       }
+      },
+      {
+       "t": "Kill the Fire Warrior of Lesarkus with the ice arrows from a yew shortbow or better.",
+       "s": "Shoot the Fire Warrior with ice arrows.",
+       "k": "fightLes",
+       "at": [
+        2646,
+        9866,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3448
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 40,
+     "do": [
+      {
+       "t": "Enter the Temple of Ikov north of East Ardougne.",
+       "s": "Enter the Temple of Ikov north of East Ardougne.",
+       "k": "enterDungeonKilledLes",
+       "at": [
+        2677,
+        3405,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17384
+        ]
+       }
+      },
+      {
+       "t": "Go all the way north and talk to Winelda there.",
+       "s": "Go all the way north and talk to Winelda there.",
+       "k": "enterLesDoor",
+       "at": [
+        2646,
+        9870,
+        0
+       ],
+       "hl": {
+        "obj": [
+         93
+        ]
+       }
+      },
+      {
+       "t": "Give Winelda 20 unnoted limpwurts.",
+       "s": "Give Winelda 20 unnoted limpwurts.",
+       "k": "giveWineldaLimps",
+       "at": [
+        2655,
+        9876,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3447
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 50,
+     "do": [
+      {
+       "t": "Enter the Temple of Ikov north of East Ardougne.",
+       "s": "Enter the Temple of Ikov north of East Ardougne.",
+       "k": "enterDungeonKilledLes",
+       "at": [
+        2677,
+        3405,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17384
+        ]
+       }
+      },
+      {
+       "t": "Go all the way north and talk to Winelda there.",
+       "s": "Go all the way north and talk to Winelda there.",
+       "k": "enterLesDoor",
+       "at": [
+        2646,
+        9870,
+        0
+       ],
+       "hl": {
+        "obj": [
+         93
+        ]
+       }
+      },
+      {
+       "t": "Give Winelda 20 unnoted limpwurts.",
+       "s": "Give Winelda 20 unnoted limpwurts.",
+       "k": "giveWineldaLimps",
+       "at": [
+        2655,
+        9876,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3447
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 60,
+     "do": [
+      {
+       "t": "Enter the Temple of Ikov north of East Ardougne. With the shiny key you can instead enter from McGrubor's Wood west of Seers' Village.",
+       "s": "Enter the Temple of Ikov north of East Ardougne.",
+       "k": "enterDungeonGivenLimps",
+       "at": [
+        2677,
+        3405,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17384
+        ]
+       }
+      },
+      {
+       "t": "Enter the house at Mcgrubbor's wood and go down the ladder.",
+       "s": "Enter the house at Mcgrubbor's wood and go down the ladder.",
+       "k": "enterFromMcgrubbors",
+       "at": [
+        2659,
+        3492,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17384
+        ]
+       }
+      },
+      {
+       "t": "Talk to Winelda in the far north of the dungeon.",
+       "s": "Talk to Winelda in the far north of the dungeon.",
+       "k": "talkToWinelda",
+       "at": [
+        2655,
+        9876,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3447
+        ]
+       }
+      },
+      {
+       "t": "Follow the path around past the skeletons and lesser demons until you find a shiny key, and pick it up.",
+       "s": "Pick up the shiny key past the skeletons and demons.",
+       "k": "pickUpKey",
+       "at": [
+        2628,
+        9859,
+        0
+       ]
+      },
+      {
+       "t": "Push the wall on the north side of this area.",
+       "s": "Push the wall on the north side of this area.",
+       "k": "pushWall",
+       "at": [
+        2643,
+        9892,
+        0
+       ],
+       "hl": {
+        "obj": [
+         1597
+        ]
+       }
+      },
+      {
+       "t": "Help the Guardians of Armadyl: take off the pendant of Lucien and talk to one of them. They send you after Lucien.",
+       "s": "Take off Lucien's pendant and talk to a Guardian.",
+       "k": "makeChoice"
+      },
+      {
+       "t": "Only if you helped Lucien instead: bring him the Staff of Armadyl in the house west of the Grand Exchange.",
+       "s": "Lucien's side only: bring him the Staff of Armadyl.",
+       "k": "bringStaffToLucien",
+       "at": [
+        3122,
+        3484,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13644
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 70,
+     "do": [
+      {
+       "t": "Wear the Armadyl pendant and defeat Lucien in the house west of the Grand Exchange.",
+       "s": "Wear the Armadyl pendant and kill Lucien west of the GE.",
+       "k": "killLucien",
+       "at": [
+        3122,
+        3484,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13644
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  "S9-83": {
+   "var": [
+    "varbit",
+    487
+   ],
+   "route": [
+    {
+     "title": "Starting off",
+     "steps": [
+      "Speak to Grish located in Jiggig west of the Gu'Tanoth and south of Castle Wars (east of fairy ring ) and offer to help. Dialogue: \"What do you mean sickies?\", \"Can I help in any way?\", \"Yes.\"",
+      "Speak to Ogre guard to the east, he will remove the barricade to gain access to the Zogre-infested area.",
+      "Climb over the crushed barricade and run east to a set of stairs going downwards, go down these stairs."
+     ]
+    },
+    {
+     "title": "The cave",
+     "steps": [
+      "Run north-west to an area with a blackened floor, a short cut scene will begin.",
+      "Search the skeleton next to the broken lectern. A Zombie will appear and attack, kill it to obtain the Ruined backpack.",
+      "Open the ruined backpack to obtain a Dragon inn tankard, some rotten food and a knife.",
+      "Search the broken lectern for the Torn page (make sure you keep this).",
+      "Attempt to search the coffin west of the Skeleton, and then use a knife on it.",
+      "Attempt to open coffin (may take a couple of tries), search the coffin for the black prism."
+     ]
+    },
+    {
+     "title": "Yanille",
+     "steps": [
+      "Go to the Dragon Inn in Yanille and use the dragon inn tankard on the bartender. The Minigame Teleport to Nightmare Zone can take you here quickly.",
+      "Speak to Zavistic Rarve in the Wizards' Guild in Yanille (if you don't have the required level to enter, ring the bell out front). (Dialogue: \"I'm here about the sicks...err Zogres\" if you have started Hand in the Sand)"
+     ]
+    },
+    {
+     "title": "Incriminating Sithik",
+     "steps": [
+      "Speak to Sithik Ints in his bed in the upstairs bedroom in the guest house north of the Wizards' Guild Dialogue: \"Do you mind if I look around?\"",
+      "Search the drawers, cupboard and wardrobe for Book of portraiture, Necromancy book, papyrus, charcoal, and a book of 'H.A.M'.",
+      "Read all three books.",
+      "Use all three books on Sithik.",
+      "Use Papyrus on Sithik.",
+      "Use portrait on Sithik.",
+      "Go to the Dragon Inn in Yanille and use the Dragon Inn Tankard, then the portrait on the Bartender.",
+      "Speak to Zavistic Rarve while holding the Necromancy book, book of 'H.A.M', the tankard and the signed portrait. Dialogue: \"I have some items that I'd like you to look at.\" or {{Chat option|1I'm here about the sicks...err Zogres}{Chat option|3I have some items that I'd like you to look at.}} if you have started Hand in the Sand.",
+      "Use the Strange potion on the Cup of tea on top of Sithik's drawers.",
+      "Go downstairs and back upstairs.",
+      "Speak to Sithik, obtain answers to all three questions in order to make Relicym's balm and Brutal arrows Dialogue: \"How do I remove the effects of the spell from the area?\", \"How do I get rid of the undead ogres\", \"How do I get rid of the disease\", \"Sorry, I have to go.\"."
+     ]
+    },
+    {
+     "title": "Relocating the ceremonial grounds",
+     "steps": [
+      "Return and speak to Grish Dialogue: \"I found who's responsible for the Zogres being here.\". He will give you an Ogre gate key to access the Ceremonial chamber.",
+      "Talk to Grish again \"There must be an easier way to kill these Zogres\" to learn how to equip Composite ogre bows Dialogue: .",
+      "Prepare to fight Slash Bash (level 111). If you are using an comp ogre bow instead of Crumble Undead, follow the \"optional\" steps below."
+     ]
+    },
+    {
+     "title": "Making an ogre composite bow (optional)",
+     "steps": [
+      "Chop an Achey Tree for logs.",
+      "Use a knife on the achey tree logs with wolf bones in your inventory, and select box number (2) to create an unstrung comp bow.",
+      "String the bow with bow string to create the finished bow."
+     ]
+    },
+    {
+     "title": "Making Relicym's balm (optional)",
+     "steps": [
+      "Either buy one from the Grand Exchange or make it yourself by adding Rogue's purse to a Vial of water and then add Snake weed. It is not needed for the quest but giving it to Uglug Nar will allow you to purchase Relicym's balm from his shop if needed in the future."
+     ]
+    },
+    {
+     "title": "Making brutal arrows (optional)",
+     "steps": [
+      "Cut down Achey Trees for Achey tree logs.",
+      "Fletch the logs with a knife into Ogre arrow shafts.",
+      "Add feathers to the shafts.",
+      "With a hammer in your inventory use nails on the Flighted ogre arrows."
+     ]
+    },
+    {
+     "title": "Fighting Slash Bash",
+     "steps": [
+      "Head back down into Jiggig.",
+      "Travel west until you reach two sets of doors.",
+      "Go through both doors and go down the stairs.",
+      "Follow the chamber to the end and search the stand.",
+      "Kill Slash Bash and collect the Zogre bones and Ogre artefact that he drops.",
+      "Return and speak to Grish. Dialogue:",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Talk to Grish south of Castle Wars.",
+       "s": "Talk to Grish south of Castle Wars.",
+       "k": "talkToGrish",
+       "at": [
+        2447,
+        3049,
+        0
+       ],
+       "hl": {
+        "npc": [
+         860
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 2,
+     "do": [
+      {
+       "t": "Talk to the guard east of Grish.",
+       "s": "Talk to the guard east of Grish.",
+       "k": "talkToGuard",
+       "at": [
+        2454,
+        3048,
+        0
+       ],
+       "hl": {
+        "npc": [
+         864
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 3,
+     "do": [
+      {
+       "t": "Climb over the barricade east of Grish.",
+       "s": "Climb over the barricade east of Grish.",
+       "k": "climbBarricade",
+       "at": [
+        2456,
+        3048,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6878
+        ]
+       }
+      },
+      {
+       "t": "Climb down the stairs to the east.",
+       "s": "Climb down the stairs to the east.",
+       "k": "goDownStairs",
+       "at": [
+        2486,
+        3043,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6841
+        ]
+       }
+      },
+      {
+       "t": "Search the skeleton in the north west corner of this area.",
+       "s": "Search the skeleton in the north west corner of this area.",
+       "k": "searchSkeleton",
+       "at": [
+        2442,
+        9459,
+        2
+       ],
+       "hl": {
+        "obj": [
+         6893
+        ]
+       }
+      },
+      {
+       "t": "Open the backpack for a knife and a dragon inn tankard.",
+       "s": "Open the backpack for a knife and a dragon inn tankard.",
+       "k": "openBackpack"
+      },
+      {
+       "t": "Search the broken lecturn in the north west corner of the tombs.",
+       "s": "Search the broken lecturn in the north west corner of the tombs.",
+       "k": "searchLectern",
+       "at": [
+        2443,
+        9459,
+        2
+       ],
+       "hl": {
+        "obj": [
+         6846
+        ]
+       }
+      },
+      {
+       "t": "Search the ogre coffin next to the skeleton.",
+       "s": "Search the ogre coffin next to the skeleton.",
+       "k": "searchCoffin",
+       "at": [
+        2439,
+        9459,
+        2
+       ],
+       "hl": {
+        "obj": [
+         6843
+        ]
+       }
+      },
+      {
+       "t": "Use a knife on the ogre coffin next to the skeleton.",
+       "s": "Use a knife on the ogre coffin next to the skeleton.",
+       "k": "useKnifeOnCoffin",
+       "at": [
+        2439,
+        9459,
+        2
+       ],
+       "hl": {
+        "obj": [
+         6843
+        ]
+       }
+      },
+      {
+       "t": "Search the coffin next to the skeleton again to open it. It may take a few attempts.",
+       "s": "Open the coffin next to the skeleton; it may take a few tries.",
+       "k": "openCoffin",
+       "at": [
+        2439,
+        9459,
+        2
+       ],
+       "hl": {
+        "obj": [
+         6843
+        ]
+       }
+      },
+      {
+       "t": "Search the coffin for a black prism.",
+       "s": "Search the coffin for a black prism.",
+       "k": "searchCoffinProperly",
+       "at": [
+        2439,
+        9459,
+        2
+       ],
+       "hl": {
+        "obj": [
+         6843
+        ]
+       }
+      },
+      {
+       "t": "Talk to Zavistic Rarve at the Yanille Wizards' Guild. Without 66 Magic, ring the bell outside the guild.",
+       "s": "Talk to Zavistic Rarve at the Yanille Wizards' Guild.",
+       "k": "talkToZavistic",
+       "at": [
+        2598,
+        3087,
+        0
+       ],
+       "hl": {
+        "npc": [
+         881
+        ]
+       }
+      },
+      {
+       "t": "Go upstairs and talk to Sithik in the house north of the Wizards' Guild.",
+       "s": "Talk to Sithik upstairs, north of the Wizards' Guild.",
+       "k": "goUpToSith",
+       "at": [
+        2597,
+        3107,
+        0
+       ],
+       "hl": {
+        "obj": [
+         16683
+        ]
+       }
+      },
+      {
+       "t": "Talk to Sithik Ints in the bed to the west.",
+       "s": "Talk to Sithik Ints in the bed to the west.",
+       "k": "talkToSith",
+       "at": [
+        2591,
+        3104,
+        1
+       ],
+       "hl": {
+        "obj": [
+         6887
+        ]
+       }
+      },
+      {
+       "t": "Search Sithik's wardrobe.",
+       "s": "Search Sithik's wardrobe.",
+       "k": "searchWardrobe",
+       "at": [
+        2590,
+        3103,
+        1
+       ],
+       "hl": {
+        "obj": [
+         6877
+        ]
+       }
+      },
+      {
+       "t": "Search Sithik's cupboard.",
+       "s": "Search Sithik's cupboard.",
+       "k": "searchCupboard",
+       "at": [
+        2593,
+        3105,
+        1
+       ],
+       "hl": {
+        "obj": [
+         6876
+        ]
+       }
+      },
+      {
+       "t": "Search Sithik's drawers for more papyrus.",
+       "s": "Search Sithik's drawers for more papyrus.",
+       "k": "searchDrawers",
+       "at": [
+        2593,
+        3103,
+        1
+       ],
+       "hl": {
+        "obj": [
+         6875
+        ]
+       }
+      },
+      {
+       "t": "The portrait drawn is wrong. Drop it and try drawing him again.",
+       "s": "The portrait drawn is wrong. Drop it and try drawing him again.",
+       "k": "dropPortraitAndSearchDrawers",
+       "at": [
+        2593,
+        3103,
+        1
+       ],
+       "hl": {
+        "obj": [
+         6875
+        ]
+       }
+      },
+      {
+       "t": "Use the papyrus on Sithik Ints.",
+       "s": "Use the papyrus on Sithik Ints.",
+       "k": "usePapyrusOnSith",
+       "at": [
+        2591,
+        3104,
+        1
+       ],
+       "hl": {
+        "obj": [
+         6887
+        ]
+       }
+      },
+      {
+       "t": "Travel to the Dragon Inn in Yanille and use the dragon inn tankard on the bartender.",
+       "s": "Use the tankard on the Dragon Inn bartender in Yanille.",
+       "k": "useTankardOnBartender",
+       "at": [
+        2555,
+        3080,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1320
+        ]
+       }
+      },
+      {
+       "t": "Use the portrait on the bartender.",
+       "s": "Use the portrait on the bartender.",
+       "k": "usePortraitOnBartender",
+       "at": [
+        2555,
+        3080,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1320
+        ]
+       }
+      },
+      {
+       "t": "Bring the books and the signed portrait to Zavistic Rarve at the Yanille Wizards' Guild. Without 66 Magic, ring the bell outside.",
+       "s": "Bring the books and signed portrait to Zavistic Rarve.",
+       "k": "bringSignedPortraitToZavistic",
+       "at": [
+        2598,
+        3087,
+        0
+       ],
+       "hl": {
+        "npc": [
+         881
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 4,
+     "do": [
+      {
+       "t": "Go upstairs and talk to Sithik in the house north of the Wizards' Guild.",
+       "s": "Talk to Sithik upstairs, north of the Wizards' Guild.",
+       "k": "goUpToSithAgain",
+       "at": [
+        2597,
+        3107,
+        0
+       ],
+       "hl": {
+        "obj": [
+         16683
+        ]
+       }
+      },
+      {
+       "t": "Use the strange potion on the cup of tea next to Sithik.",
+       "s": "Use the strange potion on the cup of tea next to Sithik.",
+       "k": "usePotionOnTea",
+       "at": [
+        2593,
+        3103,
+        1
+       ]
+      }
+     ]
+    },
+    {
+     "at": 5,
+     "do": [
+      {
+       "t": "Go upstairs and talk to Sithik in the house north of the Wizards' Guild.",
+       "s": "Talk to Sithik upstairs, north of the Wizards' Guild.",
+       "k": "goUpToSithAgain",
+       "at": [
+        2597,
+        3107,
+        0
+       ],
+       "hl": {
+        "obj": [
+         16683
+        ]
+       }
+      },
+      {
+       "t": "Use the strange potion on the cup of tea next to Sithik.",
+       "s": "Use the strange potion on the cup of tea next to Sithik.",
+       "k": "usePotionOnTea",
+       "at": [
+        2593,
+        3103,
+        1
+       ]
+      }
+     ]
+    },
+    {
+     "at": 6,
+     "do": [
+      {
+       "t": "Leave Sithik Int's house.",
+       "s": "Leave Sithik Int's house.",
+       "k": "goDownstairsFromSith",
+       "at": [
+        2597,
+        3107,
+        1
+       ],
+       "hl": {
+        "obj": [
+         16681
+        ]
+       }
+      },
+      {
+       "t": "Go upstairs to Sithik again.",
+       "s": "Go upstairs to Sithik again.",
+       "k": "goUpToOgreSith",
+       "at": [
+        2597,
+        3107,
+        0
+       ],
+       "hl": {
+        "obj": [
+         16683
+        ]
+       }
+      },
+      {
+       "t": "Talk to the transformed Sithik Ints for answers.",
+       "s": "Talk to the transformed Sithik Ints for answers.",
+       "k": "talkToSithForAnswers",
+       "at": [
+        2591,
+        3104,
+        1
+       ],
+       "hl": {
+        "obj": [
+         6887
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 8,
+     "do": [
+      {
+       "t": "Go upstairs to Sithik again.",
+       "s": "Go upstairs to Sithik again.",
+       "k": "goUpToOgreSith",
+       "at": [
+        2597,
+        3107,
+        0
+       ],
+       "hl": {
+        "obj": [
+         16683
+        ]
+       }
+      },
+      {
+       "t": "Talk to the transformed Sithik Ints for answers.",
+       "s": "Talk to the transformed Sithik Ints for answers.",
+       "k": "askAboutRemovingUndead",
+       "at": [
+        2591,
+        3104,
+        1
+       ],
+       "hl": {
+        "obj": [
+         6887
+        ]
+       }
+      },
+      {
+       "t": "Talk to the transformed Sithik Ints for answers.",
+       "s": "Talk to the transformed Sithik Ints for answers.",
+       "k": "askAboutRemovingDisease",
+       "at": [
+        2591,
+        3104,
+        1
+       ],
+       "hl": {
+        "obj": [
+         6887
+        ]
+       }
+      },
+      {
+       "t": "Talk to Grish south of Castle Wars. Be ready to fight Slash Bash: only brutal arrows from an ogre bow hurt him fully.",
+       "s": "Talk to Grish; ready the ogre bow and brutal arrows.",
+       "k": "talkToGrishForKey",
+       "at": [
+        2447,
+        3049,
+        0
+       ],
+       "hl": {
+        "npc": [
+         860
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 10,
+     "do": [
+      {
+       "t": "Talk to Grish south of Castle Wars again to learn how to make composite ogre bows.",
+       "s": "Talk to Grish again about composite ogre bows.",
+       "k": "talkToGrishForBow",
+       "at": [
+        2447,
+        3049,
+        0
+       ],
+       "hl": {
+        "npc": [
+         860
+        ]
+       }
+      },
+      {
+       "t": "Climb over the barricade east of Grish, prepared to fight Slash Bash.",
+       "s": "Climb over the barricade east of Grish, prepared to fight Slash Bash.",
+       "k": "climbBarricadeForBoss",
+       "at": [
+        2456,
+        3048,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6878
+        ]
+       }
+      },
+      {
+       "t": "Climb down the stairs to the east.",
+       "s": "Climb down the stairs to the east.",
+       "k": "goDownStairsForBoss",
+       "at": [
+        2486,
+        3043,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6841
+        ]
+       }
+      },
+      {
+       "t": "Enter the doors at the west side of the area.",
+       "s": "Enter the doors at the west side of the area.",
+       "k": "enterDoors",
+       "at": [
+        2442,
+        9433,
+        2
+       ],
+       "hl": {
+        "obj": [
+         6872
+        ]
+       }
+      },
+      {
+       "t": "Go down the stairs to the boss.",
+       "s": "Go down the stairs to the boss.",
+       "k": "goDownToBoss",
+       "at": [
+        2444,
+        9418,
+        2
+       ],
+       "hl": {
+        "obj": [
+         6841
+        ]
+       }
+      },
+      {
+       "t": "Search the stand in the north-east corner, and kill Slash Bash when he spawns.",
+       "s": "Search the north-east stand; kill Slash Bash.",
+       "k": "searchStand",
+       "at": [
+        2483,
+        9445,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6897
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 12,
+     "do": [
+      {
+       "t": "Return to Grish with the ogre artefact.",
+       "s": "Return to Grish with the ogre artefact.",
+       "k": "returnArtefactToGrish",
+       "at": [
+        2447,
+        3049,
+        0
+       ],
+       "hl": {
+        "npc": [
+         860
+        ]
+       }
+      },
+      {
+       "t": "Pick up the ogre artefact.",
+       "s": "Pick up the ogre artefact.",
+       "k": "pickUpOgreArtefact"
+      }
+     ]
+    }
+   ]
   }
  }
 }

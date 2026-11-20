@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { stepById } from '../../data';
 import { estimateFight, estimateStepFights, fightLine, stepFightFoes } from './fightEstimate';
 import { COMBAT_FOES } from './combatEstimate';
-import { gearById } from './gearAdvisor';
+import { gearById, gearPieceByName } from './gearAdvisor';
 import type { GearState } from '../../services/runeliteBridge';
 import { retiredStep } from '../../../tests/fixtures/retiredSteps';
 
@@ -41,6 +41,13 @@ describe('one quest fight with your kit', () => {
     expect(at(1).assumed).toContain('no food is allowed, and the fight may need some');
   });
 
+  it('a fight with its own bow and arrow shoots them whatever weapon is worn', () => {
+    const knight = COMBAT_FOES.find((f) => f.name === 'Black Knight')!;
+    const warrior = { ...knight, name: 'Fire Warrior of Lesarkus' };
+    const at = (ranged?: number) => estimateFight({ foe: warrior, levels: { attack: 40, strength: 40, defence: 40, hitpoints: 40, ranged }, weapon: gearPieceByName('Bronze sword'), neck: null, armour: [], food: { name: 'Trout', heals: 7 } });
+    expect(at(40)?.style).toBe('rapid');
+    expect(at()).toBeNull();
+  });
   it('every route quest fight the table knows has a free version', () => {
     for (const n of ['Count Draynor', 'Ithoi the Navigator', 'Brutus', 'Melzar the Mad', 'Lesser demon', 'Elvarg', 'Black Knight', 'Ancient Guardian']) {
       expect(foe(n), n).toBeTruthy();

@@ -15,7 +15,23 @@
         "A stake and a hammer in the inventory deal the killing blow; without them he heals to full health."
       ]
     },
-    "Entrana firebird": {
+    "Fire Warrior of Lesarkus": {
+    "url": "https://oldschool.runescape.wiki/w/Fire_Warrior_of_Lesarkus",
+    "ammo": { "item": "Ice arrows", "bow": "Yew shortbow" },
+    "facts": [
+      "Only the ice arrows from the Temple of Ikov's chests hurt him, and they fire only from yew, magic, dark or twisted bows (OSRS Wiki Ice arrows).",
+      "Level 84, 59 hitpoints, magic attacks up to 8, ranged defence +35 (OSRS Wiki Fire Warrior of Lesarkus). The estimate shoots a yew shortbow at the Ranged level."
+    ]
+  },
+  "Slash Bash": {
+    "url": "https://oldschool.runescape.wiki/w/Slash_Bash",
+    "ammo": { "item": "Bronze brutal", "bow": "Ogre bow" },
+    "facts": [
+      "Attacks hit him for at most 25% of their max hit, except brutal arrows (100%, from an ogre bow or comp ogre bow) and Crumble Undead (50%) (OSRS Wiki Slash Bash).",
+      "Level 111, 100 hitpoints, ranged and crush attacks up to 13 that inflict disease. The estimate shoots bronze brutals from the ogre bow kept from Big Chompy Bird Hunting."
+    ]
+  },
+  "Entrana firebird": {
     "url": "https://oldschool.runescape.wiki/w/Entrana_firebird",
     "bare": true,
     "facts": [

@@ -14285,5 +14285,190 @@
         "questName": "Lunar Diplomacy"
       }
     }
+  },
+  {
+    "id": "S9-82",
+    "stage": 9,
+    "type": "quest",
+    "title": "Temple of Ikov",
+    "qp": 1,
+    "requires": [],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Temple_of_Ikov",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Temple_of_Ikov/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2573,3320,0",
+    "mapLocation": {
+      "x": 2573,
+      "y": 3320,
+      "plane": 0,
+      "label": "The Flying Horse Inn in the north-western corner of East Ardougne"
+    },
+    "npc": {
+      "nameEn": "Lucien",
+      "location": "The Flying Horse Inn in the north-western corner of East Ardougne",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Lucien"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Yew shortbow",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange (Ranged 40). Ice arrows fire only from yew, magic, dark or twisted bows.",
+        "wikiItemId": 857,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Yew_shortbow.png"
+      },
+      {
+        "nameEn": "Limpwurt root",
+        "amount": 20,
+        "howToGet": "Buy on the Grand Exchange. Winelda takes 20 unnoted roots for the shiny key.",
+        "wikiItemId": 225,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Limpwurt_root.png"
+      },
+      {
+        "nameEn": "Boots of lightness",
+        "amount": 1,
+        "howToGet": "Pick them up inside the Temple of Ikov; the Lost Property shop in Edgeville sells another for 9,800 gp.",
+        "wikiItemId": 88,
+        "inStep": true,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Boots_of_lightness.png"
+      },
+      {
+        "nameEn": "Ice arrows",
+        "amount": 20,
+        "howToGet": "Search the chests in the temple's ice area; each gives 1 to 5. They cannot be bought.",
+        "wikiItemId": 78,
+        "inStep": true,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Ice_arrows_1.png"
+      },
+      {
+        "nameEn": "Lobster",
+        "amount": 10,
+        "howToGet": "Buy on the Grand Exchange: the Fire Warrior of Lesarkus (max hit 8) and Lucien.",
+        "wikiItemId": 379,
+        "heals": 12,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Lobster.png"
+      }
+    ],
+    "foes": [
+      "Fire Warrior of Lesarkus",
+      "Lucien"
+    ],
+    "reward": "1 QP, 10,500 Ranged XP, 8,000 Fletching XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Lucien"
+      ],
+      "dialogChoices": [
+        "Why can't you get it yourself?",
+        "Yes.",
+        "I seek the Staff of Armadyl.",
+        "Lucien will give me a grand reward for it!",
+        "You're right, it's time for my yearly bath.",
+        "Ok! I'll help!"
+      ],
+      "highlightItems": [
+        "Yew shortbow",
+        "Limpwurt root",
+        "Boots of lightness",
+        "Ice arrows",
+        "Lobster"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Temple of Ikov"
+      }
+    }
+  },
+  {
+    "id": "S9-83",
+    "stage": 9,
+    "type": "quest",
+    "title": "Zogre Flesh Eaters",
+    "qp": 1,
+    "requires": [
+      "S9-12",
+      "S7-14"
+    ],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Zogre_Flesh_Eaters",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Zogre_Flesh_Eaters/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2444,3051,0",
+    "mapLocation": {
+      "x": 2444,
+      "y": 3051,
+      "plane": 0,
+      "label": "Jiggig, just south of Castle Wars"
+    },
+    "npc": {
+      "nameEn": "Grish",
+      "location": "Jiggig, just south of Castle Wars",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Grish"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Knife",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or take the one from the backpack in the tombs.",
+        "wikiItemId": 946,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Knife.png"
+      },
+      {
+        "nameEn": "Ogre bow",
+        "amount": 1,
+        "howToGet": "Kept from Big Chompy Bird Hunting; Rantz sells another for 500 to 550 coins.",
+        "wikiItemId": 2883,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Ogre_bow.png"
+      },
+      {
+        "nameEn": "Bronze brutal",
+        "amount": 100,
+        "howToGet": "Buy on the Grand Exchange. Only brutal arrows from an ogre bow hurt Slash Bash fully.",
+        "wikiItemId": 4773,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_brutal_1.png"
+      },
+      {
+        "nameEn": "Lobster",
+        "amount": 10,
+        "howToGet": "Buy on the Grand Exchange: Slash Bash hits up to 13.",
+        "wikiItemId": 379,
+        "heals": 12,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Lobster.png"
+      }
+    ],
+    "foes": [
+      "Slash Bash"
+    ],
+    "reward": "1 QP, 2,000 Fletching XP, 2,000 Ranged XP, 2,000 Herblore XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Grish"
+      ],
+      "dialogChoices": [
+        "What do you mean sickies?",
+        "Can I help in any way?",
+        "Yes.",
+        "I'm here about the sicks...err Zogres",
+        "Do you mind if I look around?",
+        "I have some items that I'd like you to look at.",
+        "How do I remove the effects of the spell from the area?",
+        "How do I get rid of the undead ogres",
+        "How do I get rid of the disease",
+        "Sorry, I have to go.",
+        "I found who's responsible for the Zogres being here."
+      ],
+      "highlightItems": [
+        "Knife",
+        "Ogre bow",
+        "Bronze brutal",
+        "Lobster"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Zogre Flesh Eaters"
+      }
+    }
   }
 ]

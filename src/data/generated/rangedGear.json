@@ -1,6 +1,6 @@
 {
   "source": "OSRS Wiki: Infobox Bonuses of each article (scripts/data/build-ranged-gear.ts)",
-  "generatedAt": "2026-11-02",
+  "generatedAt": "2026-11-20",
   "items": [
     {
       "name": "Shortbow",
@@ -205,6 +205,36 @@
       "rangedAttack": 6,
       "rangedStrength": 0,
       "defence": 30
+    },
+    {
+      "name": "Yew shortbow",
+      "slot": "2h",
+      "rangedAttack": 47,
+      "rangedStrength": 0,
+      "defence": 0,
+      "speed": 4
+    },
+    {
+      "name": "Ice arrows",
+      "slot": "ammo",
+      "rangedAttack": 0,
+      "rangedStrength": 16,
+      "defence": 0
+    },
+    {
+      "name": "Ogre bow",
+      "slot": "2h",
+      "rangedAttack": 38,
+      "rangedStrength": 0,
+      "defence": 0,
+      "speed": 8
+    },
+    {
+      "name": "Bronze brutal",
+      "slot": "ammo",
+      "rangedAttack": 0,
+      "rangedStrength": 11,
+      "defence": 0
     }
   ]
 }

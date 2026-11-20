@@ -4,7 +4,7 @@ Written by `tests/combatAudit.test.ts` from `src/data/authored/combatAudit.json`
 
 Every stage of the route where the player fights or can be attacked, checked against the route text, the quest stage lines (Quest Helper), the OSRS Wiki infoboxes in combatFoes.json and the danger zones. The rule for a fight the quest cannot go on without: its food is a required item (readiness and the game check it before leaving), the app estimates it with the player's kit where it has the opponent's numbers, and an unread kit or bag is reported as not checked, never as ready.
 
-82 stages: 54 retained, 27 revised, 0 with a branch, 1 deferred.
+84 stages: 56 retained, 27 revised, 0 with a branch, 1 deferred.
 
 | Step | Kind | Mandatory | Opponents | Method | Estimate | Food in the item list | Decision |
 |---|---|---|---|---|---|---|---|
@@ -90,6 +90,8 @@ Every stage of the route where the player fights or can be attacked, checked aga
 | S9-77 Contact! | quest-fight | yes | Giant Scarab (191) | melee | Giant Scarab | Lobster 15 | Retain |
 | S9-79 Heroes' Quest | quest-fight | yes | Ice Queen (111), Jailer (47), Entrana firebird (2) | melee | Ice Queen, Entrana firebird, Jailer | Lobster 10 | Retain |
 | S9-81 Lunar Diplomacy | quest-fight | yes | Suqah (111), Me (79) | melee | Suqah, Me | Lobster 15 | Retain |
+| S9-82 Temple of Ikov | quest-fight | yes | Fire Warrior of Lesarkus (84), Lucien (14) | other | Fire Warrior of Lesarkus, Lucien | Lobster 10 | Retain |
+| S9-83 Zogre Flesh Eaters | quest-fight | yes | Slash Bash (111) | other | Slash Bash | Lobster 10 | Retain |
 
 ## S1-06 The Restless Ghost
 
@@ -1979,4 +1981,58 @@ Changed:
 Evidence:
 
 - OSRS Wiki Lunar Diplomacy quick guide, Suqah and Me infoboxes, read 2026-11-20.
+
+## S9-82 Temple of Ikov
+
+**Retain.** Temple of Ikov: shoot the level 84 Fire Warrior of Lesarkus with ice arrows from a yew shortbow, then kill Lucien (level 14) wearing the Armadyl pendant.
+
+Quest stage lines: 2.5, 3.1, 4.0.
+
+Assumptions:
+
+- Only ice arrows hurt the Fire Warrior, so the estimate shoots them from a yew shortbow at the Ranged level (fightMechanics.json ammo).
+- Ten lobsters cover the Fire Warrior's magic; Lucien is weak.
+
+Problems:
+
+- The skeletons and lesser demons on the way to the shiny key are passed, not fought.
+
+Alternatives:
+
+- Darts or throwing knives also hurt the Fire Warrior while ice arrows are equipped (OSRS Wiki).
+
+Changed:
+
+- 2.156.0: new quest; the ice arrows and yew shortbow are in rangedGear.json, and the ammo mechanic makes the fight that bow and arrow.
+
+Evidence:
+
+- OSRS Wiki Fire Warrior of Lesarkus, Ice arrows, Lucien infoboxes and the Temple of Ikov quick guide, read 2026-11-20.
+
+## S9-83 Zogre Flesh Eaters
+
+**Retain.** Zogre Flesh Eaters: kill Slash Bash (level 111, 100 hitpoints, max hit 13) with bronze brutal arrows from the ogre bow.
+
+Quest stage lines: 1.1, 4.1, 4.2, 8.4.
+
+Assumptions:
+
+- Only brutal arrows hurt Slash Bash fully, so the estimate shoots bronze brutals from the ogre bow (fightMechanics.json ammo).
+- Ten lobsters cover his ranged and crush hits.
+
+Problems:
+
+- His hits inflict disease, which drains stats; the estimate does not count it.
+
+Alternatives:
+
+- Crumble Undead deals half damage; a safespot with Protect from Missiles negates his damage (OSRS Wiki).
+
+Changed:
+
+- 2.156.0: new quest; the ogre bow and bronze brutal are in rangedGear.json.
+
+Evidence:
+
+- OSRS Wiki Slash Bash, Bronze brutal and the Zogre Flesh Eaters quick guide, read 2026-11-20.
 

@@ -509,6 +509,17 @@ const REVIEWED_FLOWS: Record<string, { revision: number; flow: NonNullable<Quest
     unknownItems: ['Lunar staff', 'Emerald lens', 'Emerald lantern', 'Suqah tooth', 'Suqah hide', 'Suqah leather', 'Lunar ore', 'Lunar bar', 'Lunar helm', 'Lunar torso', 'Lunar gloves', 'Lunar boots', 'Lunar legs', 'Lunar amulet', 'Lunar ring', 'Lunar cape', 'Special vial', 'Waking sleep vial', 'Seal of passage'],
     uncertainReceipts: ['Coins'], partialDelivery: false, fromStartOnly: false,
   } },
+  // Nothing the route buys is handed in: the brutal arrows are shot at Slash Bash (some are lost), the knife and ogre bow stay.
+  'Zogre Flesh Eaters': { revision: 15395522, flow: {
+    consumes: [], receives: [],
+    unknownItems: ['Black prism', 'Dragon inn tankard', 'Torn page', 'Papyrus', 'Portrait', 'Signed portrait', 'Strange potion', 'Ogre artefact', 'Necromancy book', 'Book of HAM affairs'],
+    uncertainReceipts: ['Bronze brutal'], partialDelivery: false, fromStartOnly: false,
+  } },
+  // Winelda takes the limpwurt roots for the shiny key; the ice arrows are shot at the Fire Warrior; the boots of lightness stay.
+  'Temple of Ikov': { revision: 15363124, flow: {
+    consumes: [{ name: 'Limpwurt root', count: 20 }], receives: [{ name: 'Boots of lightness', count: 1, when: 'complete' }],
+    unknownItems: ['Lever', 'Shiny key', 'Pendant of Lucien', 'Armadyl pendant', 'Staff of Armadyl'], uncertainReceipts: ['Ice arrows'], partialDelivery: false, fromStartOnly: false,
+  } },
   // Nothing is used up: the lantern and tinderbox stay, and the keris is the prize from the chasm.
   'Contact!': { revision: 15327950, flow: {
     consumes: [], receives: [{ name: 'Keris', count: 1, when: 'complete' }], unknownItems: ["Kaleef's parchment"], uncertainReceipts: [], partialDelivery: false, fromStartOnly: false,
@@ -689,5 +700,8 @@ const REVIEWED_CLAUSES = new Set([
   'Ability to defeat a [[Koschei|fairly strong warrior]] without [[armour]], [[weapons]], or [[spells]]',
   'The ability to kill multiple level 111 monsters.',
   'A partner',
+  '- bypassable <ref>This requirement can be bypassed - [[Temple_of_Ikov#Fire_Warrior_of_Lesarkus|see below]]</ref>',
+  'The ability to defeat a level 84 enemy with Ranged',
+  'You must be able to defeat a level 111 enemy.',
   'Access to each of the elemental [[runic altars]] ([[Air Altar|Air]], [[Fire Altar|Fire]], [[Water Altar|Water]], [[Earth Altar|Earth]])',
 ].map(clause => clause.toLowerCase()));

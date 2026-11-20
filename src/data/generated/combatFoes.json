@@ -2916,57 +2916,6 @@
       }
     },
     {
-      "name": "Suqah",
-      "version": "1",
-      "combat": 111,
-      "members": true,
-      "hitpoints": 105,
-      "attackLevel": 95,
-      "strengthLevel": 95,
-      "defenceLevel": 95,
-      "magicLevel": 1,
-      "attackBonus": 0,
-      "defence": {
-        "stab": 50,
-        "slash": 70,
-        "crush": 70,
-        "magic": 90,
-        "ranged": 30
-      },
-      "attackStyle": "stab",
-      "maxHit": 10,
-      "speedTicks": 6,
-      "aggressive": true,
-      "xpBonus": 2,
-      "weakness": {
-        "element": "earth",
-        "percent": 20
-      }
-    },
-    {
-      "name": "Me",
-      "version": "Type A",
-      "combat": 79,
-      "members": true,
-      "hitpoints": 45,
-      "attackLevel": 75,
-      "strengthLevel": 78,
-      "defenceLevel": 74,
-      "magicLevel": 1,
-      "attackBonus": 0,
-      "defence": {
-        "stab": 0,
-        "slash": 0,
-        "crush": 0,
-        "magic": 0,
-        "ranged": 0
-      },
-      "attackStyle": "crush",
-      "maxHit": 9,
-      "speedTicks": 4,
-      "aggressive": true
-    },
-    {
       "name": "Ice Queen",
       "combat": 111,
       "members": true,
@@ -3019,26 +2968,121 @@
       }
     },
     {
-      "name": "Grip",
-      "combat": 22,
+      "name": "Suqah",
+      "version": "1",
+      "combat": 111,
       "members": true,
-      "hitpoints": 25,
-      "attackLevel": 18,
-      "strengthLevel": 17,
-      "defenceLevel": 18,
+      "hitpoints": 105,
+      "attackLevel": 95,
+      "strengthLevel": 95,
+      "defenceLevel": 95,
       "magicLevel": 1,
-      "attackBonus": 5,
+      "attackBonus": 0,
       "defence": {
-        "stab": 16,
-        "slash": 27,
-        "crush": 22,
+        "stab": 50,
+        "slash": 70,
+        "crush": 70,
+        "magic": 90,
+        "ranged": 30
+      },
+      "attackStyle": "stab",
+      "maxHit": 10,
+      "speedTicks": 6,
+      "aggressive": true,
+      "xpBonus": 2,
+      "weakness": {
+        "element": "earth",
+        "percent": 20
+      }
+    },
+    {
+      "name": "Me",
+      "version": "Type A",
+      "combat": 79,
+      "members": true,
+      "hitpoints": 45,
+      "attackLevel": 75,
+      "strengthLevel": 78,
+      "defenceLevel": 74,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
         "magic": 0,
         "ranged": 0
       },
-      "attackStyle": "slash",
-      "maxHit": 3,
+      "attackStyle": "crush",
+      "maxHit": 9,
+      "speedTicks": 4,
+      "aggressive": true
+    },
+    {
+      "name": "Fire Warrior of Lesarkus",
+      "combat": 84,
+      "members": true,
+      "hitpoints": 59,
+      "attackLevel": 78,
+      "strengthLevel": 78,
+      "defenceLevel": 78,
+      "magicLevel": 62,
+      "attackBonus": -12,
+      "defence": {
+        "stab": 34,
+        "slash": 37,
+        "crush": 35,
+        "magic": -7,
+        "ranged": 35
+      },
+      "attackStyle": "magic",
+      "maxHit": 8,
+      "speedTicks": 4,
+      "aggressive": true
+    },
+    {
+      "name": "Lucien",
+      "combat": 14,
+      "members": true,
+      "hitpoints": 17,
+      "attackLevel": 12,
+      "strengthLevel": 11,
+      "defenceLevel": 10,
+      "magicLevel": 1,
+      "attackBonus": 5,
+      "defence": {
+        "stab": 6,
+        "slash": 8,
+        "crush": 7,
+        "magic": -1,
+        "ranged": 4
+      },
+      "attackStyle": "stab",
+      "maxHit": 2,
       "speedTicks": 4,
       "aggressive": false
+    },
+    {
+      "name": "Slash Bash",
+      "combat": 111,
+      "members": true,
+      "hitpoints": 100,
+      "attackLevel": 100,
+      "strengthLevel": 120,
+      "defenceLevel": 60,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 30,
+        "slash": 30,
+        "crush": 30,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "ranged",
+      "maxHit": 13,
+      "speedTicks": 6,
+      "aggressive": true
     },
     {
       "name": "Cow",

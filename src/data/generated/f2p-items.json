@@ -2347,6 +2347,29 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Bones"
   },
   {
+    "id": 88,
+    "nameEn": "Boots of lightness",
+    "examine": "Magic boots that make you lighter than normal.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Boots_of_lightness.png",
+    "value": 6,
+    "highAlch": 3,
+    "buyLocations": [
+      {
+        "shopName": "Lost Property shop",
+        "location": "Edgeville",
+        "owner": "Perdu",
+        "price": 9800,
+        "stock": "∞",
+        "members": true
+      }
+    ],
+    "freeSpawns": [
+      "Temple of Ikov basement (members only)"
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Boots_of_lightness"
+  },
+  {
     "id": 1923,
     "nameEn": "Bowl",
     "examine": "Useful for mixing things.",
@@ -3071,6 +3094,43 @@
       }
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Bronze_bar"
+  },
+  {
+    "id": 4773,
+    "nameEn": "Bronze brutal",
+    "examine": "Blunt bronze arrow... ouch.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_brutal_1.png",
+    "value": 5,
+    "highAlch": 3,
+    "lowAlch": 2,
+    "buyLocations": [
+      {
+        "shopName": "Hickton's Archery Emporium.",
+        "location": "Catherby",
+        "owner": "Hickton",
+        "price": 5,
+        "stock": 0,
+        "members": true
+      },
+      {
+        "shopName": "Dargaud's Bow and Arrows.",
+        "location": "Ranging Guild",
+        "owner": "Bow and Arrow salesman",
+        "price": 5,
+        "stock": 0,
+        "members": true
+      },
+      {
+        "shopName": "~ Uglug's stuffsies ~",
+        "location": "Jiggig",
+        "owner": "Uglug Nar",
+        "price": 5,
+        "stock": 0,
+        "members": true
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Bronze_brutal"
   },
   {
     "id": 806,
@@ -9130,6 +9190,16 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Holy_symbol"
   },
   {
+    "id": 78,
+    "nameEn": "Ice arrows",
+    "examine": "Can only be fired from yew, magic, dark or twisted bows.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Ice_arrows_1.png",
+    "value": 2,
+    "highAlch": 1,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Ice_arrows"
+  },
+  {
     "id": 1580,
     "nameEn": "Ice gloves",
     "examine": "These will keep my hands cold!",
@@ -10980,6 +11050,59 @@
       }
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Limestone"
+  },
+  {
+    "id": 225,
+    "nameEn": "Limpwurt root",
+    "examine": "The root of a limpwurt plant.",
+    "members": false,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Limpwurt_root.png",
+    "value": 7,
+    "highAlch": 4,
+    "lowAlch": 2,
+    "dropSources": [
+      {
+        "monster": "Hobgoblin#Unarmed",
+        "combatLevel": null,
+        "rate": "22/128"
+      },
+      {
+        "monster": "Hobgoblin#Armed",
+        "combatLevel": null,
+        "rate": "21/128"
+      },
+      {
+        "monster": "Hill Giant",
+        "combatLevel": 28,
+        "rate": "11/128"
+      },
+      {
+        "monster": "Obor#Members",
+        "combatLevel": null,
+        "rate": "11/135"
+      },
+      {
+        "monster": "Obor#Free-to-play",
+        "combatLevel": null,
+        "rate": "11/135"
+      },
+      {
+        "monster": "Ogress Shaman",
+        "combatLevel": 82,
+        "rate": "5/116"
+      },
+      {
+        "monster": "Ogress Warrior",
+        "combatLevel": 82,
+        "rate": "5/116"
+      },
+      {
+        "monster": "Cave bug#Level 6",
+        "combatLevel": null,
+        "rate": "1/128"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Limpwurt_root"
   },
   {
     "id": 4684,

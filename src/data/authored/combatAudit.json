@@ -2887,6 +2887,78 @@
       "evidence": [
         "OSRS Wiki Lunar Diplomacy quick guide, Suqah and Me infoboxes, read 2026-11-20."
       ]
+    },
+    {
+      "stepId": "S9-82",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "other",
+      "objective": "Temple of Ikov: shoot the level 84 Fire Warrior of Lesarkus with ice arrows from a yew shortbow, then kill Lucien (level 14) wearing the Armadyl pendant.",
+      "enemies": [
+        {
+          "name": "Fire Warrior of Lesarkus",
+          "level": 84,
+          "maxHit": 8,
+          "table": true
+        },
+        {
+          "name": "Lucien",
+          "level": 14,
+          "maxHit": 2,
+          "table": true
+        }
+      ],
+      "lines": ["2.5", "3.1", "4.0"],
+      "assumptions": [
+        "Only ice arrows hurt the Fire Warrior, so the estimate shoots them from a yew shortbow at the Ranged level (fightMechanics.json ammo).",
+        "Ten lobsters cover the Fire Warrior's magic; Lucien is weak."
+      ],
+      "problems": [
+        "The skeletons and lesser demons on the way to the shiny key are passed, not fought."
+      ],
+      "alternatives": [
+        "Darts or throwing knives also hurt the Fire Warrior while ice arrows are equipped (OSRS Wiki)."
+      ],
+      "decision": "retain",
+      "changed": [
+        "2.156.0: new quest; the ice arrows and yew shortbow are in rangedGear.json, and the ammo mechanic makes the fight that bow and arrow."
+      ],
+      "evidence": [
+        "OSRS Wiki Fire Warrior of Lesarkus, Ice arrows, Lucien infoboxes and the Temple of Ikov quick guide, read 2026-11-20."
+      ]
+    },
+    {
+      "stepId": "S9-83",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "other",
+      "objective": "Zogre Flesh Eaters: kill Slash Bash (level 111, 100 hitpoints, max hit 13) with bronze brutal arrows from the ogre bow.",
+      "enemies": [
+        {
+          "name": "Slash Bash",
+          "level": 111,
+          "maxHit": 13,
+          "table": true
+        }
+      ],
+      "lines": ["1.1", "4.1", "4.2", "8.4"],
+      "assumptions": [
+        "Only brutal arrows hurt Slash Bash fully, so the estimate shoots bronze brutals from the ogre bow (fightMechanics.json ammo).",
+        "Ten lobsters cover his ranged and crush hits."
+      ],
+      "problems": [
+        "His hits inflict disease, which drains stats; the estimate does not count it."
+      ],
+      "alternatives": [
+        "Crumble Undead deals half damage; a safespot with Protect from Missiles negates his damage (OSRS Wiki)."
+      ],
+      "decision": "retain",
+      "changed": [
+        "2.156.0: new quest; the ogre bow and bronze brutal are in rangedGear.json."
+      ],
+      "evidence": [
+        "OSRS Wiki Slash Bash, Bronze brutal and the Zogre Flesh Eaters quick guide, read 2026-11-20."
+      ]
     }
   ]
 }

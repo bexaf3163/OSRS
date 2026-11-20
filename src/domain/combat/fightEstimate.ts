@@ -105,7 +105,7 @@ interface Rolls { style: FightStyle; atkMean: number; atkVar: number; secMean: n
  */
 function rolls(foe: CombatFoe, inp: FightInput, mech: FightMechanics | null, multiplier: number): Rolls | 'cannot' | null {
   const carried = (mech?.carried ?? []).filter((c) => held(inp.carried, c.item));
-  const weapon = mech?.weapon ? gearPieceByName(mech.weapon.item) : inp.weapon;
+  const weapon = mech?.ammo ? null : mech?.weapon ? gearPieceByName(mech.weapon.item) : inp.weapon;
   const drain = (key: 'hitpoints' | 'attack' | 'strength' | 'defence') => carried.reduce((n, c) => n + (c.drain[key] ?? 0), 0);
   const restoreTicks = carried.length ? Math.min(...carried.map((c) => c.restoreTicks)) : Infinity;
   const bonus = carried.reduce((n, c) => n + (c.maxHitBonus ?? 0), 0);
@@ -123,7 +123,7 @@ function rolls(foe: CombatFoe, inp: FightInput, mech: FightMechanics | null, mul
     for (let pass = 0, restored = 0; pass < 6; pass++) {
       const level = (now: number, lost: number) => Math.min(now, Math.max(0, now - lost) + restored);
       const weakened = { ...foe, attackLevel: level(foe.attackLevel, drain('attack')), defenceLevel: level(foe.defenceLevel, drain('defence')) };
-      const hit = playerHit(inp, weapon, style, weakened);
+      const hit = playerHit(inp, weapon, style, weakened, mech?.ammo);
       if (!hit) { settled = null; break; }
       const max = hit.maxHit + bonus;
       let hp = Math.ceil(Math.max(1, foe.hitpoints - drain('hitpoints')) / multiplier);
@@ -151,7 +151,7 @@ function rolls(foe: CombatFoe, inp: FightInput, mech: FightMechanics | null, mul
     const perSwing = (1 - share) * swing.mean + share * specialHit;
     const rolled = Math.max(foe.maxHit, ...others);
     const row: Rolls = {
-      style: shootsOnly(weapon) ? 'rapid' : style, atkMean: a.mean, atkVar: a.variance, secMean: a.mean * hit.speed, secVar: a.variance * hit.speed ** 2, dmgMean: sw.mean * perSwing,
+      style: shootsOnly(weapon) || mech?.ammo ? 'rapid' : style, atkMean: a.mean, atkVar: a.variance, secMean: a.mean * hit.speed, secVar: a.variance * hit.speed ** 2, dmgMean: sw.mean * perSwing,
       dmgVar: sw.mean * (1 - share) * (swing.square - swing.mean ** 2) + sw.variance * perSwing ** 2,
       chance: hit.hitChance, max, foeC, worst: Math.max(rolled, specialHit), keep: Math.max(2 * rolled, specialHit + foe.maxHit),
     };
@@ -161,12 +161,16 @@ function rolls(foe: CombatFoe, inp: FightInput, mech: FightMechanics | null, mul
 }
 
 interface Hit { hitChance: number; maxHit: number; speed: number }
-/** The player's hit: melee with the weapon in the style, or a bow's rapid shots with the worn arrows (rangedAmmo.rangedHit), one style only. */
-function playerHit(inp: FightInput, weapon: GearPiece | null, style: TrainStyle, foe: CombatFoe): Hit | null {
-  if (!shootsOnly(weapon)) return meleeAs({ attack: inp.levels.attack, strength: inp.levels.strength, defence: inp.levels.defence }, weapon, inp.neck, style, foe);
+/** The player's hit: melee with the weapon in the style, or a bow's rapid shots with the worn arrows (rangedAmmo.rangedHit), one style only.
+ * A fight's own bow and arrow (fightMechanics.json ammo) replace the worn weapon and arrows. */
+function playerHit(inp: FightInput, weapon: GearPiece | null, style: TrainStyle, foe: CombatFoe, ammo?: FightMechanics['ammo']): Hit | null {
+  const bow = ammo?.bow ?? (shootsOnly(weapon) ? weapon!.name : null);
+  if (bow === null) return meleeAs({ attack: inp.levels.attack, strength: inp.levels.strength, defence: inp.levels.defence }, weapon, inp.neck, style, foe);
+  const arrow = ammo?.item ?? inp.ammo;
   // A bow fires only the arrows its tier takes (rangedLoadout.arrowsFor): others cannot be shot, so there is no estimate.
-  if (style !== 'accurate' || inp.levels.ranged === undefined || !inp.ammo || !arrowsFor(weapon!.name).includes(inp.ammo)) return null;
-  const r = rangedHit(inp.levels.ranged, weapon!.name, inp.ammo, inp.worn ?? [], foe, 'rapid');
+  if (style !== 'accurate' || inp.levels.ranged === undefined || !arrow || (!ammo && !arrowsFor(bow).includes(arrow))) return null;
+  const worn = (inp.worn ?? []).filter((n) => !ammo || n !== inp.weapon?.name);
+  const r = rangedHit(inp.levels.ranged, bow, arrow, worn, foe, 'rapid');
   return r ? { hitChance: r.chance, maxHit: r.maxHit, speed: r.speedTicks * TICK } : null;
 }
 

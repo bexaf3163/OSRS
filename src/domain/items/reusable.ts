@@ -11,6 +11,8 @@ export const REUSABLE = new Set([
   'bronze axe', 'bronze pickaxe', 'mithril axe', 'small fishing net', 'fly fishing rod', 'harpoon', 'lobster pot',
   'tinderbox', 'spade', 'hammer', 'knife', 'shears', 'chisel', 'secateurs', 'ghostspeak amulet', 'dramen staff',
   'anti-dragon shield', 'rune shortsword', 'rune scimitar', 'adamant scimitar', 'holy symbol',
+  // Bows of quest fights (fightMechanics.json ammo) that the gear data does not list.
+  'ogre bow', 'yew shortbow',
 ]);
 /** Anything worn (weapons, armour, amulets) is not used up either: the gear data knows every one of them. */
 const WORN = new Set((gearJson as { items: { name: string; slot?: string }[] }).items.filter((p) => p.slot).map((p) => nameKey(p.name)));
