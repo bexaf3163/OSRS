@@ -70,7 +70,7 @@ async function pluginProtocol3(browser: Browser) {
   await page.context().close();
   const fresh = await open(browser, width, {
     localStorage: { 'osrs-put:active-step': 'S2-03' }, progress: progressBefore('S2-03'),
-    status: { activeStepId: 'S2-03', protocol: 7, pluginVersion: '2.22.0' },
+    status: { activeStepId: 'S2-03', protocol: 8, pluginVersion: '2.22.0' },
   }, '#/step/S2-03');
   const f = await text(fresh.page, '.ingame');
   // The static explanations ("In the game at the top left...", "The path over land is laid by Shortest Path...") were removed on purpose: a current plugin
@@ -86,7 +86,7 @@ async function liveGameWins(browser: Browser) {
   const width = 1100;
   const { page, errors } = await open(browser, width, {
     localStorage: { 'osrs-put:active-step': 'S2-10' }, progress: progressBefore('S2-10'),
-    status: { protocol: 7, inGame: true, activeStepId: 'S2-10', questPoints: 3, questsDone: [], stats: {}, coins: 0, bankCoins: 0, equipment: [], inventory: [],
+    status: { protocol: 8, inGame: true, activeStepId: 'S2-10', questPoints: 3, questsDone: [], stats: {}, coins: 0, bankCoins: 0, equipment: [], inventory: [],
       navTarget: { label: 'Go down to the test target', x: 3200, y: 3300, plane: 0, stepId: 'S2-10' } },
   }, '#/step/S2-10');
   await waitFor(page, '.cockpit-where-card', 5000);
@@ -106,7 +106,7 @@ async function protocol6(browser: Browser) {
   const width = 1100;
   const { page, errors } = await open(browser, width, {
     localStorage: { 'osrs-put:active-step': 'S2-07', 'osrs-put:shopping-plan': '{"items":[{"name":"Iron bar","count":2}]}' }, progress: progressBefore('S2-07'),
-    status: { protocol: 7, pluginVersion: '2.22.0', stats: {}, coins: 0, bankCoins: 0, equipment: [], inventory: [] },
+    status: { protocol: 8, pluginVersion: '2.22.0', stats: {}, coins: 0, bankCoins: 0, equipment: [], inventory: [] },
   }, '#/step/S2-07');
   await settle(page);
   const sent = await page.evaluate(() => (window as unknown as { __posts: { path: string; body: any }[] }).__posts);
@@ -125,7 +125,7 @@ async function protocol6(browser: Browser) {
 async function snapshotRefusal(browser: Browser) {
   for (const snapshotReply of [{ stale: true }, { rejected: { step: 'Step guidance is disabled' } }]) {
     const { page, errors } = await open(browser, 1100, {
-      snapshotReply, progress: progressBefore('S2-07'), status: { protocol: 7, pluginVersion: '2.81.42' },
+      snapshotReply, progress: progressBefore('S2-07'), status: { protocol: 8, pluginVersion: '2.81.42' },
     }, '#/step/S2-07');
     await page.locator('.modern-show').click();
     await settle(page);
@@ -138,7 +138,7 @@ async function snapshotRefusal(browser: Browser) {
   }
   const { page, errors } = await open(browser, 1100, {
     snapshotReply: { rejected: { bankTags: 'Bank highlights are disabled' } }, progress: progressBefore('S2-07'),
-    status: { protocol: 7, pluginVersion: '2.81.42' },
+    status: { protocol: 8, pluginVersion: '2.81.42' },
   }, '#/step/S2-07');
   await page.locator('.modern-show').click();
   await settle(page);
@@ -209,7 +209,7 @@ async function questCursor(browser: Browser) {
   const earlier = quest.stages.find((s: { at: number; do: { t: string; k?: string }[] }) => s.at < last.at && s.do.length > 0 && s.do[0].k !== 'defeatGuardian');
   const { page } = await open(browser, 1440, {
     progress: progressBefore('S3-04'), localStorage: { 'osrs-put:active-step': 'S3-04' },
-    status: { protocol: 7, inGame: true, activeStepId: 'S3-04', questInstruction: { stepId: 'S3-04', stageAt: earlier.at, lineIndex: 0, peeking: false } },
+    status: { protocol: 8, inGame: true, activeStepId: 'S3-04', questInstruction: { stepId: 'S3-04', stageAt: earlier.at, lineIndex: 0, peeking: false } },
   }, '#/step/S3-04');
   const before = await text(page, '.current-action-title');
   await page.evaluate((at: number) => {
@@ -227,7 +227,7 @@ async function questObservationFreshness(browser: Browser) {
   const observation = { player: 'Fixture', sessionId: 'login-current', revision: 1, questPoints: 3, states: { "Doric's Quest": 'NOT_STARTED' } };
   const { page, errors } = await open(browser, 1280, {
     progress: progressBefore('S1-03', { gameMode: 'f2p' }),
-    status: { protocol: 7, inGame: true, player: 'Fixture', questPoints: 3, questsDone: [], questStates: observation },
+    status: { protocol: 8, inGame: true, player: 'Fixture', questPoints: 3, questsDone: [], questStates: observation },
   }, '#/journal');
   await page.locator('.la-stat b').filter({ hasText: /^3$/ }).waitFor();
   await page.evaluate(() => {

@@ -29,7 +29,7 @@ export interface FightMechanics {
   levelCap?: number;
   /** The place allows no food (Recruitment Drive's test rooms): the fight must be won on Hitpoints alone. */
   noFood?: boolean;
-  /** Only this quest arrow hurts the foe, fired from this bow or a better one (Temple of Ikov's ice arrows): the fight is that bow and arrow at the Ranged level, whatever weapon is worn. */
+  /** The fight is shot with this bow and ammunition at the Ranged level, whatever weapon is worn: only that arrow hurts the foe (Temple of Ikov's ice arrows), or melee cannot reach it and the quest supplies the bow (Another Slice of H.A.M.). */
   ammo?: { item: string; bow: string };
   facts: string[];
 }

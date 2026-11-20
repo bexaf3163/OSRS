@@ -509,6 +509,40 @@ const REVIEWED_FLOWS: Record<string, { revision: number; flow: NonNullable<Quest
     unknownItems: ['Lunar staff', 'Emerald lens', 'Emerald lantern', 'Suqah tooth', 'Suqah hide', 'Suqah leather', 'Lunar ore', 'Lunar bar', 'Lunar helm', 'Lunar torso', 'Lunar gloves', 'Lunar boots', 'Lunar legs', 'Lunar amulet', 'Lunar ring', 'Lunar cape', 'Special vial', 'Waking sleep vial', 'Seal of passage'],
     uncertainReceipts: ['Coins'], partialDelivery: false, fromStartOnly: false,
   } },
+  // The bars, herbs, hot water, pot and clay go into the favours (the Guthix rest tea, the pot lid, the weathervane); the landing lights' gems are cut and put back; tools stay.
+  'One Small Favour': { revision: 15384886, flow: {
+    consumes: [{ name: 'Steel bar', count: 4 }, { name: 'Bronze bar', count: 1 }, { name: 'Iron bar', count: 1 }, { name: 'Guam leaf', count: 2 }, { name: 'Marrentill', count: 1 }, { name: 'Harralander', count: 1 }, { name: 'Cup of hot water', count: 1 }, { name: 'Pot', count: 1 }, { name: 'Soft clay', count: 1 }],
+    receives: [],
+    unknownItems: ['Guthix rest', 'Pot lid', 'Unfired pot lid', 'Animate rock scroll', 'Weathervane pillar', 'Directionals', 'Ornament', 'Steel key ring', 'Uncut opal', 'Uncut jade', 'Uncut red topaz', 'Uncut sapphire'],
+    uncertainReceipts: ['Pigeon cage'], partialDelivery: false, fromStartOnly: false,
+  } },
+  // Nothing the route buys is used up: the artefacts are dug and cleaned in place, and the generals give the ancient mace.
+  'Another Slice of H.A.M.': { revision: 15292360, flow: {
+    consumes: [], receives: [{ name: 'Ancient mace', count: 1, when: 'complete' }],
+    unknownItems: ['Armour shard', 'Axe head', 'Helmet fragment', 'Shield fragment', 'Sword fragment', 'Mace', 'Artefact', 'Goblin symbol book'],
+    uncertainReceipts: [], partialDelivery: false, fromStartOnly: false,
+  } },
+  // The berries and the toadflax potion make the goblin potion, the dyes go on the goblin mail, the eel catches the whitefish and the gate takes 5 coins; the rod, pestle and lantern stay.
+  'Land of the Goblins': { revision: 15397552, flow: {
+    consumes: [{ name: 'Toadflax potion (unf)', count: 1 }, { name: 'Vial', count: 1 }, { name: 'Yellow dye', count: 1 }, { name: 'Blue dye', count: 1 }, { name: 'Orange dye', count: 1 },
+      { name: 'Purple dye', count: 1 }, { name: 'Raw slimy eel', count: 1 }, { name: 'Coins', count: 5 }], receives: [],
+    unknownItems: ['Pharmakos berries', 'Goblin potion', 'Black mushroom', 'Dorgesh-kaan sphere', 'Hemenster whitefish', 'Huzamogaarb key', 'Saragorgak key', 'Horogothgar key',
+      'Narogoshuun key', 'Ekeleshuun key', 'Yurkolgokh key'],
+    uncertainReceipts: ['Goblin mail', 'Black dye'], partialDelivery: false, fromStartOnly: false,
+  } },
+  // King Arthur's statue takes the granite and the scroll, and Arthur keeps the guard disguise; the black armour stays. The knights' runes are cast on the guard.
+  "King's Ransom": { revision: 15389125, flow: {
+    consumes: [{ name: 'Granite (500g)', count: 1 }, { name: 'Animate rock scroll', count: 1 }, { name: 'Bronze med helm', count: 1 }, { name: 'Iron chainbody', count: 1 }], receives: [],
+    unknownItems: ['Scrap paper', 'Address form', 'Black knight helm', 'Hair clip', 'Lockpick'],
+    uncertainReceipts: ['Law rune', 'Air rune'], partialDelivery: false, fromStartOnly: false,
+  } },
+  // Caleb takes the five fish, the rubies go into the ring and necklace, Johnathon drinks the antipoison; the blasts burn runes; the steel gauntlets are the reward.
+  'Family Crest': { revision: 15403894, flow: {
+    consumes: [{ name: 'Shrimps', count: 1 }, { name: 'Salmon', count: 1 }, { name: 'Tuna', count: 1 }, { name: 'Bass', count: 1 }, { name: 'Swordfish', count: 1 }, { name: 'Ruby', count: 2 }, { name: 'Antipoison(4)', count: 1 }],
+    receives: [{ name: 'Steel gauntlets', count: 1, when: 'complete' }],
+    unknownItems: ['Crest part', 'Perfect gold ore', 'Perfect gold bar', 'Perfect ring', 'Perfect necklace', 'Family crest'],
+    uncertainReceipts: ['Air rune', 'Death rune', 'Water rune', 'Earth rune'], partialDelivery: false, fromStartOnly: false,
+  } },
   // Nothing the route buys is handed in: the brutal arrows are shot at Slash Bash (some are lost), the knife and ogre bow stay.
   'Zogre Flesh Eaters': { revision: 15395522, flow: {
     consumes: [], receives: [],
@@ -564,8 +598,8 @@ const REVIEWED_FLOWS: Record<string, { revision: number; flow: NonNullable<Quest
   // Oronwen sews the fur and silk, the gnome takes the crunchies, logs and leather, the dyes colour four toads,
   // the still burns the coal; the mourner gear stays for Part II and the bellows refill.
   "Mourning's End Part I": { revision: 15366066, flow: {
-    consumes: [{ name: 'Bear fur', count: 1 }, { name: 'Silk', count: 2 }, { name: 'Red dye', count: 1 }, { name: 'Yellow dye', count: 1 }, { name: 'Green dye', count: 1 }, { name: 'Blue dye', count: 1 }, { name: 'Bucket of water', count: 1 }, { name: 'Feather', count: 1 }, { name: 'Toad crunchies', count: 1 }, { name: 'Magic logs', count: 1 }, { name: 'Leather', count: 1 }, { name: 'Coal', count: 10 }],
-    receives: [], unknownItems: ['Mourner letter', 'Gas mask', 'Mourner top', 'Mourner trousers', 'Mourner gloves', 'Mourner boots', 'Mourner cloak', 'Bloody mourner top', 'Ripped mourner trousers', 'Soap', 'Fixed device', 'Red toad', 'Yellow toad', 'Green toad', 'Blue toad', 'Rotten apple', 'Barrel', 'Apple barrel', 'Barrel of coal tar', 'Barrel of naphtha', 'Naphtha apple mix', 'Toxic naphtha', 'Toxic powder', 'Sieve', 'Teleport crystal'],
+    consumes: [{ name: 'Bear fur', count: 1 }, { name: 'Silk', count: 2 }, { name: 'Red dye', count: 1 }, { name: 'Yellow dye', count: 1 }, { name: 'Green dye', count: 1 }, { name: 'Blue dye', count: 1 }, { name: 'Bucket of water', count: 1 }, { name: 'Feather', count: 1 }, { name: 'Toad crunchies', count: 1 }, { name: 'Magic logs', count: 1 }, { name: 'Leather', count: 1 }, { name: 'Coal', count: 9 }, { name: 'Rotten apple', count: 1 }],
+    receives: [], unknownItems: ['Mourner letter', 'Gas mask', 'Mourner top', 'Mourner trousers', 'Mourner gloves', 'Mourner boots', 'Mourner cloak', 'Bloody mourner top', 'Ripped mourner trousers', 'Soap', 'Fixed device', 'Red toad', 'Yellow toad', 'Green toad', 'Blue toad', 'Barrel', 'Apple barrel', 'Barrel of coal tar', 'Barrel of naphtha', 'Naphtha apple mix', 'Toxic naphtha', 'Toxic powder', 'Sieve', 'Teleport crystal'],
     uncertainReceipts: ['Ogre bellows'], partialDelivery: false, fromStartOnly: false,
   } },
   // The coal, quicklime (from the limestone) and sulphur fill the barrel bomb, lit with the cloth strip woven from the wool;
@@ -703,5 +737,7 @@ const REVIEWED_CLAUSES = new Set([
   '- bypassable <ref>This requirement can be bypassed - [[Temple_of_Ikov#Fire_Warrior_of_Lesarkus|see below]]</ref>',
   'The ability to defeat a level 84 enemy with Ranged',
   'You must be able to defeat a level 111 enemy.',
+  'The ability to defeat a level 170 [[Demons|demon]] (can be [[safespot]]ted)',
+  'The ability to defeat a level 64 (using any combat style) and two level 30 enemies using either [[Ranged]] or [[Magic]].',
   'Access to each of the elemental [[runic altars]] ([[Air Altar|Air]], [[Fire Altar|Fire]], [[Water Altar|Water]], [[Earth Altar|Earth]])',
 ].map(clause => clause.toLowerCase()));

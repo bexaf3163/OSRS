@@ -31,6 +31,51 @@
       "Level 111, 100 hitpoints, ranged and crush attacks up to 13 that inflict disease. The estimate shoots bronze brutals from the ogre bow kept from Big Chompy Bird Hunting."
     ]
   },
+  "Chronozon": {
+    "url": "https://oldschool.runescape.wiki/w/Chronozon",
+    "safespot": { "spell": "Fire Blast" },
+    "facts": [
+      "Chronozon dies only after being hit at least once by each of the 4 elemental Blast spells; Family Crest needs Magic 59 for Fire Blast (OSRS Wiki Chronozon).",
+      "He can be safespotted, so the estimate casts Fire Blast from a spot he cannot reach; the other three blasts are one cast each in the step's runes."
+    ]
+  },
+  "H.A.M. Archer": {
+    "url": "https://oldschool.runescape.wiki/w/Another_Slice_of_H.A.M./Quick_guide",
+    "ammo": { "item": "Bronze bolts", "bow": "Crossbow" },
+    "facts": [
+      "Another Slice of H.A.M.'s ambush: the H.A.M. Archer and H.A.M. Mage on the tower can only be fought with Ranged or Magic, and a crossbow and 50 bronze bolts spawn upstairs for players without a ranged or magic weapon (OSRS Wiki quick guide). The estimate shoots those."
+    ]
+  },
+  "H.A.M. Mage": {
+    "url": "https://oldschool.runescape.wiki/w/Another_Slice_of_H.A.M./Quick_guide",
+    "ammo": { "item": "Bronze bolts", "bow": "Crossbow" },
+    "facts": [
+      "Another Slice of H.A.M.'s ambush: the H.A.M. Archer and H.A.M. Mage on the tower can only be fought with Ranged or Magic, and a crossbow and 50 bronze bolts spawn upstairs for players without a ranged or magic weapon (OSRS Wiki quick guide). The estimate shoots those."
+    ]
+  },
+  "Mosschin": {
+    "url": "https://oldschool.runescape.wiki/w/Land_of_the_Goblins",
+    "prayer": { "name": "Protect from Magic", "level": 37, "distance": "a few tiles away, where he only casts" },
+    "facts": [
+      "Mosschin and Redeyes attack with magic from a distance, even though the animation is a bow; a few tiles away they only cast, so Protect from Magic blocks them (OSRS Wiki Land of the Goblins).",
+      "Protect from Magic needs Prayer 37 (OSRS Wiki)."
+    ]
+  },
+  "Redeyes": {
+    "url": "https://oldschool.runescape.wiki/w/Land_of_the_Goblins",
+    "prayer": { "name": "Protect from Magic", "level": 37, "distance": "a few tiles away, where he only casts" },
+    "facts": [
+      "Mosschin and Redeyes attack with magic from a distance, even though the animation is a bow; a few tiles away they only cast, so Protect from Magic blocks them (OSRS Wiki Land of the Goblins).",
+      "Protect from Magic needs Prayer 37 (OSRS Wiki)."
+    ]
+  },
+  "Slagilith": {
+    "url": "https://oldschool.runescape.wiki/w/Slagilith",
+    "weapon": { "item": "Adamant pickaxe", "damageMultiplier": 1 },
+    "facts": [
+      "Only pickaxes hurt the Slagilith fully; other weapons deal reduced damage (One Small Favour quick guide). The estimate fights it with an adamant pickaxe."
+    ]
+  },
   "Entrana firebird": {
     "url": "https://oldschool.runescape.wiki/w/Entrana_firebird",
     "bare": true,

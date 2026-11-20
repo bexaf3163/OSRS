@@ -111234,6 +111234,4015 @@
      ]
     }
    ]
+  },
+  "S9-84": {
+   "var": [
+    "varp",
+    148
+   ],
+   "route": [
+    {
+     "title": "Starting out",
+     "steps": [
+      "Talk to Dimintheis in a house south-east of the east bank (along city wall) in Varrock and north of the fancy dress shop. Dialogue: \"Hi, I am a bold adventurer.\", \"So where is this crest?\", \"Ok, I will help you.\"",
+      "Head to Catherby and talk to Caleb in the building north-east of the bank. Dialogue: \"Are you Caleb Fitzharmon?\", \"So can I have your bit?\", \"Ok, I will get those.\"",
+      "Speak to him again and give him all the fish. Note: Ask of the whereabouts of the other crest parts, or you will not be able to progress!Dialogue: \"Uh... what happened to the rest of it?\"",
+      "Speak to the Gem Trader in Al Kharid. Dialogue: \"I'm in search of a man named Avan Fitzharmon.\"",
+      "Go north of the Gem Trader to the scorpion mining pit, and speak to the 'Man' with the yellow cape there (Avan). Dialogue: \"I'm looking for a man named Avan Fitzharmon.\""
+     ]
+    },
+    {
+     "title": "The 'perfect' necklace and ring",
+     "steps": [
+      "Head into the Dwarven Mine underneath Ice Mountain and run to the far most western end and speak to Boot. Dialogue: \"Hello. I'm in search of very high quality gold.\"",
+      "Teleport to Ardougne, head east and climb down the old ruin entrance to the Witchaven Dungeon near Witchaven and Ardougne ship port. (Labelled on the world map by the File:Dungeon map link icon.png icon. You may need to defend yourself against some hellhounds, so come prepared).",
+      "Enter the dungeon. Do not enter the wall to the east. There is a north room, a south room, and a locked eastern room that contains hellhounds and the perfect gold ore.",
+      "To unlock the east gate:",
+      "Go into the hellhound room and mine 2 'perfect' gold ores. Their aggro range is short so try to zigzag through them. Anticipating hits will manageably yield the ores with a rune pickaxe. Alternatively, low level players can stand in a safespot for 10 minutes so the hellhounds stop being aggressive.",
+      "Go to a furnace (northern Lumbridge - the home teleport, once every 30 minutes) and smelt the ores into bars, then use the bars on the furnace again and make one 'perfect' ruby necklace and 'perfect' ruby ring. Be careful not to use make-all as it will make two rings or necklaces",
+      "Go back to the 'Man' (Avan) and give him the jewellery to receive the second crest piece."
+     ]
+    },
+    {
+     "title": "Fighting Chronozon",
+     "steps": [
+      "Teleport to Varrock (lumberyard teleport), and head north-east to the Jolly Boar Inn near the lumberyard. Go upstairs and speak to Johnathon. Speak to him, and use your anti-poison on him to learn the location of the final crest piece.",
+      "Prepare for the fight:",
+      "Go to Edgeville or the small hut west of Varrock if you have a brass key to enter the Edgeville Dungeon.",
+      "Head to the gate dividing the Wilderness from the rest of the dungeon.",
+      "Travel slightly north, then make a left past the thugs and Chaos druids, through a second gate.",
+      "Travel west, then south past the poison spiders and Black demons, where you will find Chronozon.",
+      "Safespot him between the southern rocks. You may have to kill a poison spider first.",
+      "Pick up the last crest piece and teleport out.",
+      "Assemble the Family crest and head back to Dimintheis in Varrock to conclude.",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Talk to Dimintheis in south east Varrock.",
+       "s": "Talk to Dimintheis in south east Varrock.",
+       "k": "talkToDimintheis",
+       "at": [
+        3280,
+        3402,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4984
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 1,
+     "do": [
+      {
+       "t": "Talk to Caleb in Catherby.",
+       "s": "Talk to Caleb in Catherby.",
+       "k": "talkToCaleb",
+       "at": [
+        2819,
+        3452,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4317
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 2,
+     "do": [
+      {
+       "t": "Talk to Caleb again with the required fish.",
+       "s": "Talk to Caleb again with the required fish.",
+       "k": "talkToCalebWithFish",
+       "at": [
+        2819,
+        3452,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4317
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 3,
+     "do": [
+      {
+       "t": "Talk to Caleb in Catherby once more.",
+       "s": "Talk to Caleb in Catherby once more.",
+       "k": "talkToCalebOnceMore",
+       "at": [
+        2819,
+        3452,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4317
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 4,
+     "do": [
+      {
+       "t": "Talk to the Gem Trader in Al Kharid.",
+       "s": "Talk to the Gem Trader in Al Kharid.",
+       "k": "talkToGemTrader",
+       "at": [
+        3286,
+        3211,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2874
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 5,
+     "do": [
+      {
+       "t": "Talk to the man south of the Al Kharid mine.",
+       "s": "Talk to the man south of the Al Kharid mine.",
+       "k": "talkToMan",
+       "at": [
+        3295,
+        3275,
+        0
+       ],
+       "hl": {
+        "npc": [
+         385
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 6,
+     "do": [
+      {
+       "t": "Talk to Boot in the south western Dwarven Mines.",
+       "s": "Talk to Boot in the south western Dwarven Mines.",
+       "k": "enterDwarvenMine",
+       "at": [
+        3019,
+        3450,
+        0
+       ],
+       "hl": {
+        "obj": [
+         11867
+        ]
+       }
+      },
+      {
+       "t": "Talk to Boot in the south western Dwarven Mines.",
+       "s": "Talk to Boot in the south western Dwarven Mines.",
+       "k": "talkToBoot",
+       "at": [
+        2984,
+        9810,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4985
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 7,
+     "do": [
+      {
+       "t": "Enter the old ruin entrance west of Witchaven.",
+       "s": "Enter the old ruin entrance west of Witchaven.",
+       "k": "enterWitchavenDungeon",
+       "at": [
+        2696,
+        3283,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18270
+        ]
+       }
+      },
+      {
+       "t": "Follow the dungeon around to the east.",
+       "s": "Follow the dungeon around to the east.",
+       "k": "followPathAroundEast",
+       "at": [
+        2721,
+        9700,
+        0
+       ]
+      },
+      {
+       "t": "Follow the path around, and pull the lever on the wall in the north-east corner.",
+       "s": "Pull the lever in the north-east corner.",
+       "k": "pullNorthLever",
+       "at": [
+        2722,
+        9710,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2421
+        ]
+       }
+      },
+      {
+       "t": "Pull the lever in the south room up.",
+       "s": "Pull the lever in the south room up.",
+       "k": "pullSouthRoomLever",
+       "at": [
+        2724,
+        9669,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2423
+        ]
+       }
+      },
+      {
+       "t": "Pull the north wall lever again.",
+       "s": "Pull the north wall lever again.",
+       "k": "pullNorthLeverAgain",
+       "at": [
+        2722,
+        9710,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2422
+        ]
+       }
+      },
+      {
+       "t": "Pull the lever in the north room up.",
+       "s": "Pull the lever in the north room up.",
+       "k": "pullNorthRoomLever",
+       "at": [
+        2722,
+        9718,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2425
+        ]
+       }
+      },
+      {
+       "t": "Pull the north wall lever again.",
+       "s": "Pull the north wall lever again.",
+       "k": "pullNorthLever3",
+       "at": [
+        2722,
+        9710,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2421
+        ]
+       }
+      },
+      {
+       "t": "Pull the lever in the south room down.",
+       "s": "Pull the lever in the south room down.",
+       "k": "pullSouthRoomLever2",
+       "at": [
+        2724,
+        9669,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2424
+        ]
+       }
+      },
+      {
+       "t": "Mine 2 perfect gold in the east room.",
+       "s": "Mine 2 perfect gold in the east room.",
+       "k": "mineGold",
+       "at": [
+        2732,
+        9680,
+        0
+       ],
+       "hl": {
+        "obj": [
+         11371
+        ]
+       }
+      },
+      {
+       "t": "Smelt the perfect gold ore into bars.",
+       "s": "Smelt the perfect gold ore into bars.",
+       "k": "smeltGold",
+       "at": [
+        3273,
+        3186,
+        0
+       ],
+       "hl": {
+        "obj": [
+         24009
+        ]
+       }
+      },
+      {
+       "t": "Make a perfect ruby necklace at a furnace. Craft only one.",
+       "s": "Make one perfect ruby necklace at a furnace.",
+       "k": "makeNecklace",
+       "hl": {
+        "obj": [
+         24009
+        ]
+       }
+      },
+      {
+       "t": "Make a perfect ruby ring at a furnace. Make sure to only craft one.",
+       "s": "Make a perfect ruby ring at a furnace. Make sure to only craft one.",
+       "k": "makeRing",
+       "hl": {
+        "obj": [
+         24009
+        ]
+       }
+      },
+      {
+       "t": "Return to the man south of the Al Kharid mine.",
+       "s": "Return to the man south of the Al Kharid mine.",
+       "k": "returnToMan",
+       "at": [
+        3295,
+        3275,
+        0
+       ],
+       "hl": {
+        "npc": [
+         386
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 8,
+     "do": [
+      {
+       "t": "Go upstairs in the Jolly Boar Inn north-east of Varrock and talk to Johnathon.",
+       "s": "Talk to Johnathon upstairs in the Jolly Boar Inn.",
+       "k": "goUpToJohnathon",
+       "at": [
+        3286,
+        3494,
+        0
+       ],
+       "hl": {
+        "obj": [
+         11797
+        ]
+       }
+      },
+      {
+       "t": "Talk to Johnathon.",
+       "s": "Talk to Johnathon.",
+       "k": "talkToJohnathon",
+       "at": [
+        3277,
+        3504,
+        1
+       ],
+       "hl": {
+        "npc": [
+         5443
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 9,
+     "do": [
+      {
+       "t": "Go upstairs in the Jolly Boar Inn north-east of Varrock and talk to Johnathon.",
+       "s": "Talk to Johnathon upstairs in the Jolly Boar Inn.",
+       "k": "goUpToJohnathon",
+       "at": [
+        3286,
+        3494,
+        0
+       ],
+       "hl": {
+        "obj": [
+         11797
+        ]
+       }
+      },
+      {
+       "t": "Give Johnathon some antipoison.",
+       "s": "Give Johnathon some antipoison.",
+       "k": "giveJohnathonAntipoison",
+       "at": [
+        3277,
+        3504,
+        1
+       ],
+       "hl": {
+        "npc": [
+         5443
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 10,
+     "do": [
+      {
+       "t": "Enter the Edgeville Wilderness Dungeon, ready to kill Chronozon. Other players can attack you there.",
+       "s": "Enter the Edgeville Wilderness Dungeon for Chronozon.",
+       "k": "goDownToChronizon",
+       "at": [
+        3097,
+        3468,
+        0
+       ],
+       "hl": {
+        "obj": [
+         1581
+        ]
+       }
+      },
+      {
+       "t": "Kill Chronozon in the south-west corner of the Edgeville Wilderness Dungeon. Hit him at least once with each of the 4 elemental Blast spells; Fire Blast from a safespot does the rest.",
+       "s": "Kill Chronozon with all 4 Blast spells from a safespot.",
+       "k": "killChronizon",
+       "at": [
+        3087,
+        9936,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4987
+        ]
+       }
+      },
+      {
+       "t": "Pick up the crest part.",
+       "s": "Pick up the crest part.",
+       "k": "pickUpCrest3"
+      },
+      {
+       "t": "Combine the 3 crest parts together.",
+       "s": "Combine the 3 crest parts together.",
+       "k": "repairCrest"
+      },
+      {
+       "t": "Return the family crest to Dimintheis in south east Varrock.",
+       "s": "Return the family crest to Dimintheis in south east Varrock.",
+       "k": "returnCrest",
+       "at": [
+        3280,
+        3402,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4984
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  "S9-85": {
+   "var": [
+    "varp",
+    416
+   ],
+   "route": [
+    {
+     "title": "Agreeing to the favours",
+     "steps": [
+      "Talk to Yanni Salika in Shilo Village (north of the bridge at the quest icon). Dialogue: \"Is there anything else interesting to do around here?\", \"Ok, see you in a tick!\", \"Il'l get going then!\"",
+      "If mining your own gems, do this now at the Shilo Village Mine.",
+      "Talk to a Jungle forester south of Shilo at the tree line (make sure to have 1 free inventory space to receive blunt axe). Dialogue: \"I need to talk to you about red mahogany.\", \"Ok, I'll take your axe to get it sharpened.\"",
+      "Travel tip: Use the minigames teleport to Pest Control, then leave by talking to the Squire to the north and you'll be at Port Sarim. Or you Can use the Rat Pits teleport to Port Sarim, if you have completed Rat Catchers.",
+      "Talk to Brian in the Port Sarim axe shop. Dialogue: \"Do you sharpen axes?\", \"Look, can you sharpen this cursed axe or what?\", \"Ok, ok, I'll do it! I'll go and see Aggie.\"",
+      "Talk to Aggie in Draynor Village. Dialogue: \"Can I ask you about being a character witness?\", \"Let me guess, you're going to ask me to do you a favour?\", \"Oh, Ok, I'll see if I can find Jimmy.\"",
+      "Talk to Johanhus Ulsbrecht near the prison inside of the H.A.M. Hideout. Dialogue: \"I'm looking for Jimmy the Chisel.\", \"And I suppose you need me to do you a favour?\", \"Ok, Jimmy has to be worth more than a few scrawny chickens!\"",
+      "Talk to Fred the Farmer NE of the H.A.M. Hideout at the Sheep Shearer quest start point. Dialogue: \"I need to talk to you about Jimmy.\" (4 if you haven't done Sheep Shearer)",
+      "Prepare a bowl of hot water and take a pot in the Lumbridge Castle kitchen if needed. Gather 3 steel bars if not already carrying.",
+      "Talk to Seth Groats in the chicken farm east of River Lum. Dialogue: \"Oh, ok! I guess it's not that much further to Varrock!\"",
+      "Talk to Horvik at the armour shop in Varrock. Give him 3 steel bars. Dialogue: \"Hi, I need to talk to you about chicken cages!\", \"Ok, I guess one good turn deserves another.\"",
+      "Talk to the Apothecary in Varrock south of the western bank. Dialogue: \"Talk about One Small Favour.\", \"I guess I can go to Barbarian Village.\"",
+      "Travel tip: amulet of glory to Edgeville, run south or use a skull sceptre.",
+      "Talk to Tassie Slipcast in the Barbarian Village at the pottery icon on the minimap. Dialogue: \"Ok, I'll deal with Hammerspike!\"",
+      "Travel tip: teleport to the Mining Guild using a skills necklace.",
+      "Talk to Hammerspike Stoutbeard in the most western portion of the Dwarven Mines (SW of the Ice Mountain entrance). Dialogue: \"Oh, come on...do something nice for Tassie.\", \"Have you always been a gangster?\", \"Ok, another favour...I think I can manage that.\"",
+      "Gather one harralander, two guam leaves, and one marrentill.",
+      "Travel tip: If you have 10 Construction you can use Taverley teleport. If you're an ironman without redirect scrolls and have completed Enlightened Journey, ring of dueling to Castle Wars and take the Balloon Transport System to Taverley",
+      "Pick up the cup of tea from the house north of Sanfew, then drink the tea to obtain an empty cup, if you haven't got one already.",
+      "Talk to Sanfew on the top floor of the Taverley herblore shop about initiates. Dialogue: \"Are you taking any new initiates?\", \"Do you accept dwarves?\", \"A dwarf I know wants to become an initiate.\", \"Yep, it's a deal.\" (2-2-3-1 if you have completed Eadgar's Ruse)",
+      "Add your bowl of hot water to a teacup. Add a harralander, 2 guam leaves, and a marrentill. The empty bowl can be dropped afterwards.",
+      "Travel tip: Ring of dueling to Al Kharid, then use the gnome glider to White Wolf Mountain.",
+      "Talk to Captain Bleemadge on top of White Wolf Mountain at the gnome glider icon on the minimap. Dialogue: \"I have a special tea here for you from Sanfew!\", \"Ok, I'll go and get you some T.R.A.S.H.\"",
+      "Talk to Arhein on the Catherby docks south of the bank. Dialogue: \"I need to talk T.R.A.S.H to you.\", \"Yes, Ok, I'll do it!\"",
+      "Talk to Phantuwti Fanstuwi Farsight in the building north of the Seers' chapel. Dialogue: \"Hi, can you give me a weather forecast?\", \"What can I do to help?\", \"Yes, Ok, I'll do it.\"",
+      "Travel tip: teleport to the Fishing Guild using a skills necklace.",
+      "Enter the Goblin Cave south-east of the Fishing Guild. Go to the most NE room. Right-click and search the sculpture.",
+      "Travel tip: Ardougne Teleport",
+      "Talk to Wizard Cromperty in NE Ardougne at the transportation icon. Dialogue: \"I need to talk to you about a girl stuck in some rock!\", \"Oh! Ok, one more 'small favour' isn't going to kill me...I hope!\" ( Dialogue: \"Chat.\", \"I need to talk to you about a girl stuck in some rock!\", \"Oh! Ok, one more 'small favour' isn't going to kill me...I hope!\" if you have completed the Ardougne Medium Diary)",
+      "You can take the hammer and chisel south of Cromperty if you didn't bring your own.",
+      "Travel tip: Fishing Trawler Minigame Teleport",
+      "Talk to Tindel Marchant on the Port Khazard south dock. Dialogue: \"Ask about iron oxide.\", \"Ok, I'll do it!\"",
+      "Bring your cut gems, two of each: opal, jade, sapphire, and red topaz (can be mined with 40 Mining at Shilo Village) if you have them, otherwise, bring some gold in case you crush a gem in the upcoming step.",
+      "Travel tip: fairy ring teleport () or ring of dueling to Castle Wars and walk east",
+      "Talk to Rantz in the eastern Feldip Hills at the quest icon on the minimap. Dialogue: \"I need to talk to you about a mattress.\", \"Can you fill this mattress with feathers?\", \"Ok, I'll see what I can do.\"",
+      "Talk to Gnormadium Avlafrim west of Rantz. Dialogue: \"Rantz said I should help you finish this project.\", \"Yes, I'll take a look at them.\" (at the gnome glider icon on the minimap)",
+      "Search each landing light, cut the gem, and put the cut gem back. If you crush a gem, the gnome will sell you up to 2 new ones for 500 coins."
+     ]
+    },
+    {
+     "title": "Completing the favours",
+     "steps": [
+      "Talk to Gnormadium Avlafrim. Dialogue: \"I've fixed all the lights!\"",
+      "Talk to Rantz. Dialogue: \"Ok, I've helped that Gnome, he shouldn't bother you anymore.\"",
+      "Travel Tip: Watchtower teleport run north-east. Monastery Teleport via Ardougne cloak then south-east or use Port Khazard Teleport from Lunar Spellbook, or use the minigame teleport to Fishing Trawler or fairy ring and run south",
+      "Talk to Tindel Marchant. Dialogue: \"I have the mattress.\"",
+      "Talk to Wizard Cromperty in Ardougne. Dialogue: \"I have that iron oxide you asked for!\" (Dialogue: \"Chat.\", \"I have that iron oxide you asked for!\" if you have completed the Ardougne Medium Diary)",
+      "Take 5 pigeon cages (south of the north Ardougne bank) if needed, and get ready to fight Slagilith.",
+      "Return to the fishing guild cave, stand in front of the sculpture and read the animate rock scroll.",
+      "Kill the level 92 Slagilith.",
+      "Read the scroll again to free Petra. Make sure you finish the dialogue with her, or else you won't be able to make progress.",
+      "Talk to Phantuwti Fanstuwi Farsight in Seers' Village. Dialogue: \"I've released Petra, she should have returned.\", \"I'll run through you if you don't give me that weather report.\", \"Why can't you get a clear picture?\", \"Which special Seers tools do you mean?\", \"You're talking in riddles, just give me a straight answer!\", \"What do you mean, 'special combination of items'?\"",
+      "Climb to the roof of his house search the weather vane, use a hammer on it and search it again for 3 parts.",
+      "Use each part on an anvil while holding a bronze, iron, and steel bar. There is an anvil north of his house.",
+      "Put each part back on the vane.",
+      "Talk to Phantuwti Fanstuwi Farsight. Dialogue: \"I've fixed the weather vane!\"",
+      "Talk to Arhein in Catherby. Dialogue: \"I have the weather report for you.\"",
+      "Talk to Captain Bleemadge on White Wolf Mountain. Dialogue: \"Hey there, did you get your T.R.A.S.H?\"",
+      "Talk to Sanfew in Taverley. Dialogue: \"Hi there, the Gnome Pilot has agreed to take you to see the ogres!\" (Dialogue: \"Hi there, the Gnome Pilot has agreed to take you to see the ogres!)\" if you have completed Eadgar's Ruse)",
+      "Travel Tip: Use a skills necklace to teleport to the Mining Guild or use the combat bracelet to teleport to the Edgeville Monastery",
+      "Gather combat gear and a weapon for killing Hammerspike's gangsters (Combat levels 44, 48, and 49)",
+      "Go and talk to Hammerspike Stoutbeard in the Dwarven Mine.",
+      "Kill his gang members, then talk to him again.",
+      "Talk to Tassie Slipcast in Barbarian Village. She will give you clay. Spin it into a pot lid, then fire the pot lid in the pottery oven.",
+      "Use the pot lid on an empty pot. This is found in the house to the north.",
+      "Talk to the Apothecary with the pot lid and a pot. Dialogue: \"Talk about One Small Favour.\" (Dialogue: \"Talk about One Small Favour)\" if you have completed A Tail of Two Cats)",
+      "Bring 5 pigeon cages for the next step.",
+      "Talk to Horvik in the Varrock Armour shop. Dialogue: \"I have the tincture and breathing salts.\"",
+      "Talk to Horvik again. Dialogue: \"I have the five pigeon cages you asked for!\"",
+      "Talk to Seth Groats at the Lumbridge chicken farm.",
+      "Talk to Johanhus in the H.A.M. camp. Dialogue: \"You're in luck, I managed to swing that chicken deal for you.\"",
+      "Talk to Aggie in Draynor. Dialogue: \"Good news! Jimmy has been released!\"",
+      "Talk to Brian in Port Sarim. Dialogue: \"I've returned with good news.\"",
+      "Talk to a Jungle forester south of Shilo Village. Dialogue: \"Good news, I have your sharpened axe!\"",
+      "Talk to Yanni in Shilo Village, wait for the dialogue to finish. Dialogue: \"Here's the red mahogany you asked for.\"",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Talk to Yanni Salika in Shilo Village: fairy ring CKR, or the cart from Brimhaven.",
+       "s": "Talk to Yanni Salika in Shilo Village.",
+       "k": "talkToYanni",
+       "at": [
+        2836,
+        2983,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5361
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 5,
+     "do": [
+      {
+       "t": "Talk to a Jungle Forester south of Shilo Village.",
+       "s": "Talk to a Jungle Forester south of Shilo Village.",
+       "k": "talkToJungleForester",
+       "at": [
+        2861,
+        2942,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "at": 10,
+     "do": [
+      {
+       "t": "Talk to Brian in the Port Sarim axe shop.",
+       "s": "Talk to Brian in the Port Sarim axe shop.",
+       "k": "talkToBrian",
+       "at": [
+        3027,
+        3249,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2892
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 15,
+     "do": [
+      {
+       "t": "Talk to Brian in the Port Sarim axe shop.",
+       "s": "Talk to Brian in the Port Sarim axe shop.",
+       "k": "talkToBrian",
+       "at": [
+        3027,
+        3249,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2892
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 20,
+     "do": [
+      {
+       "t": "Talk to Aggie in Draynor Village.",
+       "s": "Talk to Aggie in Draynor Village.",
+       "k": "talkToAggie",
+       "at": [
+        3086,
+        3258,
+        0
+       ],
+       "hl": {
+        "npc": [
+         120
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 25,
+     "do": [
+      {
+       "t": "Enter the H.A.M. hideout west of Lumbridge and talk to Johanhus Ulsbrecht inside.",
+       "s": "Talk to Johanhus Ulsbrecht in the H.A.M. hideout.",
+       "k": "goDownToJohanhus",
+       "at": [
+        3166,
+        3252,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5492
+        ]
+       }
+      },
+      {
+       "t": "Talk to Johanhus Ulsbrecht in the south of the H.A.M hideout.",
+       "s": "Talk to Johanhus Ulsbrecht in the south of the H.A.M hideout.",
+       "k": "talkToJohanhus",
+       "at": [
+        3171,
+        9619,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2535
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 30,
+     "do": [
+      {
+       "t": "Enter the H.A.M. hideout west of Lumbridge and talk to Johanhus Ulsbrecht inside.",
+       "s": "Talk to Johanhus Ulsbrecht in the H.A.M. hideout.",
+       "k": "goDownToJohanhus",
+       "at": [
+        3166,
+        3252,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5492
+        ]
+       }
+      },
+      {
+       "t": "Talk to Johanhus Ulsbrecht in the south of the H.A.M hideout.",
+       "s": "Talk to Johanhus Ulsbrecht in the south of the H.A.M hideout.",
+       "k": "talkToJohanhus",
+       "at": [
+        3171,
+        9619,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2535
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 35,
+     "do": [
+      {
+       "t": "Enter the H.A.M. hideout west of Lumbridge and talk to Johanhus Ulsbrecht inside.",
+       "s": "Talk to Johanhus Ulsbrecht in the H.A.M. hideout.",
+       "k": "goDownToJohanhus",
+       "at": [
+        3166,
+        3252,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5492
+        ]
+       }
+      },
+      {
+       "t": "Talk to Johanhus Ulsbrecht in the south of the H.A.M hideout.",
+       "s": "Talk to Johanhus Ulsbrecht in the south of the H.A.M hideout.",
+       "k": "talkToJohanhus",
+       "at": [
+        3171,
+        9619,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2535
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 40,
+     "do": [
+      {
+       "t": "Enter the H.A.M. hideout west of Lumbridge and talk to Johanhus Ulsbrecht inside.",
+       "s": "Talk to Johanhus Ulsbrecht in the H.A.M. hideout.",
+       "k": "goDownToJohanhus",
+       "at": [
+        3166,
+        3252,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5492
+        ]
+       }
+      },
+      {
+       "t": "Talk to Johanhus Ulsbrecht in the south of the H.A.M hideout.",
+       "s": "Talk to Johanhus Ulsbrecht in the south of the H.A.M hideout.",
+       "k": "talkToJohanhus",
+       "at": [
+        3171,
+        9619,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2535
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 45,
+     "do": [
+      {
+       "t": "Talk to Fred the Farmer north of Lumbridge.",
+       "s": "Talk to Fred the Farmer north of Lumbridge.",
+       "k": "talkToFred",
+       "at": [
+        3190,
+        3273,
+        0
+       ],
+       "hl": {
+        "npc": [
+         732
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 50,
+     "do": [
+      {
+       "t": "Talk to Seth Groats in the farm north-east of Lumbridge, across the river.",
+       "s": "Talk to Seth Groats north-east of Lumbridge.",
+       "k": "talkToSeth",
+       "at": [
+        3228,
+        3291,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1351
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 55,
+     "do": [
+      {
+       "t": "Talk to Horvik in the armour shop north east of the Varrock square.",
+       "s": "Talk to Horvik in the armour shop north east of the Varrock square.",
+       "k": "talkToHorvik",
+       "at": [
+        3229,
+        3437,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2882
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 60,
+     "do": [
+      {
+       "t": "Talk to the Apothecary in west Varrock.",
+       "s": "Talk to the Apothecary in west Varrock.",
+       "k": "talkToApoth",
+       "at": [
+        3196,
+        3404,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5036
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 62,
+     "do": [
+      {
+       "t": "Talk to the Apothecary in west Varrock.",
+       "s": "Talk to the Apothecary in west Varrock.",
+       "k": "talkToApoth",
+       "at": [
+        3196,
+        3404,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5036
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 63,
+     "do": [
+      {
+       "t": "Talk to the Apothecary in west Varrock.",
+       "s": "Talk to the Apothecary in west Varrock.",
+       "k": "talkToApoth",
+       "at": [
+        3196,
+        3404,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5036
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 65,
+     "do": [
+      {
+       "t": "Talk to Tassie Slipcast in the Barbarian Village pottery building.",
+       "s": "Talk to Tassie Slipcast in the Barbarian Village pottery building.",
+       "k": "talkToTassie",
+       "at": [
+        3085,
+        3409,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1352
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 70,
+     "do": [
+      {
+       "t": "Go into the Dwarven Mine and talk to Hammerspike Stoutbeard on its west side.",
+       "s": "Talk to Hammerspike Stoutbeard in the Dwarven Mine.",
+       "k": "goDownToHammerspike",
+       "at": [
+        3019,
+        3450,
+        0
+       ],
+       "hl": {
+        "obj": [
+         11867
+        ]
+       }
+      },
+      {
+       "t": "Talk to Hammerspike Stoutbeard in the west cavern of the Dwarven Mine.",
+       "s": "Talk to Hammerspike Stoutbeard in the west cavern of the Dwarven Mine.",
+       "k": "talkToHammerspike",
+       "at": [
+        2968,
+        9811,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1353
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 75,
+     "do": [
+      {
+       "t": "Talk to Sanfew upstairs in the Taverley herblore store.",
+       "s": "Talk to Sanfew, upstairs in the Taverley herblore store",
+       "k": "goUpToSanfew",
+       "at": [
+        2899,
+        3429,
+        0
+       ],
+       "hl": {
+        "obj": [
+         16671
+        ]
+       }
+      },
+      {
+       "t": "Talk to Sanfew upstairs in the Taverley herblore store.",
+       "s": "Talk to Sanfew, upstairs in the Taverley herblore store",
+       "k": "talkToSanfew",
+       "at": [
+        2899,
+        3429,
+        1
+       ],
+       "hl": {
+        "npc": [
+         5044
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 80,
+     "do": [
+      {
+       "t": "Use a bowl of hot water on an empty cup.",
+       "s": "Use a bowl of hot water on an empty cup.",
+       "k": "useBowlOnCup"
+      },
+      {
+       "t": "Use 2 guams, a marrentill and a harralander on the cup.",
+       "s": "Use 2 guams, a marrentill and a harralander on the cup.",
+       "k": "useHerbsOnCup"
+      },
+      {
+       "t": "Right-click talk to Captain Bleemadge on White Wolf Mountain.",
+       "s": "Right-click talk to Captain Bleemadge on White Wolf Mountain.",
+       "k": "talkToBleemadge",
+       "at": [
+        2847,
+        3498,
+        0
+       ],
+       "hl": {
+        "npc": [
+         10459
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 81,
+     "do": [
+      {
+       "t": "Use a bowl of hot water on an empty cup.",
+       "s": "Use a bowl of hot water on an empty cup.",
+       "k": "useBowlOnCup"
+      },
+      {
+       "t": "Use 2 guams, a marrentill and a harralander on the cup.",
+       "s": "Use 2 guams, a marrentill and a harralander on the cup.",
+       "k": "useHerbsOnCup"
+      },
+      {
+       "t": "Right-click talk to Captain Bleemadge on White Wolf Mountain.",
+       "s": "Right-click talk to Captain Bleemadge on White Wolf Mountain.",
+       "k": "talkToBleemadge",
+       "at": [
+        2847,
+        3498,
+        0
+       ],
+       "hl": {
+        "npc": [
+         10459
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 82,
+     "do": [
+      {
+       "t": "Use a bowl of hot water on an empty cup.",
+       "s": "Use a bowl of hot water on an empty cup.",
+       "k": "useBowlOnCup"
+      },
+      {
+       "t": "Use 2 guams, a marrentill and a harralander on the cup.",
+       "s": "Use 2 guams, a marrentill and a harralander on the cup.",
+       "k": "useHerbsOnCup"
+      },
+      {
+       "t": "Right-click talk to Captain Bleemadge on White Wolf Mountain.",
+       "s": "Right-click talk to Captain Bleemadge on White Wolf Mountain.",
+       "k": "talkToBleemadge",
+       "at": [
+        2847,
+        3498,
+        0
+       ],
+       "hl": {
+        "npc": [
+         10459
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 83,
+     "do": [
+      {
+       "t": "Use a bowl of hot water on an empty cup.",
+       "s": "Use a bowl of hot water on an empty cup.",
+       "k": "useBowlOnCup"
+      },
+      {
+       "t": "Use 2 guams, a marrentill and a harralander on the cup.",
+       "s": "Use 2 guams, a marrentill and a harralander on the cup.",
+       "k": "useHerbsOnCup"
+      },
+      {
+       "t": "Right-click talk to Captain Bleemadge on White Wolf Mountain.",
+       "s": "Right-click talk to Captain Bleemadge on White Wolf Mountain.",
+       "k": "talkToBleemadge",
+       "at": [
+        2847,
+        3498,
+        0
+       ],
+       "hl": {
+        "npc": [
+         10459
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 84,
+     "do": [
+      {
+       "t": "Use a bowl of hot water on an empty cup.",
+       "s": "Use a bowl of hot water on an empty cup.",
+       "k": "useBowlOnCup"
+      },
+      {
+       "t": "Use 2 guams, a marrentill and a harralander on the cup.",
+       "s": "Use 2 guams, a marrentill and a harralander on the cup.",
+       "k": "useHerbsOnCup"
+      },
+      {
+       "t": "Right-click talk to Captain Bleemadge on White Wolf Mountain.",
+       "s": "Right-click talk to Captain Bleemadge on White Wolf Mountain.",
+       "k": "talkToBleemadge",
+       "at": [
+        2847,
+        3498,
+        0
+       ],
+       "hl": {
+        "npc": [
+         10459
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 86,
+     "do": [
+      {
+       "t": "Right-click talk to Captain Bleemadge on White Wolf Mountain.",
+       "s": "Right-click talk to Captain Bleemadge on White Wolf Mountain.",
+       "k": "talkToBleemadgeNoTea",
+       "at": [
+        2847,
+        3498,
+        0
+       ],
+       "hl": {
+        "npc": [
+         10459
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 88,
+     "do": [
+      {
+       "t": "Talk to Arhein in Catherby.",
+       "s": "Talk to Arhein in Catherby.",
+       "k": "talkToArhein",
+       "at": [
+        2804,
+        3432,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3200
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 90,
+     "do": [
+      {
+       "t": "Talk to Phantuwti in the south west house of Seers' Village.",
+       "s": "Talk to Phantuwti in the south west house of Seers' Village.",
+       "k": "talkToPhantuwti",
+       "at": [
+        2702,
+        3473,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1357
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 95,
+     "do": [
+      {
+       "t": "Enter the cave south east of the Fishing Guild.",
+       "s": "Enter the cave south east of the Fishing Guild.",
+       "k": "enterGoblinCave",
+       "at": [
+        2624,
+        3393,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2
+        ]
+       }
+      },
+      {
+       "t": "Right-click search the sculpture in the wall in the north-east corner of the cave.",
+       "s": "Search the sculpture in the cave's north-east wall.",
+       "k": "searchWall",
+       "at": [
+        2621,
+        9835,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5808
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 100,
+     "do": [
+      {
+       "t": "Talk to Wizard Cromperty in north east Ardougne.",
+       "s": "Talk to Wizard Cromperty in north east Ardougne.",
+       "k": "talkToCromperty",
+       "at": [
+        2684,
+        3323,
+        0
+       ],
+       "hl": {
+        "npc": [
+         8480
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 105,
+     "do": [
+      {
+       "t": "Talk to Tindel Marchant in Port Khazard.",
+       "s": "Talk to Tindel Marchant in Port Khazard.",
+       "k": "talkToTindel",
+       "at": [
+        2678,
+        3153,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1358
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 110,
+     "do": [
+      {
+       "t": "Talk to Rantz in the Feldip Hills: fairy ring AKS or a Feldip Hills teleport.",
+       "s": "Talk to Rantz in the Feldip Hills.",
+       "k": "talkToRantz",
+       "at": [
+        2631,
+        2969,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1470
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 115,
+     "do": [
+      {
+       "t": "Talk to Gnormadium Avlafrim west of Rantz.",
+       "s": "Talk to Gnormadium Avlafrim west of Rantz.",
+       "k": "talkToGnormadium",
+       "at": [
+        2542,
+        2968,
+        0
+       ],
+       "hl": {
+        "npc": [
+         7516
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 120,
+     "do": [
+      {
+       "t": "Take a jade from the north east landing light.",
+       "s": "Take a jade from the north east landing light.",
+       "has": "Uncut jade",
+       "k": "take1",
+       "at": [
+        2554,
+        2974,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5820
+        ]
+       }
+      },
+      {
+       "t": "Cut the uncut jade.",
+       "s": "Cut the uncut jade.",
+       "has": "Jade",
+       "k": "cutJade"
+      },
+      {
+       "t": "Put a jade into the north east landing light.",
+       "s": "Put a jade into the north east landing light.",
+       "k": "put1",
+       "at": [
+        2554,
+        2974,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5820
+        ]
+       }
+      },
+      {
+       "t": "Take a red topaz from the landing light.",
+       "s": "Take a red topaz from the landing light.",
+       "has": "Uncut red topaz",
+       "k": "take2",
+       "at": [
+        2551,
+        2974,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5822
+        ]
+       }
+      },
+      {
+       "t": "Cut the uncut red topaz.",
+       "s": "Cut the uncut red topaz.",
+       "has": "Red topaz",
+       "k": "cutTopaz"
+      },
+      {
+       "t": "Put a red topaz into the landing light.",
+       "s": "Put a red topaz into the landing light.",
+       "k": "put2",
+       "at": [
+        2551,
+        2974,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5822
+        ]
+       }
+      },
+      {
+       "t": "Take an opal from the landing light.",
+       "s": "Take an opal from the landing light.",
+       "has": "Uncut opal",
+       "k": "take3",
+       "at": [
+        2548,
+        2974,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5821
+        ]
+       }
+      },
+      {
+       "t": "Cut the uncut opal.",
+       "s": "Cut the uncut opal.",
+       "has": "Opal",
+       "k": "cutOpal"
+      },
+      {
+       "t": "Put an opal into the landing light.",
+       "s": "Put an opal into the landing light.",
+       "k": "put3",
+       "at": [
+        2548,
+        2974,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5821
+        ]
+       }
+      },
+      {
+       "t": "Take a sapphire from the landing light.",
+       "s": "Take a sapphire from the landing light.",
+       "has": "Uncut sapphire",
+       "k": "take4",
+       "at": [
+        2545,
+        2974,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5823
+        ]
+       }
+      },
+      {
+       "t": "Cut the uncut sapphire.",
+       "s": "Cut the uncut sapphire.",
+       "has": "Sapphire",
+       "k": "cutSaph"
+      },
+      {
+       "t": "Put a sapphire into the landing light.",
+       "s": "Put a sapphire into the landing light.",
+       "k": "put4",
+       "at": [
+        2545,
+        2974,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5823
+        ]
+       }
+      },
+      {
+       "t": "Take a jade from the landing light.",
+       "s": "Take a jade from the landing light.",
+       "has": "Uncut jade",
+       "k": "take5",
+       "at": [
+        2554,
+        2969,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5820
+        ]
+       }
+      },
+      {
+       "t": "Put a jade into the landing light.",
+       "s": "Put a jade into the landing light.",
+       "k": "put5",
+       "at": [
+        2554,
+        2969,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5820
+        ]
+       }
+      },
+      {
+       "t": "Take a red topaz from the landing light.",
+       "s": "Take a red topaz from the landing light.",
+       "has": "Uncut red topaz",
+       "k": "take6",
+       "at": [
+        2551,
+        2969,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5822
+        ]
+       }
+      },
+      {
+       "t": "Put a red topaz into the landing light.",
+       "s": "Put a red topaz into the landing light.",
+       "k": "put6",
+       "at": [
+        2551,
+        2969,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5822
+        ]
+       }
+      },
+      {
+       "t": "Take an opal from the landing light.",
+       "s": "Take an opal from the landing light.",
+       "has": "Uncut opal",
+       "k": "take7",
+       "at": [
+        2548,
+        2969,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5821
+        ]
+       }
+      },
+      {
+       "t": "Put an opal into the landing light.",
+       "s": "Put an opal into the landing light.",
+       "k": "put7",
+       "at": [
+        2548,
+        2969,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5821
+        ]
+       }
+      },
+      {
+       "t": "Take a sapphire from the landing light.",
+       "s": "Take a sapphire from the landing light.",
+       "has": "Uncut sapphire",
+       "k": "take8",
+       "at": [
+        2545,
+        2969,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5823
+        ]
+       }
+      },
+      {
+       "t": "Put a sapphire into the landing light.",
+       "s": "Put a sapphire into the landing light.",
+       "k": "put8",
+       "at": [
+        2545,
+        2969,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5823
+        ]
+       }
+      },
+      {
+       "t": "Talk to Gnormadium Avlafrim again.",
+       "s": "Talk to Gnormadium Avlafrim again.",
+       "k": "talkToGnormadiumAgain",
+       "at": [
+        2542,
+        2968,
+        0
+       ],
+       "hl": {
+        "npc": [
+         7516
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 125,
+     "do": [
+      {
+       "t": "Talk to Gnormadium Avlafrim again.",
+       "s": "Talk to Gnormadium Avlafrim again.",
+       "k": "talkToGnormadiumAgain",
+       "at": [
+        2542,
+        2968,
+        0
+       ],
+       "hl": {
+        "npc": [
+         7516
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 130,
+     "do": [
+      {
+       "t": "Return to Rantz in the Feldip Hills: fairy ring AKS or a Feldip Hills teleport.",
+       "s": "Return to Rantz in the Feldip Hills.",
+       "k": "returnToRantz",
+       "at": [
+        2631,
+        2975,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1470
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 135,
+     "do": [
+      {
+       "t": "Return to Tindel Marchant in Port Khazard.",
+       "s": "Return to Tindel Marchant in Port Khazard.",
+       "k": "returnToTindel",
+       "at": [
+        2678,
+        3153,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1358
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 140,
+     "do": [
+      {
+       "t": "Return to Wizard Cromperty in north east Ardougne.",
+       "s": "Return to Wizard Cromperty in north east Ardougne.",
+       "k": "returnToCromperty",
+       "at": [
+        2684,
+        3323,
+        0
+       ],
+       "hl": {
+        "npc": [
+         8480
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 145,
+     "do": [
+      {
+       "t": "Get 5 pigeon cages from behind Jerico's house in central East Ardougne.",
+       "s": "Get 5 pigeon cages behind Jerico's house.",
+       "k": "getPigeonCages",
+       "has": "Pigeon cage",
+       "at": [
+        2618,
+        3325,
+        0
+       ]
+      },
+      {
+       "t": "Enter the cave south-east of the Fishing Guild, ready to fight the Slagilith (level 92): only pickaxes hurt it fully.",
+       "s": "Enter the cave south-east of the Fishing Guild.",
+       "k": "enterGoblinCaveAgain",
+       "at": [
+        2624,
+        3393,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2
+        ]
+       }
+      },
+      {
+       "t": "Use the animate rock scroll next to the sculpture in the north-east cavern.",
+       "s": "Use the animate rock scroll by the sculpture.",
+       "k": "standNextToSculpture",
+       "at": [
+        2616,
+        9835,
+        0
+       ]
+      },
+      {
+       "t": "Read the animate rock scroll.",
+       "s": "Read the animate rock scroll.",
+       "k": "readScroll"
+      },
+      {
+       "t": "Kill the Slagilith with a pickaxe: other weapons deal reduced damage.",
+       "s": "Kill the Slagilith with a pickaxe.",
+       "k": "killSlagilith",
+       "at": [
+        2617,
+        9837,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1362
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 150,
+     "do": [
+      {
+       "t": "Get 5 pigeon cages from behind Jerico's house in central East Ardougne.",
+       "s": "Get 5 pigeon cages behind Jerico's house.",
+       "k": "getPigeonCages",
+       "has": "Pigeon cage",
+       "at": [
+        2618,
+        3325,
+        0
+       ]
+      },
+      {
+       "t": "Enter the cave south-east of the Fishing Guild, ready to fight the Slagilith (level 92): only pickaxes hurt it fully.",
+       "s": "Enter the cave south-east of the Fishing Guild.",
+       "k": "enterGoblinCaveAgain",
+       "at": [
+        2624,
+        3393,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2
+        ]
+       }
+      },
+      {
+       "t": "Use the animate rock scroll next to the sculpture in the north-east cavern.",
+       "s": "Use the animate rock scroll by the sculpture.",
+       "k": "standNextToSculpture",
+       "at": [
+        2616,
+        9835,
+        0
+       ]
+      },
+      {
+       "t": "Read the animate rock scroll.",
+       "s": "Read the animate rock scroll.",
+       "k": "readScroll"
+      },
+      {
+       "t": "Kill the Slagilith with a pickaxe: other weapons deal reduced damage.",
+       "s": "Kill the Slagilith with a pickaxe.",
+       "k": "killSlagilith",
+       "at": [
+        2617,
+        9837,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1362
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 152,
+     "do": [
+      {
+       "t": "Get 5 pigeon cages from behind Jerico's house in central East Ardougne.",
+       "s": "Get 5 pigeon cages behind Jerico's house.",
+       "k": "getPigeonCages",
+       "has": "Pigeon cage",
+       "at": [
+        2618,
+        3325,
+        0
+       ]
+      },
+      {
+       "t": "Enter the cave south-east of the Fishing Guild, ready to fight the Slagilith (level 92): only pickaxes hurt it fully.",
+       "s": "Enter the cave south-east of the Fishing Guild.",
+       "k": "enterGoblinCaveAgain",
+       "at": [
+        2624,
+        3393,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2
+        ]
+       }
+      },
+      {
+       "t": "Use the animate rock scroll next to the sculpture in the north-east cavern.",
+       "s": "Use the animate rock scroll by the sculpture.",
+       "k": "standNextToSculpture",
+       "at": [
+        2616,
+        9835,
+        0
+       ]
+      },
+      {
+       "t": "Read the animate rock scroll again.",
+       "s": "Read the animate rock scroll again.",
+       "k": "readScrollAgain"
+      },
+      {
+       "t": "Talk to Petra Fiyed.",
+       "s": "Talk to Petra Fiyed.",
+       "k": "talkToPetra",
+       "at": [
+        2617,
+        9837,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1360
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 155,
+     "do": [
+      {
+       "t": "Get 5 pigeon cages from behind Jerico's house in central East Ardougne.",
+       "s": "Get 5 pigeon cages behind Jerico's house.",
+       "k": "getPigeonCages",
+       "has": "Pigeon cage",
+       "at": [
+        2618,
+        3325,
+        0
+       ]
+      },
+      {
+       "t": "Enter the cave south-east of the Fishing Guild, ready to fight the Slagilith (level 92): only pickaxes hurt it fully.",
+       "s": "Enter the cave south-east of the Fishing Guild.",
+       "k": "enterGoblinCaveAgain",
+       "at": [
+        2624,
+        3393,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2
+        ]
+       }
+      },
+      {
+       "t": "Use the animate rock scroll next to the sculpture in the north-east cavern.",
+       "s": "Use the animate rock scroll by the sculpture.",
+       "k": "standNextToSculpture",
+       "at": [
+        2616,
+        9835,
+        0
+       ]
+      },
+      {
+       "t": "Read the animate rock scroll again.",
+       "s": "Read the animate rock scroll again.",
+       "k": "readScrollAgain"
+      },
+      {
+       "t": "Talk to Petra Fiyed.",
+       "s": "Talk to Petra Fiyed.",
+       "k": "talkToPetra",
+       "at": [
+        2617,
+        9837,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1360
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 160,
+     "do": [
+      {
+       "t": "Return to Phantuwti in the south west house of Seers' Village.",
+       "s": "Return to Phantuwti in the south west house of Seers' Village.",
+       "k": "returnToPhantuwti",
+       "at": [
+        2702,
+        3473,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1357
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 165,
+     "do": [
+      {
+       "t": "Return to Phantuwti in the south west house of Seers' Village.",
+       "s": "Return to Phantuwti in the south west house of Seers' Village.",
+       "k": "returnToPhantuwti2",
+       "at": [
+        2702,
+        3473,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1357
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 170,
+     "do": [
+      {
+       "t": "Return to Phantuwti in the south west house of Seers' Village.",
+       "s": "Return to Phantuwti in the south west house of Seers' Village.",
+       "k": "returnToPhantuwti2",
+       "at": [
+        2702,
+        3473,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1357
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 175,
+     "do": [
+      {
+       "t": "Go up the ladder nearby.",
+       "s": "Go up the ladder nearby.",
+       "k": "goUpLadder",
+       "at": [
+        2699,
+        3476,
+        0
+       ],
+       "hl": {
+        "obj": [
+         25941
+        ]
+       }
+      },
+      {
+       "t": "Go up to the roof.",
+       "s": "Go up to the roof.",
+       "k": "goUpToRoof",
+       "at": [
+        2715,
+        3472,
+        1
+       ],
+       "hl": {
+        "obj": [
+         26118
+        ]
+       }
+      },
+      {
+       "t": "Right-click search the weathervane on top of the Seers' building.",
+       "s": "Right-click search the weathervane on top of the Seers' building.",
+       "k": "searchVane",
+       "at": [
+        2702,
+        3476,
+        3
+       ],
+       "hl": {
+        "obj": [
+         5811
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 176,
+     "do": [
+      {
+       "t": "Go up the ladder nearby.",
+       "s": "Go up the ladder nearby.",
+       "k": "goUpLadder",
+       "at": [
+        2699,
+        3476,
+        0
+       ],
+       "hl": {
+        "obj": [
+         25941
+        ]
+       }
+      },
+      {
+       "t": "Go up to the roof.",
+       "s": "Go up to the roof.",
+       "k": "goUpToRoof",
+       "at": [
+        2715,
+        3472,
+        1
+       ],
+       "hl": {
+        "obj": [
+         26118
+        ]
+       }
+      },
+      {
+       "t": "Use a hammer on the weathervane.",
+       "s": "Use a hammer on the weathervane.",
+       "k": "useHammerOnVane",
+       "at": [
+        2702,
+        3476,
+        3
+       ],
+       "hl": {
+        "obj": [
+         5811
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 177,
+     "do": [
+      {
+       "t": "Go up the ladder nearby.",
+       "s": "Go up the ladder nearby.",
+       "k": "goUpLadder",
+       "at": [
+        2699,
+        3476,
+        0
+       ],
+       "hl": {
+        "obj": [
+         25941
+        ]
+       }
+      },
+      {
+       "t": "Go up to the roof.",
+       "s": "Go up to the roof.",
+       "k": "goUpToRoof",
+       "at": [
+        2715,
+        3472,
+        1
+       ],
+       "hl": {
+        "obj": [
+         26118
+        ]
+       }
+      },
+      {
+       "t": "Right-click search the weathervane on top of the Seers' building again.",
+       "s": "Search the weathervane on the Seers' building again.",
+       "k": "searchVaneAgain",
+       "at": [
+        2702,
+        3476,
+        3
+       ],
+       "hl": {
+        "obj": [
+         5811
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 180,
+     "do": [
+      {
+       "t": "Repair the vane parts on the anvil in the north of Seers' Village.",
+       "s": "Repair the vane parts on the Seers' Village anvil.",
+       "k": "useVane123OnAnvil",
+       "at": [
+        2712,
+        3495,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2097
+        ]
+       }
+      },
+      {
+       "t": "Repair the vane parts on the anvil in the north of Seers' Village.",
+       "s": "Repair the vane parts on the Seers' Village anvil.",
+       "k": "useVane23OnAnvil",
+       "at": [
+        2712,
+        3495,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2097
+        ]
+       }
+      },
+      {
+       "t": "Repair the vane parts on the anvil in the north of Seers' Village.",
+       "s": "Repair the vane parts on the Seers' Village anvil.",
+       "k": "useVane12OnAnvil",
+       "at": [
+        2712,
+        3495,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2097
+        ]
+       }
+      },
+      {
+       "t": "Repair the vane parts on the anvil in the north of Seers' Village.",
+       "s": "Repair the vane parts on the Seers' Village anvil.",
+       "k": "useVane13OnAnvil",
+       "at": [
+        2712,
+        3495,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2097
+        ]
+       }
+      },
+      {
+       "t": "Repair the vane parts on the anvil in the north of Seers' Village.",
+       "s": "Repair the vane parts on the Seers' Village anvil.",
+       "k": "useVane2OnAnvil",
+       "at": [
+        2712,
+        3495,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2097
+        ]
+       }
+      },
+      {
+       "t": "Repair the vane parts on the anvil in the north of Seers' Village.",
+       "s": "Repair the vane parts on the Seers' Village anvil.",
+       "k": "useVane1OnAnvil",
+       "at": [
+        2712,
+        3495,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2097
+        ]
+       }
+      },
+      {
+       "t": "Repair the vane parts on the anvil in the north of Seers' Village.",
+       "s": "Repair the vane parts on the Seers' Village anvil.",
+       "k": "useVane3OnAnvil",
+       "at": [
+        2712,
+        3495,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2097
+        ]
+       }
+      },
+      {
+       "t": "Go back up to the Seers' roof and fix the vane.",
+       "s": "Go back up to the Seers' roof and fix the vane.",
+       "k": "goBackUpLadder",
+       "at": [
+        2699,
+        3476,
+        0
+       ],
+       "hl": {
+        "obj": [
+         25941
+        ]
+       }
+      },
+      {
+       "t": "Repair the vane parts on the anvil in north Seers' Village.",
+       "s": "Repair the vane parts on the anvil in north Seers' Village.",
+       "k": "goDownLadderToSeers",
+       "at": [
+        2715,
+        3470,
+        1
+       ],
+       "hl": {
+        "obj": [
+         25939
+        ]
+       }
+      },
+      {
+       "t": "Go back up to the Seers' roof and fix the vane.",
+       "s": "Go back up to the Seers' roof and fix the vane.",
+       "k": "goBackUpToRoof",
+       "at": [
+        2715,
+        3472,
+        1
+       ],
+       "hl": {
+        "obj": [
+         26118
+        ]
+       }
+      },
+      {
+       "t": "Climb down from the roof.",
+       "s": "Climb down from the roof.",
+       "k": "goDownFromRoof",
+       "at": [
+        2715,
+        3472,
+        3
+       ],
+       "hl": {
+        "obj": [
+         26119
+        ]
+       }
+      },
+      {
+       "t": "Use the ornament on the weathervane.",
+       "s": "Use the ornament on the weathervane.",
+       "k": "useVane1",
+       "at": [
+        2702,
+        3476,
+        3
+       ],
+       "hl": {
+        "obj": [
+         5811
+        ]
+       }
+      },
+      {
+       "t": "Use the directionals on the weathervane.",
+       "s": "Use the directionals on the weathervane.",
+       "k": "useVane2",
+       "at": [
+        2702,
+        3476,
+        3
+       ],
+       "hl": {
+        "obj": [
+         5811
+        ]
+       }
+      },
+      {
+       "t": "Use the weathervane pillar on the weathervane.",
+       "s": "Use the weathervane pillar on the weathervane.",
+       "k": "useVane3",
+       "at": [
+        2702,
+        3476,
+        3
+       ],
+       "hl": {
+        "obj": [
+         5811
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 185,
+     "do": [
+      {
+       "t": "Return to Phantuwti in the south west house of Seers' Village.",
+       "s": "Return to Phantuwti in the south west house of Seers' Village.",
+       "k": "finishWithPhantuwti",
+       "at": [
+        2702,
+        3473,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1357
+        ]
+       }
+      },
+      {
+       "t": "Return to Phantuwti.",
+       "s": "Return to Phantuwti.",
+       "k": "goFromRoofToPhantuwti",
+       "at": [
+        2715,
+        3472,
+        3
+       ],
+       "hl": {
+        "obj": [
+         26119
+        ]
+       }
+      },
+      {
+       "t": "Return to Phantuwti.",
+       "s": "Return to Phantuwti.",
+       "k": "goDownLadderToPhantuwti",
+       "at": [
+        2699,
+        3476,
+        1
+       ],
+       "hl": {
+        "obj": [
+         25940
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 190,
+     "do": [
+      {
+       "t": "Talk to Arhein in Catherby.",
+       "s": "Talk to Arhein in Catherby.",
+       "k": "returnToArhein",
+       "at": [
+        2804,
+        3432,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3200
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 195,
+     "do": [
+      {
+       "t": "Right-click talk to Captain Bleemadge on White Wolf Mountain.",
+       "s": "Right-click talk to Captain Bleemadge on White Wolf Mountain.",
+       "k": "returnToBleemadge",
+       "at": [
+        2847,
+        3498,
+        0
+       ],
+       "hl": {
+        "npc": [
+         10459
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 200,
+     "do": [
+      {
+       "t": "Return to Sanfew upstairs in the Taverley herblore store.",
+       "s": "Return to Sanfew upstairs in the Taverley herblore store.",
+       "k": "returnUpToSanfew",
+       "at": [
+        2899,
+        3429,
+        0
+       ],
+       "hl": {
+        "obj": [
+         16671
+        ]
+       }
+      },
+      {
+       "t": "Return to Sanfew upstairs in the Taverley herblore store.",
+       "s": "Return to Sanfew upstairs in the Taverley herblore store.",
+       "k": "returnToSanfew",
+       "at": [
+        2899,
+        3429,
+        1
+       ],
+       "hl": {
+        "npc": [
+         5044
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 205,
+     "do": [
+      {
+       "t": "Return to the Dwarven Mine and talk to Hammerspike Stoutbeard on its west side.",
+       "s": "Return to Hammerspike in the Dwarven Mine.",
+       "k": "goDownToHammerspikeAgain",
+       "at": [
+        3019,
+        3450,
+        0
+       ],
+       "hl": {
+        "obj": [
+         11867
+        ]
+       }
+      },
+      {
+       "t": "Go back to Hammerspike Stoutbeard in the west cavern of the Dwarven Mine.",
+       "s": "Return to Hammerspike in the Dwarven Mine.",
+       "k": "returnToHammerspike",
+       "at": [
+        2968,
+        9811,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1353
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 210,
+     "do": [
+      {
+       "t": "Return to the Dwarven Mine and talk to Hammerspike Stoutbeard on its west side.",
+       "s": "Return to Hammerspike in the Dwarven Mine.",
+       "k": "goDownToHammerspikeAgain",
+       "at": [
+        3019,
+        3450,
+        0
+       ],
+       "hl": {
+        "obj": [
+         11867
+        ]
+       }
+      },
+      {
+       "t": "Kill 3 dwarf gang members until Hammerspike yields; one appears after each kill.",
+       "s": "Kill 3 dwarf gang members for Hammerspike.",
+       "k": "killGangMembers",
+       "at": [
+        2968,
+        9811,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1354
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 215,
+     "do": [
+      {
+       "t": "Return to the Dwarven Mine and talk to Hammerspike Stoutbeard on its west side.",
+       "s": "Return to Hammerspike in the Dwarven Mine.",
+       "k": "goDownToHammerspikeAgain",
+       "at": [
+        3019,
+        3450,
+        0
+       ],
+       "hl": {
+        "obj": [
+         11867
+        ]
+       }
+      },
+      {
+       "t": "Kill 3 dwarf gang members until Hammerspike yields; one appears after each kill.",
+       "s": "Kill 3 dwarf gang members for Hammerspike.",
+       "k": "killGangMembers",
+       "at": [
+        2968,
+        9811,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1354
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 220,
+     "do": [
+      {
+       "t": "Return to the Dwarven Mine and talk to Hammerspike Stoutbeard on its west side.",
+       "s": "Return to Hammerspike in the Dwarven Mine.",
+       "k": "goDownToHammerspikeAgain",
+       "at": [
+        3019,
+        3450,
+        0
+       ],
+       "hl": {
+        "obj": [
+         11867
+        ]
+       }
+      },
+      {
+       "t": "Kill 3 dwarf gang members until Hammerspike yields; one appears after each kill.",
+       "s": "Kill 3 dwarf gang members for Hammerspike.",
+       "k": "killGangMembers",
+       "at": [
+        2968,
+        9811,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1354
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 225,
+     "do": [
+      {
+       "t": "Return to the Dwarven Mine and talk to Hammerspike Stoutbeard on its west side.",
+       "s": "Return to Hammerspike in the Dwarven Mine.",
+       "k": "goDownToHammerspikeAgain",
+       "at": [
+        3019,
+        3450,
+        0
+       ],
+       "hl": {
+        "obj": [
+         11867
+        ]
+       }
+      },
+      {
+       "t": "Go back to Hammerspike Stoutbeard in the west cavern of the Dwarven Mine after killing his dwarf gang members.",
+       "s": "Return to Hammerspike in the Dwarven Mine.",
+       "k": "talkToHammerspikeFinal",
+       "at": [
+        2968,
+        9811,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1353
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 230,
+     "do": [
+      {
+       "t": "Return to Tassie Slipcast in the Barbarian Village pottery building.",
+       "s": "Return to Tassie Slipcast in the Barbarian Village pottery building.",
+       "k": "returnToTassie",
+       "at": [
+        3085,
+        3409,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1352
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 235,
+     "do": [
+      {
+       "t": "Spin the clay into a pot lid.",
+       "s": "Spin the clay into a pot lid.",
+       "k": "spinPotLid",
+       "at": [
+        3087,
+        3409,
+        0
+       ],
+       "hl": {
+        "obj": [
+         14887
+        ]
+       }
+      },
+      {
+       "t": "Fire the unfired pot lid.",
+       "s": "Fire the unfired pot lid.",
+       "k": "firePotLid",
+       "at": [
+        3085,
+        3407,
+        0
+       ],
+       "hl": {
+        "obj": [
+         11601
+        ]
+       }
+      },
+      {
+       "t": "Get a pot to put your lid on; there is one in the Barbarian Village helmet shop.",
+       "s": "Get a pot from the Barbarian Village helmet shop.",
+       "k": "pickUpPot",
+       "has": "Pot"
+      },
+      {
+       "t": "Use the pot lid on a pot.",
+       "s": "Use the pot lid on a pot.",
+       "k": "usePotLidOnPot"
+      },
+      {
+       "t": "Go back to the Apothecary in west Varrock.",
+       "s": "Go back to the Apothecary in west Varrock.",
+       "k": "returnToApothecary",
+       "at": [
+        3196,
+        3404,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5036
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 240,
+     "do": [
+      {
+       "t": "Return to Horvik in the armour shop north east of the Varrock square.",
+       "s": "Return to Horvik in the armour shop north east of the Varrock square.",
+       "k": "returnToHorvik",
+       "at": [
+        3229,
+        3437,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2882
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 245,
+     "do": [
+      {
+       "t": "Talk to Horvik once more in the armour shop north-east of Varrock square.",
+       "s": "Talk to Horvik in the armour shop north-east of Varrock square.",
+       "k": "talkToHorvikFinal",
+       "at": [
+        3229,
+        3437,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2882
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 250,
+     "do": [
+      {
+       "t": "Return to Seth Groats in the farm north-east of Lumbridge, across the river.",
+       "s": "Return to Seth Groats north-east of Lumbridge.",
+       "k": "returnToSeth",
+       "at": [
+        3228,
+        3291,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1351
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 255,
+     "do": [
+      {
+       "t": "Enter the H.A.M. hideout west of Lumbridge and return to Johanhus Ulsbrecht.",
+       "s": "Return to Johanhus in the H.A.M. hideout.",
+       "k": "returnDownToJohnahus",
+       "at": [
+        3166,
+        3252,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5492
+        ]
+       }
+      },
+      {
+       "t": "Return to Johanhus Ulsbrecht in the south of the H.A.M hideout.",
+       "s": "Return to Johanhus Ulsbrecht in the south of the H.A.M hideout.",
+       "k": "returnToJohnahus",
+       "at": [
+        3171,
+        9619,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2535
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 260,
+     "do": [
+      {
+       "t": "Return to Aggie in Draynor Village.",
+       "s": "Return to Aggie in Draynor Village.",
+       "k": "returnToAggie",
+       "at": [
+        3086,
+        3258,
+        0
+       ],
+       "hl": {
+        "npc": [
+         120
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 265,
+     "do": [
+      {
+       "t": "Return to Brian in the Port Sarim axe shop.",
+       "s": "Return to Brian in the Port Sarim axe shop.",
+       "k": "returnToBrian",
+       "at": [
+        3027,
+        3249,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2892
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 270,
+     "do": [
+      {
+       "t": "Return to a Jungle Forester south of Shilo Village: fairy ring CKR, or the cart from Brimhaven.",
+       "s": "Return to a Jungle Forester south of Shilo Village.",
+       "k": "returnToForester",
+       "at": [
+        2861,
+        2942,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "at": 275,
+     "do": [
+      {
+       "t": "Return to Yanni Salika in Shilo Village.",
+       "s": "Return to Yanni Salika in Shilo Village.",
+       "k": "returnToYanni",
+       "at": [
+        2836,
+        2983,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5361
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  "S9-86": {
+   "var": [
+    "varbit",
+    3550
+   ],
+   "route": [
+    {
+     "title": "Starting out",
+     "steps": [
+      "Speak to Ur-tag or Ambassador Alvijar in the north-east part of Dorgesh-Kaan's middle level. Dialogue: \"What are you arguing about?\", \"I'd love to help!\""
+     ]
+    },
+    {
+     "title": "Excavation",
+     "steps": [
+      "Head to the south-west corner of the city's middle level.",
+      "Enter the doorway with the transportation symbol on the minimap.",
+      "Walk south on the tracks and talk to Tegdak.",
+      "Dig up artefacts from the ground with the trowel (there are six artefacts total).",
+      "Use artefacts on the specimen table to clean them.",
+      "Talk to Tegdak. Zanik will automatically follow you after (if you don't have a follower already)."
+     ]
+    },
+    {
+     "title": "To the village",
+     "steps": [
+      "Make sure Zanik is following you.",
+      "Talk to the Goblin scribe in the house west of Ur-tag where you started the quest.",
+      "Speak to Oldak in the north-west corner of the city's lower level (there are stairs down in the house west of the scribe) to teleport to the Goblin Village."
+     ]
+    },
+    {
+     "title": "The H.A.M-bush",
+     "steps": [
+      "Talk to General Wartface or Bentnoze. A cutscene will start.",
+      "Run south to the ladder, stay behind the houses on the west side to not get hit.",
+      "Climb up and kill the H.A.M. Mage and H.A.M. Archer, you must use magic or ranged. Throwing darts can work, only if you use the \"long range\" combat style. If you forgot a magic or ranged weapon, a crossbow and 50 bronze bolts spawns just to the west of your character upstairs.",
+      "Talk to General Wartface or General Bentnoze to receive ancient mace and two goblin warriors"
+     ]
+    },
+    {
+     "title": "Getting past the guards",
+     "steps": [
+      "Go to the Lumbridge Swamp Cave entrance (outside by the giant frogs in Lumbridge Swamp)",
+      "Talk to one of the goblin sergeants.",
+      "Read the following steps before doing them as this next section is time sensitive.",
+      "#Enter the caves then climb down the nearby ladder.",
+      "#As soon as you're down, talk to the sergeants and tell one of them to wait. Dialogue: \"One of you wait here\"",
+      "#Run to the room and enter.",
+      "#Wait for 2 guards to pass.",
+      "#Tell your sergeant to wait in the room. Dialogue: \"Wait here\"",
+      "#Run up to the boxes to trigger a 3rd guard and run back to the room so he doesn't see you.",
+      "#After the 3rd guard passes, ask your sergeant to follow you again. Dialogue: \"Follow me\"",
+      "#Walk (do not run) to the end of the tunnel and the final guard will attack your sergeant.",
+      "#Climb down the ladder to fight Sigmund - Use the Ancient mace's special attack ONLY AFTER he starts using prayer to disable it for the entire fight.",
+      "Defeat Sigmund.",
+      "Untie Zanik.",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Enter the Lumbridge Castle basement.",
+       "s": "Enter the Lumbridge Castle basement.",
+       "k": "goDownIntoBasement",
+       "at": [
+        3209,
+        3216,
+        0
+       ],
+       "hl": {
+        "obj": [
+         14880
+        ]
+       }
+      },
+      {
+       "t": "Climb through the hole in the cellar wall of the Lumbridge Castle basement.",
+       "s": "Climb through the hole in the Lumbridge Castle cellar wall.",
+       "k": "climbThroughHole",
+       "at": [
+        3219,
+        9618,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6898
+        ]
+       }
+      },
+      {
+       "t": "Travel with Kazgar to shortcut to Mistag.",
+       "s": "Travel with Kazgar to shortcut to Mistag.",
+       "k": "talkToKazgar",
+       "at": [
+        3230,
+        9610,
+        0
+       ],
+       "hl": {
+        "npc": [
+         7300
+        ]
+       }
+      },
+      {
+       "t": "Enter Dorgesh-Kaan.",
+       "s": "Enter Dorgesh-Kaan.",
+       "k": "enterCity",
+       "at": [
+        3317,
+        9601,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6919
+        ]
+       }
+      },
+      {
+       "t": "Climb up to the next floor.",
+       "s": "Climb up to the next floor.",
+       "k": "climbToF1City",
+       "at": [
+        2721,
+        5360,
+        0
+       ],
+       "hl": {
+        "obj": [
+         22939
+        ]
+       }
+      },
+      {
+       "t": "Talk to Ur-tag in the north east building.",
+       "s": "Talk to Ur-tag in the north east building.",
+       "k": "talkToUrtag",
+       "at": [
+        2733,
+        5366,
+        1
+       ],
+       "hl": {
+        "npc": [
+         2315
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 1,
+     "do": [
+      {
+       "t": "Enter the Lumbridge Castle basement.",
+       "s": "Enter the Lumbridge Castle basement.",
+       "k": "goDownIntoBasement",
+       "at": [
+        3209,
+        3216,
+        0
+       ],
+       "hl": {
+        "obj": [
+         14880
+        ]
+       }
+      },
+      {
+       "t": "Climb through the hole in the cellar wall of the Lumbridge Castle basement.",
+       "s": "Climb through the hole in the Lumbridge Castle cellar wall.",
+       "k": "climbThroughHole",
+       "at": [
+        3219,
+        9618,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6898
+        ]
+       }
+      },
+      {
+       "t": "Travel with Kazgar to shortcut to Mistag.",
+       "s": "Travel with Kazgar to shortcut to Mistag.",
+       "k": "talkToKazgar",
+       "at": [
+        3230,
+        9610,
+        0
+       ],
+       "hl": {
+        "npc": [
+         7300
+        ]
+       }
+      },
+      {
+       "t": "Enter Dorgesh-Kaan.",
+       "s": "Enter Dorgesh-Kaan.",
+       "k": "enterCity",
+       "at": [
+        3317,
+        9601,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6919
+        ]
+       }
+      },
+      {
+       "t": "Climb up to the next floor.",
+       "s": "Climb up to the next floor.",
+       "k": "climbToF1City",
+       "at": [
+        2721,
+        5360,
+        0
+       ],
+       "hl": {
+        "obj": [
+         22939
+        ]
+       }
+      },
+      {
+       "t": "Enter the railway entrance in the south west of Dorgesh-Kaan.",
+       "s": "Enter the railway entrance in the south west of Dorgesh-Kaan.",
+       "k": "enterRailway",
+       "at": [
+        2695,
+        5277,
+        1
+       ],
+       "hl": {
+        "obj": [
+         23052
+        ]
+       }
+      },
+      {
+       "t": "Enter the doorway with the transportation symbol in the south-west of Dorgesh-Kaan's middle level, follow the tracks south and talk to Tegdak.",
+       "s": "Follow the tracks south and talk to Tegdak.",
+       "k": "talkToTegdak",
+       "at": [
+        2512,
+        5564,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5182
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 2,
+     "do": [
+      {
+       "t": "Enter the Lumbridge Castle basement.",
+       "s": "Enter the Lumbridge Castle basement.",
+       "k": "goDownIntoBasement",
+       "at": [
+        3209,
+        3216,
+        0
+       ],
+       "hl": {
+        "obj": [
+         14880
+        ]
+       }
+      },
+      {
+       "t": "Climb through the hole in the cellar wall of the Lumbridge Castle basement.",
+       "s": "Climb through the hole in the Lumbridge Castle cellar wall.",
+       "k": "climbThroughHole",
+       "at": [
+        3219,
+        9618,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6898
+        ]
+       }
+      },
+      {
+       "t": "Travel with Kazgar to shortcut to Mistag.",
+       "s": "Travel with Kazgar to shortcut to Mistag.",
+       "k": "talkToKazgar",
+       "at": [
+        3230,
+        9610,
+        0
+       ],
+       "hl": {
+        "npc": [
+         7300
+        ]
+       }
+      },
+      {
+       "t": "Enter Dorgesh-Kaan.",
+       "s": "Enter Dorgesh-Kaan.",
+       "k": "enterCity",
+       "at": [
+        3317,
+        9601,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6919
+        ]
+       }
+      },
+      {
+       "t": "Climb up to the next floor.",
+       "s": "Climb up to the next floor.",
+       "k": "climbToF1City",
+       "at": [
+        2721,
+        5360,
+        0
+       ],
+       "hl": {
+        "obj": [
+         22939
+        ]
+       }
+      },
+      {
+       "t": "Enter the railway entrance in the south west of Dorgesh-Kaan.",
+       "s": "Enter the railway entrance in the south west of Dorgesh-Kaan.",
+       "k": "enterRailway",
+       "at": [
+        2695,
+        5277,
+        1
+       ],
+       "hl": {
+        "obj": [
+         23052
+        ]
+       }
+      },
+      {
+       "t": "Use the trowel on the marked dig spot to dig up an artefact.",
+       "s": "Dig up an artefact with the trowel.",
+       "k": "dig1",
+       "at": [
+        2513,
+        5563,
+        0
+       ],
+       "hl": {
+        "obj": [
+         23290
+        ]
+       }
+      },
+      {
+       "t": "Use the trowel on the marked dig spot to dig up an artefact.",
+       "s": "Dig up an artefact with the trowel.",
+       "k": "dig2",
+       "at": [
+        2511,
+        5561,
+        0
+       ],
+       "hl": {
+        "obj": [
+         23293
+        ]
+       }
+      },
+      {
+       "t": "Use the trowel on the marked dig spot to dig up an artefact.",
+       "s": "Dig up an artefact with the trowel.",
+       "k": "dig3",
+       "at": [
+        2513,
+        5550,
+        0
+       ],
+       "hl": {
+        "obj": [
+         23296
+        ]
+       }
+      },
+      {
+       "t": "Use the trowel on the marked dig spot to dig up an artefact.",
+       "s": "Dig up an artefact with the trowel.",
+       "k": "dig4",
+       "at": [
+        2511,
+        5547,
+        0
+       ],
+       "hl": {
+        "obj": [
+         23534
+        ]
+       }
+      },
+      {
+       "t": "Use the trowel on the marked dig spot to dig up an artefact.",
+       "s": "Dig up an artefact with the trowel.",
+       "k": "dig5",
+       "at": [
+        2512,
+        5544,
+        0
+       ],
+       "hl": {
+        "obj": [
+         23301
+        ]
+       }
+      },
+      {
+       "t": "Use the trowel on the marked dig spot to dig up an artefact.",
+       "s": "Dig up an artefact with the trowel.",
+       "k": "dig6",
+       "at": [
+        2513,
+        5539,
+        0
+       ],
+       "hl": {
+        "obj": [
+         23304
+        ]
+       }
+      },
+      {
+       "t": "Clean the artefacts on the specimen table.",
+       "s": "Clean the artefacts on the specimen table.",
+       "k": "cleanArtefacts",
+       "at": [
+        2513,
+        5559,
+        0
+       ],
+       "hl": {
+        "obj": [
+         23305
+        ]
+       }
+      },
+      {
+       "t": "Show Tegdak the artefacts.",
+       "s": "Show Tegdak the artefacts.",
+       "k": "showTegdakArtefacts",
+       "at": [
+        2512,
+        5564,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5182
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 3,
+     "do": [
+      {
+       "t": "Enter the Lumbridge Castle basement.",
+       "s": "Enter the Lumbridge Castle basement.",
+       "k": "goDownIntoBasement",
+       "at": [
+        3209,
+        3216,
+        0
+       ],
+       "hl": {
+        "obj": [
+         14880
+        ]
+       }
+      },
+      {
+       "t": "Climb through the hole in the cellar wall of the Lumbridge Castle basement.",
+       "s": "Climb through the hole in the Lumbridge Castle cellar wall.",
+       "k": "climbThroughHole",
+       "at": [
+        3219,
+        9618,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6898
+        ]
+       }
+      },
+      {
+       "t": "Travel with Kazgar to shortcut to Mistag.",
+       "s": "Travel with Kazgar to shortcut to Mistag.",
+       "k": "talkToKazgar",
+       "at": [
+        3230,
+        9610,
+        0
+       ],
+       "hl": {
+        "npc": [
+         7300
+        ]
+       }
+      },
+      {
+       "t": "Enter Dorgesh-Kaan.",
+       "s": "Enter Dorgesh-Kaan.",
+       "k": "enterCity",
+       "at": [
+        3317,
+        9601,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6919
+        ]
+       }
+      },
+      {
+       "t": "Climb up to the next floor.",
+       "s": "Climb up to the next floor.",
+       "k": "climbToF1City",
+       "at": [
+        2721,
+        5360,
+        0
+       ],
+       "hl": {
+        "obj": [
+         22939
+        ]
+       }
+      },
+      {
+       "t": "Enter the railway entrance in the south west of Dorgesh-Kaan.",
+       "s": "Enter the railway entrance in the south west of Dorgesh-Kaan.",
+       "k": "enterRailway",
+       "at": [
+        2695,
+        5277,
+        1
+       ],
+       "hl": {
+        "obj": [
+         23052
+        ]
+       }
+      },
+      {
+       "t": "Talk to Zanik.",
+       "s": "Talk to Zanik.",
+       "k": "talkToZanikRailway",
+       "at": [
+        2512,
+        5564,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5184
+        ]
+       }
+      },
+      {
+       "t": "Leave the railway.",
+       "s": "Leave the railway.",
+       "k": "leaveRailway",
+       "at": [
+        2521,
+        5607,
+        0
+       ],
+       "hl": {
+        "obj": [
+         23285
+        ]
+       }
+      },
+      {
+       "t": "With Zanik following you, talk to the goblin scribe in the house west of Ur-tag.",
+       "s": "Talk to the goblin scribe west of Ur-tag, with Zanik.",
+       "k": "talkToScribe",
+       "at": [
+        2716,
+        5369,
+        1
+       ],
+       "hl": {
+        "npc": [
+         2302
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 4,
+     "do": [
+      {
+       "t": "Enter the Lumbridge Castle basement.",
+       "s": "Enter the Lumbridge Castle basement.",
+       "k": "goDownIntoBasement",
+       "at": [
+        3209,
+        3216,
+        0
+       ],
+       "hl": {
+        "obj": [
+         14880
+        ]
+       }
+      },
+      {
+       "t": "Climb through the hole in the cellar wall of the Lumbridge Castle basement.",
+       "s": "Climb through the hole in the Lumbridge Castle cellar wall.",
+       "k": "climbThroughHole",
+       "at": [
+        3219,
+        9618,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6898
+        ]
+       }
+      },
+      {
+       "t": "Travel with Kazgar to shortcut to Mistag.",
+       "s": "Travel with Kazgar to shortcut to Mistag.",
+       "k": "talkToKazgar",
+       "at": [
+        3230,
+        9610,
+        0
+       ],
+       "hl": {
+        "npc": [
+         7300
+        ]
+       }
+      },
+      {
+       "t": "Enter Dorgesh-Kaan.",
+       "s": "Enter Dorgesh-Kaan.",
+       "k": "enterCity",
+       "at": [
+        3317,
+        9601,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6919
+        ]
+       }
+      },
+      {
+       "t": "Enter the railway entrance in the south west of Dorgesh-Kaan.",
+       "s": "Enter the railway entrance in the south west of Dorgesh-Kaan.",
+       "k": "enterRailway",
+       "at": [
+        2695,
+        5277,
+        1
+       ],
+       "hl": {
+        "obj": [
+         23052
+        ]
+       }
+      },
+      {
+       "t": "Talk to Zanik.",
+       "s": "Talk to Zanik.",
+       "k": "talkToZanikRailway",
+       "at": [
+        2512,
+        5564,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5184
+        ]
+       }
+      },
+      {
+       "t": "Leave the railway.",
+       "s": "Leave the railway.",
+       "k": "leaveRailway",
+       "at": [
+        2521,
+        5607,
+        0
+       ],
+       "hl": {
+        "obj": [
+         23285
+        ]
+       }
+      },
+      {
+       "t": "Go downstairs.",
+       "s": "Go downstairs.",
+       "k": "goDownToF0City",
+       "at": [
+        2721,
+        5360,
+        1
+       ],
+       "hl": {
+        "obj": [
+         22940
+        ]
+       }
+      },
+      {
+       "t": "Go down the stairs in the house west of the scribe and talk to Oldak in the north-west corner of the lower level; he teleports you to the Goblin Village.",
+       "s": "Talk to Oldak on the lower level to reach Goblin Village.",
+       "k": "talkToOldak",
+       "at": [
+        2704,
+        5365,
+        0
+       ],
+       "hl": {
+        "npc": [
+         11265
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 5,
+     "do": [
+      {
+       "t": "Talk to General Wartface and General Bentnoze in Goblin Village.",
+       "s": "Talk to General Wartface and General Bentnoze in Goblin Village.",
+       "k": "talkToGenerals",
+       "at": [
+        2957,
+        3512,
+        0
+       ],
+       "hl": {
+        "npc": [
+         670
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 6,
+     "do": [
+      {
+       "t": "Go to Goblin Village, ready to fight.",
+       "s": "Go to Goblin Village, ready to fight.",
+       "k": "goToGoblinVillage",
+       "at": [
+        2955,
+        3501,
+        0
+       ]
+      },
+      {
+       "t": "Make your way to the tower to the south, keeping behind the houses on the west side, and climb the ladder.",
+       "s": "Keep behind the west houses and climb the tower's ladder.",
+       "k": "goUpLadder",
+       "at": [
+        2442,
+        5417,
+        0
+       ],
+       "hl": {
+        "obj": [
+         23531
+        ]
+       }
+      },
+      {
+       "t": "Kill the H.A.M. Mage and H.A.M. Archer with Ranged or Magic. Without a ranged or magic weapon, use the crossbow and 50 bronze bolts that spawn just west of you upstairs.",
+       "s": "Kill the H.A.M. Mage and Archer with Ranged or Magic.",
+       "k": "killHamMageAndArcher",
+       "at": [
+        2447,
+        5417,
+        2
+       ],
+       "hl": {
+        "npc": [
+         5158
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 7,
+     "do": [
+      {
+       "t": "Talk to General Wartface and General Bentnoze in Goblin Village again.",
+       "s": "Talk to General Wartface and General Bentnoze in Goblin Village again.",
+       "k": "talkToGeneralsAgain",
+       "at": [
+        2957,
+        3512,
+        0
+       ],
+       "hl": {
+        "npc": [
+         670
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 8,
+     "do": [
+      {
+       "t": "Talk to the Sergeants in Lumbridge Swamp.",
+       "s": "Talk to the Sergeants in Lumbridge Swamp.",
+       "k": "talkToSergeant",
+       "at": [
+        3170,
+        3170,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5162
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 9,
+     "do": [
+      {
+       "t": "Enter the Lumbridge Swamp Caves.",
+       "s": "Enter the Lumbridge Swamp Caves.",
+       "k": "enterSwamp",
+       "at": [
+        3169,
+        3172,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5947
+        ]
+       }
+      },
+      {
+       "t": "Climb down the ladder to the secret H.A.M. base.",
+       "s": "Climb down the ladder to the secret H.A.M. base.",
+       "k": "climbEnterHamBase",
+       "at": [
+        3171,
+        9568,
+        0
+       ],
+       "hl": {
+        "obj": [
+         23282
+        ]
+       }
+      },
+      {
+       "t": "Hide behind the marked crate and wait for the guards to walk past and around the corner.",
+       "s": "Hide behind the marked crate until the guards pass.",
+       "k": "goToCrate",
+       "at": [
+        2408,
+        5538,
+        0
+       ]
+      },
+      {
+       "t": "Work out how to avoid all the H.A.M guards.",
+       "s": "Work out how to avoid all the H.A.M guards.",
+       "k": "waitAtCrate"
+      },
+      {
+       "t": "Run in front of the final guard and wait for one of the sergeants to attack him.",
+       "s": "Lure the final guard to your sergeant.",
+       "k": "lureHamMember",
+       "at": [
+        2412,
+        5537,
+        0
+       ]
+      },
+      {
+       "t": "Climb down the ladder.",
+       "s": "Climb down the ladder.",
+       "k": "enterFinalFight",
+       "at": [
+        2413,
+        5526,
+        0
+       ],
+       "hl": {
+        "obj": [
+         23376
+        ]
+       }
+      },
+      {
+       "t": "When Sigmund starts using protection prayers, use the ancient mace's special attack to remove them, then defeat him.",
+       "s": "Once Sigmund prays, use the ancient mace special.",
+       "k": "useSpecial",
+       "at": [
+        2543,
+        5511,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5142
+        ]
+       }
+      },
+      {
+       "t": "Defeat Sigmund.",
+       "s": "Defeat Sigmund.",
+       "k": "defeatSigmund",
+       "at": [
+        2543,
+        5511,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5146
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 10,
+     "do": [
+      {
+       "t": "Enter the Lumbridge Swamp Caves.",
+       "s": "Enter the Lumbridge Swamp Caves.",
+       "k": "enterSwamp",
+       "at": [
+        3169,
+        3172,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5947
+        ]
+       }
+      },
+      {
+       "t": "Climb down the ladder to the secret H.A.M. base.",
+       "s": "Climb down the ladder to the secret H.A.M. base.",
+       "k": "climbEnterHamBase",
+       "at": [
+        3171,
+        9568,
+        0
+       ],
+       "hl": {
+        "obj": [
+         23282
+        ]
+       }
+      },
+      {
+       "t": "Climb down the ladder.",
+       "s": "Climb down the ladder.",
+       "k": "enterFinalFight",
+       "at": [
+        2413,
+        5526,
+        0
+       ],
+       "hl": {
+        "obj": [
+         23376
+        ]
+       }
+      },
+      {
+       "t": "Untie Zanik.",
+       "s": "Untie Zanik.",
+       "k": "untieZanik",
+       "at": [
+        2542,
+        5513,
+        0
+       ],
+       "hl": {
+        "obj": [
+         23284
+        ]
+       }
+      }
+     ]
+    }
+   ]
   }
  }
 }

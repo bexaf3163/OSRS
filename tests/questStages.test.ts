@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { allSteps, questStagesJson as raw } from '../src/data';
-import { stepGuide } from '../src/domain/guide/inGameTarget';
+import { stagesForPlugin, stepGuide, toInGameTarget, WATCH_MAX } from '../src/domain/guide/inGameTarget';
 
 const quests = (raw as unknown as { quests: Record<string, import('../src/types').QuestStages> }).quests;
 const withStages = allSteps.filter((s) => s.questStages);
@@ -19,9 +19,9 @@ describe('quest stages (Quest Helper)', () => {
     }
   });
 
-  it('plugin limits: stages <= 40, steps per stage <= 120, text <= 500 characters, coordinates within the map', () => {
+  it('plugin limits: stages <= 80, steps per stage <= 120, text <= 500 characters, coordinates within the map', () => {
     for (const [id, q] of Object.entries(quests)) {
-      expect(q.stages.length, id).toBeLessThanOrEqual(40);
+      expect(q.stages.length, id).toBeLessThanOrEqual(80);
       for (const st of q.stages) {
         expect(st.do.length, `${id}#${st.at}`).toBeGreaterThan(0);
         expect(st.do.length, `${id}#${st.at}`).toBeLessThanOrEqual(120);
@@ -84,5 +84,18 @@ describe('quest stages (Quest Helper)', () => {
       expect(JSON.stringify(g).length, s.id).toBeLessThan(48 * 1024);
       for (const st of g.stage!.stages) if (st.go !== undefined) expect(g.places[st.go], `${s.id}#${st.at}`).toBeDefined();
     }
+  });
+
+  it('every list of a step target fits the plugin (ActiveTarget.MAX_LIST)', () => {
+    for (const s of allSteps) {
+      for (const [k, v] of Object.entries(toInGameTarget(s) ?? {})) if (Array.isArray(v)) expect(v.length, `${s.id} ${k}`).toBeLessThanOrEqual(WATCH_MAX);
+    }
+  });
+
+  it('a protocol 7 plugin gets the first 40 stages of a longer quest, protocol 8 gets them all', () => {
+    const t = toInGameTarget(allSteps.find((s) => s.id === 'S9-85')!)!;
+    expect(t.guide!.stage!.stages.length).toBeGreaterThan(40);
+    expect(stagesForPlugin(t, 7).guide!.stage!.stages).toEqual(t.guide!.stage!.stages.slice(0, 40));
+    expect(stagesForPlugin(t, 8)).toBe(t);
   });
 });

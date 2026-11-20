@@ -51,7 +51,7 @@ function hillGiants(opts: { coins?: number; bankSeen?: boolean; storage?: Record
   return {
     progress: progressBefore('S5-06'),
     localStorage: { 'osrs-put:active-step': 'S5-06', ...(opts.storage ?? {}) },
-    status: { protocol: 7, inGame: true, player: 'Review Hero', activeStepId: 'S5-06', questPoints: 30, totalLevel: 150, stats, pos: { x: 3093, y: 3495, plane: 0 }, ...gear },
+    status: { protocol: 8, inGame: true, player: 'Review Hero', activeStepId: 'S5-06', questPoints: 30, totalLevel: 150, stats, pos: { x: 3093, y: 3495, plane: 0 }, ...gear },
     events: [
       { type: 'OWNED', bankSeen: opts.bankSeen !== false, items: owned }, { type: 'GEAR', gear }, { type: 'QUESTS', done: [] },
       { type: 'STATS', stats }, { type: 'XP', xp: { attack: 13363, strength: 2000, defence: 0, hitpoints: 3500 } },
@@ -65,7 +65,7 @@ function skiller(levels: Record<string, number>, storage: Record<string, string>
   return {
     progress: progressBefore('S5-06', { levels }),
     localStorage: { 'osrs-put:active-step': 'S5-06', ...storage },
-    status: { protocol: 7, inGame: true, player: 'Review Hero', stats: levels, coins: 2500, bankCoins: 12000, equipment: [], inventory: [] },
+    status: { protocol: 8, inGame: true, player: 'Review Hero', stats: levels, coins: 2500, bankCoins: 12000, equipment: [], inventory: [] },
     events: [{ type: 'STATS', stats: levels }, { type: 'OWNED', bankSeen: true, items: [] }],
     market: true,
   };

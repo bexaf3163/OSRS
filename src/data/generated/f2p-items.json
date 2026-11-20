@@ -1382,6 +1382,85 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Ball_of_wool"
   },
   {
+    "id": 365,
+    "nameEn": "Bass",
+    "examine": "Wow, this is a big fish.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Bass.png",
+    "value": 40,
+    "highAlch": 24,
+    "lowAlch": 16,
+    "buyLocations": [
+      {
+        "shopName": "Fishing Guild Shop.",
+        "location": "Fishing Guild",
+        "owner": "Roachey",
+        "price": 40,
+        "stock": 0,
+        "members": true
+      },
+      {
+        "shopName": "Prifddinas Foodstuffs",
+        "location": "Prifddinas",
+        "owner": "Derwen",
+        "price": 40,
+        "stock": 3,
+        "members": true
+      },
+      {
+        "shopName": "Warrior Guild Food Shop",
+        "location": "Ground floor of Warriors' Guild",
+        "owner": "Lidio",
+        "price": 48,
+        "stock": 10,
+        "members": true
+      }
+    ],
+    "dropSources": [
+      {
+        "monster": "Green dragon#Regular",
+        "combatLevel": null,
+        "rate": "3/128"
+      },
+      {
+        "monster": "Mourner#Level 108",
+        "combatLevel": null,
+        "rate": "3/128"
+      },
+      {
+        "monster": "Iorwerth Warrior#Iorwerth Camp",
+        "combatLevel": null,
+        "rate": "3/128"
+      },
+      {
+        "monster": "Iorwerth Warrior#Iorwerth Dungeon",
+        "combatLevel": null,
+        "rate": "3/128"
+      },
+      {
+        "monster": "Ankou#Regular",
+        "combatLevel": null,
+        "rate": "2/100"
+      },
+      {
+        "monster": "Terror dog#Level 100",
+        "combatLevel": null,
+        "rate": "2/128"
+      },
+      {
+        "monster": "Terror dog#Level 110",
+        "combatLevel": null,
+        "rate": "2/128"
+      },
+      {
+        "monster": "Maniacal Monkey Archer",
+        "combatLevel": 132,
+        "rate": "4/20"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Bass"
+  },
+  {
     "id": 530,
     "nameEn": "Bat bones",
     "examine": "Ew it's a pile of bones.",
@@ -5914,6 +5993,17 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Cowhide"
   },
   {
+    "id": 4460,
+    "nameEn": "Cup of hot water",
+    "examine": "It's hot!",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Cup_of_hot_water.png",
+    "value": 10,
+    "highAlch": 6,
+    "lowAlch": 4,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Cup_of_hot_water"
+  },
+  {
     "id": 1978,
     "nameEn": "Cup of tea",
     "examine": "A nice cup of tea.",
@@ -9158,6 +9248,17 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Harpoon"
   },
   {
+    "id": 255,
+    "nameEn": "Harralander",
+    "examine": "A useful herb.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Harralander.png",
+    "value": 20,
+    "highAlch": 12,
+    "lowAlch": 8,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Harralander"
+  },
+  {
     "id": 97,
     "nameEn": "Harralander potion (unf)",
     "examine": "I need another ingredient to finish this Harralander potion.",
@@ -10186,6 +10287,17 @@
       "Weiss (members only)"
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Iron_spit"
+  },
+  {
+    "id": 1611,
+    "nameEn": "Jade",
+    "examine": "A semi precious stone.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Jade.png",
+    "value": 150,
+    "highAlch": 90,
+    "lowAlch": 60,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Jade"
   },
   {
     "id": 247,
@@ -12625,6 +12737,78 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Nature_rune"
   },
   {
+    "id": 1597,
+    "nameEn": "Necklace mould",
+    "examine": "Used to make necklaces.",
+    "members": false,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Necklace_mould.png",
+    "value": 5,
+    "highAlch": 3,
+    "lowAlch": 2,
+    "buyLocations": [
+      {
+        "shopName": "Dommik's Crafting Store.",
+        "location": "Al Kharid",
+        "owner": "Dommik",
+        "price": 5,
+        "stock": 2,
+        "members": false
+      },
+      {
+        "shopName": "Rommik's Crafty Supplies.",
+        "location": "Rimmington",
+        "owner": "Rommik",
+        "price": 5,
+        "stock": 2,
+        "members": false
+      },
+      {
+        "shopName": "Hamab's Crafting Emporium",
+        "location": "Ape Atoll",
+        "owner": "Hamab",
+        "price": 5,
+        "stock": 2,
+        "members": true
+      },
+      {
+        "shopName": "Artima's Crafting Supplies",
+        "location": "Civitas illa Fortis",
+        "owner": "Artima",
+        "price": 5,
+        "stock": 4,
+        "members": true
+      },
+      {
+        "shopName": "Elder Coco's Crafting Stall",
+        "location": "The Summer Shore",
+        "owner": "Elder Coco",
+        "price": 5,
+        "stock": 4,
+        "members": true
+      },
+      {
+        "shopName": "Carefree Crafting Stall",
+        "location": "Keldagrim",
+        "owner": "Nolar",
+        "price": 7,
+        "stock": 2,
+        "members": true
+      },
+      {
+        "shopName": "Jamila's Craft Stall.",
+        "location": "Sophanem",
+        "owner": "Jamila",
+        "price": 7,
+        "stock": 2,
+        "members": true
+      }
+    ],
+    "freeSpawns": [
+      "Crafting Guild - 1st floor"
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Necklace_mould"
+  },
+  {
     "id": 1733,
     "nameEn": "Needle",
     "examine": "Used with a thread to make clothes.",
@@ -13572,6 +13756,18 @@
       "East Ardougne - Edmond and Alrena's house (members only)"
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Picture"
+  },
+  {
+    "id": 424,
+    "nameEn": "Pigeon cage",
+    "examine": "It's full of pigeons.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Pigeon_cage.png",
+    "value": 1,
+    "freeSpawns": [
+      "East Ardougne - Jerico's house (members only)"
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Pigeon_cage"
   },
   {
     "id": 2116,
@@ -16290,6 +16486,17 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Red_dye"
   },
   {
+    "id": 1613,
+    "nameEn": "Red topaz",
+    "examine": "A semi precious stone.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Red_topaz.png",
+    "value": 200,
+    "highAlch": 120,
+    "lowAlch": 80,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Red_topaz"
+  },
+  {
     "id": 25,
     "nameEn": "Red vine worm",
     "examine": "Wormy.",
@@ -16656,6 +16863,141 @@
       "Colossal Wyrm Agility Course (members only)"
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Rotten_tomato"
+  },
+  {
+    "id": 1603,
+    "nameEn": "Ruby",
+    "examine": "This looks valuable.",
+    "members": false,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Ruby.png",
+    "value": 1000,
+    "highAlch": 600,
+    "lowAlch": 400,
+    "buyLocations": [
+      {
+        "shopName": "Herquin's Gems.",
+        "location": "Falador",
+        "owner": "Herquin",
+        "price": 1000,
+        "stock": 0,
+        "members": false
+      },
+      {
+        "shopName": "Gem Trader.",
+        "location": "Al Kharid",
+        "owner": "Gem trader",
+        "price": 1000,
+        "stock": 0,
+        "members": false
+      },
+      {
+        "shopName": "Kourend Castle Gem Stall.",
+        "location": "Kourend Castle",
+        "owner": "Gem merchant",
+        "price": 1000,
+        "stock": 1,
+        "members": true
+      },
+      {
+        "shopName": "Prifddinas Gem Stall",
+        "location": "Prifddinas",
+        "owner": "Glenda",
+        "price": 1000,
+        "stock": 1,
+        "members": true
+      },
+      {
+        "shopName": "Conara's Jewels",
+        "location": "Cam Torum",
+        "owner": "Conara",
+        "price": 1000,
+        "stock": 2,
+        "members": true
+      },
+      {
+        "shopName": "Toci's Gem Store",
+        "location": "Aldarin",
+        "owner": "Toci",
+        "price": 1000,
+        "stock": 1,
+        "members": true
+      },
+      {
+        "shopName": "Elder Coco's Crafting Stall",
+        "location": "The Summer Shore",
+        "owner": "Elder Coco",
+        "price": 1000,
+        "stock": 1,
+        "members": true
+      },
+      {
+        "shopName": "Ardougne Gem Stall.",
+        "location": "East Ardougne",
+        "owner": "Gem merchant",
+        "price": 1500,
+        "stock": 1,
+        "members": true
+      },
+      {
+        "shopName": "Green Gemstone Gems",
+        "location": "Keldagrim",
+        "owner": "Hervi",
+        "price": 1500,
+        "stock": 1,
+        "members": true
+      },
+      {
+        "shopName": "Fortis Gem Stall",
+        "location": "Civitas illa Fortis",
+        "owner": "Gem Merchant",
+        "price": 1500,
+        "stock": 1,
+        "members": true
+      }
+    ],
+    "dropSources": [
+      {
+        "monster": "Tortured gorilla",
+        "combatLevel": 141,
+        "rate": "53/1,000"
+      },
+      {
+        "monster": "Frigatebird",
+        "combatLevel": 78,
+        "rate": "5/50"
+      },
+      {
+        "monster": "Yama",
+        "combatLevel": 1238,
+        "rate": "3/95.11"
+      },
+      {
+        "monster": "Elite Black Knight",
+        "combatLevel": 138,
+        "rate": "3/122"
+      },
+      {
+        "monster": "Vardorvis",
+        "combatLevel": 572,
+        "rate": "1/100"
+      },
+      {
+        "monster": "Duke Sucellus",
+        "combatLevel": 758,
+        "rate": "1/100"
+      },
+      {
+        "monster": "The Whisperer",
+        "combatLevel": 587,
+        "rate": "1/100"
+      },
+      {
+        "monster": "The Leviathan",
+        "combatLevel": 593,
+        "rate": "1/100"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Ruby"
   },
   {
     "id": 1319,
@@ -19200,6 +19542,15 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Spade"
   },
   {
+    "id": 670,
+    "nameEn": "Specimen brush",
+    "examine": "A small brush used to clean rock samples.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Specimen_brush.png",
+    "value": 1,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Specimen_brush"
+  },
+  {
     "id": 2007,
     "nameEn": "Spice",
     "examine": "This could liven up an otherwise bland stew.",
@@ -21521,6 +21872,15 @@
       }
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Trout"
+  },
+  {
+    "id": 676,
+    "nameEn": "Trowel",
+    "examine": "Used for digging!",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Trowel.png",
+    "value": 1,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Trowel"
   },
   {
     "id": 361,

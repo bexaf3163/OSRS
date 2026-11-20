@@ -2959,6 +2959,137 @@
       "evidence": [
         "OSRS Wiki Slash Bash, Bronze brutal and the Zogre Flesh Eaters quick guide, read 2026-11-20."
       ]
+    },
+    {
+      "stepId": "S9-84",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "safespot",
+      "objective": "Family Crest: kill Chronozon (level 170, 60 hitpoints, max hit 18) in the Wilderness, hitting him with all four elemental Blast spells.",
+      "enemies": [
+        {
+          "name": "Chronozon",
+          "level": 170,
+          "maxHit": 18,
+          "table": true
+        }
+      ],
+      "lines": [
+        "2.1",
+        "2.6"
+      ],
+      "assumptions": [
+        "Chronozon is safespotted, so the estimate casts Fire Blast from a spot he cannot reach and takes no damage (fightMechanics.json safespot).",
+        "The Air, Water and Earth Blast casts are one cast each, paid by the runes the step lists."
+      ],
+      "problems": [
+        "The fight is in level 13 Wilderness; player killers are not modelled."
+      ],
+      "alternatives": [
+        "Melee or Ranged with good gear and food, finishing with the four Blast spells (OSRS Wiki)."
+      ],
+      "decision": "retain",
+      "changed": [
+        "2.157.0: new quest; Chronozon and his safespot are in combatFoes.json and fightMechanics.json."
+      ],
+      "evidence": [
+        "OSRS Wiki Chronozon (level 170, 60 hitpoints, max hit 18) and the Family Crest quick guide, read 2026-11-20."
+      ]
+    },
+    {
+      "stepId": "S9-85",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "melee",
+      "objective": "One Small Favour: kill 3 dwarf gang members (levels 44 to 49, max hit 4 to 7) for Hammerspike, then the Slagilith (level 92, 60 hitpoints, max hit 13) with a pickaxe.",
+      "enemies": [
+        {
+          "name": "Dwarf gang member",
+          "level": 49,
+          "maxHit": 7,
+          "table": true
+        },
+        {
+          "name": "Slagilith",
+          "level": 92,
+          "maxHit": 13,
+          "table": true
+        }
+      ],
+      "lines": [
+        "0.28",
+        "1.5",
+        "1.7",
+        "1.20"
+      ],
+      "assumptions": [
+        "Only pickaxes hurt the Slagilith fully, so the estimate fights it with an adamant pickaxe (fightMechanics.json weapon).",
+        "The gang members are fought one at a time, as each appears after the last kill."
+      ],
+      "problems": [
+        "Other weapons deal reduced damage to the Slagilith; the estimate does not price a fight without a pickaxe."
+      ],
+      "alternatives": [
+        "Crumble Undead or other magic on the Slagilith; any style on the gang members (OSRS Wiki)."
+      ],
+      "decision": "retain",
+      "changed": [
+        "2.157.0: new quest; the Slagilith and the gang members are in combatFoes.json."
+      ],
+      "evidence": [
+        "OSRS Wiki Slagilith (level 92, max hit 13), Dwarf gang member (levels 44, 48 and 49) and the One Small Favour quick guide, read 2026-11-20."
+      ]
+    },
+    {
+      "stepId": "S9-86",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "other",
+      "objective": "Another Slice of H.A.M.: shoot the H.A.M. Archer and Mage (level 30, max hit 4) on the tower with the crossbow, then kill Sigmund (level 64, 70 hitpoints, max hit 6) after draining his prayer with the ancient mace special.",
+      "enemies": [
+        {
+          "name": "H.A.M. Archer",
+          "level": 30,
+          "maxHit": 4,
+          "table": true
+        },
+        {
+          "name": "H.A.M. Mage",
+          "level": 30,
+          "maxHit": 4,
+          "table": true
+        },
+        {
+          "name": "Sigmund",
+          "level": 64,
+          "maxHit": 6,
+          "table": true
+        }
+      ],
+      "lines": [
+        "3.2",
+        "4.10",
+        "4.11",
+        "4.12"
+      ],
+      "assumptions": [
+        "Melee cannot reach the Archer and Mage, so the estimate shoots bronze bolts from the crossbow the quest leaves upstairs (fightMechanics.json ammo).",
+        "Ten lobsters cover the hits taken."
+      ],
+      "problems": [
+        "The Sigmund page has two monster infoboxes and combatFoes.json reads only the first, the level 50 Death to the Dorgeshuun version (60 hitpoints, max hit 5). The estimate for this fight is a little low.",
+        "His protection prayers are not modelled; the route drains them with the ancient mace special."
+      ],
+      "alternatives": [
+        "Ranged or Magic against Sigmund once his prayer is off (OSRS Wiki)."
+      ],
+      "decision": "retain",
+      "changed": [
+        "2.157.0: new quest; the crossbow and bronze bolts are in rangedGear.json."
+      ],
+      "evidence": [
+        "OSRS Wiki Sigmund (second infobox: level 64, 70 hitpoints, max hit 6), H.A.M. Archer and H.A.M. Mage (level 30) and the Another Slice of H.A.M. quick guide, read 2026-11-20."
+      ]
     }
   ]
 }

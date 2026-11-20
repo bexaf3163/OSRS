@@ -4,7 +4,7 @@ Written by `tests/combatAudit.test.ts` from `src/data/authored/combatAudit.json`
 
 Every stage of the route where the player fights or can be attacked, checked against the route text, the quest stage lines (Quest Helper), the OSRS Wiki infoboxes in combatFoes.json and the danger zones. The rule for a fight the quest cannot go on without: its food is a required item (readiness and the game check it before leaving), the app estimates it with the player's kit where it has the opponent's numbers, and an unread kit or bag is reported as not checked, never as ready.
 
-84 stages: 56 retained, 27 revised, 0 with a branch, 1 deferred.
+87 stages: 59 retained, 27 revised, 0 with a branch, 1 deferred.
 
 | Step | Kind | Mandatory | Opponents | Method | Estimate | Food in the item list | Decision |
 |---|---|---|---|---|---|---|---|
@@ -92,6 +92,9 @@ Every stage of the route where the player fights or can be attacked, checked aga
 | S9-81 Lunar Diplomacy | quest-fight | yes | Suqah (111), Me (79) | melee | Suqah, Me | Lobster 15 | Retain |
 | S9-82 Temple of Ikov | quest-fight | yes | Fire Warrior of Lesarkus (84), Lucien (14) | other | Fire Warrior of Lesarkus, Lucien | Lobster 10 | Retain |
 | S9-83 Zogre Flesh Eaters | quest-fight | yes | Slash Bash (111) | other | Slash Bash | Lobster 10 | Retain |
+| S9-84 Family Crest | quest-fight | yes | Chronozon (170) | safespot | Chronozon | Lobster 5 | Retain |
+| S9-85 One Small Favour | quest-fight | yes | Dwarf gang member (49), Slagilith (92) | melee | Slagilith, Dwarf gang member | Lobster 10 | Retain |
+| S9-86 Another Slice of H.A.M. | quest-fight | yes | H.A.M. Archer (30), H.A.M. Mage (30), Sigmund (64) | other | H.A.M. Archer, H.A.M. Mage, Sigmund | Lobster 10 | Retain |
 
 ## S1-06 The Restless Ghost
 
@@ -2035,4 +2038,86 @@ Changed:
 Evidence:
 
 - OSRS Wiki Slash Bash, Bronze brutal and the Zogre Flesh Eaters quick guide, read 2026-11-20.
+
+## S9-84 Family Crest
+
+**Retain.** Family Crest: kill Chronozon (level 170, 60 hitpoints, max hit 18) in the Wilderness, hitting him with all four elemental Blast spells.
+
+Quest stage lines: 2.1, 2.6.
+
+Assumptions:
+
+- Chronozon is safespotted, so the estimate casts Fire Blast from a spot he cannot reach and takes no damage (fightMechanics.json safespot).
+- The Air, Water and Earth Blast casts are one cast each, paid by the runes the step lists.
+
+Problems:
+
+- The fight is in level 13 Wilderness; player killers are not modelled.
+
+Alternatives:
+
+- Melee or Ranged with good gear and food, finishing with the four Blast spells (OSRS Wiki).
+
+Changed:
+
+- 2.157.0: new quest; Chronozon and his safespot are in combatFoes.json and fightMechanics.json.
+
+Evidence:
+
+- OSRS Wiki Chronozon (level 170, 60 hitpoints, max hit 18) and the Family Crest quick guide, read 2026-11-20.
+
+## S9-85 One Small Favour
+
+**Retain.** One Small Favour: kill 3 dwarf gang members (levels 44 to 49, max hit 4 to 7) for Hammerspike, then the Slagilith (level 92, 60 hitpoints, max hit 13) with a pickaxe.
+
+Quest stage lines: 0.28, 1.5, 1.7, 1.20.
+
+Assumptions:
+
+- Only pickaxes hurt the Slagilith fully, so the estimate fights it with an adamant pickaxe (fightMechanics.json weapon).
+- The gang members are fought one at a time, as each appears after the last kill.
+
+Problems:
+
+- Other weapons deal reduced damage to the Slagilith; the estimate does not price a fight without a pickaxe.
+
+Alternatives:
+
+- Crumble Undead or other magic on the Slagilith; any style on the gang members (OSRS Wiki).
+
+Changed:
+
+- 2.157.0: new quest; the Slagilith and the gang members are in combatFoes.json.
+
+Evidence:
+
+- OSRS Wiki Slagilith (level 92, max hit 13), Dwarf gang member (levels 44, 48 and 49) and the One Small Favour quick guide, read 2026-11-20.
+
+## S9-86 Another Slice of H.A.M.
+
+**Retain.** Another Slice of H.A.M.: shoot the H.A.M. Archer and Mage (level 30, max hit 4) on the tower with the crossbow, then kill Sigmund (level 64, 70 hitpoints, max hit 6) after draining his prayer with the ancient mace special.
+
+Quest stage lines: 3.2, 4.10, 4.11, 4.12.
+
+Assumptions:
+
+- Melee cannot reach the Archer and Mage, so the estimate shoots bronze bolts from the crossbow the quest leaves upstairs (fightMechanics.json ammo).
+- Ten lobsters cover the hits taken.
+
+Problems:
+
+- The Sigmund page has two monster infoboxes and combatFoes.json reads only the first, the level 50 Death to the Dorgeshuun version (60 hitpoints, max hit 5). The estimate for this fight is a little low.
+- His protection prayers are not modelled; the route drains them with the ancient mace special.
+
+Alternatives:
+
+- Ranged or Magic against Sigmund once his prayer is off (OSRS Wiki).
+
+Changed:
+
+- 2.157.0: new quest; the crossbow and bronze bolts are in rangedGear.json.
+
+Evidence:
+
+- OSRS Wiki Sigmund (second infobox: level 64, 70 hitpoints, max hit 6), H.A.M. Archer and H.A.M. Mage (level 30) and the Another Slice of H.A.M. quick guide, read 2026-11-20.
 

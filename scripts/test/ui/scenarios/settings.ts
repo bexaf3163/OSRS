@@ -25,7 +25,7 @@ async function accountSyncProofScenarios(browser: Browser) {
     const { page, errors } = await open(browser, width, {
       progress: { version: 3, steps: { 'S1-04': 'skipped' }, levels: {}, notes: { 'S1-03': 'Keep this note' }, gameMode: 'f2p' },
       localStorage: { 'osrs-put-settings-tab': 'progress' },
-      status: { protocol: 7, inGame: true, player: 'Sync Proof', questsDone: ['Goblin Diplomacy'] },
+      status: { protocol: 8, inGame: true, player: 'Sync Proof', questsDone: ['Goblin Diplomacy'] },
       events: [{ type: 'QUESTS', done: ['Goblin Diplomacy'] }],
     }, '#/settings');
     await settle(page);
@@ -91,7 +91,7 @@ async function recovery(browser: Browser) {
   }
   {
     const { page, errors } = await open(browser, 1280, {
-      oversizedSnapshot: true, progress: progressBefore('S3-05'), status: { protocol: 7, pluginVersion: '2.74.0', activeStepId: 'S3-05' },
+      oversizedSnapshot: true, progress: progressBefore('S3-05'), status: { protocol: 8, pluginVersion: '2.74.0', activeStepId: 'S3-05' },
       localStorage: { 'osrs-put:active-step': 'S3-05' },
     }, '#/step/S3-05');
     await page.getByText(/The game guide could not sync: its data exceeds/).waitFor({ timeout: 5000 });
@@ -135,7 +135,7 @@ async function recovery(browser: Browser) {
       profileFile: { version: 99, list: [] },
       localStorage: { 'osrs-put:profiles': JSON.stringify(profiles) },
       progress: progressBefore('S4-01', { levels: { attack: 30 } }),
-      status: { protocol: 7, player: 'Profile test', stats: { attack: 99 } },
+      status: { protocol: 8, player: 'Profile test', stats: { attack: 99 } },
       events: [{ type: 'STATS', stats: { attack: 99 } }],
     }, '#/settings');
     expect(await page.locator('.profile-storage-warning').count() === 1, `profile protection (${width}): one actionable recovery warning`);
@@ -154,7 +154,7 @@ async function recovery(browser: Browser) {
       profileFile: nativeProfiles,
       localStorage: { 'osrs-put:profiles': JSON.stringify(browserProfiles) },
       progress: progressBefore('S4-01', { levels: { attack: 30 } }),
-      status: { protocol: 7, player: 'Profile test', stats: { attack: 99 } },
+      status: { protocol: 8, player: 'Profile test', stats: { attack: 99 } },
       events: [{ type: 'STATS', stats: { attack: 99 } }],
     }, '#/settings');
     expect(await page.locator('.profile-storage-warning').count() === 1 && (await text(page, '.profile-storage-warning')).includes('saved profile lists disagree'), `profile conflict (${width}): one warning explains the conflict between supported lists`);

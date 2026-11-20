@@ -70,7 +70,7 @@ async function stepS901(browser: Browser) {
   const stats = { crafting: 31, woodcutting: 36, magic: 13, hitpoints: 31, attack: 40, strength: 40, defence: 33 };
   const { page, errors } = await open(browser, 1280, {
     progress: progressBefore('S9-01', { gameMode: 'members', levels: stats }),
-    localStorage: { 'osrs-put:active-step': 'S9-01' }, status: { protocol: 7, inGame: true, player: 'Entrana Test', stats, activeStepId: 'S9-01', questInstruction: { stepId: 'S9-01', stageAt: 2, lineIndex: 0, peeking: false } },
+    localStorage: { 'osrs-put:active-step': 'S9-01' }, status: { protocol: 8, inGame: true, player: 'Entrana Test', stats, activeStepId: 'S9-01', questInstruction: { stepId: 'S9-01', stageAt: 2, lineIndex: 0, peeking: false } },
     events: [{ type: 'STATS', stats }, { type: 'OWNED', bankSeen: true, items: [
       { name: 'Knife', carried: 1, noted: 0, bank: 0 }, { name: 'Bronze axe', carried: 0, noted: 0, bank: 1 },
       ...['Tuna', 'Trout', 'Salmon', 'Lobster'].map(name => ({ name, carried: 0, noted: 0, bank: name === 'Salmon' ? 5 : 0 })),
@@ -106,7 +106,7 @@ async function stepS901(browser: Browser) {
 async function stepS802(browser: Browser) {
   const { page, errors } = await open(browser, 1280, {
     progress: progressBefore('S8-02'),
-    status: { protocol: 7, questsDone: [], questPoints: 60 },
+    status: { protocol: 8, questsDone: [], questPoints: 60 },
     events: [{ type: 'QUESTS', done: [] }],
   }, '#/step/S8-02');
   expect((await page.locator('.step-blocked').allInnerTexts()).some(t => t.includes('S8-01')), 'prerequisites: live unfinished quest overrides an old route done mark');
@@ -128,7 +128,7 @@ async function questPhase(browser: Browser) {
   const gear = { equipment: [], inventory: [{ id: 294, name: "Glarial's pebble", count: 1 }], coins: 1000, bankCoins: 0 };
   const { page, errors } = await open(browser, 1280, {
     progress: progressBefore(id), localStorage: { 'osrs-put:active-step': id },
-    status: { protocol: 7, inGame: true, activeStepId: id, player: 'Phase Test', ...gear, questInstruction: { stepId: id, stageAt: 3, lineIndex: 4, peeking: false } },
+    status: { protocol: 8, inGame: true, activeStepId: id, player: 'Phase Test', ...gear, questInstruction: { stepId: id, stageAt: 3, lineIndex: 4, peeking: false } },
     events: [{ type: 'GEAR', ...gear }, { type: 'OWNED', bankSeen: true, items: ['Rope', 'Air rune', 'Earth rune', 'Water rune', "Glarial's pebble"].map(name => ({ name, carried: name.includes('pebble') ? 1 : 0, noted: 0, bank: 0 })) }],
   }, '#/step/S7-01');
   await page.getByRole('tab', { name: 'Preparation', exact: true }).click();
@@ -286,7 +286,7 @@ async function compactPreference(browser: Browser) {
   const { page, errors } = await open(browser, 1440, {
     progress: progressBefore('S3-04'),
     localStorage: { 'osrs-put:active-step': 'S3-04', },
-    status: { protocol: 7, inGame: true, activeStepId: 'S3-04', questInstruction: { stepId: 'S3-04', stageAt: stage.at, lineIndex, peeking: false } },
+    status: { protocol: 8, inGame: true, activeStepId: 'S3-04', questInstruction: { stepId: 'S3-04', stageAt: stage.at, lineIndex, peeking: false } },
   }, '#/step/S3-04');
   await waitFor(page, '.cockpit', 5000);
   expect(await page.locator('.strip').count() === 0 && await page.locator('.la-pg.la-l').isVisible(), 'legacy display preference: the normal Ledger remains available');
@@ -315,7 +315,7 @@ async function shieldOfArravStages(browser: Browser) {
 async function dragonScimitarTasks(browser: Browser) {
   const { page, errors } = await open(browser, 1440, {
     progress: progressBefore('S9-04'), localStorage: { 'osrs-put:active-step': 'S9-04' },
-    status: { protocol: 7, inGame: true, activeStepId: 'S9-04', stats: { attack: 52 }, equipment: [], inventory: [], coins: 1000, bankCoins: 0 },
+    status: { protocol: 8, inGame: true, activeStepId: 'S9-04', stats: { attack: 52 }, equipment: [], inventory: [], coins: 1000, bankCoins: 0 },
   }, '#/step/S9-04');
   await settle(page);
   const tasks = await text(page, '.step-tasks');

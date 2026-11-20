@@ -5,7 +5,7 @@ import type { Step, StepBranch } from '../types';
 import { gateAllows } from '../domain/persistence/profiles';
 import { guardedProfileGate as profileGate, readProfiles } from './profiles';
 import { clearActiveStep, supportsSnapshot, syncActiveStep } from '../services/runeliteBridge';
-import { autoCompletes, toInGameTarget } from '../domain/guide/inGameTarget';
+import { autoCompletes, stagesForPlugin, toInGameTarget } from '../domain/guide/inGameTarget';
 import { preflightItems } from '../domain/prep/stepItems';
 import { doseKind } from '../domain/items/doseKind';
 import { roadFrom, tripWindow } from '../domain/prep/oneTrip';
@@ -42,8 +42,9 @@ export function useStepSending({ activeStepId, setAdvance, liveIdentity, session
       return epoch === sessionEpoch.current && ok;
     }
     // What the ways to the step need is counted too: the planner says "withdraw it" only for what the bank is known to hold.
-    const payload = toInGameTarget(target, branch, ahead, transportWatch(latest.current.mode));
-    if (!payload) return false;
+    const built = toInGameTarget(target, branch, ahead, transportWatch(latest.current.mode));
+    if (!built) return false;
+    const payload = stagesForPlugin(built, pluginProtocol.current);
     const sn = snapshot.current;
     sn.parts = { ...sn.parts, step: payload };
     sn.synced = true;

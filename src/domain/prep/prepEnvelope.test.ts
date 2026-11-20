@@ -73,14 +73,15 @@ describe('the state snapshot for the game (protocol 6)', () => {
     expect(await send({}, 413)).toMatchObject({ ok: false, status: 413 });
   });
 
-  it('the app declares protocol 7 and the /prep-plan address; an older plugin — we ask to update', () => {
-    expect(APP_PROTOCOL).toBe(7);
+  it('the app declares protocol 8 and the /prep-plan address; an older plugin — we ask to update', () => {
+    expect(APP_PROTOCOL).toBe(8);
     expect(BRIDGE_PATHS).toContain('/prep-plan');
     expect(supportsSnapshot(6)).toBe(true);
     expect(supportsSnapshot(5)).toBe(false);
     expect(supportsSnapshot(null)).toBe(false);
     expect(missingWithPlugin(5).join(' ')).toMatch(/snapshot/);
-    expect(missingWithPlugin(7)).toEqual([]);
+    expect(missingWithPlugin(7)).toEqual(['the in-game stages of the longest quests']);
+    expect(missingWithPlugin(8)).toEqual([]);
   });
 
   it('the plan in the game: percent, lines with importance, "do not take now", within the plugin checks', () => {

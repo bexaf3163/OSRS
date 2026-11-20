@@ -3085,6 +3085,173 @@
       "aggressive": true
     },
     {
+      "name": "Chronozon",
+      "combat": 170,
+      "members": true,
+      "hitpoints": 60,
+      "attackLevel": 173,
+      "strengthLevel": 172,
+      "defenceLevel": 173,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "slash",
+      "maxHit": 18,
+      "speedTicks": 4,
+      "aggressive": true,
+      "xpBonus": -97,
+      "weakness": {
+        "element": "water",
+        "percent": 25
+      }
+    },
+    {
+      "name": "Slagilith",
+      "combat": 92,
+      "members": true,
+      "hitpoints": 60,
+      "attackLevel": 60,
+      "strengthLevel": 120,
+      "defenceLevel": 75,
+      "magicLevel": 1,
+      "attackBonus": 10,
+      "defence": {
+        "stab": 50,
+        "slash": 50,
+        "crush": 5,
+        "magic": 5,
+        "ranged": 50
+      },
+      "attackStyle": "crush",
+      "maxHit": 13,
+      "speedTicks": 4,
+      "aggressive": true,
+      "xpBonus": 3,
+      "weakness": {
+        "element": "earth",
+        "percent": 40
+      }
+    },
+    {
+      "name": "Dwarf gang member",
+      "version": "Level 44",
+      "combat": 44,
+      "members": true,
+      "hitpoints": 40,
+      "attackLevel": 40,
+      "strengthLevel": 40,
+      "defenceLevel": 35,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 7,
+        "slash": 7,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 7
+      },
+      "attackStyle": "crush",
+      "maxHit": 5,
+      "speedTicks": 5,
+      "aggressive": false
+    },
+    {
+      "name": "Dwarf gang member",
+      "version": "Level 48",
+      "combat": 48,
+      "members": true,
+      "hitpoints": 25,
+      "attackLevel": 80,
+      "strengthLevel": 30,
+      "defenceLevel": 25,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 7,
+        "slash": 7,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 7
+      },
+      "attackStyle": "crush",
+      "maxHit": 4,
+      "speedTicks": 5,
+      "aggressive": false
+    },
+    {
+      "name": "Dwarf gang member",
+      "version": "Level 49",
+      "combat": 49,
+      "members": true,
+      "hitpoints": 25,
+      "attackLevel": 30,
+      "strengthLevel": 60,
+      "defenceLevel": 57,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 7,
+        "slash": 7,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 7
+      },
+      "attackStyle": "crush",
+      "maxHit": 7,
+      "speedTicks": 5,
+      "aggressive": false
+    },
+    {
+      "name": "H.A.M. Archer",
+      "combat": 30,
+      "members": true,
+      "hitpoints": 35,
+      "attackLevel": 30,
+      "strengthLevel": 0,
+      "defenceLevel": 30,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 5,
+        "slash": 5,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 5
+      },
+      "attackStyle": "ranged",
+      "maxHit": 4,
+      "speedTicks": 10,
+      "aggressive": true
+    },
+    {
+      "name": "H.A.M. Mage",
+      "combat": 30,
+      "members": true,
+      "hitpoints": 35,
+      "attackLevel": 0,
+      "strengthLevel": 0,
+      "defenceLevel": 30,
+      "magicLevel": 30,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 5,
+        "slash": 5,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 5
+      },
+      "attackStyle": "magic",
+      "maxHit": 4,
+      "speedTicks": 10,
+      "aggressive": true
+    },
+    {
       "name": "Cow",
       "version": "1",
       "combat": 2,

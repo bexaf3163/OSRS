@@ -9,7 +9,7 @@ async function ledgerScenarios(browser: Browser) {
   // What reached RuneLite for a step: the snapshot (protocol 6), the active step or a navigation target that names it.
   const sent = (page: Page, id: string) => page.evaluate((id) => (window as unknown as { __posts: { path: string; body?: unknown }[] }).__posts.filter((p) => p.path !== '/status' && JSON.stringify(p.body ?? '').includes(`"${id}"`)).length, id);
   const navPosts = (page: Page) => page.evaluate(() => (window as unknown as { __posts: { path: string }[] }).__posts.filter((p) => p.path === '/nav-target').length);
-  const { page, errors } = await open(browser, 1440, { progress: progressBefore('S2-09'), status: { protocol: 7, inGame: true, activeStepId: null, player: 'Fixture', questStates: questStatesBefore('S2-09') } }, '#/step/S2-09');
+  const { page, errors } = await open(browser, 1440, { progress: progressBefore('S2-09'), status: { protocol: 8, inGame: true, activeStepId: null, player: 'Fixture', questStates: questStatesBefore('S2-09') } }, '#/step/S2-09');
   await page.waitForSelector('.la-hotbar', { timeout: 5000 });
   const title = () => page.locator('#step-view-title').innerText();
   const hud = page.locator('.la-hud');
@@ -231,7 +231,7 @@ async function combatStrategy(browser: Browser) {
   const { page, errors } = await open(browser, 1440, {
     progress: progressBefore('S2-11'), market: true,
     localStorage: { 'osrs-put:active-step': 'S2-11', 'osrs-put:planning-intent': JSON.stringify({ version: 1, intent: { kind: 'quest', questId: 'Ernest the Chicken' } }) },
-    status: { protocol: 7, player: 'Fixture', inGame: true, activeStepId: 'S2-11', questStates: observation, stats, ...gear },
+    status: { protocol: 8, player: 'Fixture', inGame: true, activeStepId: 'S2-11', questStates: observation, stats, ...gear },
     events: [{ type: 'STATS', stats }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true,
       items: [{ name: 'Mithril scimitar', carried: 1, bank: 0, noted: 0 }, { name: 'Trout', carried: 26, bank: 0, noted: 0 }] }],
   }, '#/path');
@@ -260,7 +260,7 @@ async function f2pNext(browser: Browser) {
     cooking: 30, mining: 18, smithing: 29, crafting: 9, runecraft: 1 };
   const gear = { equipment: [], inventory: [{ id: 1353, name: 'Steel axe', count: 1 }], coins: 30000, bankCoins: 0 };
   const { page, errors } = await open(browser, 1440, { market: true, progress: { ...progressBefore('S1-01'), gameMode: 'f2p' },
-    status: { protocol: 7, inGame: true, player: 'Fixture', ...gear, stats, questStates: questStatesBefore('S7-01') },
+    status: { protocol: 8, inGame: true, player: 'Fixture', ...gear, stats, questStates: questStatesBefore('S7-01') },
     events: [{ type: 'STATS', stats }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items: [{ name: 'Steel axe', carried: 1, noted: 0, bank: 0 }] }] }, '#/path');
   await settle(page);
   const next = await page.getByRole('region', { name: 'Next action' }).innerText();
@@ -285,7 +285,7 @@ async function f2pNextOptional(browser: Browser) {
     const progress = progressBefore('S7-01', { gameMode: 'f2p' }), marks = progress.steps as Record<string, string>;
     if (mark === 'open') delete marks['S3-05']; else marks['S3-05'] = mark;
     return open(browser, 1440, { market: true, progress,
-      status: { protocol: 7, inGame: true, player: 'Fixture', ...gear, stats, questStates: { ...states, states: { ...states.states, 'Shield of Arrav': 'IN_PROGRESS' } } },
+      status: { protocol: 8, inGame: true, player: 'Fixture', ...gear, stats, questStates: { ...states, states: { ...states.states, 'Shield of Arrav': 'IN_PROGRESS' } } },
       events: [{ type: 'STATS', stats }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items: [] }] }, '#/path');
   };
   let { page, errors } = await at('open');

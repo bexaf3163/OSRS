@@ -16,8 +16,9 @@ const PAGES = [
   'Bronze arrow', 'Iron arrow', 'Steel arrow', 'Mithril arrow', 'Adamant arrow',
   'Coif', 'Leather cowl', 'Leather body', 'Hardleather body', 'Studded body', "Green d'hide body", 'Leather chaps', 'Studded chaps',
   "Green d'hide chaps", 'Leather vambraces', "Green d'hide vambraces", 'Leather gloves', 'Leather boots', 'Amulet of accuracy', 'Amulet of power',
-  // Quest fights' own bows and arrows (fightMechanics.json ammo): Temple of Ikov's ice arrows, Zogre Flesh Eaters' brutal arrows.
-  'Yew shortbow', 'Ice arrows', 'Ogre bow', 'Bronze brutal',
+  // Quest fights' own bows and ammunition (fightMechanics.json ammo): Temple of Ikov's ice arrows, Zogre Flesh Eaters' brutal arrows,
+  // the crossbow and bolts that spawn for Another Slice of H.A.M.
+  'Yew shortbow', 'Ice arrows', 'Ogre bow', 'Bronze brutal', 'Crossbow', 'Bronze bolts',
 ];
 
 

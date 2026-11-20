@@ -22,6 +22,9 @@ const AUTHORED: (number | string)[][] = [
   [3361, 3150, 0, 3361, 11482, 0, 44635, 'Enter Cave', ''], // Giants' Foundry (Sleeping Giants)
   [3361, 11482, 0, 3361, 3150, 0, 44636, 'Exit Cave', ''],
   [3059, 3590, 0, 2281, 4837, 0, 34742, 'Enter Mysterious ruins', ''], // Chaos altar, with a chaos talisman (What Lies Below)
+  // shortcut: areas reached through other areas, so the row is the first entrance on the surface, not one step; replace when the arrow follows chains.
+  [3209, 3216, 0, 2512, 5564, 0, 14880, 'Climb-down Trapdoor', ''], // Dorgesh-Kaan railway dig (cellar, mines, city, train; Another Slice of H.A.M.)
+  [3169, 3172, 0, 2404, 5540, 0, 5947, 'Climb-down Dark hole', ''], // H.A.M. storerooms (swamp caves, then the H.A.M. ladder)
 ];
 const rows = [...dedupePortals(portals).map(toRow), ...AUTHORED];
 const floorRows = dedupePortals(floors).map(toRow);

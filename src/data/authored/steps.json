@@ -14470,5 +14470,543 @@
         "questName": "Zogre Flesh Eaters"
       }
     }
+  },
+  {
+    "id": "S9-84",
+    "stage": 9,
+    "type": "quest",
+    "title": "Family Crest",
+    "qp": 1,
+    "requires": [],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Family_Crest",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Family_Crest/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3279,3404,0",
+    "mapLocation": {
+      "x": 3279,
+      "y": 3404,
+      "plane": 0,
+      "label": "South-eastern Varrock"
+    },
+    "npc": {
+      "nameEn": "Dimintheis",
+      "location": "South-eastern Varrock",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Dimintheis"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Lobster",
+        "amount": 5,
+        "howToGet": "Buy on the Grand Exchange: the Wilderness dungeon's monsters on the way to Chronozon.",
+        "wikiItemId": 379,
+        "heals": 12,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Lobster.png"
+      },
+      {
+        "nameEn": "Shrimps",
+        "heals": 3,
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange. Caleb wants one each of shrimps, salmon, tuna, bass and swordfish.",
+        "wikiItemId": 315,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Shrimps.png"
+      },
+      {
+        "nameEn": "Salmon",
+        "heals": 9,
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Keepa Kettilon's store in Jatizso for 33 gp.",
+        "wikiItemId": 329,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Salmon.png"
+      },
+      {
+        "nameEn": "Tuna",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Fishing Guild Shop in Fishing Guild for 40 gp.",
+        "wikiItemId": 361,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Tuna.png"
+      },
+      {
+        "nameEn": "Bass",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Fishing Guild Shop in Fishing Guild for 40 gp.",
+        "wikiItemId": 365,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bass.png"
+      },
+      {
+        "nameEn": "Swordfish",
+        "heals": 14,
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Fishing Guild Shop in Fishing Guild for 80 gp.",
+        "wikiItemId": 373,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Swordfish.png"
+      },
+      {
+        "nameEn": "Bronze pickaxe",
+        "amount": 1,
+        "howToGet": "Any pickaxe from the bank: you mine 2 perfect gold ores (Mining 40).",
+        "wikiItemId": 1265,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_pickaxe.png"
+      },
+      {
+        "nameEn": "Ruby",
+        "amount": 2,
+        "howToGet": "Buy on the Grand Exchange, or from Herquin's Gems in Falador for 1000 gp.",
+        "wikiItemId": 1603,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Ruby.png"
+      },
+      {
+        "nameEn": "Ring mould",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Dommik's Crafting Store in Al Kharid for 5 gp.",
+        "wikiItemId": 1592,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Ring_mould.png"
+      },
+      {
+        "nameEn": "Necklace mould",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Dommik's Crafting Store in Al Kharid for 5 gp.",
+        "wikiItemId": 1597,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Necklace_mould.png"
+      },
+      {
+        "nameEn": "Antipoison(4)",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange. Johnathon drinks it; any dose of a poison cure works.",
+        "wikiItemId": 2446,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Antipoison(4).png"
+      },
+      {
+        "nameEn": "Staff of fire",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange: endless fire runes for Fire Blast on Chronozon from a safespot.",
+        "wikiItemId": 1387,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Staff_of_fire.png"
+      },
+      {
+        "nameEn": "Air rune",
+        "amount": 90,
+        "howToGet": "Buy on the Grand Exchange: four per Fire Blast and three for each other blast.",
+        "wikiItemId": 556,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Air_rune.png"
+      },
+      {
+        "nameEn": "Death rune",
+        "amount": 23,
+        "howToGet": "Buy on the Grand Exchange: one per blast spell.",
+        "wikiItemId": 560,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Death_rune.png"
+      },
+      {
+        "nameEn": "Water rune",
+        "amount": 3,
+        "howToGet": "Buy on the Grand Exchange: one Water Blast must hit Chronozon.",
+        "wikiItemId": 555,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Water_rune.png"
+      },
+      {
+        "nameEn": "Earth rune",
+        "amount": 4,
+        "howToGet": "Buy on the Grand Exchange: one Earth Blast must hit Chronozon.",
+        "wikiItemId": 557,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Earth_rune.png"
+      }
+    ],
+    "foes": [
+      "Chronozon"
+    ],
+    "reward": "1 QP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Dimintheis"
+      ],
+      "dialogChoices": [
+        "Hi, I am a bold adventurer.",
+        "So where is this crest?",
+        "Ok, I will help you.",
+        "Are you Caleb Fitzharmon?",
+        "So can I have your bit?",
+        "Ok, I will get those.",
+        "Uh... what happened to the rest of it?",
+        "I'm in search of a man named Avan Fitzharmon.",
+        "I'm looking for a man named Avan Fitzharmon.",
+        "Hello. I'm in search of very high quality gold."
+      ],
+      "highlightItems": [
+        "Shrimps",
+        "Salmon",
+        "Tuna",
+        "Bass",
+        "Swordfish",
+        "Bronze pickaxe",
+        "Ruby",
+        "Ring mould",
+        "Necklace mould",
+        "Antipoison(4)",
+        "Staff of fire",
+        "Air rune",
+        "Death rune",
+        "Water rune",
+        "Earth rune",
+        "Lobster"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Family Crest"
+      }
+    }
+  },
+  {
+    "id": "S9-85",
+    "stage": 9,
+    "type": "quest",
+    "title": "One Small Favour",
+    "qp": 2,
+    "requires": [
+      "S2-06",
+      "S9-44"
+    ],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/One_Small_Favour",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/One_Small_Favour/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2835,2987,0",
+    "mapLocation": {
+      "x": 2835,
+      "y": 2987,
+      "plane": 0,
+      "label": "Shilo Village"
+    },
+    "npc": {
+      "nameEn": "Yanni Salika",
+      "location": "Shilo Village",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Yanni_Salika"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Steel bar",
+        "amount": 4,
+        "howToGet": "Buy on the Grand Exchange.",
+        "wikiItemId": 2353,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Steel_bar.png"
+      },
+      {
+        "nameEn": "Bronze bar",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Drogo's Mining Emporium in Dwarven Mines for 8 gp.",
+        "wikiItemId": 2349,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_bar.png"
+      },
+      {
+        "nameEn": "Iron bar",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Drogo's Mining Emporium in Dwarven Mines for 28 gp.",
+        "wikiItemId": 2351,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Iron_bar.png"
+      },
+      {
+        "nameEn": "Guam leaf",
+        "amount": 2,
+        "howToGet": "Buy on the Grand Exchange: two go into the Guthix rest tea (Herblore 18).",
+        "wikiItemId": 249,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Guam_leaf.png"
+      },
+      {
+        "nameEn": "Marrentill",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange: it goes into the Guthix rest tea.",
+        "wikiItemId": 251,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Marrentill.png"
+      },
+      {
+        "nameEn": "Harralander",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange: it goes into the Guthix rest tea.",
+        "wikiItemId": 255,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Harralander.png"
+      },
+      {
+        "nameEn": "Cup of hot water",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange: the herbs go into it for the Guthix rest tea.",
+        "wikiItemId": 4460,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Cup_of_hot_water.png"
+      },
+      {
+        "nameEn": "Hammer",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Drogo's Mining Emporium in Dwarven Mines for 1 gp.",
+        "wikiItemId": 2347,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Hammer.png"
+      },
+      {
+        "nameEn": "Pigeon cage",
+        "amount": 5,
+        "howToGet": "Free: 5 cages behind Jerico's house in East Ardougne.",
+        "wikiItemId": 424,
+        "inStep": true,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Pigeon_cage.png"
+      },
+      {
+        "nameEn": "Pot",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Rimmington General Store in Rimmington for 1 gp.",
+        "wikiItemId": 1931,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Pot.png"
+      },
+      {
+        "nameEn": "Soft clay",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange.",
+        "wikiItemId": 1761,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Soft_clay.png"
+      },
+      {
+        "nameEn": "Chisel",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Dommik's Crafting Store in Al Kharid for 1 gp.",
+        "wikiItemId": 1755,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Chisel.png"
+      },
+      {
+        "nameEn": "Opal",
+        "amount": 1,
+        "howToGet": "Take the uncut gem from a landing light during the quest and cut it with the chisel.",
+        "wikiItemId": 1609,
+        "inStep": true,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Opal.png"
+      },
+      {
+        "nameEn": "Jade",
+        "amount": 1,
+        "howToGet": "Take the uncut gem from a landing light during the quest and cut it with the chisel.",
+        "wikiItemId": 1611,
+        "inStep": true,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Jade.png"
+      },
+      {
+        "nameEn": "Red topaz",
+        "amount": 1,
+        "howToGet": "Take the uncut gem from a landing light during the quest and cut it with the chisel.",
+        "wikiItemId": 1613,
+        "inStep": true,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Red_topaz.png"
+      },
+      {
+        "nameEn": "Sapphire",
+        "amount": 1,
+        "howToGet": "Take the uncut gem from a landing light during the quest and cut it with the chisel.",
+        "wikiItemId": 1607,
+        "inStep": true,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Sapphire.png"
+      },
+      {
+        "nameEn": "Adamant pickaxe",
+        "amount": 1,
+        "howToGet": "Any pickaxe from the bank: only pickaxes hurt the Slagilith fully; the estimate uses an adamant one.",
+        "wikiItemId": 1271,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Adamant_pickaxe.png"
+      },
+      {
+        "nameEn": "Lobster",
+        "amount": 10,
+        "howToGet": "Buy on the Grand Exchange: the Slagilith (level 92) and the dwarf gang members.",
+        "wikiItemId": 379,
+        "heals": 12,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Lobster.png"
+      }
+    ],
+    "foes": [
+      "Slagilith",
+      "Dwarf gang member"
+    ],
+    "reward": "2 QP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Yanni Salika"
+      ],
+      "dialogChoices": [
+        "Is there anything else interesting to do around here?",
+        "Ok, see you in a tick!",
+        "Il'l get going then!",
+        "I need to talk to you about red mahogany.",
+        "Ok, I'll take your axe to get it sharpened.",
+        "Do you sharpen axes?",
+        "Look, can you sharpen this cursed axe or what?",
+        "Ok, ok, I'll do it! I'll go and see Aggie.",
+        "Can I ask you about being a character witness?",
+        "Let me guess, you're going to ask me to do you a favour?",
+        "Oh, Ok, I'll see if I can find Jimmy.",
+        "I'm looking for Jimmy the Chisel.",
+        "And I suppose you need me to do you a favour?",
+        "Ok, Jimmy has to be worth more than a few scrawny chickens!",
+        "I need to talk to you about Jimmy.",
+        "Hi, I need to talk to you about chicken cages!",
+        "Ok, I guess one good turn deserves another.",
+        "Talk about One Small Favour.",
+        "I guess I can go to Barbarian Village.",
+        "Ok, I'll deal with Hammerspike!",
+        "Oh, come on...do something nice for Tassie.",
+        "Have you always been a gangster?",
+        "Ok, another favour...I think I can manage that.",
+        "Are you taking any new initiates?",
+        "Do you accept dwarves?",
+        "A dwarf I know wants to become an initiate.",
+        "Yep, it's a deal.",
+        "I have a special tea here for you from Sanfew!",
+        "Ok, I'll go and get you some T.R.A.S.H.",
+        "I need to talk T.R.A.S.H to you.",
+        "Yes, Ok, I'll do it!",
+        "Hi, can you give me a weather forecast?",
+        "What can I do to help?",
+        "Yes, Ok, I'll do it.",
+        "I need to talk to you about a girl stuck in some rock!",
+        "Oh! Ok, one more 'small favour' isn't going to kill me...I hope!",
+        "Ask about iron oxide.",
+        "Ok, I'll do it!",
+        "I need to talk to you about a mattress.",
+        "Can you fill this mattress with feathers?",
+        "Ok, I'll see what I can do.",
+        "Rantz said I should help you finish this project.",
+        "Yes, I'll take a look at them.",
+        "I've fixed all the lights!",
+        "Ok, I've helped that Gnome, he shouldn't bother you anymore.",
+        "I have the mattress.",
+        "I have that iron oxide you asked for!",
+        "I've released Petra, she should have returned.",
+        "I'll run through you if you don't give me that weather report.",
+        "Why can't you get a clear picture?",
+        "Which special Seers tools do you mean?",
+        "You're talking in riddles, just give me a straight answer!",
+        "What do you mean, 'special combination of items'?",
+        "I've fixed the weather vane!",
+        "I have the weather report for you.",
+        "Hey there, did you get your T.R.A.S.H?",
+        "Hi there, the Gnome Pilot has agreed to take you to see the ogres!",
+        "I have the tincture and breathing salts.",
+        "I have the five pigeon cages you asked for!",
+        "You're in luck, I managed to swing that chicken deal for you.",
+        "Good news! Jimmy has been released!",
+        "I've returned with good news.",
+        "Good news, I have your sharpened axe!",
+        "Here's the red mahogany you asked for."
+      ],
+      "highlightItems": [
+        "Steel bar",
+        "Bronze bar",
+        "Iron bar",
+        "Guam leaf",
+        "Marrentill",
+        "Harralander",
+        "Cup of hot water",
+        "Hammer",
+        "Pigeon cage",
+        "Pot",
+        "Soft clay",
+        "Chisel",
+        "Opal",
+        "Jade",
+        "Red topaz",
+        "Sapphire",
+        "Adamant pickaxe",
+        "Lobster"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "One Small Favour"
+      }
+    }
+  },
+  {
+    "id": "S9-86",
+    "stage": 9,
+    "type": "quest",
+    "title": "Another Slice of H.A.M.",
+    "qp": 1,
+    "requires": [
+      "S9-38",
+      "S9-26",
+      "S7-18"
+    ],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Another_Slice_of_H.A.M.",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Another_Slice_of_H.A.M./Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3210,3216,0",
+    "mapLocation": {
+      "x": 3210,
+      "y": 3216,
+      "plane": 0,
+      "label": "The trapdoor to the Lumbridge Castle cellar"
+    },
+    "npc": {
+      "nameEn": "Ur-tag",
+      "location": "Dorgesh-Kaan",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Ur-tag"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Bullseye lantern",
+        "amount": 1,
+        "howToGet": "A lit light for the Lumbridge Swamp Caves: buy a bullseye lantern on the Grand Exchange and light it with a tinderbox.",
+        "wikiItemId": 4548,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bullseye_lantern.png"
+      },
+      {
+        "nameEn": "Trowel",
+        "amount": 1,
+        "howToGet": "You get it during the quest, at the dig.",
+        "wikiItemId": 676,
+        "inStep": true,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Trowel.png"
+      },
+      {
+        "nameEn": "Specimen brush",
+        "amount": 1,
+        "howToGet": "You get it during the quest, at the dig.",
+        "wikiItemId": 670,
+        "inStep": true,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Specimen_brush.png"
+      },
+      {
+        "nameEn": "Lobster",
+        "amount": 10,
+        "howToGet": "Buy on the Grand Exchange: the H.A.M. Archer and Mage (level 30) and Sigmund (level 64).",
+        "wikiItemId": 379,
+        "heals": 12,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Lobster.png"
+      }
+    ],
+    "foes": [
+      "H.A.M. Archer",
+      "H.A.M. Mage",
+      "Sigmund"
+    ],
+    "reward": "1 QP, 3,000 Mining XP, 3,000 Prayer XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Ur-tag"
+      ],
+      "dialogChoices": [
+        "What are you arguing about?",
+        "I'd love to help!",
+        "One of you wait here",
+        "Wait here",
+        "Follow me"
+      ],
+      "highlightItems": [
+        "Bullseye lantern",
+        "Trowel",
+        "Specimen brush",
+        "Lobster"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Another Slice of H.A.M."
+      }
+    }
   }
 ]

@@ -61,7 +61,7 @@ export function stagePayload(step: Step, places: StepGuidePayload['places']): St
   const qs = step.questStages;
   if (!qs || !qs.stages.length) return undefined;
   const stages: StagePayload['stages'] = [];
-  for (const st of [...qs.stages].sort((a, b) => a.at - b.at).slice(0, 40)) {
+  for (const st of [...qs.stages].sort((a, b) => a.at - b.at).slice(0, 80)) {
     let go: number | undefined;
     if (st.go) {
       let p: StepGuidePayload['places'][number] | undefined;
@@ -107,6 +107,12 @@ export function stagePayload(step: Step, places: StepGuidePayload['places']): St
 }
 /** The plugin refuses a longer watch list (ActiveTarget.MAX_LIST). */
 export const WATCH_MAX = 64;
+/** A protocol 7 plugin refuses a quest of more than 40 stages: it gets the first 40, as before 2.157.0. */
+export function stagesForPlugin(payload: ActiveStepPayload, protocol: number | null): ActiveStepPayload {
+  const stage = payload.guide?.stage;
+  if ((protocol ?? 0) >= 8 || !stage || stage.stages.length <= 40) return payload;
+  return { ...payload, guide: { ...payload.guide!, stage: { ...stage, stages: stage.stages.slice(0, 40) } } };
+}
 /**
  * The step target for the game. An explicit inGame from the route wins; without it — the start point and the gathering places from the step map,
  * so the arrow and tiles work for steps whose highlight is not yet written out.

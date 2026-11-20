@@ -24,7 +24,7 @@ final class TargetStages
 	@Data
 	public static class Stage
 	{
-		static final int MAX_STAGES = 40;
+		static final int MAX_STAGES = 80;
 		// Eagles' Peak keeps 47 Quest Helper steps under one quest value.
 		static final int MAX_STAGE_STEPS = 120;
 		static final int MAX_BANKS = 40;

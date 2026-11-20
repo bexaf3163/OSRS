@@ -13,7 +13,7 @@ import { parseQuestInstruction } from '../domain/quests/questCursor';
 import type { QuestInstruction } from '../domain/quests/questCursor';
 export { parseQuestInstruction };
 export type { QuestInstruction };
-import { toInGameTarget } from '../domain/guide/inGameTarget';
+import { stagesForPlugin, toInGameTarget } from '../domain/guide/inGameTarget';
 import { parseEvent, parseStats, parseXp, parseQuests, parsePos, parseSeconds, parsePlayer, parseGear } from './bridgeEvents';
 
 export const BRIDGE_ORIGIN = 'http://127.0.0.1:38282';
@@ -91,13 +91,13 @@ export function parseCombatLog(v: unknown): CombatLogState | null {
  * 4 (2.11) — the "What you need" list on the game screen; plugin 2.10 (protocol 3) does not have it.
  * 6 (2.22) — one /prep-plan state snapshot instead of five requests, the preparation plan on the game screen.
  */
-export const APP_PROTOCOL = 7;
+export const APP_PROTOCOL = 8;
 
 /** What an old plugin lacks — for the "update the plugin" warning: what appeared since which protocol. */
 export function missingWithPlugin(protocol: number | null): string[] {
   const p = protocol ?? 1;
   const out: string[] = [];
-  if (p < 7) out.push('the in-game stages of the longest quests');
+  if (p < 8) out.push('the in-game stages of the longest quests');
   if (p < 6) out.push('a single state snapshot and the preparation plan on the game screen (readiness percent, "do not take now", recovery mode)');
   if (p < 5) out.push('XP, quests and the character name from the game (account sync, profiles, time to the goal)');
   if (p < 4) out.push('the "What you need" list on the game screen (a click on a row gives an arrow and the path there)');
@@ -387,7 +387,8 @@ export function parseNavTarget(raw: unknown): NavTargetPayload | null {
 export async function syncActiveStep(step: Step, t: BridgeTransport = defaultTransport(), branch?: StepBranch, extraWatch: string[] = []): Promise<boolean> {
   const payload = toInGameTarget(step, branch, extraWatch);
   if (!payload) return false;
-  return (await t.request('POST', '/active-step', payload)).ok;
+  // Only a plugin older than protocol 6 gets the step this way.
+  return (await t.request('POST', '/active-step', stagesForPlugin(payload, null))).ok;
 }
 
 /** The snapshot result: which parts the plugin did not accept (unfit or turned off in its settings) and whether the snapshot was late. */
