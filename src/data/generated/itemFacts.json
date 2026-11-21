@@ -43,6 +43,18 @@
    "limit": 4500,
    "highAlch": 240
   },
+  "Air battlestaff": {
+   "id": 1397,
+   "members": true,
+   "limit": 18000,
+   "highAlch": 9300
+  },
+  "Air orb": {
+   "id": 573,
+   "members": true,
+   "limit": 11000,
+   "highAlch": 180
+  },
   "Air rune": {
    "id": 556,
    "members": false,
@@ -97,6 +109,12 @@
    "limit": 10000,
    "highAlch": 36
   },
+  "Anglerfish": {
+   "id": 13441,
+   "members": true,
+   "limit": 10000,
+   "highAlch": 270
+  },
   "Antipoison(3)": {
    "id": 175,
    "members": false,
@@ -114,6 +132,12 @@
    "members": true,
    "limit": 2000,
    "highAlch": 7
+  },
+  "Battlestaff": {
+   "id": 1391,
+   "members": true,
+   "limit": 11000,
+   "highAlch": 4200
   },
   "Big bones": {
    "id": 532,
@@ -133,11 +157,35 @@
    "limit": 40,
    "highAlch": 230
   },
+  "Black d'hide body": {
+   "id": 2503,
+   "members": true,
+   "limit": 70,
+   "highAlch": 8088
+  },
+  "Black dragon leather": {
+   "id": 2509,
+   "members": true,
+   "limit": 11000,
+   "highAlch": 66
+  },
   "Black pickaxe": {
    "id": 12297,
    "members": false,
    "limit": 4,
    "highAlch": 87
+  },
+  "Blue d'hide body": {
+   "id": 2499,
+   "members": true,
+   "limit": 125,
+   "highAlch": 5616
+  },
+  "Blue dragon leather": {
+   "id": 2505,
+   "members": true,
+   "limit": 13000,
+   "highAlch": 42
   },
   "Body rune": {
    "id": 559,
@@ -229,6 +277,12 @@
    "limit": 6000,
    "highAlch": 2
   },
+  "Cooked karambwan": {
+   "id": 3144,
+   "members": true,
+   "limit": 10000,
+   "highAlch": 150
+  },
   "Cooked meat": {
    "id": 2142,
    "members": false,
@@ -301,6 +355,18 @@
    "limit": 40,
    "highAlch": 58770
   },
+  "Earth battlestaff": {
+   "id": 1399,
+   "members": true,
+   "limit": 18000,
+   "highAlch": 9300
+  },
+  "Earth orb": {
+   "id": 575,
+   "members": true,
+   "limit": 11000,
+   "highAlch": 180
+  },
   "Earth rune": {
    "id": 557,
    "members": false,
@@ -367,6 +433,18 @@
    "limit": 3000,
    "highAlch": 1
   },
+  "Fire battlestaff": {
+   "id": 1393,
+   "members": true,
+   "limit": 18000,
+   "highAlch": 9300
+  },
+  "Fire orb": {
+   "id": 569,
+   "members": true,
+   "limit": 11000,
+   "highAlch": 180
+  },
   "Fire rune": {
    "id": 554,
    "members": false,
@@ -403,6 +481,12 @@
    "limit": 40,
    "highAlch": 3
   },
+  "Glassblowing pipe": {
+   "id": 1785,
+   "members": true,
+   "limit": 40,
+   "highAlch": 1
+  },
   "Gold amulet (u)": {
    "id": 1673,
    "members": false,
@@ -438,6 +522,18 @@
    "members": false,
    "limit": 20000,
    "highAlch": 1
+  },
+  "Green d'hide body": {
+   "id": 1135,
+   "members": false,
+   "limit": 125,
+   "highAlch": 4680
+  },
+  "Green dragon leather": {
+   "id": 1745,
+   "members": true,
+   "limit": 13000,
+   "highAlch": 30
   },
   "Guam potion (unf)": {
    "id": 91,
@@ -564,6 +660,12 @@
    "members": true,
    "limit": 10000,
    "highAlch": 32
+  },
+  "Lantern lens": {
+   "id": 4542,
+   "members": true,
+   "limit": 10000,
+   "highAlch": 42
   },
   "Leather": {
    "id": 1741,
@@ -727,6 +829,18 @@
    "limit": 125,
    "highAlch": 996
   },
+  "Molten glass": {
+   "id": 1775,
+   "members": true,
+   "limit": 13000,
+   "highAlch": 1
+  },
+  "Monkfish": {
+   "id": 7946,
+   "members": true,
+   "limit": 13000,
+   "highAlch": 138
+  },
   "Nature rune": {
    "id": 561,
    "members": false,
@@ -799,6 +913,12 @@
    "limit": 13000,
    "highAlch": 9
   },
+  "Raw anglerfish": {
+   "id": 13439,
+   "members": true,
+   "limit": 15000,
+   "highAlch": 270
+  },
   "Raw beef": {
    "id": 2132,
    "members": false,
@@ -817,11 +937,23 @@
    "limit": 15000,
    "highAlch": 6
   },
+  "Raw karambwan": {
+   "id": 3142,
+   "members": true,
+   "limit": 13000,
+   "highAlch": 120
+  },
   "Raw lobster": {
    "id": 377,
    "members": false,
    "limit": 15000,
    "highAlch": 42
+  },
+  "Raw monkfish": {
+   "id": 7944,
+   "members": true,
+   "limit": 13000,
+   "highAlch": 138
   },
   "Raw pike": {
    "id": 349,
@@ -840,6 +972,12 @@
    "members": false,
    "limit": 15000,
    "highAlch": 6
+  },
+  "Raw shark": {
+   "id": 383,
+   "members": true,
+   "limit": 15000,
+   "highAlch": 102
   },
   "Raw shrimps": {
    "id": 317,
@@ -864,6 +1002,18 @@
    "members": false,
    "limit": 15000,
    "highAlch": 24
+  },
+  "Red d'hide body": {
+   "id": 2501,
+   "members": true,
+   "limit": 70,
+   "highAlch": 6738
+  },
+  "Red dragon leather": {
+   "id": 2507,
+   "members": true,
+   "limit": 11000,
+   "highAlch": 54
   },
   "Red spiders' eggs": {
    "id": 223,
@@ -991,6 +1141,12 @@
    "limit": 40,
    "highAlch": 6
   },
+  "Shark": {
+   "id": 385,
+   "members": true,
+   "limit": 10000,
+   "highAlch": 102
+  },
   "Shortbow": {
    "id": 841,
    "members": false,
@@ -1050,6 +1206,12 @@
    "members": false,
    "limit": 10000,
    "highAlch": 60
+  },
+  "Steel cannonball": {
+   "id": 2,
+   "members": true,
+   "limit": 11000,
+   "highAlch": 3
   },
   "Steel dagger": {
    "id": 1207,
@@ -1195,11 +1357,29 @@
    "limit": 13000,
    "highAlch": 12
   },
+  "Unpowered orb": {
+   "id": 567,
+   "members": true,
+   "limit": 10000,
+   "highAlch": 60
+  },
   "Vile ashes": {
    "id": 25769,
    "members": false,
    "limit": 3000,
    "highAlch": 1
+  },
+  "Water battlestaff": {
+   "id": 1395,
+   "members": true,
+   "limit": 18000,
+   "highAlch": 9300
+  },
+  "Water orb": {
+   "id": 571,
+   "members": true,
+   "limit": 11000,
+   "highAlch": 180
   },
   "Water rune": {
    "id": 555,

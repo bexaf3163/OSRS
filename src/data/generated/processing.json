@@ -3197,6 +3197,434 @@
         "qty": 1
       },
       "source": "https://oldschool.runescape.wiki/w/Adamant_warhammer"
+    },
+    {
+      "id": "green-dhide-body",
+      "skill": "crafting",
+      "level": 63,
+      "xp": 186,
+      "ticks": 3,
+      "facility": null,
+      "tools": [
+        "Needle"
+      ],
+      "members": true,
+      "inputs": [
+        {
+          "name": "Green dragon leather",
+          "qty": 3,
+          "stacks": false
+        },
+        {
+          "name": "Thread",
+          "qty": 0.2,
+          "stacks": true,
+          "initialReserve": 0.8
+        }
+      ],
+      "output": {
+        "name": "Green d'hide body",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Green_d'hide_body"
+    },
+    {
+      "id": "blue-dhide-body",
+      "skill": "crafting",
+      "level": 71,
+      "xp": 210,
+      "ticks": 3,
+      "facility": null,
+      "tools": [
+        "Needle"
+      ],
+      "members": true,
+      "inputs": [
+        {
+          "name": "Blue dragon leather",
+          "qty": 3,
+          "stacks": false
+        },
+        {
+          "name": "Thread",
+          "qty": 0.2,
+          "stacks": true,
+          "initialReserve": 0.8
+        }
+      ],
+      "output": {
+        "name": "Blue d'hide body",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Blue_d'hide_body"
+    },
+    {
+      "id": "red-dhide-body",
+      "skill": "crafting",
+      "level": 77,
+      "xp": 234,
+      "ticks": 3,
+      "facility": null,
+      "tools": [
+        "Needle"
+      ],
+      "members": true,
+      "inputs": [
+        {
+          "name": "Red dragon leather",
+          "qty": 3,
+          "stacks": false
+        },
+        {
+          "name": "Thread",
+          "qty": 0.2,
+          "stacks": true,
+          "initialReserve": 0.8
+        }
+      ],
+      "output": {
+        "name": "Red d'hide body",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Red_d'hide_body"
+    },
+    {
+      "id": "black-dhide-body",
+      "skill": "crafting",
+      "level": 84,
+      "xp": 258,
+      "ticks": 3,
+      "facility": null,
+      "tools": [
+        "Needle"
+      ],
+      "members": true,
+      "inputs": [
+        {
+          "name": "Black dragon leather",
+          "qty": 3,
+          "stacks": false
+        },
+        {
+          "name": "Thread",
+          "qty": 0.2,
+          "stacks": true,
+          "initialReserve": 0.8
+        }
+      ],
+      "output": {
+        "name": "Black d'hide body",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Black_d'hide_body"
+    },
+    {
+      "id": "water-battlestaff",
+      "skill": "crafting",
+      "level": 54,
+      "xp": 100,
+      "ticks": 2,
+      "facility": null,
+      "tools": [],
+      "members": true,
+      "inputs": [
+        {
+          "name": "Water orb",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Battlestaff",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Water battlestaff",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Water_battlestaff"
+    },
+    {
+      "id": "earth-battlestaff",
+      "skill": "crafting",
+      "level": 58,
+      "xp": 112.5,
+      "ticks": 2,
+      "facility": null,
+      "tools": [],
+      "members": true,
+      "inputs": [
+        {
+          "name": "Earth orb",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Battlestaff",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Earth battlestaff",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Earth_battlestaff"
+    },
+    {
+      "id": "fire-battlestaff",
+      "skill": "crafting",
+      "level": 62,
+      "xp": 125,
+      "ticks": 2,
+      "facility": null,
+      "tools": [],
+      "members": true,
+      "inputs": [
+        {
+          "name": "Fire orb",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Battlestaff",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Fire battlestaff",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Fire_battlestaff"
+    },
+    {
+      "id": "air-battlestaff",
+      "skill": "crafting",
+      "level": 66,
+      "xp": 137.5,
+      "ticks": 2,
+      "facility": null,
+      "tools": [],
+      "members": true,
+      "inputs": [
+        {
+          "name": "Air orb",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Battlestaff",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Air battlestaff",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Air_battlestaff"
+    },
+    {
+      "id": "unpowered-orb",
+      "skill": "crafting",
+      "level": 46,
+      "xp": 52.5,
+      "ticks": 3,
+      "facility": null,
+      "tools": [
+        "Glassblowing pipe"
+      ],
+      "members": true,
+      "inputs": [
+        {
+          "name": "Molten glass",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Unpowered orb",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Unpowered_orb"
+    },
+    {
+      "id": "lantern-lens",
+      "skill": "crafting",
+      "level": 49,
+      "xp": 55,
+      "ticks": 3,
+      "facility": null,
+      "tools": [
+        "Glassblowing pipe"
+      ],
+      "members": true,
+      "inputs": [
+        {
+          "name": "Molten glass",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Lantern lens",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Lantern_lens"
+    },
+    {
+      "id": "empty-light-orb",
+      "skill": "crafting",
+      "level": 87,
+      "xp": 70,
+      "ticks": 3,
+      "facility": null,
+      "tools": [
+        "Glassblowing pipe"
+      ],
+      "members": true,
+      "inputs": [
+        {
+          "name": "Molten glass",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Empty light orb",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Empty_light_orb"
+    },
+    {
+      "id": "cannonball",
+      "skill": "smithing",
+      "level": 35,
+      "xp": 25.6,
+      "ticks": 10,
+      "facility": "furnace",
+      "tools": [
+        "Ammo mould"
+      ],
+      "members": true,
+      "inputs": [
+        {
+          "name": "Steel bar",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Steel cannonball",
+        "qty": 4
+      },
+      "source": "https://oldschool.runescape.wiki/w/Steel_cannonball"
+    },
+    {
+      "id": "karambwan",
+      "skill": "cooking",
+      "level": 30,
+      "xp": 190,
+      "ticks": 4,
+      "facility": "fire",
+      "tools": [],
+      "members": true,
+      "inputs": [
+        {
+          "name": "Raw karambwan",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Cooked karambwan",
+        "qty": 1
+      },
+      "success": {
+        "low": 70,
+        "high": 255
+      },
+      "source": "https://oldschool.runescape.wiki/w/Cooked_karambwan"
+    },
+    {
+      "id": "monkfish",
+      "skill": "cooking",
+      "level": 62,
+      "xp": 150,
+      "ticks": 4,
+      "facility": "fire",
+      "tools": [],
+      "members": true,
+      "inputs": [
+        {
+          "name": "Raw monkfish",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Monkfish",
+        "qty": 1
+      },
+      "success": {
+        "low": 11,
+        "high": 275
+      },
+      "source": "https://oldschool.runescape.wiki/w/Monkfish"
+    },
+    {
+      "id": "shark",
+      "skill": "cooking",
+      "level": 80,
+      "xp": 210,
+      "ticks": 4,
+      "facility": "fire",
+      "tools": [],
+      "members": true,
+      "inputs": [
+        {
+          "name": "Raw shark",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Shark",
+        "qty": 1
+      },
+      "success": {
+        "low": 1,
+        "high": 202
+      },
+      "source": "https://oldschool.runescape.wiki/w/Shark"
+    },
+    {
+      "id": "anglerfish",
+      "skill": "cooking",
+      "level": 84,
+      "xp": 230,
+      "ticks": 4,
+      "facility": "fire",
+      "tools": [],
+      "members": true,
+      "inputs": [
+        {
+          "name": "Raw anglerfish",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Anglerfish",
+        "qty": 1
+      },
+      "success": {
+        "low": 1,
+        "high": 200
+      },
+      "source": "https://oldschool.runescape.wiki/w/Anglerfish"
     }
   ],
   "methods": {
@@ -3398,6 +3826,34 @@
       "alch-diamond-necklace",
       "alch-emerald-amulet",
       "alch-ruby-amulet"
+    ],
+    "cr-dhide": [
+      "green-dhide-body",
+      "blue-dhide-body",
+      "red-dhide-body",
+      "black-dhide-body"
+    ],
+    "cr-battlestaff": [
+      "water-battlestaff",
+      "earth-battlestaff",
+      "fire-battlestaff",
+      "air-battlestaff"
+    ],
+    "cr-glass": [
+      "unpowered-orb",
+      "lantern-lens",
+      "empty-light-orb"
+    ],
+    "sm-cannonball": [
+      "cannonball"
+    ],
+    "ck-karambwan": [
+      "karambwan"
+    ],
+    "ck-members-fish": [
+      "monkfish",
+      "shark",
+      "anglerfish"
     ]
   }
 }

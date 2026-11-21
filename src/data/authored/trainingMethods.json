@@ -2912,6 +2912,130 @@
       "note": "Needs a player-owned house (1,000 coins at an estate agent). Each hour uses about 475-555 mahogany planks and some steel bars; the Wiki rate is from the Mahogany Homes table.",
       "url": "https://oldschool.runescape.wiki/w/Construction_training",
       "place": "Falador"
+    },
+    {
+      "id": "cr-dhide",
+      "skill": "crafting",
+      "from": 63,
+      "to": null,
+      "name": "D'hide bodies (green to black)",
+      "members": true,
+      "needs": [
+        {
+          "type": "item",
+          "name": "Needle"
+        },
+        {
+          "type": "item",
+          "name": "Thread"
+        }
+      ],
+      "effort": "low",
+      "cost": "cost",
+      "risk": "none",
+      "where": "At the Grand Exchange bank: buy the tanned dragon leather and thread, then craft by the bank",
+      "note": "Each body uses 3 tanned dragon leather and thread. The model prices the leather and the body at the exchange. OSRS Wiki recipe pages, checked 2026-11-21.",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Crafting_training",
+      "place": "Grand Exchange"
+    },
+    {
+      "id": "cr-battlestaff",
+      "skill": "crafting",
+      "from": 54,
+      "to": null,
+      "name": "Battlestaves (water, earth, fire, air)",
+      "members": true,
+      "needs": [],
+      "effort": "low",
+      "cost": "cost",
+      "risk": "none",
+      "where": "At the Grand Exchange bank: buy battlestaves and the matching orbs, then attach them by the bank",
+      "note": "Each staff uses one battlestaff and one charged orb. The model prices both and the finished staff at the exchange. OSRS Wiki recipe pages, checked 2026-11-21.",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Crafting_training",
+      "place": "Grand Exchange"
+    },
+    {
+      "id": "cr-glass",
+      "skill": "crafting",
+      "from": 46,
+      "to": null,
+      "name": "Glassblowing (orbs and lenses)",
+      "members": true,
+      "needs": [
+        {
+          "type": "item",
+          "name": "Glassblowing pipe"
+        }
+      ],
+      "effort": "low",
+      "cost": "cost",
+      "risk": "none",
+      "where": "At any bank with molten glass and a glassblowing pipe",
+      "note": "Each item uses one molten glass. OSRS Wiki recipe pages, checked 2026-11-21.",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Crafting_training",
+      "place": "Grand Exchange"
+    },
+    {
+      "id": "sm-cannonball",
+      "skill": "smithing",
+      "from": 35,
+      "to": null,
+      "name": "Cannonballs",
+      "members": true,
+      "needs": [
+        {
+          "type": "quest",
+          "quest": "Dwarf Cannon"
+        },
+        {
+          "type": "item",
+          "name": "Ammo mould"
+        }
+      ],
+      "effort": "low",
+      "cost": "profit",
+      "risk": "none",
+      "where": "The Edgeville furnace, with steel bars from the bank",
+      "note": "Needs Dwarf Cannon and an ammo mould. Each steel bar makes 4 cannonballs; slow but almost idle. OSRS Wiki recipe pages, checked 2026-11-21.",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Smithing_training",
+      "place": "Edgeville"
+    },
+    {
+      "id": "ck-karambwan",
+      "skill": "cooking",
+      "from": 30,
+      "to": null,
+      "name": "Cooked karambwan",
+      "members": true,
+      "needs": [
+        {
+          "type": "quest",
+          "quest": "Tai Bwo Wannai Trio"
+        }
+      ],
+      "effort": "medium",
+      "cost": "cost",
+      "risk": "none",
+      "where": "A range or fire near a bank",
+      "note": "Needs Tai Bwo Wannai Trio to cook karambwan safely. OSRS Wiki recipe pages, checked 2026-11-21.",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Cooking_training",
+      "place": "Grand Exchange"
+    },
+    {
+      "id": "ck-members-fish",
+      "skill": "cooking",
+      "from": 62,
+      "to": null,
+      "name": "Monkfish, sharks and anglerfish",
+      "members": true,
+      "needs": [],
+      "effort": "low",
+      "cost": "cost",
+      "risk": "none",
+      "where": "A range or fire near a bank",
+      "note": "Raw fish bought at the exchange; the model counts burnt fish at this level. OSRS Wiki recipe pages, checked 2026-11-21.",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Cooking_training",
+      "place": "Grand Exchange"
     }
   ]
 }

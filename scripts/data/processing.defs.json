@@ -870,6 +870,121 @@
       "page": "Adamant warhammer",
       "skill": "smithing",
       "facility": "anvil"
+    },
+    {
+      "id": "green-dhide-body",
+      "page": "Green d'hide body",
+      "skill": "crafting",
+      "facility": null,
+      "members": true
+    },
+    {
+      "id": "blue-dhide-body",
+      "page": "Blue d'hide body",
+      "skill": "crafting",
+      "facility": null,
+      "members": true
+    },
+    {
+      "id": "red-dhide-body",
+      "page": "Red d'hide body",
+      "skill": "crafting",
+      "facility": null,
+      "members": true
+    },
+    {
+      "id": "black-dhide-body",
+      "page": "Black d'hide body",
+      "skill": "crafting",
+      "facility": null,
+      "members": true
+    },
+    {
+      "id": "water-battlestaff",
+      "page": "Water battlestaff",
+      "skill": "crafting",
+      "facility": null,
+      "members": true
+    },
+    {
+      "id": "earth-battlestaff",
+      "page": "Earth battlestaff",
+      "skill": "crafting",
+      "facility": null,
+      "members": true
+    },
+    {
+      "id": "fire-battlestaff",
+      "page": "Fire battlestaff",
+      "skill": "crafting",
+      "facility": null,
+      "members": true
+    },
+    {
+      "id": "air-battlestaff",
+      "page": "Air battlestaff",
+      "skill": "crafting",
+      "facility": null,
+      "members": true
+    },
+    {
+      "id": "unpowered-orb",
+      "page": "Unpowered orb",
+      "skill": "crafting",
+      "facility": null,
+      "members": true
+    },
+    {
+      "id": "lantern-lens",
+      "page": "Lantern lens",
+      "skill": "crafting",
+      "facility": null,
+      "members": true
+    },
+    {
+      "id": "empty-light-orb",
+      "page": "Empty light orb",
+      "skill": "crafting",
+      "facility": null,
+      "members": true
+    },
+    {
+      "id": "cannonball",
+      "page": "Steel cannonball",
+      "skill": "smithing",
+      "facility": "furnace",
+      "members": true
+    },
+    {
+      "id": "karambwan",
+      "page": "Cooked karambwan",
+      "skill": "cooking",
+      "facility": "fire",
+      "members": true
+    },
+    {
+      "id": "monkfish",
+      "page": "Monkfish",
+      "skill": "cooking",
+      "facility": "fire",
+      "successLabel": "Fire",
+      "members": true
+    },
+    {
+      "id": "shark",
+      "page": "Shark",
+      "skill": "cooking",
+      "facility": "fire",
+      "successLabel": "Fire",
+      "members": true
+    },
+    {
+      "id": "anglerfish",
+      "page": "Anglerfish",
+      "skill": "cooking",
+      "facility": "fire",
+      "successLabel": "Fire",
+      "members": true
     }
   ],
   "methods": {
@@ -1071,6 +1186,34 @@
       "alch-diamond-necklace",
       "alch-emerald-amulet",
       "alch-ruby-amulet"
+    ],
+    "cr-dhide": [
+      "green-dhide-body",
+      "blue-dhide-body",
+      "red-dhide-body",
+      "black-dhide-body"
+    ],
+    "cr-battlestaff": [
+      "water-battlestaff",
+      "earth-battlestaff",
+      "fire-battlestaff",
+      "air-battlestaff"
+    ],
+    "cr-glass": [
+      "unpowered-orb",
+      "lantern-lens",
+      "empty-light-orb"
+    ],
+    "sm-cannonball": [
+      "cannonball"
+    ],
+    "ck-karambwan": [
+      "karambwan"
+    ],
+    "ck-members-fish": [
+      "monkfish",
+      "shark",
+      "anglerfish"
     ]
   },
   "light": {
