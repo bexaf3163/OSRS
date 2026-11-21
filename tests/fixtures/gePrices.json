@@ -3232,6 +3232,122 @@
   "Necklace mould": {
    "buy": 929,
    "sell": 451
+  },
+  "Leather boots": {
+   "buy": 60,
+   "sell": 55
+  },
+  "Leather cowl": {
+   "buy": 59,
+   "sell": 20
+  },
+  "Leather vambraces": {
+   "buy": 33,
+   "sell": 17
+  },
+  "Gold amulet (u)": {
+   "buy": 121,
+   "sell": 112
+  },
+  "Tiara": {
+   "buy": 99,
+   "sell": 90
+  },
+  "Sapphire amulet (u)": {
+   "buy": 343,
+   "sell": 345
+  },
+  "Emerald amulet (u)": {
+   "buy": 594,
+   "sell": 533
+  },
+  "Ruby amulet (u)": {
+   "buy": 1009,
+   "sell": 951
+  },
+  "Diamond amulet (u)": {
+   "buy": 1904,
+   "sell": 1897
+  },
+  "Shortbow (u)": {
+   "buy": 8,
+   "sell": 5
+  },
+  "Longbow (u)": {
+   "buy": 6,
+   "sell": 3
+  },
+  "Oak shortbow (u)": {
+   "buy": 6,
+   "sell": 5
+  },
+  "Oak longbow (u)": {
+   "buy": 15,
+   "sell": 12
+  },
+  "Willow shortbow (u)": {
+   "buy": 28,
+   "sell": 8
+  },
+  "Willow longbow (u)": {
+   "buy": 50,
+   "sell": 36
+  },
+  "Maple shortbow (u)": {
+   "buy": 62,
+   "sell": 59
+  },
+  "Yew shortbow (u)": {
+   "buy": 154,
+   "sell": 123
+  },
+  "Magic shortbow (u)": {
+   "buy": 563,
+   "sell": 537
+  },
+  "Sardine": {
+   "buy": 11,
+   "sell": 10
+  },
+  "Herring": {
+   "buy": 16,
+   "sell": 15
+  },
+  "Pike": {
+   "buy": 27,
+   "sell": 26
+  },
+  "Blue d'hide body": {
+   "buy": 5016,
+   "sell": 5011
+  },
+  "Red d'hide body": {
+   "buy": 5835,
+   "sell": 5830
+  },
+  "Black d'hide body": {
+   "buy": 7456,
+   "sell": 7250
+  },
+  "Water battlestaff": {
+   "buy": 8765,
+   "sell": 8651
+  },
+  "Earth battlestaff": {
+   "buy": 8750,
+   "sell": 8715
+  },
+  "Fire battlestaff": {
+   "buy": 8850,
+   "sell": 8730
+  },
+  "Cooked karambwan": {
+   "buy": 306,
+   "sell": 296
+  },
+  "Raw monkfish": {
+   "buy": 104,
+   "sell": 96
   }
  }
 }

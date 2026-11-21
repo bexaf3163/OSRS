@@ -77,7 +77,8 @@ function play(mode: GameMode) {
     }
     return rates.get(key) ?? rate;
   };
-  for (; turn < MAX_TURNS[mode]; turn++) {
+  // GATE_MAX_TURNS cuts a run short for profiling; the run then fails its quest count.
+  for (; turn < (Number(process.env.GATE_MAX_TURNS) || MAX_TURNS[mode]); turn++) {
     const stats = Object.fromEntries(SKILLS.map(s => [s, Math.max(1, levelForXp(xp[s]))]));
     const done = Object.entries(quests).filter(([, q]) => q.state === 'COMPLETED').map(([id]) => id);
     const owned = { bankSeen: true, items: new Map(NAMES.map(n => [n.toLowerCase(), { name: n, carried: bag.get(n) ?? 0, bank: bank.get(n) ?? 0, noted: 0 }])) };
