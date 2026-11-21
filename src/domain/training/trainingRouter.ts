@@ -665,7 +665,9 @@ function buildPath(skill: string, level: number, target: number, input: AdviceIn
     input.untilChange ? 1 : 0, input.followed ?? '-', priceKeyOf(input.prices), input.restriction ?? '-', first?.id ?? '-'].join('|');
   let out = cache.get(key);
   if (!out) {
-    if (cache.size > 2000) cache.clear();
+    // A Members gate turn asks for about 800 new paths; a 2,000 cap emptied the cache every turn (99% misses).
+    // shortcut: whole-cache reset at 100,000 paths, replace with an LRU if app memory ever matters.
+    if (cache.size > 100_000) cache.clear();
     cache.set(key, out = pathFresh(skill, level, target, input, first, raw));
   }
   return out;
