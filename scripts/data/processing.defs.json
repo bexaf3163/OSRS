@@ -390,6 +390,12 @@
       }
     },
     {
+      "id": "anchovy-pizza",
+      "page": "Anchovy pizza",
+      "skill": "cooking",
+      "facility": null
+    },
+    {
       "id": "bury-bones",
       "page": "Bones",
       "skill": "prayer",
@@ -459,6 +465,93 @@
           "page": "Free-to-play Prayer training",
           "evidence": "combination of 2,900 buries and scatters per hour"
         }
+      }
+    },
+    {
+      "id": "enchant-sapphire-amulet",
+      "page": "Amulet of magic",
+      "skill": "magic",
+      "facility": null
+    },
+    {
+      "id": "enchant-emerald-amulet",
+      "page": "Amulet of defence",
+      "skill": "magic",
+      "facility": null
+    },
+    {
+      "id": "enchant-ruby-amulet",
+      "page": "Amulet of strength",
+      "skill": "magic",
+      "facility": null
+    },
+    {
+      "id": "enchant-diamond-amulet",
+      "page": "Amulet of power",
+      "skill": "magic",
+      "facility": null
+    },
+    {
+      "id": "alch-gold-necklace",
+      "page": "Gold necklace",
+      "skill": "magic",
+      "facility": null,
+      "alch": {
+        "spell": "High Level Alchemy"
+      }
+    },
+    {
+      "id": "alch-sapphire-necklace",
+      "page": "Sapphire necklace",
+      "skill": "magic",
+      "facility": null,
+      "alch": {
+        "spell": "High Level Alchemy"
+      }
+    },
+    {
+      "id": "alch-emerald-necklace",
+      "page": "Emerald necklace",
+      "skill": "magic",
+      "facility": null,
+      "alch": {
+        "spell": "High Level Alchemy"
+      }
+    },
+    {
+      "id": "alch-ruby-necklace",
+      "page": "Ruby necklace",
+      "skill": "magic",
+      "facility": null,
+      "alch": {
+        "spell": "High Level Alchemy"
+      }
+    },
+    {
+      "id": "alch-diamond-necklace",
+      "page": "Diamond necklace",
+      "skill": "magic",
+      "facility": null,
+      "alch": {
+        "spell": "High Level Alchemy"
+      }
+    },
+    {
+      "id": "alch-emerald-amulet",
+      "page": "Emerald amulet",
+      "skill": "magic",
+      "facility": null,
+      "alch": {
+        "spell": "High Level Alchemy"
+      }
+    },
+    {
+      "id": "alch-ruby-amulet",
+      "page": "Ruby amulet",
+      "skill": "magic",
+      "facility": null,
+      "alch": {
+        "spell": "High Level Alchemy"
       }
     },
     {
@@ -960,6 +1053,24 @@
     ],
     "pr-banked-fiendish-ashes": [
       "scatter-fiendish-ashes"
+    ],
+    "ck-anchovy-pizza": [
+      "anchovy-pizza"
+    ],
+    "ma-enchant": [
+      "enchant-sapphire-amulet",
+      "enchant-emerald-amulet",
+      "enchant-ruby-amulet",
+      "enchant-diamond-amulet"
+    ],
+    "ma-halch": [
+      "alch-gold-necklace",
+      "alch-sapphire-necklace",
+      "alch-emerald-necklace",
+      "alch-ruby-necklace",
+      "alch-diamond-necklace",
+      "alch-emerald-amulet",
+      "alch-ruby-amulet"
     ]
   },
   "light": {

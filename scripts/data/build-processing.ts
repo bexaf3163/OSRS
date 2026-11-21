@@ -22,6 +22,8 @@ interface TickEvidence { page: string; evidence: string; ticks: number }
 interface RecipeDef { id: string; page: string; skill: string; facility: Kind | null; members?: boolean; /** Lit with a tinderbox (Firemaking): read from the log's {{Firemaking info}}. */ light?: boolean;
   consume?: { level: number; xp: number; xpEvidence: string; action: TickEvidence; samePace?: { page: string; evidence: string } };
   spell?: { page: string; materialPage: string; successEvidence: string; batchSize: number };
+  /** The item (the page) alched with this spell for coins. */
+  alch?: { spell: string };
   wholeBatch?: boolean;
   /** A worn item that makes every action succeed (Ring of forging: iron bars), proven by its page; one charge per action. */
   forging?: { item: string; evidence: string };
@@ -152,6 +154,25 @@ for (const d of defs.recipes) {
       source: `https://oldschool.runescape.wiki/w/${encodeURIComponent(s.page.replace(/ /g, '_'))}` });
     continue;
   }
+  if (d.alch) {
+    // Alchemy: the item and the spell's runes in, 60% of the item's value in coins out (the Wiki's high alchemy rule).
+    const box = templates(await wikitext(d.alch.spell), 'Infobox Spell')[0] ?? {};
+    const runes = templates(box.cost ?? '', 'RuneReq')[0] ?? {};
+    const ticks = /^(\d+) ticks$/.exec(box.speed ?? '');
+    const item = templates(text, 'Infobox Item')[0];
+    const value = num(item?.value);
+    if (!item || !(value > 0) || !ticks || !(num(box.level) > 0) || !(num(box.exp) > 0) || !Object.keys(runes).length) { fail(d.id, 'alchemy evidence incomplete'); continue; }
+    const staffData = (JSON.parse(readFileSync(`${root}src/data/authored/spells.json`, 'utf8')) as { staffs: Record<string, { name: string }> }).staffs;
+    const inputs = [{ name: plain(d.page), qty: 1, stacks: await stacks(d.page) }];
+    for (const [element, qty] of Object.entries(runes)) {
+      const name = `${element} rune`;
+      inputs.push({ name, qty: num(qty), stacks: await stacks(name), ...(staffData[element.toLowerCase()] ? { staff: staffData[element.toLowerCase()].name } : {}) });
+    }
+    recipes.push({ id: d.id, skill: d.skill, level: num(box.level), xp: num(box.exp), ticks: Number(ticks[1]), facility: null, tools: [], inputs,
+      output: { name: 'Coins', qty: Math.floor(value * 0.6) }, members: /^yes$/i.test(item.members ?? ''),
+      source: `https://oldschool.runescape.wiki/w/${encodeURIComponent(d.page.replace(/ /g, '_'))}` });
+    continue;
+  }
   if (d.consume) {
     const c = d.consume;
     const action = (await wikitext(c.action.page)).split('\n').find((l) => l.includes(c.action.evidence));
@@ -214,7 +235,7 @@ for (const d of defs.recipes) {
   const chart = successCharts(text).flatMap((c) => c.lines).find((l) => d.successLabel ? l.label === d.successLabel : /fire or range/i.test(l.label));
   const pct = /(\d+)% chance/.exec(r.output1quantitynote ?? '');
   if (d.forging && !(await wikitext(d.forging.item)).includes(d.forging.evidence)) { fail(d.id, `${d.forging.item} evidence not found`); continue; }
-  if (d.skill === 'cooking' && !chart) { fail(d.id, 'no fire-or-range line in its skilling success chart'); continue; }
+  if (d.skill === 'cooking' && !chart && d.facility !== null) { fail(d.id, 'no fire-or-range line in its skilling success chart'); continue; }
   recipes.push({
     id: d.id, skill: d.skill, level, xp, ticks, facility: d.facility, tools: d.wholeBatch ? [] : tools,
     ...(d.members ? { members: true } : {}),

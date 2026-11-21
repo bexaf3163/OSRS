@@ -78,7 +78,7 @@ export const num = (s: string | undefined): number => Number((s ?? '').replace(/
 export function recipeTicks(recipe: Record<string, string>): number {
   const note = recipe.ticksnote ?? '';
   const steady = /increases to (\d+)/i.exec(note) ?? /(\d+) ticks for the rest/i.exec(note)
-    ?? /then (\d+) ticks/i.exec(note) ?? /make[- ](?:all|x) is (\d+) ticks/i.exec(note);
+    ?? /then (\d+) ticks/i.exec(note) ?? /make[- ](?:all|x) is (\d+) ticks/i.exec(note) ?? /manual casting is (\d+) ticks/i.exec(note);
   return steady ? Number(steady[1]) : num(recipe.ticks);
 }
 

@@ -183,6 +183,8 @@ export interface MethodView {
   unchecked: NeedStatus[];
   /** Confirmed missing next-trip kit cost above known available coins; unknown stock/prices never imply a deficit. */
   fundingShortfall?: number;
+  /** A profit method whose prices are unknown: it waits behind ordinary methods, as a manual setup does. */
+  unpriced?: boolean;
   /** Current kit is covered or its missing purchases are confirmed affordable. Unknown prices/cash are not funding. */
   fundingReady?: boolean;
   /** With no cash, an unpriced processing batch needs verification before replacing usable supplies. */
@@ -210,6 +212,10 @@ function viewFresh(m: TrainingMethod, state: PlayerState, prices?: PriceView | n
     ? [{ key: `method:${index}`, nameEn: n.name, count: n.count ?? 1, anyOf: n.anyOf, equip: n.equip }] : []));
   const needs = declared.map((n, index) => needStatus(n, state, materials.get(`method:${index}`)));
   if (m.manualSetup) needs.push({ kind: 'item', label: m.manualSetup, state: 'UNKNOWN', detail: 'Manual setup has not been verified.' });
+  // A profit method (enchanting, alchemy, jewellery) is a profit only when today's prices show it; unpriced, it waits as an alternative.
+  const ownStock = m.rateSource === 'model' && declared.every((n, i) => n.type !== 'item' || needs[i].state === 'OK' || needs[i].state === 'BANK');
+  const unpriced = m.cost === 'profit' && PROCESSING.methods[m.id] !== undefined && m.costPerHour == null && !ownStock;
+  if (unpriced) needs.push({ kind: 'item', label: 'Current exchange prices', state: 'UNKNOWN', detail: 'Its margin is unknown without prices.' });
   const unsafeFoe = meleeUnsafe(m, state);
   if (unsafeFoe) needs.push({ kind: 'skill', label: `More Hitpoints: ${unsafeFoe}`, state: 'MISSING', detail: 'Not safe training at this level.' });
   if (m.kit === 'f2p-bow' && state.mode !== 'f2p') needs.push({ kind: 'item', label: 'Members ranged loadout', state: 'UNKNOWN', detail: 'This starter kit models ordinary F2P bows only; check your Members weapon and ammunition separately.' });
@@ -222,7 +228,7 @@ function viewFresh(m: TrainingMethod, state: PlayerState, prices?: PriceView | n
   const kit = covered ? 0 : cash !== null && prices ? requirementCost(declared.map(n => methodRequirement(n, state)), state, prices) : null;
   const fundingReady = kit === 0 || (kit !== null && cash !== null && kit <= cash);
   const fundingShortfall = cash !== null && kit !== null && kit > cash ? Math.ceil(kit - cash) : 0;
-  return { method: m, status: locked.length ? 'LOCKED' : prep.length || m.manualSetup ? 'PREP' : 'READY', missing: [...locked, ...prep], unchecked, fundingReady, ...(m.consumables?.length && cash === 0 && kit === null ? { needsFundingCheck: true } : {}), ...(fundingShortfall ? { fundingShortfall } : {}) };
+  return { method: m, status: locked.length ? 'LOCKED' : prep.length || m.manualSetup || unpriced ? 'PREP' : 'READY', missing: [...locked, ...prep], unchecked, fundingReady, ...(m.consumables?.length && cash === 0 && kit === null ? { needsFundingCheck: true } : {}), ...(fundingShortfall ? { fundingShortfall } : {}), ...(unpriced ? { unpriced } : {}) };
 }
 
 export function methodNeeds(m: TrainingMethod, state: PlayerState, prices?: PriceView | null): MethodNeed[] {
@@ -364,6 +370,7 @@ export function practicalRate(m: TrainingMethod): number | null {
 function compare(xpLeft?: number, level?: number, coinRate: number | null = null) {
   return (a: MethodView, b: MethodView): number => {
     if (Boolean(a.fundingShortfall) !== Boolean(b.fundingShortfall)) return Number(Boolean(a.fundingShortfall)) - Number(Boolean(b.fundingShortfall));
+    if (Boolean(a.unpriced) !== Boolean(b.unpriced)) return Number(Boolean(a.unpriced)) - Number(Boolean(b.unpriced));
     if (Boolean(a.method.manualSetup) !== Boolean(b.method.manualSetup)) return Number(Boolean(a.method.manualSetup)) - Number(Boolean(b.method.manualSetup));
     const uncheckedEntry = (v: MethodView) => v.unchecked.some(n => n.kind === 'skill' || n.kind === 'quest');
     if (uncheckedEntry(a) !== uncheckedEntry(b)) return Number(uncheckedEntry(a)) - Number(uncheckedEntry(b));

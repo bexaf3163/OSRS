@@ -1532,6 +1532,32 @@
       "source": "https://oldschool.runescape.wiki/w/Jug_of_wine"
     },
     {
+      "id": "anchovy-pizza",
+      "skill": "cooking",
+      "level": 55,
+      "xp": 39,
+      "ticks": 2,
+      "facility": null,
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Plain pizza",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Anchovies",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Anchovy pizza",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Anchovy_pizza"
+    },
+    {
       "id": "bury-bones",
       "skill": "prayer",
       "level": 1,
@@ -1606,6 +1632,361 @@
       "output": null,
       "members": false,
       "source": "https://oldschool.runescape.wiki/w/Vile_ashes"
+    },
+    {
+      "id": "enchant-sapphire-amulet",
+      "skill": "magic",
+      "level": 7,
+      "xp": 17.5,
+      "ticks": 3,
+      "facility": null,
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Sapphire amulet",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Cosmic rune",
+          "qty": 1,
+          "stacks": true
+        },
+        {
+          "name": "Water rune",
+          "qty": 1,
+          "stacks": true
+        }
+      ],
+      "output": {
+        "name": "Amulet of magic",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Amulet_of_magic"
+    },
+    {
+      "id": "enchant-emerald-amulet",
+      "skill": "magic",
+      "level": 27,
+      "xp": 37,
+      "ticks": 3,
+      "facility": null,
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Emerald amulet",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Cosmic rune",
+          "qty": 1,
+          "stacks": true
+        },
+        {
+          "name": "Air rune",
+          "qty": 3,
+          "stacks": true
+        }
+      ],
+      "output": {
+        "name": "Amulet of defence",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Amulet_of_defence"
+    },
+    {
+      "id": "enchant-ruby-amulet",
+      "skill": "magic",
+      "level": 49,
+      "xp": 59,
+      "ticks": 3,
+      "facility": null,
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Ruby amulet",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Cosmic rune",
+          "qty": 1,
+          "stacks": true
+        },
+        {
+          "name": "Fire rune",
+          "qty": 5,
+          "stacks": true
+        }
+      ],
+      "output": {
+        "name": "Amulet of strength",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Amulet_of_strength"
+    },
+    {
+      "id": "enchant-diamond-amulet",
+      "skill": "magic",
+      "level": 57,
+      "xp": 67,
+      "ticks": 3,
+      "facility": null,
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Diamond amulet",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Cosmic rune",
+          "qty": 1,
+          "stacks": true
+        },
+        {
+          "name": "Earth rune",
+          "qty": 10,
+          "stacks": true
+        }
+      ],
+      "output": {
+        "name": "Amulet of power",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Amulet_of_power"
+    },
+    {
+      "id": "alch-gold-necklace",
+      "skill": "magic",
+      "level": 55,
+      "xp": 65,
+      "ticks": 5,
+      "facility": null,
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Gold necklace",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Nature rune",
+          "qty": 1,
+          "stacks": true
+        },
+        {
+          "name": "Fire rune",
+          "qty": 5,
+          "stacks": true,
+          "staff": "Staff of fire"
+        }
+      ],
+      "output": {
+        "name": "Coins",
+        "qty": 270
+      },
+      "members": false,
+      "source": "https://oldschool.runescape.wiki/w/Gold_necklace"
+    },
+    {
+      "id": "alch-sapphire-necklace",
+      "skill": "magic",
+      "level": 55,
+      "xp": 65,
+      "ticks": 5,
+      "facility": null,
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Sapphire necklace",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Nature rune",
+          "qty": 1,
+          "stacks": true
+        },
+        {
+          "name": "Fire rune",
+          "qty": 5,
+          "stacks": true,
+          "staff": "Staff of fire"
+        }
+      ],
+      "output": {
+        "name": "Coins",
+        "qty": 630
+      },
+      "members": false,
+      "source": "https://oldschool.runescape.wiki/w/Sapphire_necklace"
+    },
+    {
+      "id": "alch-emerald-necklace",
+      "skill": "magic",
+      "level": 55,
+      "xp": 65,
+      "ticks": 5,
+      "facility": null,
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Emerald necklace",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Nature rune",
+          "qty": 1,
+          "stacks": true
+        },
+        {
+          "name": "Fire rune",
+          "qty": 5,
+          "stacks": true,
+          "staff": "Staff of fire"
+        }
+      ],
+      "output": {
+        "name": "Coins",
+        "qty": 855
+      },
+      "members": false,
+      "source": "https://oldschool.runescape.wiki/w/Emerald_necklace"
+    },
+    {
+      "id": "alch-ruby-necklace",
+      "skill": "magic",
+      "level": 55,
+      "xp": 65,
+      "ticks": 5,
+      "facility": null,
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Ruby necklace",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Nature rune",
+          "qty": 1,
+          "stacks": true
+        },
+        {
+          "name": "Fire rune",
+          "qty": 5,
+          "stacks": true,
+          "staff": "Staff of fire"
+        }
+      ],
+      "output": {
+        "name": "Coins",
+        "qty": 1305
+      },
+      "members": false,
+      "source": "https://oldschool.runescape.wiki/w/Ruby_necklace"
+    },
+    {
+      "id": "alch-diamond-necklace",
+      "skill": "magic",
+      "level": 55,
+      "xp": 65,
+      "ticks": 5,
+      "facility": null,
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Diamond necklace",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Nature rune",
+          "qty": 1,
+          "stacks": true
+        },
+        {
+          "name": "Fire rune",
+          "qty": 5,
+          "stacks": true,
+          "staff": "Staff of fire"
+        }
+      ],
+      "output": {
+        "name": "Coins",
+        "qty": 2205
+      },
+      "members": false,
+      "source": "https://oldschool.runescape.wiki/w/Diamond_necklace"
+    },
+    {
+      "id": "alch-emerald-amulet",
+      "skill": "magic",
+      "level": 55,
+      "xp": 65,
+      "ticks": 5,
+      "facility": null,
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Emerald amulet",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Nature rune",
+          "qty": 1,
+          "stacks": true
+        },
+        {
+          "name": "Fire rune",
+          "qty": 5,
+          "stacks": true,
+          "staff": "Staff of fire"
+        }
+      ],
+      "output": {
+        "name": "Coins",
+        "qty": 765
+      },
+      "members": false,
+      "source": "https://oldschool.runescape.wiki/w/Emerald_amulet"
+    },
+    {
+      "id": "alch-ruby-amulet",
+      "skill": "magic",
+      "level": 55,
+      "xp": 65,
+      "ticks": 5,
+      "facility": null,
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Ruby amulet",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Nature rune",
+          "qty": 1,
+          "stacks": true
+        },
+        {
+          "name": "Fire rune",
+          "qty": 5,
+          "stacks": true,
+          "staff": "Staff of fire"
+        }
+      ],
+      "output": {
+        "name": "Coins",
+        "qty": 1215
+      },
+      "members": false,
+      "source": "https://oldschool.runescape.wiki/w/Ruby_amulet"
     },
     {
       "id": "superheat-iron",
@@ -2999,6 +3380,24 @@
     ],
     "pr-banked-fiendish-ashes": [
       "scatter-fiendish-ashes"
+    ],
+    "ck-anchovy-pizza": [
+      "anchovy-pizza"
+    ],
+    "ma-enchant": [
+      "enchant-sapphire-amulet",
+      "enchant-emerald-amulet",
+      "enchant-ruby-amulet",
+      "enchant-diamond-amulet"
+    ],
+    "ma-halch": [
+      "alch-gold-necklace",
+      "alch-sapphire-necklace",
+      "alch-emerald-necklace",
+      "alch-ruby-necklace",
+      "alch-diamond-necklace",
+      "alch-emerald-amulet",
+      "alch-ruby-amulet"
     ]
   }
 }

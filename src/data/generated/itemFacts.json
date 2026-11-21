@@ -61,11 +61,41 @@
    "limit": 40,
    "highAlch": 60
   },
+  "Amulet of defence": {
+   "id": 1729,
+   "members": false,
+   "limit": 125,
+   "highAlch": 765
+  },
+  "Amulet of magic": {
+   "id": 1727,
+   "members": false,
+   "limit": 125,
+   "highAlch": 540
+  },
+  "Amulet of power": {
+   "id": 1731,
+   "members": false,
+   "limit": 125,
+   "highAlch": 2115
+  },
+  "Amulet of strength": {
+   "id": 1725,
+   "members": false,
+   "limit": 125,
+   "highAlch": 1215
+  },
   "Anchovies": {
    "id": 319,
    "members": false,
    "limit": 15000,
    "highAlch": 9
+  },
+  "Anchovy pizza": {
+   "id": 2297,
+   "members": false,
+   "limit": 10000,
+   "highAlch": 36
   },
   "Antipoison(3)": {
    "id": 175,
@@ -235,6 +265,12 @@
    "limit": 11000,
    "highAlch": 1200
   },
+  "Diamond amulet": {
+   "id": 1700,
+   "members": false,
+   "limit": 10000,
+   "highAlch": 2115
+  },
   "Diamond amulet (u)": {
    "id": 1681,
    "members": false,
@@ -288,6 +324,12 @@
    "members": false,
    "limit": 13000,
    "highAlch": 300
+  },
+  "Emerald amulet": {
+   "id": 1696,
+   "members": false,
+   "limit": 10000,
+   "highAlch": 765
   },
   "Emerald amulet (u)": {
    "id": 1677,
@@ -727,6 +769,12 @@
    "limit": 6000,
    "highAlch": 12
   },
+  "Plain pizza": {
+   "id": 2289,
+   "members": false,
+   "limit": 10000,
+   "highAlch": 24
+  },
   "Prayer potion(3)": {
    "id": 139,
    "members": true,
@@ -834,6 +882,12 @@
    "members": false,
    "limit": 13000,
    "highAlch": 600
+  },
+  "Ruby amulet": {
+   "id": 1698,
+   "members": false,
+   "limit": 10000,
+   "highAlch": 1215
   },
   "Ruby amulet (u)": {
    "id": 1679,

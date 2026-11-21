@@ -44,6 +44,8 @@ export function coinTimeShare(netPerHour: number | undefined, rate: number | nul
 /** Coins one drop brings after the tax, or null: no price, nothing after the tax, or an item a restricted account cannot sell. */
 export function dropValue(name: string, prices: PriceView | null | undefined, restriction: TradeRestriction['state'] | undefined): number | null {
   if (restriction === 'RESTRICTED' && isRestrictedItem(name)) return null;
+  // Coins (high alchemy) are money already: one each, no exchange and no tax.
+  if (name.toLowerCase() === 'coins') return 1;
   const price = prices?.sell(name)?.price;
   const each = price ? netEach(price, name) : 0;
   return each > 0 ? each : null;

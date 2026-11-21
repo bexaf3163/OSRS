@@ -239,7 +239,7 @@ export function processRate(m: TrainingMethod, skill: string, state: PlayerState
           for (const k of ['lootPerHour', 'loot', 'costName'] as const) if (priced.rate[k] !== undefined) Object.assign(o.rate, { [k]: priced.rate[k] });
           o.score = priced.score;
         } else o.score = 1 / ((o.rate.xph[0] + o.rate.xph[1]) / 2);
-      } else if (ids.length > 1 && r.output) o.rate.methodName = `${r.skill === 'cooking' && r.facility === 'fire' ? 'Cook' : 'Make'} ${r.skill === 'cooking' ? r.output.name.replace(/^Cooked\s+/, '') : r.output.name}`;
+      } else if (ids.length > 1 && r.output) o.rate.methodName = r.output.name === 'Coins' ? `Alch ${r.inputs[0].name}` : `${r.skill === 'cooking' && r.facility === 'fire' ? 'Cook' : 'Make'} ${r.skill === 'cooking' ? r.output.name.replace(/^Cooked\s+/, '') : r.output.name}`;
       // A tie (within 2%) goes to the station nearer the method's own place, so the advice does not hop between equal stations.
       const far = (x: Option) => (home && x.rate.spot ? Math.max(Math.abs(x.rate.spot.place.x - home.x), Math.abs(x.rate.spot.place.y - home.y)) : 0);
       // Kit feasibility precedes XP; an uncertain wallet is neither zero cash nor confirmed buying power.

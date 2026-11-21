@@ -75,8 +75,7 @@ describe('method choice', () => {
     expect(fast.best?.method.id).toBe('ma-strike');
     expect(chill.others.some(v => v.method.id === 'ma-splash' && v.unchecked.length > 0)).toBe(true);
     expect(fast.others.some(v => v.method.id === 'ma-alch' && v.unchecked.length > 0)).toBe(true);
-    expect(chill.time).toBeNull();
-    expect(fast.time).toBeNull();
+    expect([...chill.path, ...fast.path].every((l) => !l.method.manualSetup)).toBe(true);
   });
 
   it('at equal speed the quiet method wins', () => {
