@@ -616,6 +616,13 @@ function reasonFor(v: MethodView, level: number, upgrade: ToolUpgrade | null = n
   if (m.costPerHour) parts.push(`${m.costName ?? (m.skills.includes('magic') ? 'runes' : 'arrows')} ≈ ${fmtK(Math.round(m.costPerHour / 100) * 100)} gp per hour`);
   else if (m.cost === 'cost') parts.push('material costs');
   else if (m.cost === 'profit') parts.push('can end in profit');
+  // The money comparison of the methods: what an hour nets and what each XP costs or earns.
+  if (m.xph && typeof m.costPerHour === 'number' && (m.costPerHour > 0 || (m.lootPerHour ?? 0) > 0)) {
+    const net = (m.lootPerHour ?? 0) - m.costPerHour;
+    const perXp = net / ((m.xph[0] + m.xph[1]) / 2);
+    const k = Math.abs(net) >= 1000 ? `${Math.round(Math.abs(net) / 1000)}k` : String(Math.round(Math.abs(net)));
+    parts.push(`net ≈ ${net < 0 ? '−' : '+'}${k} gp per hour, ${perXp < 0 ? '−' : '+'}${Math.abs(perXp).toFixed(2)} gp per XP`);
+  }
   if (v.fundingShortfall) parts.push(`earn at least ${v.fundingShortfall.toLocaleString('en-US')} gp for the missing next-trip kit first`);
   if (v.status === 'PREP') parts.push(`first: ${v.missing.map((x) => x.label).join(', ')}`);
   if (v.status === 'LOCKED') parts.push(`locked: ${v.missing.map((x) => x.label).join(', ')}`);
