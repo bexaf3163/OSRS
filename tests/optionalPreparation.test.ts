@@ -3,7 +3,6 @@ import { stepsFor } from '../src/data';
 import { stepOrRetired } from './fixtures/retiredSteps';
 import { emptyProgress } from '../src/domain/persistence/progress';
 import { buildPlayerState } from '../src/domain/player/playerState';
-import { F2P_SKILL_ADVICE } from '../src/domain/training/f2pSkillAdvice';
 import { pickTraining } from '../src/domain/training/methodPick';
 import { followedGoals, GOAL_REACHED, methodToolNames, withTrainingMethod } from '../src/domain/training/methodStep';
 import { stepUpgradeCategories } from '../src/domain/training/gearUpgradeRouter';
@@ -23,8 +22,9 @@ const run = (id: string, levels: Record<string, number>) => {
 
 describe('practical optional F2P preparation', () => {
   it('uses the Skills F2P checkpoints and shared Skills guidance for every optional skill', () => {
-    expect(followedGoals(retiredStep('S6-01')!)).toEqual([{ skill: 'fishing', target: F2P_SKILL_ADVICE.fishing!.target }, { skill: 'cooking', target: F2P_SKILL_ADVICE.cooking!.target }]);
-    expect(followedGoals(retiredStep('S6-02')!)).toEqual(['mining', 'woodcutting', 'firemaking'].map(skill => ({ skill, target: F2P_SKILL_ADVICE[skill as 'mining']!.target })));
+    // The retired steps keep the Skills checkpoints of their time (before the 2026-11-21 F2P review).
+    expect(followedGoals(retiredStep('S6-01')!)).toEqual([{ skill: 'fishing', target: 35 }, { skill: 'cooking', target: 68 }]);
+    expect(followedGoals(retiredStep('S6-02')!)).toEqual([{ skill: 'mining', target: 45 }, { skill: 'woodcutting', target: 36 }, { skill: 'firemaking', target: 50 }]);
     expect(stepsFor('members').some(s => s.stage === 6)).toBe(false);
     expect(methodToolNames(retiredStep('S6-02')!)).toEqual(expect.arrayContaining(['Tinderbox', 'Logs', 'Oak logs', 'Willow logs', 'Maple logs', 'Yew logs']));
   });

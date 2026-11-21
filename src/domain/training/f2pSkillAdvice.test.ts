@@ -20,12 +20,12 @@ describe('advisory F2P checkpoints', () => {
 
   it('does not turn an unread level into a reached milestone or turn passive skills into a grind', () => {
     const cooking = f2pAdviceFor('cooking')!;
-    expect(cooking.target).toBe(68);
+    expect(cooking.target).toBe(70);
     expect(f2pAdviceLabel(cooking)).not.toContain('reached');
-    expect(f2pAdviceLabel(cooking, 67)).not.toContain('reached');
-    expect(f2pAdviceLabel(cooking, 68)).toContain('reached');
+    expect(f2pAdviceLabel(cooking, 69)).not.toContain('reached');
+    expect(f2pAdviceLabel(cooking, 70)).toContain('reached');
     expect(f2pAdviceLabel(cooking, NaN)).not.toContain('reached');
-    for (const id of ['prayer', 'runecraft', 'hitpoints']) expect(f2pAdviceFor(id)?.target).toBeNull();
+    for (const id of ['runecraft', 'hitpoints']) expect(f2pAdviceFor(id)?.target).toBeNull();
   });
 
 });

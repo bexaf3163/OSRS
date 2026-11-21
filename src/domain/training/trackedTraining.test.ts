@@ -64,7 +64,7 @@ describe('followed skills use the shared staged route', () => {
     expect(unread.step.requirements).toContainEqual({ type: 'skill', skill: 'ranged', min: 1 });
   });
   it('does not turn passive/prefer-members guidance into a forced99 grind; explicit targets survive reload', () => {
-    expect(trackedTraining({ skill: 'prayer', mode: 'fast' }, state(1), 'f2p')).toBeNull();
+    expect(trackedTraining({ skill: 'runecraft', mode: 'fast' }, state(1), 'f2p')).toBeNull();
     expect(parseTracked({ skill: 'ranged', mode: 'fast', target: 50 })?.target).toBe(50);
     expect(parseTracked({ skill: 'ranged', mode: 'fast', target: NaN })).toBeNull();
     expect(parseTracked({ skill: 'ranged', mode: 'fast', target: 100 })).toBeNull();
@@ -127,14 +127,14 @@ describe('after the F2P quests: what to train next', () => {
       expect(['good', 'optional']).toContain(F2P_SKILL_ADVICE[row.skill]!.priority);
       expect(row.level).toBeLessThan(row.target);
     }
-    expect(rows.map(r => r.skill)).not.toEqual(expect.arrayContaining(['smithing', 'prayer', 'runecraft', 'attack']));
+    for (const s of ['runecraft', 'attack', 'defence']) expect(rows.map(r => r.skill)).not.toContain(s);
     const good = rows.filter(r => r.priority === 'good'), firstOptional = rows.findIndex(r => r.priority === 'optional');
     expect(rows.slice(0, good.length)).toEqual(good);
     const known = (list: typeof rows) => list.filter(r => r.time).map(r => r.time!.minHours + r.time!.maxHours);
     expect(known(good)).toEqual([...known(good)].sort((a, b) => a - b));
     expect(firstOptional).toBe(good.length);
     // Reaching a checkpoint removes it.
-    expect(f2pCheckpoints(character({ fishing: 35 })).some(r => r.skill === 'fishing')).toBe(false);
+    expect(f2pCheckpoints(character({ fishing: 58 })).some(r => r.skill === 'fishing')).toBe(false);
   });
 });
 

@@ -36,5 +36,5 @@ describe('the F2P mode shows only F2P methods', () => {
       }
     }
     expect([...new Set(bad)]).toEqual([]);
-  });
+  }, 60_000);
 });

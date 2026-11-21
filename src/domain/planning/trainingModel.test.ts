@@ -87,11 +87,11 @@ describe('explicit skill objective through the shared planner', () => {
     const decision = decide(observed, model)!;
     expect(decision.activeAction.kind).toBe('VERIFY');
     expect(decision.expectedNext.effects).toEqual([]);
-    const prayer = { ...observed, player: { ...observed.player, levels: { ...observed.player.levels,
-      prayer: { known: true as const, value: 12, source: 'game' as const } } } };
-    const deferred = createTrainingModel(prayer, { skill: 'prayer', mode: 'fast' }, adapters());
-    expect(decide(prayer, deferred)?.activeAction.kind).toBe('VERIFY');
-    expect(deferred.evaluate(deferred.objectiveIds[0], observedProjection(prayer))?.effects).toEqual([]);
+    const runecraft = { ...observed, player: { ...observed.player, levels: { ...observed.player.levels,
+      runecraft: { known: true as const, value: 12, source: 'game' as const } } } };
+    const deferred = createTrainingModel(runecraft, { skill: 'runecraft', mode: 'fast' }, adapters());
+    expect(decide(runecraft, deferred)?.activeAction.kind).toBe('VERIFY');
+    expect(deferred.evaluate(deferred.objectiveIds[0], observedProjection(runecraft))?.effects).toEqual([]);
   });
 
   it('leaves a goal without consumables metadata consuming UNKNOWN, never zero', () => {

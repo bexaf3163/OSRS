@@ -7,21 +7,21 @@ export interface F2pSkillAdvice {
   reason: string;
 }
 
-/** Reviewed 2026-11-11. Authored pre-members checkpoints, not training requirements or XP forecasts. */
+/** Reviewed 2026-11-21 (owner: profitable skills go further in F2P). Authored pre-members checkpoints, not training requirements or XP forecasts. */
 export const F2P_SKILL_ADVICE: Partial<Record<SkillName, F2pSkillAdvice>> = {
-  cooking: { priority: 'good', target: 68, reason: 'Wine is the fastest Cooking from 35, and it stops burning at 68.' },
-  firemaking: { priority: 'good', target: 50, reason: 'Wintertodt opens at 50 on members; F2P log burning past it is slow.' },
-  mining: { priority: 'good', target: 45, reason: 'Iron is the best F2P Mining from 15; members methods (granite) start at 45.' },
-  fishing: { priority: 'good', target: 35, reason: 'Trout and salmon from 20; 35 opens harpoon tuna and is a sensible stop.' },
-  woodcutting: { priority: 'optional', target: 36, reason: "36 covers Lost City's Woodcutting requirement; a longer F2P grind is not worth it." },
-  magic: { priority: 'optional', target: 55, reason: '55 unlocks High Level Alchemy.' },
-  smithing: { priority: 'good', target: 29, reason: "The Knight's Sword alone takes Smithing from 1 to 29: do not grind those levels." },
-  crafting: { priority: 'optional', target: 31, reason: "31 covers Lost City's Crafting requirement." },
+  cooking: { priority: 'good', target: 70, reason: "Tuna, then anchovy pizza from 55, train without losing coins; wine from 35 is the fastest but costs coins. 70 is the Recipe for Disaster level." },
+  firemaking: { priority: 'good', target: 50, reason: "Maple logs from 45 are the cheapest Firemaking per XP; 50 opens Wintertodt on members, and maples stay cheap past it for a longer F2P stay." },
+  mining: { priority: 'good', target: 60, reason: "Iron is the best F2P Mining from 15; 60 opens the Mining Guild, which free players can use." },
+  fishing: { priority: 'good', target: 58, reason: "Fly fishing trout and salmon from 20 is the F2P method, as fast as members methods up to Barbarian Fishing; 35 opens harpoon tuna." },
+  woodcutting: { priority: 'optional', target: 36, reason: "36 covers Lost City; willows past it pay little in F2P, yews from 60 a little more." },
+  magic: { priority: 'good', target: 70, reason: 'Enchanting amulets and alching gem necklaces pay while they train; 70 is where members Ice Burst becomes far faster.' },
+  smithing: { priority: 'good', target: 50, reason: "The Knight's Sword takes Smithing to 29; smelting steel and mithril bars pays to 50, where members Giants' Foundry starts." },
+  crafting: { priority: 'good', target: 70, reason: 'Gold and gem jewellery at a furnace pays from the start; 70 opens diamond amulets, and 31 also covers Lost City.' },
   attack: { priority: 'optional', target: 40, reason: '40 is a practical starter checkpoint for F2P combat.' },
   strength: { priority: 'optional', target: 40, reason: '40 is a practical starter checkpoint for F2P combat.' },
-  defence: { priority: 'optional', target: 10, reason: 'An early armour checkpoint: count upcoming quest XP before training further.' },
+  defence: { priority: 'optional', target: 40, reason: "Dragon Slayer I gives Defence XP; 40 wears rune armour, the best F2P armour." },
   ranged: { priority: 'optional', target: 40, reason: "40 opens green d'hide armour." },
-  prayer: { priority: 'members', target: null, reason: 'No F2P grind: bury the bones you get; altars are a members method.' },
+  prayer: { priority: 'good', target: 43, reason: "The Restless Ghost gives 9; vile ashes are the cheapest F2P Prayer per XP, and 43 is Protect from Melee, the last prayer free players use." },
   runecraft: { priority: 'members', target: null, reason: 'No F2P grind before members.' },
   hitpoints: { priority: 'passive', target: null, reason: 'It comes with combat training; no separate target.' },
 };
