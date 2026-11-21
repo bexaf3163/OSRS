@@ -6,22 +6,22 @@ import { BASE, progressBefore, open, settle, expect, noOverflow, waitFor, text }
 
 async function f2pSkillsScenarios(browser: Browser) {
   for (const width of [1000, 1440]) {
-    const { page, errors } = await open(browser, width, { progress: progressBefore('S3-03', { gameMode: 'f2p', levels: { attack: 30, strength: 21, defence: 10 } }) }, '#/skills');
+    const { page, errors } = await open(browser, width, { progress: progressBefore('S3-03', { gameMode: 'f2p', levels: { attack: 30, strength: 21, defence: 40 } }) }, '#/skills');
     const defence = page.locator('.skill-tile a[href="#/skills/ME/defence"]');
     expect(await defence.count() === 1, `Skills ${width}: Defence has one direct tile`);
     expect(await page.locator('.section-rail').count() === 0, `Skills ${width}: no duplicate skill menu`);
     expect(await page.locator('.f2p-skill-badge').count() === 15, `F2P ${width}: every free skill including passive Hitpoints has one marker`);
-    expect((await defence.innerText()).includes('10 reached'), `F2P ${width}: a known reached checkpoint is marked`);
-    expect((await page.locator('.skill-tile a[href="#/skills/CO/cooking"]').innerText()).includes('68'), `F2P ${width}: Cooking shows the verified wine checkpoint`);
-    expect((await page.locator('.skill-tile a[href="#/skills/PR/prayer"]').innerText()).includes('Prefer members'), `F2P ${width}: Prayer does not demand a F2P grind`);
+    expect((await defence.innerText()).includes('40 reached'), `F2P ${width}: a known reached checkpoint is marked`);
+    expect((await page.locator('.skill-tile a[href="#/skills/CO/cooking"]').innerText()).includes('70'), `F2P ${width}: Cooking shows its level 70 checkpoint`);
+    expect((await page.locator('.skill-tile a[href="#/skills/PR/prayer"]').innerText()).includes('43'), `F2P ${width}: Prayer shows its Protect from Melee checkpoint`);
     expect(await noOverflow(page) && !errors.length, `F2P ${width}: compact markers have no overflow or console errors`);
     await page.screenshot({ path: `audit-temp/f2p-priorities-${width}.png` });
     await defence.click();
     await page.locator('.training').waitFor();
     expect((await page.locator('.training').innerText()).includes('Defence checkpoint reached'), `Skills ${width}: a completed F2P checkpoint is explained instead of an empty Train pane`);
     expect((await text(page, 'h1')).includes('Defence'), `Skills ${width}: Defence opens directly`);
-    expect((await text(page, '.f2p-skill-checkpoint')).includes('10 reached'), `F2P ${width}: the detail uses the same checkpoint as its tile`);
-    expect(!(await text(page, '.skill-level-goal')).includes('Goal'), `F2P ${width}: a reached checkpoint is not shown as a goal ahead ("Defence 10 → Goal 10")`);
+    expect((await text(page, '.f2p-skill-checkpoint')).includes('40 reached'), `F2P ${width}: the detail uses the same checkpoint as its tile`);
+    expect(!(await text(page, '.skill-level-goal')).includes('Goal'), `F2P ${width}: a reached checkpoint is not shown as a goal ahead ("Defence 40 → Goal 40")`);
     await page.locator('.skill-tile a[href="#/skills/ME/attack"]').click();
     await page.locator('.training').first().waitFor();
     expect(await page.getByRole('group', { name: 'Training priority' }).count() === 0, `Skills ${width}: no training priority switch (always Balanced)`);
@@ -37,10 +37,10 @@ async function f2pSkillsScenarios(browser: Browser) {
     await page.getByRole('tab', { name: 'Calculator', exact: true }).click();
     expect(await page.locator('.calc').count() === 1, `Skills ${width}: calculator remains accessible`);
     await page.getByRole('tab', { name: 'Reference', exact: true }).click();
-    expect((await text(page, '.f2p-skill-note')).includes('10 reached') && await page.locator('.skill-level-editor').count() === 1, `Skills ${width}: F2P evidence and level editing remain accessible`);
+    expect((await text(page, '.f2p-skill-note')).includes('40 reached') && await page.locator('.skill-level-editor').count() === 1, `Skills ${width}: F2P evidence and level editing remain accessible`);
     await page.getByRole('tab', { name: 'Train', exact: true }).click();
     expect(await noOverflow(page) && !errors.length, `F2P ${width}: the direct skill guide stays usable`);
-    // The group without a chosen skill opens on the lagging skill whose checkpoint is still ahead: Strength 21 → 40, not Defence 10 (reached).
+    // The group without a chosen skill opens on the lagging skill whose checkpoint is still ahead: Strength 21 → 40, not Defence 40 (reached).
     await page.evaluate(() => { location.hash = '#/skills/ME'; });
     await page.locator('.skill-level-goal').filter({ hasText: 'Strength' }).waitFor({ timeout: 5000 }).catch(() => {});
     const groupHead = await text(page, '.skill-level-goal');
@@ -51,12 +51,12 @@ async function f2pSkillsScenarios(browser: Browser) {
   // The equipment line is the engine's own kit for the selected method (2.86.1): it names the real tool or materials; a skill saved for
   // membership shows no fixed note.
   for (const [group, skill, tool] of [['WC', 'woodcutting', /axe/], ['MI', 'mining', /pickaxe/], ['FI', 'fishing', /net|rod|harpoon/], ['CO', 'cooking', /raw /],
-    ['FM', 'firemaking', /tinderbox.*logs/], ['SM', 'smithing', /hammer|bar|ore/], ['CR', 'crafting', /needle|chisel|mould|leather/], ['RC', 'runecraft', null], ['PR', 'prayer', null]] as const) {
+    ['FM', 'firemaking', /tinderbox.*logs/], ['SM', 'smithing', /hammer|bar|ore/], ['CR', 'crafting', /needle|chisel|mould|leather/], ['RC', 'runecraft', null], ['PR', 'prayer', /ashes|bones/]] as const) {
     const { page, errors } = await open(browser, 1000, { market: true,
       progress: progressBefore('S5-01', { gameMode: 'f2p', levels: { [skill]: 1 } }),
     }, `#/skills/${group}/${skill}`);
     const equipment = (await page.locator('.training-equipment:visible').count()) ? (await text(page, '.training-equipment:visible')).toLowerCase() : null;
-    expect(tool ? !!equipment && tool.test(equipment) : equipment === null, `Skills equipment (${skill}): the engine's kit for the current method, never a fixed note`);
+    expect(tool ? !!equipment && tool.test(equipment) : equipment === null, `Skills equipment (${skill}): the engine's kit for the current method, never a fixed note (got "${equipment}")`);
     expect(await page.locator('.skill-detail details').count() === 0 && await noOverflow(page) && !errors.length, `Skills equipment (${skill}): compact without a disclosure stack or errors`);
     await page.context().close();
   }

@@ -356,9 +356,9 @@ async function nonCombatPreparationScenarios(browser: Browser) {
     await page.context().close();
   }
   {
-    const { page, errors } = await open(browser, 1280, mock, '#/skills/SM/smithing');
+    const { page, errors } = await open(browser, 1280, mock, '#/skills/SM/smithing?goal=29');
     await page.getByRole('button', { name: 'Open quest guide', exact: true }).waitFor();
-    expect((await text(page, '.training')).includes("The Knight's Sword"), 'Smithing: the default29 checkpoint offers its actual XP quest rather than a bronze grind');
+    expect((await text(page, '.training')).includes("The Knight's Sword"), 'Smithing: the 29 goal offers its actual XP quest rather than a bronze grind');
     await page.getByRole('button', { name: 'Open quest guide', exact: true }).click();
     await page.waitForFunction(() => location.hash === '#/step/S2-07' && (window as any).__posts.filter((post: any) => post.path === '/prep-plan').at(-1)?.body?.step?.stepId === 'S2-07');
     const progress = await page.evaluate(() => JSON.parse(localStorage.getItem('osrs-put:progress') ?? '{}'));
