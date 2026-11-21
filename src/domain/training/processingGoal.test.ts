@@ -92,7 +92,7 @@ describe('conditional full-goal processing supplies through the shared path', ()
       return buildNeed({ step, prep: engine.plan(step), prices, owned: player.owned, manual: {} });
     };
     const known = needFor(st);
-    expect(known.minimum.cost).toBeLessThanOrEqual(28);
+    expect(known.minimum.lines.map((l) => l.qty)).toEqual([28]);
     expect(known.objective.cost).toBeGreaterThan(known.minimum.cost);
     const unread = { ...st, bankSeen: false, owned: { ...st.owned!, bankSeen: false, items: new Map([...st.owned!.items].map(([key, item]) => [key, { ...item, bank: undefined }])) } };
     const unknown = needFor(unread);

@@ -247,6 +247,34 @@
       "source": "https://oldschool.runescape.wiki/w/Iron_bar"
     },
     {
+      "id": "iron-bar-forging",
+      "skill": "smithing",
+      "level": 15,
+      "xp": 12.5,
+      "ticks": 4,
+      "facility": "furnace",
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Iron ore",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Ring of forging",
+          "qty": 0.007142857142857143,
+          "stacks": true,
+          "initialReserve": 0.9928571428571429
+        }
+      ],
+      "output": {
+        "name": "Iron bar",
+        "qty": 1
+      },
+      "chance": 1,
+      "source": "https://oldschool.runescape.wiki/w/Iron_bar"
+    },
+    {
       "id": "silver-bar",
       "skill": "smithing",
       "level": 20,
@@ -919,6 +947,342 @@
       "source": "https://oldschool.runescape.wiki/w/Tiara"
     },
     {
+      "id": "sapphire-ring",
+      "skill": "crafting",
+      "level": 20,
+      "xp": 40,
+      "ticks": 3,
+      "facility": "furnace",
+      "tools": [
+        "Ring mould"
+      ],
+      "inputs": [
+        {
+          "name": "Gold bar",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Sapphire",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Sapphire ring",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Sapphire_ring"
+    },
+    {
+      "id": "sapphire-necklace",
+      "skill": "crafting",
+      "level": 22,
+      "xp": 55,
+      "ticks": 3,
+      "facility": "furnace",
+      "tools": [
+        "Necklace mould"
+      ],
+      "inputs": [
+        {
+          "name": "Sapphire",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Gold bar",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Sapphire necklace",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Sapphire_necklace"
+    },
+    {
+      "id": "sapphire-amulet",
+      "skill": "crafting",
+      "level": 24,
+      "xp": 65,
+      "ticks": 3,
+      "facility": "furnace",
+      "tools": [
+        "Amulet mould"
+      ],
+      "inputs": [
+        {
+          "name": "Sapphire",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Gold bar",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Sapphire amulet (u)",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Sapphire_amulet_(u)"
+    },
+    {
+      "id": "emerald-ring",
+      "skill": "crafting",
+      "level": 27,
+      "xp": 55,
+      "ticks": 3,
+      "facility": "furnace",
+      "tools": [
+        "Ring mould"
+      ],
+      "inputs": [
+        {
+          "name": "Emerald",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Gold bar",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Emerald ring",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Emerald_ring"
+    },
+    {
+      "id": "emerald-necklace",
+      "skill": "crafting",
+      "level": 29,
+      "xp": 60,
+      "ticks": 3,
+      "facility": "furnace",
+      "tools": [
+        "Necklace mould"
+      ],
+      "inputs": [
+        {
+          "name": "Emerald",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Gold bar",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Emerald necklace",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Emerald_necklace"
+    },
+    {
+      "id": "emerald-amulet",
+      "skill": "crafting",
+      "level": 31,
+      "xp": 70,
+      "ticks": 3,
+      "facility": "furnace",
+      "tools": [
+        "Amulet mould"
+      ],
+      "inputs": [
+        {
+          "name": "Emerald",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Gold bar",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Emerald amulet (u)",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Emerald_amulet_(u)"
+    },
+    {
+      "id": "ruby-ring",
+      "skill": "crafting",
+      "level": 34,
+      "xp": 70,
+      "ticks": 3,
+      "facility": "furnace",
+      "tools": [
+        "Ring mould"
+      ],
+      "inputs": [
+        {
+          "name": "Gold bar",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Ruby",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Ruby ring",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Ruby_ring"
+    },
+    {
+      "id": "ruby-necklace",
+      "skill": "crafting",
+      "level": 40,
+      "xp": 75,
+      "ticks": 3,
+      "facility": "furnace",
+      "tools": [
+        "Necklace mould"
+      ],
+      "inputs": [
+        {
+          "name": "Ruby",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Gold bar",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Ruby necklace",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Ruby_necklace"
+    },
+    {
+      "id": "ruby-amulet",
+      "skill": "crafting",
+      "level": 50,
+      "xp": 85,
+      "ticks": 3,
+      "facility": "furnace",
+      "tools": [
+        "Amulet mould"
+      ],
+      "inputs": [
+        {
+          "name": "Ruby",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Gold bar",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Ruby amulet (u)",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Ruby_amulet_(u)"
+    },
+    {
+      "id": "diamond-ring",
+      "skill": "crafting",
+      "level": 43,
+      "xp": 85,
+      "ticks": 3,
+      "facility": "furnace",
+      "tools": [
+        "Ring mould"
+      ],
+      "inputs": [
+        {
+          "name": "Gold bar",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Diamond",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Diamond ring",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Diamond_ring"
+    },
+    {
+      "id": "diamond-necklace",
+      "skill": "crafting",
+      "level": 56,
+      "xp": 90,
+      "ticks": 3,
+      "facility": "furnace",
+      "tools": [
+        "Necklace mould"
+      ],
+      "inputs": [
+        {
+          "name": "Gold bar",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Diamond",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Diamond necklace",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Diamond_necklace"
+    },
+    {
+      "id": "diamond-amulet",
+      "skill": "crafting",
+      "level": 70,
+      "xp": 100,
+      "ticks": 3,
+      "facility": "furnace",
+      "tools": [
+        "Amulet mould"
+      ],
+      "inputs": [
+        {
+          "name": "Gold bar",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Diamond",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Diamond amulet (u)",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Diamond_amulet_(u)"
+    },
+    {
       "id": "sapphire",
       "skill": "crafting",
       "level": 20,
@@ -1204,6 +1568,44 @@
       "output": null,
       "members": false,
       "source": "https://oldschool.runescape.wiki/w/Big_bones"
+    },
+    {
+      "id": "scatter-fiendish-ashes",
+      "skill": "prayer",
+      "level": 1,
+      "xp": 10,
+      "ticks": 2,
+      "facility": null,
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Fiendish ashes",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": null,
+      "members": false,
+      "source": "https://oldschool.runescape.wiki/w/Fiendish_ashes"
+    },
+    {
+      "id": "scatter-vile-ashes",
+      "skill": "prayer",
+      "level": 1,
+      "xp": 25,
+      "ticks": 2,
+      "facility": null,
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Vile ashes",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": null,
+      "members": false,
+      "source": "https://oldschool.runescape.wiki/w/Vile_ashes"
     },
     {
       "id": "superheat-iron",
@@ -2475,7 +2877,19 @@
       "gold-ring",
       "gold-necklace",
       "gold-amulet",
-      "tiara"
+      "tiara",
+      "sapphire-ring",
+      "sapphire-necklace",
+      "sapphire-amulet",
+      "emerald-ring",
+      "emerald-necklace",
+      "emerald-amulet",
+      "ruby-ring",
+      "ruby-necklace",
+      "ruby-amulet",
+      "diamond-ring",
+      "diamond-necklace",
+      "diamond-amulet"
     ],
     "cr-gems": [
       "sapphire",
@@ -2569,6 +2983,7 @@
     "sm-smelting": [
       "bronze-bar",
       "iron-bar",
+      "iron-bar-forging",
       "silver-bar",
       "steel-bar",
       "gold-bar",
@@ -2578,6 +2993,12 @@
     ],
     "cr-hardleather": [
       "hardleather-body"
+    ],
+    "pr-banked-vile-ashes": [
+      "scatter-vile-ashes"
+    ],
+    "pr-banked-fiendish-ashes": [
+      "scatter-fiendish-ashes"
     ]
   }
 }

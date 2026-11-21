@@ -20,9 +20,11 @@ interface StationDef { objectName?: string; kind: Kind; page: string; row?: stri
   lit?: boolean; bankTiles?: number }
 interface TickEvidence { page: string; evidence: string; ticks: number }
 interface RecipeDef { id: string; page: string; skill: string; facility: Kind | null; members?: boolean; /** Lit with a tinderbox (Firemaking): read from the log's {{Firemaking info}}. */ light?: boolean;
-  consume?: { level: number; xp: number; xpEvidence: string; action: TickEvidence };
+  consume?: { level: number; xp: number; xpEvidence: string; action: TickEvidence; samePace?: { page: string; evidence: string } };
   spell?: { page: string; materialPage: string; successEvidence: string; batchSize: number };
   wholeBatch?: boolean;
+  /** A worn item that makes every action succeed (Ring of forging: iron bars), proven by its page; one charge per action. */
+  forging?: { item: string; evidence: string };
   /** Batch size is an app preparation choice. Work/wait ticks must match the Wiki recipe's timing note and total. */
   batch?: { size: number; workTicks: number; waitTicks: number; workEvidence: string; waitEvidence: string }; successLabel?: string;
 }
@@ -154,9 +156,11 @@ for (const d of defs.recipes) {
     const c = d.consume;
     const action = (await wikitext(c.action.page)).split('\n').find((l) => l.includes(c.action.evidence));
     const item = templates(text, 'Infobox Item')[0];
-    const xpMatch = /give (\d+(?:\.\d+)?) \[\[Prayer\]\] experience when buried/.exec(c.xpEvidence);
+    const xpMatch = /give (\d+(?:\.\d+)?) \[\[Prayer\]\] experience when (?:buried|scattered)/.exec(c.xpEvidence);
+    // Ashes: the Wiki times scattering only alongside burying (the same pace), so the burying line carries the ticks.
+    const paced = !c.samePace || (await wikitext(c.samePace.page)).includes(c.samePace.evidence);
     if (!item || !text.includes(c.xpEvidence) || !xpMatch || Number(xpMatch[1]) !== c.xp || d.skill !== 'prayer'
-      || !action || !action.includes(`${c.action.ticks} ticks per bone`) || !(c.level > 0) || !(c.xp > 0) || !(c.action.ticks > 0)) {
+      || !action || !paced || !action.includes(`${c.action.ticks} ticks per bone`) || !(c.level > 0) || !(c.xp > 0) || !(c.action.ticks > 0)) {
       fail(d.id, 'consumption XP/action evidence does not match the source'); continue;
     }
     recipes.push({ id: d.id, skill: d.skill, level: c.level, xp: c.xp, ticks: c.action.ticks, facility: null, tools: [],
@@ -209,15 +213,16 @@ for (const d of defs.recipes) {
   // Success: a cooking chart's fire-or-range line (low/high of the skilling success formula, burning stops where it reaches 1), or a flat "N% chance".
   const chart = successCharts(text).flatMap((c) => c.lines).find((l) => d.successLabel ? l.label === d.successLabel : /fire or range/i.test(l.label));
   const pct = /(\d+)% chance/.exec(r.output1quantitynote ?? '');
+  if (d.forging && !(await wikitext(d.forging.item)).includes(d.forging.evidence)) { fail(d.id, `${d.forging.item} evidence not found`); continue; }
   if (d.skill === 'cooking' && !chart) { fail(d.id, 'no fire-or-range line in its skilling success chart'); continue; }
   recipes.push({
     id: d.id, skill: d.skill, level, xp, ticks, facility: d.facility, tools: d.wholeBatch ? [] : tools,
     ...(d.members ? { members: true } : {}),
-    inputs: d.wholeBatch ? inputs.map((i) => ({ ...i, anyOf: ['Pure essence'] })) : inputs,
+    inputs: d.wholeBatch ? inputs.map((i) => ({ ...i, anyOf: ['Pure essence'] })) : d.forging ? [...inputs, { name: d.forging.item, qty: 1, stacks: true }] : inputs,
     output: { name: plain(r.output1), qty: num(r.output1quantity) || 1 },
     ...(d.wholeBatch ? { wholeBatch: true, multiplierEvery: Number(every![1]), access: { carried, equipped }, station: plain(r.facilities) } : {}),
     ...(d.batch ? { batchSize: d.batch.size, batchWaitTicks: d.batch.waitTicks } : {}),
-    ...(chart ? { success: { low: chart.low, high: chart.high } } : pct ? { chance: Number(pct[1]) / 100 } : {}),
+    ...(chart ? { success: { low: chart.low, high: chart.high } } : d.forging ? { chance: 1 } : pct ? { chance: Number(pct[1]) / 100 } : {}),
     source: `https://oldschool.runescape.wiki/w/${encodeURIComponent(d.page.replace(/ /g, '_'))}`,
   });
 }
@@ -226,7 +231,7 @@ for (const d of defs.recipes) {
 /** The count a sentence states: "5 uses" or "used five times" (the Thread page since 2026). */
 function statedCount(text: string): number {
   const words = ['two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
-  const m = /\b(\d+|two|three|four|five|six|seven|eight|nine|ten) (?:uses|times)\b/i.exec(text)?.[1]?.toLowerCase();
+  const m = /\b(\d+|two|three|four|five|six|seven|eight|nine|ten) (?:uses|times|charges)\b/i.exec(text)?.[1]?.toLowerCase();
   return m === undefined ? NaN : /^\d+$/.test(m) ? Number(m) : words.indexOf(m) + 2;
 }
 const usesByName = new Map<string, number>();

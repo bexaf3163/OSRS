@@ -52,7 +52,8 @@
     "build-portals": "node scripts/data/build-portals.ts",
     "build-trainers": "node scripts/data/build-trainers.ts",
     "build-skilling": "node scripts/data/build-skilling.ts",
-    "build-processing": "node scripts/data/build-processing.ts"
+    "build-processing": "node scripts/data/build-processing.ts",
+    "build-item-facts": "node scripts/data/build-item-facts.ts"
   },
   "devDependencies": {
     "@types/leaflet": "^1.9.22",

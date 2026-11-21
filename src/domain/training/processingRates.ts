@@ -224,11 +224,21 @@ export function processRate(m: TrainingMethod, skill: string, state: PlayerState
         // The XP mechanics match, but a mixture must not inherit one product's sale value or input price.
         o.rate.methodName = m.name;
         o.rate.basis = m.name;
-        o.rate.costPerHour = null;
+        // A buyer holding none of the alternatives buys the cheapest: priced as that recipe, so money still ranks it. Owned stock
+        // of a mixture stays unpriced.
+        const chosen = o.rate.needs?.find((n) => n.type === 'item' && n.anyOf?.length);
+        const names = chosen && 'name' in chosen ? [chosen.name, ...(chosen.anyOf ?? [])] : [];
+        const holdsAny = names.some((n) => (heldOf(state, n).total ?? 0) > 0);
+        const own = chosen && 'name' in chosen && !holdsAny ? ids.map((x) => reg.recipes.find((y) => y.id === x)).find((y) => y?.inputs.some((i) => i.name === chosen.name)) : undefined;
+        const priced = own ? option(own, at, level, state, market, coinRate, m) : null;
+        o.rate.costPerHour = priced?.rate.costPerHour ?? null;
         delete o.rate.lootPerHour;
         delete o.rate.loot;
         delete o.rate.costName;
-        o.score = 1 / ((o.rate.xph[0] + o.rate.xph[1]) / 2);
+        if (priced && priced.rate.costPerHour !== null) {
+          for (const k of ['lootPerHour', 'loot', 'costName'] as const) if (priced.rate[k] !== undefined) Object.assign(o.rate, { [k]: priced.rate[k] });
+          o.score = priced.score;
+        } else o.score = 1 / ((o.rate.xph[0] + o.rate.xph[1]) / 2);
       } else if (ids.length > 1 && r.output) o.rate.methodName = `${r.skill === 'cooking' && r.facility === 'fire' ? 'Cook' : 'Make'} ${r.skill === 'cooking' ? r.output.name.replace(/^Cooked\s+/, '') : r.output.name}`;
       // A tie (within 2%) goes to the station nearer the method's own place, so the advice does not hop between equal stations.
       const far = (x: Option) => (home && x.rate.spot ? Math.max(Math.abs(x.rate.spot.place.x - home.x), Math.abs(x.rate.spot.place.y - home.y)) : 0);

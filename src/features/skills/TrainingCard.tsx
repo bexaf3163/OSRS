@@ -7,7 +7,7 @@ import { levelById } from '../../data';
 import { useStore } from '../../state/store';
 import { useBridge } from '../../state/bridge';
 import { usePlayerState } from '../../state/playerStateContext';
-import { adviseTraining, atLevel, formatHours, methodsFor, questTrainingStep, rateText, type MethodView, type TrainingAdvice } from '../../domain/training/trainingRouter';
+import { adviseTraining, atLevel, formatHours, ladderFrom, methodsFor, questTrainingStep, rateText, type MethodView, type TrainingAdvice } from '../../domain/training/trainingRouter';
 import { stagesOf } from '../../domain/training/stages';
 import { actionForm } from '../../domain/player/pacing';
 import { levelOf } from '../../domain/player/playerState';
@@ -45,8 +45,9 @@ export function useTrainingAdvice(skill: string | null, target: number, followed
     const advice = adviseTraining(input);
     if (advice.level === null || advice.level <= 1 || advice.level >= advice.target) return advice;
     // The guide from level 1: the same router at level 1, so passed stages read as the route that led here.
-    const ladder = adviseTraining({ ...input, target: advice.target, untilChange: false, state: atLevel(input.state, skill, 1), xp: null, measuredXph: null, followed: null }).path;
-    return { ...advice, ladder };
+    const fromOne = adviseTraining({ ...input, target: advice.target, untilChange: false, state: atLevel(input.state, skill, 1), xp: null, measuredXph: null, followed: null }).path;
+    const ahead = untilChange ? adviseTraining({ ...input, untilChange: false }).path : advice.path;
+    return { ...advice, ladder: ladderFrom(fromOne, ahead, advice.level) };
   },
     [skill, target, context, have, measured, prices, trade.state, followed, untilChange],
   );

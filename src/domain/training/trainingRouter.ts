@@ -437,6 +437,13 @@ const recommendedAt = (m: TrainingMethod, level: number, mode: GameMode): boolea
   // giant frogs at Ranged 24 (acceptance S05).
   availableAt(m, level, mode) && (!m.introductory || m.to === null || level < m.to);
 
+/** The Plan's ladder: the level-1 forecast for the levels already passed, then the player's own path from the level on, so the
+ * current stage is the method the Train card recommends (a cheaper method unlocked since is not hidden by an old leg). */
+export function ladderFrom(fromOne: readonly PathLeg[], ahead: readonly PathLeg[], level: number): PathLeg[] {
+  const passed = fromOne.filter((l) => l.fromLevel < level).map((l) => (l.toLevel > level ? { ...l, toLevel: level } : l));
+  return [...passed, ...ahead];
+}
+
 export interface PathLeg {
   method: TrainingMethod;
   fromLevel: number;

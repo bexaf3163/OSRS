@@ -1079,15 +1079,9 @@
       "id": "cr-gold",
       "skill": "crafting",
       "from": 5,
-      "to": 43,
-      "name": "Gold and silver jewellery",
+      "to": null,
+      "name": "Gold and gem jewellery",
       "members": false,
-      "needs": [
-        {
-          "type": "item",
-          "name": "Ring mould"
-        }
-      ],
       "xph": [
         20250,
         40500
@@ -1096,7 +1090,7 @@
       "cost": "profit",
       "risk": "none",
       "where": "The Edgeville or Al Kharid furnace",
-      "note": "Gold rings from 5, necklaces from 6, unstrung gold amulets from 8 and silver tiaras from 23. The shared model compares usable owned materials and current prices; profit is not guaranteed.",
+      "note": "Gold rings from 5, necklaces from 6, unstrung amulets from 8, then sapphire (20), emerald (27), ruby (34) and diamond (43) rings, necklaces and amulets. Moulds cost 5 gp at Dommik in Al Kharid or Rommik in Rimmington. The shared model compares owned materials and current prices; profit is not guaranteed.",
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_Crafting_training",
       "place": "Edgeville"
     },
@@ -2569,6 +2563,54 @@
       "where": "At the Grand Exchange bank: buy or withdraw the big bones and bury them by the bank",
       "place": "Grand Exchange",
       "note": "Withdraw owned unnoted bones first. Buying bones is a separate paid method; it does not include collecting them through combat. Check the price and your budget before buying.",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Prayer_training"
+    },
+    {
+      "id": "pr-banked-vile-ashes",
+      "skill": "prayer",
+      "from": 1,
+      "to": 99,
+      "name": "Scatter banked vile ashes",
+      "members": false,
+      "needs": [
+        {
+          "type": "item",
+          "name": "Vile ashes",
+          "count": 28
+        }
+      ],
+      "xpa": 25,
+      "act": "ash|ashes",
+      "effort": "high",
+      "cost": "cost",
+      "risk": "none",
+      "where": "At the Grand Exchange bank: buy or withdraw the vile ashes and scatter them by the bank",
+      "place": "Grand Exchange",
+      "note": "Vile ashes give 25 Prayer XP; free players can scatter them, as fast as bones are buried (about 2,900 an hour, Wiki). Buying ashes is a paid method.",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Prayer_training"
+    },
+    {
+      "id": "pr-banked-fiendish-ashes",
+      "skill": "prayer",
+      "from": 1,
+      "to": 99,
+      "name": "Scatter banked fiendish ashes",
+      "members": false,
+      "needs": [
+        {
+          "type": "item",
+          "name": "Fiendish ashes",
+          "count": 28
+        }
+      ],
+      "xpa": 10,
+      "act": "ash|ashes",
+      "effort": "high",
+      "cost": "cost",
+      "risk": "none",
+      "where": "At the Grand Exchange bank: buy or withdraw the fiendish ashes and scatter them by the bank",
+      "place": "Grand Exchange",
+      "note": "Fiendish ashes give 10 Prayer XP; free players can scatter them, as fast as bones are buried (about 2,900 an hour, Wiki). Buying ashes is a paid method.",
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_Prayer_training"
     },
     {

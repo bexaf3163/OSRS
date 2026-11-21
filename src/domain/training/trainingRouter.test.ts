@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { adviseTraining, formatHours, methodsFor, trainingMethods, viewMethod, type AdviceInput } from './trainingRouter';
+import { adviseTraining, formatHours, ladderFrom, methodsFor, trainingMethods, viewMethod, type AdviceInput } from './trainingRouter';
 import { buildPlayerState } from '../player/playerState';
 import { preparationNeeds } from './trainingRouter';
 import { emptyProgress } from '../persistence/progress';
@@ -218,3 +218,12 @@ describe('melee training at level 1 (fresh-account simulation, 2.86.1)', () => {
   });
 });
 
+
+describe('the Plan ladder', () => {
+  it('keeps the level-1 forecast only below the level and the player\'s own path from it, so the current stage matches the card', () => {
+    const m = (id: string) => trainingMethods.find((x) => x.id === id)!;
+    const fromOne = [{ method: m('ck-meat'), fromLevel: 1, toLevel: 20 }, { method: m('ck-trout'), fromLevel: 20, toLevel: 60 }, { method: m('ck-tuna'), fromLevel: 60, toLevel: 68 }];
+    const ahead = [{ method: m('ck-tuna'), fromLevel: 40, toLevel: 68 }];
+    expect(ladderFrom(fromOne, ahead, 40).map((l) => `${l.method.id} ${l.fromLevel}-${l.toLevel}`)).toEqual(['ck-meat 1-20', 'ck-trout 20-40', 'ck-tuna 40-68']);
+  });
+});

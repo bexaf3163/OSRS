@@ -73,6 +73,16 @@
       "facility": "furnace"
     },
     {
+      "id": "iron-bar-forging",
+      "page": "Iron bar",
+      "skill": "smithing",
+      "facility": "furnace",
+      "forging": {
+        "item": "Ring of forging",
+        "evidence": "a 100% success rate of creating an [[iron bar]] while it is worn"
+      }
+    },
+    {
       "id": "silver-bar",
       "page": "Silver bar",
       "skill": "smithing",
@@ -235,6 +245,78 @@
       "facility": "furnace"
     },
     {
+      "id": "sapphire-ring",
+      "page": "Sapphire ring",
+      "skill": "crafting",
+      "facility": "furnace"
+    },
+    {
+      "id": "sapphire-necklace",
+      "page": "Sapphire necklace",
+      "skill": "crafting",
+      "facility": "furnace"
+    },
+    {
+      "id": "sapphire-amulet",
+      "page": "Sapphire amulet (u)",
+      "skill": "crafting",
+      "facility": "furnace"
+    },
+    {
+      "id": "emerald-ring",
+      "page": "Emerald ring",
+      "skill": "crafting",
+      "facility": "furnace"
+    },
+    {
+      "id": "emerald-necklace",
+      "page": "Emerald necklace",
+      "skill": "crafting",
+      "facility": "furnace"
+    },
+    {
+      "id": "emerald-amulet",
+      "page": "Emerald amulet (u)",
+      "skill": "crafting",
+      "facility": "furnace"
+    },
+    {
+      "id": "ruby-ring",
+      "page": "Ruby ring",
+      "skill": "crafting",
+      "facility": "furnace"
+    },
+    {
+      "id": "ruby-necklace",
+      "page": "Ruby necklace",
+      "skill": "crafting",
+      "facility": "furnace"
+    },
+    {
+      "id": "ruby-amulet",
+      "page": "Ruby amulet (u)",
+      "skill": "crafting",
+      "facility": "furnace"
+    },
+    {
+      "id": "diamond-ring",
+      "page": "Diamond ring",
+      "skill": "crafting",
+      "facility": "furnace"
+    },
+    {
+      "id": "diamond-necklace",
+      "page": "Diamond necklace",
+      "skill": "crafting",
+      "facility": "furnace"
+    },
+    {
+      "id": "diamond-amulet",
+      "page": "Diamond amulet (u)",
+      "skill": "crafting",
+      "facility": "furnace"
+    },
+    {
       "id": "sapphire",
       "page": "Sapphire",
       "skill": "crafting",
@@ -336,6 +418,46 @@
           "page": "Game tick/Action lengths",
           "evidence": "Burying [[remains|bones]]:",
           "ticks": 2
+        }
+      }
+    },
+    {
+      "id": "scatter-fiendish-ashes",
+      "page": "Fiendish ashes",
+      "skill": "prayer",
+      "facility": null,
+      "consume": {
+        "level": 1,
+        "xp": 10,
+        "xpEvidence": "They give 10 [[Prayer]] experience when scattered",
+        "action": {
+          "page": "Game tick/Action lengths",
+          "evidence": "Burying [[remains|bones]]:",
+          "ticks": 2
+        },
+        "samePace": {
+          "page": "Free-to-play Prayer training",
+          "evidence": "combination of 2,900 buries and scatters per hour"
+        }
+      }
+    },
+    {
+      "id": "scatter-vile-ashes",
+      "page": "Vile ashes",
+      "skill": "prayer",
+      "facility": null,
+      "consume": {
+        "level": 1,
+        "xp": 25,
+        "xpEvidence": "The ashes give 25 [[Prayer]] experience when scattered",
+        "action": {
+          "page": "Game tick/Action lengths",
+          "evidence": "Burying [[remains|bones]]:",
+          "ticks": 2
+        },
+        "samePace": {
+          "page": "Free-to-play Prayer training",
+          "evidence": "combination of 2,900 buries and scatters per hour"
         }
       }
     },
@@ -716,7 +838,19 @@
       "gold-ring",
       "gold-necklace",
       "gold-amulet",
-      "tiara"
+      "tiara",
+      "sapphire-ring",
+      "sapphire-necklace",
+      "sapphire-amulet",
+      "emerald-ring",
+      "emerald-necklace",
+      "emerald-amulet",
+      "ruby-ring",
+      "ruby-necklace",
+      "ruby-amulet",
+      "diamond-ring",
+      "diamond-necklace",
+      "diamond-amulet"
     ],
     "cr-gems": [
       "sapphire",
@@ -810,6 +944,7 @@
     "sm-smelting": [
       "bronze-bar",
       "iron-bar",
+      "iron-bar-forging",
       "silver-bar",
       "steel-bar",
       "gold-bar",
@@ -819,6 +954,12 @@
     ],
     "cr-hardleather": [
       "hardleather-body"
+    ],
+    "pr-banked-vile-ashes": [
+      "scatter-vile-ashes"
+    ],
+    "pr-banked-fiendish-ashes": [
+      "scatter-fiendish-ashes"
     ]
   },
   "light": {
@@ -839,6 +980,12 @@
       "page": "Thread",
       "uses": 5,
       "evidence": "Each spool of thread can be used five times before it is consumed."
+    },
+    {
+      "name": "Ring of forging",
+      "page": "Ring of forging",
+      "uses": 140,
+      "evidence": "A newly-enchanted ring has 140 charges"
     }
   ]
 }
