@@ -31,7 +31,7 @@ const advise = (skill: string, level: number, target: number, tool: string) =>
 
 describe('a better tool tier is weighed over its whole use', () => {
   it('a tier is replaced where the path plans the next one: the last F2P tier is never replaced on a free account', () => {
-    expect([toolReplacedAt('Steel axe', 'f2p'), toolReplacedAt('Adamant axe', 'f2p'), toolReplacedAt('Rune axe', 'f2p'), toolReplacedAt('Rune axe', 'members')]).toEqual([11, 41, null, 61]);
+    expect([toolReplacedAt('Steel axe', 'f2p'), toolReplacedAt('Adamant axe', 'f2p'), toolReplacedAt('Rune axe', 'f2p'), toolReplacedAt('Rune axe', 'members')]).toEqual([21, 41, null, 61]);
     expect(toolReplacedAt('Rune scimitar', 'f2p')).toBeNull();
   });
 

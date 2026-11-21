@@ -1655,7 +1655,8 @@
         {
           "name": "Water rune",
           "qty": 1,
-          "stacks": true
+          "stacks": true,
+          "staff": "Staff of water"
         }
       ],
       "output": {
@@ -1686,7 +1687,8 @@
         {
           "name": "Air rune",
           "qty": 3,
-          "stacks": true
+          "stacks": true,
+          "staff": "Staff of air"
         }
       ],
       "output": {
@@ -1717,7 +1719,8 @@
         {
           "name": "Fire rune",
           "qty": 5,
-          "stacks": true
+          "stacks": true,
+          "staff": "Staff of fire"
         }
       ],
       "output": {
@@ -1748,7 +1751,8 @@
         {
           "name": "Earth rune",
           "qty": 10,
-          "stacks": true
+          "stacks": true,
+          "staff": "Staff of earth"
         }
       ],
       "output": {

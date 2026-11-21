@@ -89,6 +89,8 @@ export interface TrainingMethod {
   costPerHour?: number | null;
   /** Coins an hour the model's method banks from its drop when that pays for its time, and the drop. */
   lootPerHour?: number;
+  /** Power training: catches are dropped, never banked, so the rate and the spot are the drop ones ("Iron, dropping the ore"). */
+  drop?: boolean;
   /** Coins an hour at market prices, without the planning margin: what methods are ranked by. */
   marketNetPerHour?: number;
   lootName?: string;
@@ -120,6 +122,7 @@ interface Raw {
   id: string; skill: string | string[]; from: number; suggestedFrom?: number; introductory?: boolean; to: number | null; name: string; members: boolean;
   needs?: MethodNeed[]; kit?: TrainingMethod['kit']; manualSetup?: string; xph?: [number, number]; xpa?: number; act?: string; effort: Effort; cost: MethodCost; risk: Risk;
   where: string; place?: string; objectNames?: string[]; npcNames?: string[]; note?: string; url: string; kind?: 'method' | 'quest'; xpTotal?: number; questGuide?: TrainingMethod['questGuide'];
+  drop?: boolean;
 }
 
 export const trainingMethods: TrainingMethod[] = (methodsJson as unknown as { methods: Raw[] }).methods.map((m) => ({
@@ -127,7 +130,7 @@ export const trainingMethods: TrainingMethod[] = (methodsJson as unknown as { me
   skills: Array.isArray(m.skill) ? m.skill : [m.skill],
   from: m.from, to: m.to ?? null, name: m.name, members: m.members,
   needs: m.needs ?? [], xph: m.xph ?? null, xpa: m.xpa ?? null, act: m.act ?? null,
-  effort: m.effort, cost: m.cost, risk: m.risk, where: m.where, ...(m.place ? { place: m.place } : {}), ...(m.note ? { note: m.note } : {}), url: m.url,
+  effort: m.effort, cost: m.cost, risk: m.risk, where: m.where, ...(m.drop ? { drop: true } : {}), ...(m.place ? { place: m.place } : {}), ...(m.note ? { note: m.note } : {}), url: m.url,
   kind: m.kind ?? 'method', xpTotal: m.xpTotal ?? null,
   ...(m.questGuide ? { questGuide: m.questGuide } : {}),
   ...(m.objectNames ? { objectNames: m.objectNames } : {}),
@@ -694,8 +697,10 @@ function pathFresh(skill: string, level: number, target: number, input: AdviceIn
     if (lv === level || lv % FORECAST_STEP === 0 || milestones.has(lv)) ratedAt = lv;
     const at = ratedAt;
     // Later legs carry the kit their stage recommends, so the rate matches the advice.
-    const projected = lv === level ? atLevel(projectedState, skill, lv) : withPlannedKit(atLevel(projectedState, skill, lv), skill, lv, level);
-    const methods = at === level ? input.methods ?? trainingMethods : personalize(raw, skill, atLevel(projected, skill, at), input.prices, input.restriction);
+    // Every leg, the first too, carries the tool its stage plans, so all legs are rated by the same model, not some by the wiki guess.
+    const projected = withPlannedKit(atLevel(projectedState, skill, lv), skill, lv);
+    const kitAdded = projected !== atLevel(projectedState, skill, lv);
+    const methods = at === level && !kitAdded ? input.methods ?? trainingMethods : personalize(raw, skill, atLevel(projected, skill, at), input.prices, input.restriction);
     // Advance only this skill in a copy; other skill/quest entry proofs must still be satisfied.
     const cands = methodsFor(skill, methods).filter((m) => !m.manualSetup && recommendedAt(m, lv, input.mode)).map((m) => viewMethod(m, projected, input.prices)).filter((v) => v.status !== 'LOCKED');
     // Each level is weighed as the first one is (adviseTraining): the hours from here to the goal, less what the banked drops are worth.

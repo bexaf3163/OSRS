@@ -213,7 +213,10 @@ for (const d of defs.recipes) {
   const inputs = [];
   for (let i = 1; r[`mat${i}`]; i++) {
     const name = plain(r[`mat${i}`]);
-    inputs.push({ name, qty: num(r[`mat${i}quantity`]) || 1, stacks: await stacks(name) });
+    // An elemental rune in a recipe (Enchant amulets) is replaced by its staff, as the spell recipes above do.
+    const element = /^(air|water|earth|fire) rune$/i.exec(name)?.[1].toLowerCase();
+    const staff = element ? (JSON.parse(readFileSync(`${root}src/data/authored/spells.json`, 'utf8')) as { staffs: Record<string, { name: string }> }).staffs[element] : undefined;
+    inputs.push({ name, qty: num(r[`mat${i}quantity`]) || 1, stacks: await stacks(name), ...(staff ? { staff: staff.name } : {}) });
   }
   const tools = (r.tools ?? '').split(/,|<br\s*\/?>/).map(plain).filter(Boolean);
   const carried = d.wholeBatch ? tools.find((n) => / talisman$/i.test(n)) : undefined;

@@ -38,10 +38,11 @@ describe('the training plan told as stages', () => {
     expect(order).toEqual([...order].sort((a, b) => a - b));
   });
 
-  it('a later level with the same kit as now keeps the player\'s own state', () => {
+  it('every leg carries the tool its stage plans, the current one too, so all legs use one rate model', () => {
     const state = player('mining', 25);
-    expect(withPlannedKit(state, 'mining', 30, 25)).toBe(state);
-    expect(withPlannedKit(state, 'mining', 31, 25)).not.toBe(state);
+    const at30 = withPlannedKit(state, 'mining', 30);
+    expect(at30.owned?.items.get('mithril pickaxe')?.carried).toBe(1);
+    expect(withPlannedKit(at30, 'mining', 30)).toBe(at30);
   });
 });
 

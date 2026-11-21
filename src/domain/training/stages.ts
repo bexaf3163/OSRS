@@ -4,6 +4,10 @@ import { nameKey } from '../items/itemKey';
 import { AXES, PICKAXES, toolUse } from '../items/toolTiers';
 import type { PlayerState } from '../player/playerState';
 import { SPELLS, isCombatSpell } from '../combat/magicPlan';
+import { toolProgressionJson } from '../../data';
+
+// Free tiers the gathering model cannot rate are not planned: a black pickaxe (no shop, no model) gave its leg the wiki guess instead.
+const MODELLED = new Set(Object.values(toolProgressionJson as unknown as Record<string, unknown>).filter(Array.isArray).flat().map((t) => nameKey((t as { tier: string }).tier)));
 import type { PathLeg } from './trainingRouter';
 
 export interface Stage {
@@ -24,7 +28,7 @@ export function toolTierAt(skill: string, level: number, mode: GameMode): string
   let best: string | null = null;
   for (const name of family) {
     const use = toolUse(name);
-    if (use && use.level <= level && (mode === 'members' || !use.members) && !SIDE_TIER.test(name)) best = name;
+    if (use && use.level <= level && (mode === 'members' || !use.members) && !SIDE_TIER.test(name) && (use.members || MODELLED.has(nameKey(name)))) best = name;
   }
   return best;
 }
@@ -56,13 +60,12 @@ function strikeRunesAt(level: number): string[] {
  */
 // One item list per bank and kit, so rate caches keyed on it (rateKeyOf) are not rebuilt for every level copy of the state.
 const plannedItems = new WeakMap<object, Map<string, NonNullable<PlayerState['owned']>['items']>>();
-export function withPlannedKit(state: PlayerState, skill: string, level: number, currentLevel: number): PlayerState {
+export function withPlannedKit(state: PlayerState, skill: string, level: number): PlayerState {
   const kitAt = (lv: number): [string, number][] => {
     const tier = toolTierAt(skill, lv, state.mode);
     return tier ? [[tier, 1]] : skill === 'magic' ? strikeRunesAt(lv).map((r) => [r, 1000]) : [];
   };
   const kit = kitAt(level);
-  if (JSON.stringify(kit) === JSON.stringify(kitAt(currentLevel))) return state;
   const owned = state.owned ?? { bankSeen: false, items: new Map() };
   const missing = kit.filter(([name]) => (owned.items.get(nameKey(name))?.carried ?? 0) <= 0);
   if (!missing.length) return state;

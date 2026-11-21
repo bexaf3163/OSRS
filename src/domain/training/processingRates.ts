@@ -105,8 +105,10 @@ function recipeBag(r: Recipe, state: PlayerState, market: Market, method?: Train
       attack: levelOf(state, 'attack') ?? 1, strength: levelOf(state, 'strength') ?? 1, defence: levelOf(state, 'defence') ?? 1,
       magic: levelOf(state, 'magic'), ranged: levelOf(state, 'ranged'),
     }, state.quests.known ? new Set(state.quests.value) : undefined)) return false;
+    // A held staff replaces its rune; without one, held runes are used first, and with neither one staff (under 1k gp) is planned
+    // instead of buying thousands of runes.
     const held = heldOf(state, i.staff);
-    return held.presence === 'PRESENT' || held.equipped > 0;
+    return held.presence === 'PRESENT' || held.equipped > 0 || (heldOf(state, i.name).total ?? 0) <= 0;
   });
   const inputs = r.inputs.filter((i) => !substituted.includes(i)).map((i) => {
     if (!i.anyOf?.length) return i;

@@ -299,7 +299,7 @@ describe('shared batch waits and consumed supplies', () => {
     expect(method('pr-banked-big-bones').cost).toBe('cost');
     expect(method('pr-banked-big-bones').needs).toContainEqual({ type: 'item', name: 'Big bones', count: 28 });
   });
-  it('Superheat uses spell timing and guaranteed iron output, respects Smithing, and equips owned rune substitutes', () => {
+  it('Superheat uses spell timing and guaranteed iron output, respects Smithing, and uses a staff instead of runes when no runes are held', () => {
     const m = method('ma-superheat');
     const market = { prices: prices({ 'Iron ore': 10, 'Nature rune': 100, 'Fire rune': 5 }, { 'Iron bar': 200 }) };
     expect(processRate(m, 'magic', stateOf({ magic: 43, smithing: 14 }), market)).toBeNull();
@@ -311,7 +311,9 @@ describe('shared batch waits and consumed supplies', () => {
     expect(normal.xpPerAction).toBe(53);
     expect(normal.xph[1]).toBeCloseTo((25 * 53 * 3600) / (25 * 3 * 0.6 + 3));
     expect(staff.xph).toEqual(normal.xph);
-    expect(staff.costPerHour!).toBeLessThan(normal.costPerHour!);
+    // With no fire runes held, the plan buys the staff too instead of thousands of runes.
+    expect(staff.costPerHour!).toBe(normal.costPerHour!);
+    expect(normal.needs).toContainEqual({ type: 'item', name: 'Staff of fire', count: 1, equip: true });
     expect(staff.needs).toContainEqual({ type: 'item', name: 'Staff of fire', count: 1, equip: true });
     expect(staff.needs?.some((n) => n.type === 'item' && n.name === 'Fire rune')).toBe(false);
     expect(staff.consumables?.some(n => n.name === 'Fire rune')).toBe(false);

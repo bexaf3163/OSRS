@@ -148,14 +148,14 @@ describe('path, actions and time', () => {
     expect(b.actionsLeft).toBe(Math.ceil((xpForLevel(21) - xpForLevel(15) - 1000) / 37.5));
   });
 
-  it('time: by the player\'s measurements exactly; without measurements — a range "by the wiki"; no speed — no time', () => {
+  it('time: by the player\'s measurements exactly; without measurements — a range from the model with the planned axe; no speed — no time', () => {
     // One axe tier (adamant, 31-40): a later tier would make the plan a forecast with the planned axe.
     const state = levels({ woodcutting: 31 });
     const measured = advise({ skill: 'woodcutting', target: 40, state, mode: 'f2p', measuredXph: 20_000 });
     expect(measured.time?.source).toBe('measured');
     expect(measured.time?.minHours).toBeCloseTo((xpForLevel(40) - xpForLevel(31)) / 20_000);
     const wiki = advise({ skill: 'woodcutting', target: 40, state, mode: 'f2p' });
-    expect(wiki.time?.source).toBe('wiki');
+    expect(wiki.time?.source).toBe('model');
     expect(wiki.time!.minHours).toBeLessThan(wiki.time!.maxHours);
     expect(formatHours(wiki.time!)).toMatch(/^about/);
     expect(formatHours(measured.time!)).toMatch(/^≈/);

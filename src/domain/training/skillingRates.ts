@@ -134,7 +134,7 @@ function paceAt(r: Resource, spot: SkillSpot, level: number, tool: ToolUse): { c
   return { chances, any, atSpot };
 }
 
-function spotRate(r: Resource, spot: SkillSpot, level: number, state: PlayerState, market: Market, coinRate: number | null, reg: SkillingRegistry, forced?: ToolUse): SpotRate | null {
+function spotRate(r: Resource, spot: SkillSpot, level: number, state: PlayerState, market: Market, coinRate: number | null, reg: SkillingRegistry, forced?: ToolUse, drop?: boolean): SpotRate | null {
   const tool = forced ?? toolFor(r, level, state, reg);
   if (!tool) return null;
   const pace = paceAt(r, spot, level, tool);
@@ -147,7 +147,7 @@ function spotRate(r: Resource, spot: SkillSpot, level: number, state: PlayerStat
   const trip = spot.bank ? bankTrip({ place: spot.place, bank: spot.bank, ...(spot.waypoints ? { waypoints: spot.waypoints } : {}) }) : null;
   const bankPer = (i: 0 | 1) => (trip ? (trip.minutes[i] * 60) / slots : Infinity);
   const mid = (f: (i: 0 | 1) => number) => (f(0) + f(1)) / 2;
-  const banks = trip !== null && bankingPays(valueEach, mid(bankPer) - mid((i) => DROP[i]), coinRate);
+  const banks = !drop && trip !== null && bankingPays(valueEach, mid(bankPer) - mid((i) => DROP[i]), coinRate);
   const perItem = (i: 0 | 1) => atSpot(i) + (banks ? bankPer(i) : DROP[i]);
   const perHour = (i: 0 | 1) => 3600 / perItem(i);
   const xph: [number, number] = [(xpEach * perHour(1)) / (1 + MARGIN), xpEach * perHour(0)];
@@ -191,7 +191,7 @@ export function gatherRate(m: TrainingMethod, skill: string, state: PlayerState,
     if (!r || r.skill !== skill) continue;
     for (const spot of reg.spots) {
       if (spot.resource !== id || (spot.members && state.mode !== 'members')) continue;
-      const s = spotRate(r, spot, level, state, market, coinRate, reg);
+      const s = spotRate(r, spot, level, state, market, coinRate, reg, undefined, m.drop);
       if (s && (!best || better(s, best.s, home))) best = { s, r, spot };
     }
   }
