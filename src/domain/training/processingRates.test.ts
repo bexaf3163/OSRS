@@ -379,3 +379,16 @@ describe('Runecraft uses an inventory action and the altar journey', () => {
     expect(processRate(method('ck-tuna'), 'cooking', at40, {}, permanent)?.spot?.label).toBe('Barbarian Village fire');
   });
 });
+
+describe('held materials', () => {
+  // App prices with the planning margin (2026-11-21): rubies lose money when bought, but a player holding them should use them.
+  const market = { prices: prices(
+    { Sapphire: 191, Ruby: 828, 'Gold bar': 99, 'Sapphire necklace': 387, 'Sapphire amulet (u)': 360, 'Sapphire ring': 360, 'Ruby necklace': 1120, 'Ruby amulet (u)': 1110, 'Ruby ring': 1100, Emerald: 420, 'Emerald ring': 640, 'Emerald necklace': 660, 'Emerald amulet (u)': 700, Diamond: 1802, 'Diamond ring': 2050 },
+    { Sapphire: 147, Ruby: 654, 'Gold bar': 76, 'Sapphire necklace': 304, 'Sapphire amulet (u)': 300, 'Sapphire ring': 290, 'Ruby necklace': 882, 'Ruby amulet (u)': 841, 'Ruby ring': 850, Emerald: 330, 'Emerald ring': 520, 'Emerald necklace': 530, 'Emerald amulet (u)': 560, Diamond: 1444, 'Diamond ring': 1700 }) };
+  const holding = (items: Record<string, number>) => buildPlayerState({ mode: 'f2p', stats: null, progress: { ...emptyProgress(), levels: { crafting: 55 } }, gear: null, questsDone: [], connected: true,
+    owned: { bankSeen: true, items: new Map(Object.entries(items).map(([name, n]) => [name.toLowerCase(), { name, carried: 0, noted: 0, bank: n }])) } } as never);
+  it('a player holding rubies makes ruby jewellery instead of being sent to buy sapphires', () => {
+    expect(processRate(method('cr-gold'), 'crafting', holding({ Ruby: 62, 'Gold bar': 62, 'Necklace mould': 1 }), market)?.basis).toMatch(/^Ruby/);
+    expect(processRate(method('cr-gold'), 'crafting', holding({ 'Necklace mould': 1 }), market)?.basis).not.toMatch(/^Ruby/);
+  });
+});

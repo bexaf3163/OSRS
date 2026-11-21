@@ -52,8 +52,7 @@ const MAX_TURNS: Record<GameMode, number> = { f2p: 300, members: 1300 };
 const UNKNOWN_TIME_DEBT = 0;
 // A fresh Members account finishes every quest; the turns whose remaining time is unknown are known debt. Lower it as it
 // shrinks, never raise it.
-// shortcut: owner allowed 1 for 2.159.0 (2026-11-21): a later quest's preparation is untimed at the Lost City turn; fix it and restore 0 next release.
-const MEMBERS_UNKNOWN_TIME_DEBT = 1;
+const MEMBERS_UNKNOWN_TIME_DEBT = 0;
 
 // One fresh account played through the route of a mode; it stops at the first check and returns what is left.
 function play(mode: GameMode) {

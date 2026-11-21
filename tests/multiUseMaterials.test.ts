@@ -71,7 +71,7 @@ describe('multi-use materials share safe physical quantities across the lifecycl
   it('prices average consumption rather than the one-time physical allowance', () => {
     const unit = (price: number) => ({ price, basis: 'side' as const, confidence: 'HIGH' as const, ageMinutes: 0, volumePerHour: null, notes: [] });
     const prices: PriceView = { status: 'live', at: 1, idOf: () => undefined, limitOf: () => undefined,
-      buy: n => unit(n === 'Thread' ? 100 : n === 'Leather' ? 10 : 1), sell: () => unit(1) };
+      buy: n => unit(n === 'Thread' ? 100 : n === 'Leather' ? 10 : 1), sell: n => unit(n === 'Thread' ? 100 : n === 'Leather' ? 10 : 1) };
     const rate = processRate(method, 'crafting', character(6, 26), { prices })!;
     const actionsPerHour = (rate.xph[1] + rate.xph[0] * 1.1) / 2 / 13.8;
     expect(rate.costPerHour).not.toBeNull();

@@ -21,6 +21,7 @@ import { attacksPlayer, hostileText } from './aggression';
 import { matchStrict } from '../travel/locations';
 import { combatLevel } from '../player/xp';
 import { supplyPrice } from '../market/itemPrice';
+import { marketView } from '../market/quotes';
 import { PROCESSING, type ProcessingRegistry } from './processingRates';
 import { TILES_PER_SECOND, type Point } from '../travel/travel';
 
@@ -164,7 +165,13 @@ function spotRate(r: Resource, spot: SkillSpot, level: number, state: PlayerStat
   };
   // The time per XP, the coins banked counted as the time cows would take to earn them (lootValue.coinsPerMinute).
   // Coins net of the bait used up; an unknown bait price leaves coins out of the score rather than taking the bait as free.
-  const saved = rate.costPerHour === null ? 0 : coinTimeShare(lootPerHour - (rate.costPerHour ?? 0), coinRate);
+  // Ranked at market prices (marketView): the planning margin stays in the shown coins only.
+  const ref = market.prices && marketView(market.prices);
+  const refBait = r.bait ? supplyPrice(r.bait, ref, state.mode) : 0;
+  const refEach = r.products.reduce((a, p, i) => a + chances[i] * (dropValue(p.name, ref, market.restriction) ?? 0), 0) / any;
+  const marketNet = refBait === null ? null : (banks ? refEach * items : 0) - (r.bait ? items * refBait : 0);
+  if (marketNet !== null) rate.marketNetPerHour = marketNet;
+  const saved = marketNet === null ? 0 : coinTimeShare(marketNet, coinRate);
   const combat = combatLevel(Object.fromEntries(Object.keys(state.levels).map((k) => [k, levelOf(state, k)])) as never);
   const threat = spot.hostiles?.map((h) => ({ npc: h.npc, level: Math.max(...h.levels) })).find((h) => attacksPlayer(h.level, combat));
   return { rate, score: (1 - saved) / ((xph[0] + xph[1]) / 2), ...(threat ? { danger: hostileText(threat.npc, threat.level) } : {}) };

@@ -50,6 +50,8 @@ export interface ModelRate {
   selectedTool?: string;
   /** Coins an hour from what is banked and sold, when it pays for its time; then xph already has its pickups and bank trips in it. */
   lootPerHour?: number;
+  /** Coins an hour at market prices, without the planning margin: what methods are ranked by (processRates). */
+  marketNetPerHour?: number;
   /** What is banked: "Big bones", "Willow logs". */
   loot?: string;
   /** One safety line when the picked spot has NPCs that attack this player (every safer spot was worse or absent). */

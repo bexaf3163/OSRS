@@ -13,6 +13,7 @@ import { itemRequirement } from '../player/requirements';
 import { requirementCost } from '../market/needPrice';
 import { isRestrictedItem } from '../market/tradeRestriction';
 import { supplyPrice } from '../market/itemPrice';
+import { marketView, type PriceView } from '../market/quotes';
 import { matchStrict } from '../travel/locations';
 import { canWear, gearPieceByName } from '../combat/gearAdvisor';
 import type { Market, ModelRate, RateSpot } from './methodRates';
@@ -169,25 +170,37 @@ function option(r: Recipe, at: { spot: RateSpot | null; trip: [number, number]; 
   const perHour = (i: 0 | 1) => 3600 / seconds(i);
   const xph: [number, number] = [(r.xp * success * perHour(1)) / (1 + MARGIN), r.xp * success * perHour(0)];
   const done = (perHour(0) + perHour(1)) / 2;
-  // Materials at the price to replace them (a material owned is used up too); the product at its sale value after tax, a failed one (burnt) at none.
-  const each = inputs.reduce<number | null>((a, i) => {
-    const p = supplyPrice(i.name, market.prices, state.mode);
-    return a === null || p === null ? null : a + p * i.qty;
-  }, 0);
-  const sale = r.output ? dropValue(r.output.name, market.prices, market.restriction) : 0;
-  // A product the trade rules keep from being sold is worth nothing to sell; one with no price is unknown, and then so are the coins.
-  const value = sale ?? (market.restriction === 'RESTRICTED' && isRestrictedItem(r.output!.name) ? 0 : null);
-  // An own fire burns one log a trip.
-  const logPrice = at.lit ? supplyPrice('Logs', market.prices, state.mode) : 0;
-  const costPerHour = each === null || value === null || logPrice === null ? null : each * done + logPrice * done / actions;
-  // The product's value is shown only with its materials' cost: a gain without the cost would read as profit.
+  // Materials at the price to replace them; a material the player already holds costs what selling it would bring, so 62 rubies
+  // in the bank are not priced as rubies to buy and the pick does not send the player to buy sapphires instead.
+  // shortcut: held stock is priced at its sale value for the whole rate, even past the held quantity; re-picked when it runs out.
+  // The product at its sale value after tax, a failed one (burnt) at none.
   const outputQty = (r.output?.qty ?? 0) * (r.multiplierEvery ? 1 + Math.floor(level / r.multiplierEvery) : 1);
-  const lootPerHour = costPerHour === null || !r.output ? 0 : value! * outputQty * success * done;
+  // Recipes are compared at market prices; the planning margin (buy high, sell low) stays in the shown costs and the funding check,
+  // or every expensive recipe loses to the cheapest one (sapphire necklaces from Crafting 22 to 99).
+  const priced = (prices: PriceView | null | undefined) => {
+    const each = inputs.reduce<number | null>((a, i) => {
+      const held = (heldOf(state, i.name).total ?? 0) > 0 ? prices?.sell(i.name)?.price : undefined;
+      const p = held ?? supplyPrice(i.name, prices, state.mode);
+      return a === null || p === null ? null : a + p * i.qty;
+    }, 0);
+    const sale = r.output ? dropValue(r.output.name, prices, market.restriction) : 0;
+    // A product the trade rules keep from being sold is worth nothing to sell; one with no price is unknown, and then so are the coins.
+    const value = sale ?? (market.restriction === 'RESTRICTED' && isRestrictedItem(r.output!.name) ? 0 : null);
+    // An own fire burns one log a trip.
+    const logPrice = at.lit ? supplyPrice('Logs', prices, state.mode) : 0;
+    const costPerHour = each === null || value === null || logPrice === null ? null : each * done + logPrice * done / actions;
+    // The product's value is shown only with its materials' cost: a gain without the cost would read as profit.
+    const lootPerHour = costPerHour === null || !r.output ? 0 : value! * outputQty * success * done;
+    return { costPerHour, lootPerHour };
+  };
+  const { costPerHour, lootPerHour } = priced(market.prices);
+  const atMarket = priced(market.prices && marketView(market.prices));
   const rate: ModelRate = {
     xph, costPerHour, basis: r.output?.name ?? r.inputs[0].name, xpPerAction: r.xp * success, exactNeeds: true, batchActions: actions,
     needs, consumables: inputs.map(({ name, qty, initialReserve, anyOf }) => ({ name, qty, ...(initialReserve !== undefined ? { initialReserve } : {}), ...(anyOf?.length ? { anyOf: [...anyOf] } : {}) })),
     ...(costPerHour !== null ? { costName: inputs.map((i) => i.name.toLowerCase()).join(', ') } : {}),
     ...(lootPerHour > 0 && r.output ? { lootPerHour, loot: r.output.name } : {}),
+    ...(atMarket.costPerHour !== null ? { marketNetPerHour: atMarket.lootPerHour - atMarket.costPerHour } : {}),
     ...(at.spot ? { spot: at.spot } : {}),
     ...((capped || r.wholeBatch) ? { warning: [
       ...(capped ? [`First batch: ${actions} actions. Recheck supplies before refilling; replenishment is not assumed.`] : []),
@@ -195,7 +208,7 @@ function option(r: Recipe, at: { spot: RateSpot | null; trip: [number, number]; 
     ].join(' ') } : {}),
   };
   // Time per XP less what the coins are worth in time (lootValue): a loss counts in full, a gain at most half; unknown coins are left out.
-  const saved = costPerHour === null ? 0 : coinTimeShare(lootPerHour - costPerHour, coinRate);
+  const saved = atMarket.costPerHour === null ? 0 : coinTimeShare(atMarket.lootPerHour - atMarket.costPerHour, coinRate);
   const fundingRank = batchFunding(needs, state, market.prices);
   return { rate, score: (1 - saved) / ((xph[0] + xph[1]) / 2), fundingRank };
 }

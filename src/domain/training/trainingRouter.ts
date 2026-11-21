@@ -89,6 +89,8 @@ export interface TrainingMethod {
   costPerHour?: number | null;
   /** Coins an hour the model's method banks from its drop when that pays for its time, and the drop. */
   lootPerHour?: number;
+  /** Coins an hour at market prices, without the planning margin: what methods are ranked by. */
+  marketNetPerHour?: number;
   lootName?: string;
   /** Better tools the player could buy, priced, with the rate each would give (the gathering engine). */
   upgrades?: ModelRate['upgrades'];
@@ -409,8 +411,9 @@ function compare(xpLeft?: number, level?: number, coinRate: number | null = null
     if (pa && pb && xpLeft && xpLeft > 0) {
       // The hours to the goal, less what the banked drops are worth in hours (lootValue.ts: the same rule as the fight plans).
       const hours = (v: MethodView, p: number) => xpLeft / p + setupHours(v);
-      const coinsA = netCoinsPerHour(a.method);
-      const coinsB = netCoinsPerHour(b.method);
+      // Methods are ranked at market prices; the planning margin would make every expensive recipe lose to the cheapest one.
+      const coinsA = a.method.marketNetPerHour ?? netCoinsPerHour(a.method);
+      const coinsB = b.method.marketNetPerHour ?? netCoinsPerHour(b.method);
       // Coins on both sides or on neither: a method whose cost is not known is never compared as free.
       const worth = (v: MethodView, h: number) => (coinsA === null || coinsB === null ? 0 : h * coinTimeShare(v === a ? coinsA : coinsB, coinRate));
       const ra0 = hours(a, pa);
@@ -577,6 +580,7 @@ export function personalize(methods: readonly TrainingMethod[], skill: string, s
         return { ...authored, count: n.count, ...(anyOf.length ? { anyOf } : {}) };
       })] } : {}),
       ...(r.lootPerHour ? { lootPerHour: r.lootPerHour, lootName: r.loot } : {}),
+      ...(r.marketNetPerHour !== undefined ? { marketNetPerHour: r.marketNetPerHour } : {}),
       ...(r.costName ? { costName: r.costName } : {}),
       ...(r.warning ? { rateWarning: r.warning } : {}),
       ...(r.upgrades?.length ? { upgrades: r.upgrades } : {}),

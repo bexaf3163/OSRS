@@ -100,6 +100,13 @@ function marketNotes(q: Quote): { confidence: Confidence; notes: string[] } {
  * What one item costs to buy: the high side. A latest price far above the hour's average is a spike: the average is used. A missing high side falls
  * back to the low side, flagged and LOW. No price at all — null.
  */
+/** The same prices at the market reference, without the planning margin: methods and recipes are compared on these, or every
+ * expensive recipe loses to the cheapest one; costs shown and funding keep the margin. */
+export function marketView(prices: PriceView): PriceView {
+  const ref = (q: UnitPrice | null): UnitPrice | null => (q ? { ...q, price: q.referencePrice ?? q.price } : null);
+  return { ...prices, buy: (n, id) => ref(prices.buy(n, id)), sell: (n, id) => ref(prices.sell(n, id)) };
+}
+
 export function buyOf(q: Quote | undefined, now: number): UnitPrice | null {
   if (!q) return null;
   const m = marketNotes(q);
