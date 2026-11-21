@@ -5,6 +5,7 @@
     "f2p-items.json": "npm run build-items",
     "fundingWiki.json": "npm run build-money",
     "gear.json": "npm run build-gear",
+    "itemFacts.json": "npm run build-item-facts",
     "majorLocations.json": "npm run build-locations",
         "portals.json": "npm run build-portals",
     "processing.json": "npm run build-processing",

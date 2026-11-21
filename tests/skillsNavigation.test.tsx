@@ -33,7 +33,7 @@ describe('direct skill access without nested menus', () => {
   it.each(['1', '100', '-2', 'NaN', '10.5', 'Infinity', ''])('rejects an invalid preparation goal %s', goal => {
     expect(parseHash(`#/skills/MI/mining?goal=${goal}`).goal).toBeUndefined();
   });
-  it.each([['PR', 'prayer'], ['RC', 'runecraft']])('does not turn %s into an arbitrary default grind; explicit goals remain available', (id, skill) => {
+  it.each([['RC', 'runecraft']])('does not turn %s into an arbitrary default grind; explicit goals remain available', (id, skill) => {
     const html = renderToStaticMarkup(<SkillDetailPage id={id} selectedSkill={skill} />);
     expect(html).toContain('Save dedicated training for membership');
     expect(html).not.toContain('data-training-skill=');

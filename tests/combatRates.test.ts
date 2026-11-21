@@ -89,6 +89,12 @@ describe('one engine for every combat method', () => {
     expect(low.costPerHour!).toBeLessThanOrEqual(1200 * 10);
   });
 
+  it('Magic: worn armour that leaves a spell no chance to hit is taken off while casting, and the step says so', () => {
+    const armoured = methodRate(method('ma-strike'), 'magic', state({ magic: 1, hitpoints: 10 }, MELEE), { prices: fixed })!;
+    expect(armoured.xph[0]).toBeGreaterThan(0);
+    expect(armoured.warning).toMatch(/^Take off .*Iron platebody.* while casting/);
+  });
+
   it('never guesses: unread worn items, an unknown level or a weapon the data does not know give no rate', () => {
     expect(methodRate(method('me-frog'), 'attack', state({ attack: 20, strength: 20, defence: 1, hitpoints: 20 }, MELEE, false))).toBeNull();
     expect(methodRate(method('me-frog'), 'attack', state({ strength: 20, defence: 1, hitpoints: 20 }, MELEE))).toBeNull();

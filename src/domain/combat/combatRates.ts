@@ -361,9 +361,15 @@ function magicKitRate(m: TrainingMethod, state: PlayerState, prices: PriceView |
   }
   if (equipment.weapon && !gearPieceByName(equipment.weapon)) return null;
   // The magic attack bonus of what is worn; an item the gear data does not know counts as 0.
-  const bonus = Object.values(equipment).reduce((a, n) => a + (gearPieceByName(n)?.attack.magic ?? 0), 0);
-  const hit = spellHit(spell, level, bonus, foe);
+  const bonus = () => Object.values(equipment).reduce((a, n) => a + (gearPieceByName(n)?.attack.magic ?? 0), 0);
+  let hit = spellHit(spell, level, bonus(), foe);
+  // Armour whose magic penalty leaves the spell no chance to hit is taken off while casting, and the step says so.
+  const blocking = hit && hit.chance <= 0 ? Object.entries(equipment).filter(([slot, n]) => slot !== 'weapon' && (gearPieceByName(n)?.attack.magic ?? 0) < 0
+    && !needs.some((need) => need.type === 'item' && nameKey(need.name) === nameKey(n))) : [];
+  for (const [slot] of blocking) delete equipment[slot];
+  if (blocking.length) hit = spellHit(spell, level, bonus(), foe);
   if (!hit) return null;
+  const takeOff = blocking.length ? `Take off ${blocking.map(([, n]) => n).join(', ')} while casting: their magic penalty leaves ${spell.name} no chance to hit.` : '';
   const { maxHit, chance } = hit;
   const casts = attacksToKill(foe.hitpoints, maxHit, chance, false).mean;
   if (!Number.isFinite(casts)) return null;
@@ -386,6 +392,6 @@ function magicKitRate(m: TrainingMethod, state: PlayerState, prices: PriceView |
     costName: recovery.food.mid > 0 ? `runes and ${sustained.food.toLowerCase()}` : 'runes',
     basis: spell.name,
     secondsPerKill: (recovery.totalMinutes.mid * 60) / kills, foodPerKill: recovery.food.mid / kills, food: sustained.food,
-    ...(sustained.warning ? { warning: sustained.warning } : {}),
+    ...(sustained.warning || takeOff ? { warning: [takeOff, sustained.warning].filter(Boolean).join(' ') } : {}),
   };
 }
