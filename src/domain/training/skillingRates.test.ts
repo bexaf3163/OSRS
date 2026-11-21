@@ -74,17 +74,13 @@ describe('Members gathering through the shared resource model', () => {
     expect(a.best?.unchecked.length).toBeGreaterThan(0);
   });
 
-  it('does not invent a Bronze axe when the only owned usable tool has unmodelled mechanics', () => {
+  it('rates a held tier without its own rates as the best modelled tier its level allows, never a Bronze axe', () => {
+    // The plan buys a Crystal axe at 71: a null rate there dropped teaks for willows at 75.
     const s = stateOf({ woodcutting: 75, attack: 60 }, { 'Infernal axe': [1, 0] }, 'members');
-    expect(gatherRate(method('wc-teak'), 'woodcutting', s)).toBeNull();
-    const spot = SKILLING.spots.find(s => s.resource === 'teak')!;
-    expect(gatherPace('Teak logs', spot.place, s)).toBeNull();
-    const advice = adviseTraining({ skill: 'woodcutting', target: 80, state: s, mode: 'members', methods: [method('wc-teak')] });
-    expect(advice.best?.status).toBe('READY'); // The tool works; only the personalized rate is unsupported.
-    expect(advice.best?.method.xph).toBeNull();
-    // Different, newly declared content must inherit the same unknown-tool protection.
-    const reg = { ...SKILLING, methods: { ...SKILLING.methods, 'future-tree': ['oak'] } };
-    expect(gatherRate({ ...method('wc-oak'), id: 'future-tree' }, 'woodcutting', s, {}, reg)).toBeNull();
+    const dragon = stateOf({ woodcutting: 75, attack: 60 }, { 'Dragon axe': [1, 0] }, 'members');
+    const rate = gatherRate(method('wc-teak'), 'woodcutting', s);
+    expect(rate?.selectedTool).toBe('Infernal axe');
+    expect(rate?.xph).toEqual(gatherRate(method('wc-teak'), 'woodcutting', dragon)?.xph);
   });
 
   it('does not time an unavailable explicitly planned tool, or silently substitute a different tier', () => {

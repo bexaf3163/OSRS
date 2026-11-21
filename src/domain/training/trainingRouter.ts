@@ -683,7 +683,6 @@ function buildPath(skill: string, level: number, target: number, input: AdviceIn
 function pathFresh(skill: string, level: number, target: number, input: AdviceInput, first: TrainingMethod | null, raw: readonly TrainingMethod[]): { legs: PathLeg[]; time: TimeEstimate | null; handover?: string } {
   const legs: PathLeg[] = [];
   const milestones = trainingMilestones(skill, raw, input.mode, input.state);
-  let ratedAt = level;
   let previousSetup = '';
   let projectedState = input.state;
   let minHours = 0;
@@ -691,18 +690,24 @@ function pathFresh(skill: string, level: number, target: number, input: AdviceIn
   let timed = true;
   const sources = new Set<TimeEstimate['source']>();
   let handover: string | undefined;
+  // Rates, kit and views change only where the path re-rates (every FORECAST_STEP levels and at every unlock milestone), so the
+  // candidates are rated there once and reused for the levels between; re-viewing every method at every level was most of a gate turn.
+  let views: MethodView[] = [];
+  let projected = input.state;
+  const needsFor: { id?: string; needs: MethodNeed[] } = { needs: [] };
   for (let lv = level; lv < target; lv++) {
     // The model's rates are for the level the leg starts at (every FORECAST_STEP levels), not today's carried forward: a method unlocked later is
     // then compared on its own model rate, not on the wiki's guide against today's model rates.
-    if (lv === level || lv % FORECAST_STEP === 0 || milestones.has(lv)) ratedAt = lv;
-    const at = ratedAt;
-    // Later legs carry the kit their stage recommends, so the rate matches the advice.
-    // Every leg, the first too, carries the tool its stage plans, so all legs are rated by the same model, not some by the wiki guess.
-    const projected = withPlannedKit(atLevel(projectedState, skill, lv), skill, lv);
-    const kitAdded = projected !== atLevel(projectedState, skill, lv);
-    const methods = at === level && !kitAdded ? input.methods ?? trainingMethods : personalize(raw, skill, atLevel(projected, skill, at), input.prices, input.restriction);
-    // Advance only this skill in a copy; other skill/quest entry proofs must still be satisfied.
-    const cands = methodsFor(skill, methods).filter((m) => !m.manualSetup && recommendedAt(m, lv, input.mode)).map((m) => viewMethod(m, projected, input.prices)).filter((v) => v.status !== 'LOCKED');
+    if (lv === level || lv % FORECAST_STEP === 0 || milestones.has(lv)) {
+      // Every leg, the first too, carries the tool its stage plans, so all legs are rated by the same model, not some by the wiki guess.
+      const base = atLevel(projectedState, skill, lv);
+      projected = withPlannedKit(base, skill, lv);
+      const methods = lv === level && projected === base ? input.methods ?? trainingMethods : personalize(raw, skill, atLevel(projected, skill, lv), input.prices, input.restriction);
+      // Advance only this skill in a copy; other skill/quest entry proofs must still be satisfied.
+      views = methodsFor(skill, methods).filter((m) => !m.manualSetup && recommendedAt(m, lv, input.mode)).map((m) => viewMethod(m, projected, input.prices)).filter((v) => v.status !== 'LOCKED');
+      needsFor.id = undefined;
+    }
+    const cands = [...views];
     // Each level is weighed as the first one is (adviseTraining): the hours from here to the goal, less what the banked drops are worth.
     cands.sort(compare(Math.max(0, xpForLevel(target) - xpForLevel(lv)), lv, coinsPerMinute(input.prices, input.mode)));
     let pick = (lv === level ? cands.find(c => c.method.id === first?.id)?.method : undefined) ?? cands[0]?.method;
@@ -727,7 +732,8 @@ function pathFresh(skill: string, level: number, target: number, input: AdviceIn
       maxHours += xp / rate[0];
       sources.add(measured ? 'measured' : pick.rateSource ?? 'wiki');
     }
-    const plannedNeeds = methodNeeds(pick, projected, input.prices);
+    if (needsFor.id !== pick.id) Object.assign(needsFor, { id: pick.id, needs: methodNeeds(pick, projected, input.prices) });
+    const plannedNeeds = needsFor.needs;
     const setup = JSON.stringify([pick.rateBasis ?? '', plannedNeeds.map(n => n.type === 'item' && n.equip ? { ...n, count: 1 } : n)]);
     const review = milestones.has(lv);
     const processingActions = pick.consumables && pick.xpa && Number.isFinite(pick.xpa) && pick.xpa > 0 ? xp / pick.xpa : undefined;

@@ -34,14 +34,15 @@ final class OverlayText
 	private static final String GAP = "  ";
 
 	/** Fonts by (RuneLite font, scale): the plates and the ground labels take different ones, the same frame after frame. */
-	private static final Map<List<Object>, Font> FONTS = new HashMap<>();
+	// Concurrent, not synchronized: the layout tests lay out cards on every core and the lock serialised them.
+	private static final Map<List<Object>, Font> FONTS = new java.util.concurrent.ConcurrentHashMap<>();
 
 	private OverlayText()
 	{
 	}
 
 	/** The plugin plate font from the font chosen in RuneLite; scale is the large HUD (1.25). */
-	static synchronized Font font(Font base, float scale)
+	static Font font(Font base, float scale)
 	{
 		List<Object> key = Arrays.asList(base, scale);
 		Font hit = FONTS.get(key);

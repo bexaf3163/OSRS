@@ -329,7 +329,23 @@ public class OverlayLayoutTest
 	 * pass, so the layout is first computed on an empty sketch and then the panel is drawn clean.
 	 */
 	/** Where it stuck out in the last check: "left 3, bottom 1". */
-	private static String lastWhere = "";
+	private static final ThreadLocal<String> LAST_WHERE = ThreadLocal.withInitial(() -> "");
+
+	/** Draws the collected cards on every core, in order: each check draws into its own image (the two card suites took 33 minutes on one). */
+	private static List<String> runAll(List<java.util.concurrent.Callable<String>> jobs)
+	{
+		return jobs.parallelStream().map(j ->
+		{
+			try
+			{
+				return j.call();
+			}
+			catch (Exception e)
+			{
+				throw new RuntimeException(e);
+			}
+		}).filter(java.util.Objects::nonNull).collect(java.util.stream.Collectors.toList());
+	}
 
 	private static int overflow(Builder builder, Font font, int width, String save) throws IOException
 	{
@@ -376,7 +392,7 @@ public class OverlayLayoutTest
 				}
 			}
 		}
-		lastWhere = "left " + left + ", right " + right + ", top " + top + ", bottom " + bottom;
+		LAST_WHERE.set("left " + left + ", right " + right + ", top " + top + ", bottom " + bottom);
 		if (save != null)
 		{
 			OUT.mkdirs();
@@ -492,7 +508,8 @@ public class OverlayLayoutTest
 		// Open, every tab is laid out; the picture is of the tab the scenario opens.
 		int shown = !expanded ? LedgerGuideTest.CLOSED : advice ? LedgerGuide.ADVICE : LedgerGuide.NOW;
 		int outside = 0;
-		for (int state : expanded ? new int[]{LedgerGuide.NOW, LedgerGuide.PREPARE, LedgerGuide.NEXT, LedgerGuide.ADVICE} : new int[]{shown})
+		// Hovered, only the shown tab is drawn: the mouse is over that tab's button, and the other tabs are drawn unhovered by the open state.
+		for (int state : expanded && !hover ? new int[]{LedgerGuide.NOW, LedgerGuide.PREPARE, LedgerGuide.NEXT, LedgerGuide.ADVICE} : new int[]{shown})
 		{
 			outside += overflowHud(LedgerGuideTest.layout(c, state, width, scale, 2000), hover, state == shown ? save : null);
 		}
@@ -514,7 +531,8 @@ public class OverlayLayoutTest
 		g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		g.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_OFF);
 		g.translate(MARGIN, MARGIN);
-		LedgerGuide.paint(g, l, hovered, 85);
+		// Drawn directly, not through the frame cache: the cached image is the plaque's own size, so it could never show text sticking out.
+		LedgerGuide.draw(g, l, hovered, 85);
 		g.dispose();
 		int[] px = ((DataBufferInt) img.getRaster().getDataBuffer()).getData();
 		int outside = 0;
@@ -537,7 +555,7 @@ public class OverlayLayoutTest
 				}
 			}
 		}
-		lastWhere = "left " + left + ", right " + right + ", top " + top + ", bottom " + bottom;
+		LAST_WHERE.set("left " + left + ", right " + right + ", top " + top + ", bottom " + bottom);
 		if (save != null)
 		{
 			OUT.mkdirs();
@@ -599,6 +617,7 @@ public class OverlayLayoutTest
 		List<HudModel.Card> cards = hudCards();
 		assertTrue("too few states: " + cards.size(), cards.size() > 300);
 		List<String> bad = new ArrayList<>();
+		List<java.util.concurrent.Callable<String>> jobs = new ArrayList<>();
 		Set<String> saved = new LinkedHashSet<>();
 		for (boolean large : new boolean[]{false, true})
 		{
@@ -606,8 +625,11 @@ public class OverlayLayoutTest
 			// Its own width, the narrowest and the widest the player can stretch it to.
 			for (int width : new int[]{LedgerGuide.WIDTH, LedgerGuide.MIN_WIDTH, OsrsPathGuideOverlay.MAX_WIDTH})
 			{
+				// Equal cards lay out equally: each distinct card is drawn once per size and width.
+				Set<HudModel.Card> seen = new java.util.HashSet<>();
 				for (HudModel.Card c : cards)
 				{
+					boolean seenBefore = !seen.add(c);
 					for (boolean expanded : new boolean[]{false, true})
 					{
 						String save = null;
@@ -617,16 +639,22 @@ public class OverlayLayoutTest
 						{
 							save = "hud-data-" + sample + (expanded ? "-open" : "-closed") + (large ? "-large" : "");
 						}
-						int out = overflowHud(c, expanded, true, scale, width, false, save);
-						if (out > 0)
+						if (seenBefore && save == null)
 						{
-							bad.add((large ? "large " : "") + width + "px " + (expanded ? "open" : "closed") + ": " + c.getHeadline() + " / " + c.getStatus() + " - " + out
-								+ " points (" + lastWhere + ")");
+							continue;
 						}
+						final String sv = save;
+						final String label = (large ? "large " : "") + width + "px " + (expanded ? "open" : "closed") + ": " + c.getHeadline() + " / " + c.getStatus();
+						jobs.add(() ->
+						{
+							int out = overflowHud(c, expanded, true, scale, width, false, sv);
+							return out > 0 ? label + " - " + out + " points (" + LAST_WHERE.get() + ")" : null;
+						});
 					}
 				}
 			}
 		}
+		bad.addAll(runAll(jobs));
 		assertTrue("sticks out of the frame (" + bad.size() + "):\n" + String.join("\n", bad.subList(0, Math.min(20, bad.size()))), bad.isEmpty());
 	}
 
@@ -649,7 +677,7 @@ public class OverlayLayoutTest
 						InventoryCheckOverlay.standardWidth(large), i == 0 ? "bank-" + tag : null);
 					if (out > 0)
 					{
-						bad.add("bank " + tag + " #" + i + " - " + out + " points (" + lastWhere + ")");
+						bad.add("bank " + tag + " #" + i + " - " + out + " points (" + LAST_WHERE.get() + ")");
 					}
 				}
 				for (int i = 0; i < lists.size(); i++)
@@ -659,14 +687,14 @@ public class OverlayLayoutTest
 						GrandExchangeHelperOverlay.standardWidth(large), i == 0 ? "ge-" + tag : null);
 					if (out > 0)
 					{
-						bad.add("exchange " + tag + " #" + i + " - " + out + " points (" + lastWhere + ")");
+						bad.add("exchange " + tag + " #" + i + " - " + out + " points (" + LAST_WHERE.get() + ")");
 					}
 					// With the step purchases the list does not hold (one card at the exchange, ExchangeView): the same frame.
 					int extra = overflow((panel, fm, w) -> GrandExchangeHelperOverlay.build(panel, rows, Arrays.asList("Strength potion(4) x3 - Grand Exchange, about 160 gp each", "Staff of fire"), "S3-08", fm, w, 70), font,
 						GrandExchangeHelperOverlay.standardWidth(large), i == 0 ? "ge-extras-" + tag : null);
 					if (extra > 0)
 					{
-						bad.add("exchange extras " + tag + " #" + i + " - " + extra + " points (" + lastWhere + ")");
+						bad.add("exchange extras " + tag + " #" + i + " - " + extra + " points (" + LAST_WHERE.get() + ")");
 					}
 				}
 			}
@@ -689,7 +717,7 @@ public class OverlayLayoutTest
 					HudModel.Card c = HudModel.build(HudModelTest.input(view, HudModelTest.state(distance, 9999), null));
 					for (boolean expanded : new boolean[]{false, true})
 					{
-						assertEquals(width + " " + distance + " " + lastWhere, 0, overflowHud(c, expanded, false, scale, width, false, null));
+						assertEquals(width + " " + distance + " " + LAST_WHERE.get(), 0, overflowHud(c, expanded, false, scale, width, false, null));
 					}
 				}
 			}
@@ -735,16 +763,24 @@ public class OverlayLayoutTest
 			}
 		}
 		assertTrue("too few views: " + views.size(), views.size() > 200);
+		// A card depends on its view only, not on the size or width it is drawn at: built once, on every core.
+		List<HudModel.Card> built = views.parallelStream().map(v -> HudModel.build(HudModelTest.input(v, HudModelTest.state("~62 tiles ↓", 62), null)))
+			.collect(java.util.stream.Collectors.toList());
 		List<String> bad = new ArrayList<>();
+		List<java.util.concurrent.Callable<String>> jobs = new ArrayList<>();
 		Set<String> saved = new LinkedHashSet<>();
 		for (boolean large : new boolean[]{false, true})
 		{
 			float scale = large ? Hud.LARGE : 1f;
 			for (int width : new int[]{LedgerGuide.WIDTH, LedgerGuide.MIN_WIDTH})
 			{
-				for (StepGuide.View v : views)
+				// Equal cards lay out equally: each distinct card is drawn once per size and width (the test took 27 minutes).
+				Set<HudModel.Card> seen = new java.util.HashSet<>();
+				for (int vi = 0; vi < views.size(); vi++)
 				{
-					HudModel.Card c = HudModel.build(HudModelTest.input(v, HudModelTest.state("~62 tiles ↓", 62), null));
+					StepGuide.View v = views.get(vi);
+					HudModel.Card c = built.get(vi);
+					boolean seenBefore = !seen.add(c);
 					assertTrue(v.getTitle(), c != null);
 					// Closed; open; open with the advice and the mouse over the first button after the header.
 					for (int mode = 0; mode < 3; mode++)
@@ -759,15 +795,23 @@ public class OverlayLayoutTest
 						{
 							save = name;
 						}
-						int out = overflowHud(c, mode > 0, mode == 2, scale, width, mode == 2, save);
-						if (out > 0)
+						if (seenBefore && save == null)
 						{
-							bad.add((large ? "large " : "") + width + "px " + v.getTitle() + " mode " + mode + " - " + out + " points (" + lastWhere + ")");
+							continue;
 						}
+						final int m = mode;
+						final String sv = save;
+						final String label = (large ? "large " : "") + width + "px " + v.getTitle() + " mode " + mode;
+						jobs.add(() ->
+						{
+							int out = overflowHud(c, m > 0, m == 2, scale, width, m == 2, sv);
+							return out > 0 ? label + " - " + out + " points (" + LAST_WHERE.get() + ")" : null;
+						});
 					}
 				}
 			}
 		}
+		bad.addAll(runAll(jobs));
 		assertTrue("sticks out of the frame (" + bad.size() + "):\n" + String.join("\n", bad.subList(0, Math.min(20, bad.size()))), bad.isEmpty());
 	}
 }

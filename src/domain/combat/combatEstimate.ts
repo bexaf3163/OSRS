@@ -123,7 +123,7 @@ function playerHitDistribution(maxHit: number, zeroIsOne = true): number[] {
 const progressChance = (chance: number, maxHit: number, zeroIsOne: boolean) => (zeroIsOne || maxHit <= 0 ? chance : chance * (maxHit / (maxHit + 1)));
 
 /** Attacks to kill an opponent with `hp` hit points: mean and variance. Infinity when nothing can hit. */
-export function attacksToKill(hp: number, maxHit: number, landChance: number, zeroIsOne = true): { mean: number; variance: number } {
+function attacksToKillFresh(hp: number, maxHit: number, landChance: number, zeroIsOne: boolean): { mean: number; variance: number } {
   const chance = progressChance(landChance, maxHit, zeroIsOne);
   if (!(chance > 0) || (!zeroIsOne && maxHit <= 0)) return { mean: Infinity, variance: Infinity };
   const q = playerHitDistribution(maxHit, zeroIsOne);
@@ -150,7 +150,7 @@ export function attacksToKill(hp: number, maxHit: number, landChance: number, ze
  * The chance that a kill takes exactly n attacks, n = 0, 1, 2… (cut where less than 1 in 100 000 is left). The same recursion as
  * attacksToKill, kept whole: the opponent's swings depend on the fight's length in a way the mean alone does not give.
  */
-export function attackCounts(hp: number, maxHit: number, landChance: number, zeroIsOne = true): number[] {
+function attackCountsFresh(hp: number, maxHit: number, landChance: number, zeroIsOne: boolean): number[] {
   const chance = progressChance(landChance, maxHit, zeroIsOne);
   if (!(chance > 0)) return [];
   const q = playerHitDistribution(maxHit, zeroIsOne);
@@ -596,4 +596,21 @@ export function estimateStep(step: Pick<Step, 'pacing' | 'foes' | 'itemsRequired
     });
     return e ? [e] : [];
   });
+}
+
+// The route planner asks for the same fights thousands of times a turn; both answers depend only on these four numbers.
+// shortcut: callers must not change a returned array or object; the caches are cleared at 50,000 entries.
+const killMemo = new Map<string, { mean: number; variance: number }>();
+const countMemo = new Map<string, number[]>();
+export function attacksToKill(hp: number, maxHit: number, landChance: number, zeroIsOne = true): { mean: number; variance: number } {
+  const key = [hp, maxHit, landChance, zeroIsOne].join('|');
+  let out = killMemo.get(key);
+  if (!out) { if (killMemo.size > 50_000) killMemo.clear(); killMemo.set(key, out = attacksToKillFresh(hp, maxHit, landChance, zeroIsOne)); }
+  return out;
+}
+export function attackCounts(hp: number, maxHit: number, landChance: number, zeroIsOne = true): number[] {
+  const key = [hp, maxHit, landChance, zeroIsOne].join('|');
+  let out = countMemo.get(key);
+  if (!out) { if (countMemo.size > 50_000) countMemo.clear(); countMemo.set(key, out = attackCountsFresh(hp, maxHit, landChance, zeroIsOne)); }
+  return out;
 }

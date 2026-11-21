@@ -276,11 +276,18 @@ final class LedgerGuide
 	// ---------------------------------------------------------------------------------------------------------------------------------
 	// Painting.
 
-	private static BufferedImage drawn;
-	private static Layout drawnLayout;
-	private static Row drawnHover;
-	private static int drawnOpacity;
-	private static double drawnScaleX = 1, drawnScaleY = 1;
+	/** The last plaque drawn and what it was drawn for. */
+	private static final class Drawn
+	{
+		BufferedImage image;
+		Layout layout;
+		Row hover;
+		int opacity;
+		double scaleX = 1, scaleY = 1;
+	}
+
+	// One cache per painting thread: the client paints on its one thread; the layout tests draw cards on several at once.
+	private static final ThreadLocal<Drawn> DRAWN = ThreadLocal.withInitial(Drawn::new);
 
 	/**
 	 * Draws the laid-out plaque from (0, 0), the button under the mouse highlighted. The leather, the gradients and the spaced labels cost
@@ -293,11 +300,12 @@ final class LedgerGuide
 		// the text: the image is made at the screen's own pixels and copied without scaling.
 		AffineTransform t = g.getTransform();
 		double sx = t.getScaleX(), sy = t.getScaleY();
-		if (drawn == null || l != drawnLayout || hovered != drawnHover || opacity != drawnOpacity || sx != drawnScaleX || sy != drawnScaleY)
+		Drawn cache = DRAWN.get();
+		if (cache.image == null || l != cache.layout || hovered != cache.hover || opacity != cache.opacity || sx != cache.scaleX || sy != cache.scaleY)
 		{
 			int w = (int) Math.ceil(l.getSize().width * sx), h = (int) Math.ceil(l.getSize().height * sy);
-			boolean reuse = drawn != null && drawn.getWidth() == w && drawn.getHeight() == h;
-			BufferedImage img = reuse ? drawn : new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+			boolean reuse = cache.image != null && cache.image.getWidth() == w && cache.image.getHeight() == h;
+			BufferedImage img = reuse ? cache.image : new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
 			Graphics2D c = img.createGraphics();
 			try
 			{
@@ -316,18 +324,18 @@ final class LedgerGuide
 			{
 				c.dispose();
 			}
-			drawn = img;
-			drawnLayout = l;
-			drawnHover = hovered;
-			drawnOpacity = opacity;
-			drawnScaleX = sx;
-			drawnScaleY = sy;
+			cache.image = img;
+			cache.layout = l;
+			cache.hover = hovered;
+			cache.opacity = opacity;
+			cache.scaleX = sx;
+			cache.scaleY = sy;
 		}
 		Graphics2D d = (Graphics2D) g.create();
 		try
 		{
 			d.setTransform(AffineTransform.getTranslateInstance(t.getTranslateX(), t.getTranslateY()));
-			d.drawImage(drawn, 0, 0, null);
+			d.drawImage(cache.image, 0, 0, null);
 		}
 		finally
 		{
@@ -335,7 +343,7 @@ final class LedgerGuide
 		}
 	}
 
-	private static void draw(Graphics2D g, Layout l, Row hovered, int opacity)
+	static void draw(Graphics2D g, Layout l, Row hovered, int opacity)
 	{
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		int w = l.getSize().width, h = l.getSize().height, a = Math.max(OverlayCard.alpha(opacity), 236);

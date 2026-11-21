@@ -138,7 +138,7 @@
       "id": "wc-teak",
       "skill": "woodcutting",
       "from": 35,
-      "to": 65,
+      "to": null,
       "name": "Teak trees",
       "members": true,
       "needs": [

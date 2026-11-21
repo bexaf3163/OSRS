@@ -308,16 +308,16 @@ async function whatToTrainWith(browser: Browser) {
   expect(await noOverflow(page), 'what to train with: no horizontal scrolling');
   await page.goto(`${BASE}#/skills/WC`);
   await waitFor(page, '.training', 5000);
-  // No planner need: the goal is where the engine changes method, Willow trees until Teak trees take over at 41.
+  // No planner need: the goal is where the engine changes method, Willow trees until Teak trees take over at 35.
   const head = await text(page, '.page-head');
   await page.getByRole('tab', { name: 'Plan', exact: true }).click();
   const note = await text(page, '.focus-note');
-  expect(head.includes('Goal 41') && note.includes('switches to Teak trees'), `what to train with: the default goal is the engine's next method (${head} / ${note})`);
-  // An explicit goal past the rune axe (41): the time is a forecast across the plan with the planned axe.
+  expect(head.includes('Goal 35') && note.includes('switches to Teak trees'), `what to train with: the default goal is the engine's next method (${head} / ${note})`);
+  // An explicit goal past the rune axe (41): the time covers the whole plan, every stage rated with its planned axe.
   await page.goto(`${BASE}#/skills/WC/woodcutting?goal=50`);
   await waitFor(page, '.training', 5000);
   const fast = await text(page, '.training');
-  expect(/across your plan/.test(fast), 'what to train with: "Fastest" shows the time across the plan');
+  expect(/⏱ .+ to 50/.test(fast), `what to train with: "Fastest" shows the time to the goal across the plan (${fast.slice(0, 300)})`);
   expect(!errors.length, `what to train with: no console errors ${errors.join('; ')}`);
   await page.context().close();
 }

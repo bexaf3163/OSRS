@@ -69,13 +69,17 @@ function toolFor(r: Resource, level: number, state: PlayerState, reg: SkillingRe
   if (!usable.length) return null;
   const seen = usable.map((t) => heldExact(state, t.item).presence);
   const best = seen.lastIndexOf('PRESENT');
-  if (best < 0 && seen.includes('UNKNOWN')) return null;
-  // A known but unmodelled tool is not an empty kit. Do not silently price/rate a Bronze replacement.
-  if (best < 0 && toolFamilyOf(r.tool)?.some(name => {
+  // A held tier without rates (crystal, infernal, 3rd age, gilded) rates as the best modelled tier its level allows, a lower
+  // bound: never a Bronze replacement, and the tree the plan bought it for keeps its rate.
+  const proxy = (toolFamilyOf(r.tool) ?? []).reduce((top, name) => {
     const use = toolUse(name);
-    return use && level >= use.level && (!use.members || state.mode === 'members')
-      && !family.tiers.some(t => t.item.toLowerCase() === name.toLowerCase()) && heldExact(state, name).presence === 'PRESENT';
-  })) return null;
+    if (!use || level < use.level || (use.members && state.mode !== 'members') || heldExact(state, name).presence !== 'PRESENT'
+      || family.tiers.some(t => t.item.toLowerCase() === name.toLowerCase())) return top;
+    const i = usable.reduce((k, t, j) => (t.level <= use.level ? j : k), -1);
+    return i > top.i ? { i, name } : top;
+  }, { i: -1, name: '' });
+  if (proxy.i > best) return { tier: usable[proxy.i], name: proxy.name, owned: true, wielded: heldExact(state, proxy.name).equipped > 0 };
+  if (best < 0 && seen.includes('UNKNOWN')) return null;
   const tier = usable[Math.max(0, best)];
   return { tier, name: tier.item, owned: best >= 0, wielded: heldExact(state, tier.item).equipped > 0 };
 }
