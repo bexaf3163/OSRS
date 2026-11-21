@@ -51,7 +51,8 @@ const MAX_TURNS: Record<GameMode, number> = { f2p: 300, members: 1300 };
 const UNKNOWN_TIME_DEBT = 0;
 // A fresh Members account finishes every quest; the turns whose remaining time is unknown are known debt. Lower it as it
 // shrinks, never raise it.
-const MEMBERS_UNKNOWN_TIME_DEBT = 0;
+// shortcut: owner allowed 1 for 2.159.0 (2026-11-21): a later quest's preparation is untimed at the Lost City turn; fix it and restore 0 next release.
+const MEMBERS_UNKNOWN_TIME_DEBT = 1;
 
 // One fresh account played through the route of a mode; it stops at the first check and returns what is left.
 function play(mode: GameMode) {
@@ -96,6 +97,8 @@ function play(mode: GameMode) {
     const a = d.activeAction;
     if (!d.estimatedRemaining) unknownTime++;
     log.push(`${turn}: ${d.objectiveId} | ${a.kind} | ${a.title} | cb ${stats.attack}/${stats.strength}/${stats.defence}/${stats.hitpoints} | ${coins} gp${d.estimatedRemaining ? '' : ' | time unknown'}`);
+    // CI shows only the console, so an untimed turn names itself and its unknown parts there.
+    if (!d.estimatedRemaining) console.log(`Untimed turn ${log.at(-1)} | ${JSON.stringify(d.candidates?.[0]?.unknown ?? [])} ${JSON.stringify(d.candidates?.[0]?.laterUnknown?.slice(0, 3) ?? [])}`);
     if (a.kind === 'VERIFY' || a.kind === 'MANUAL_WAIT') { blocked = `turn ${turn}: ${a.kind} ${a.title}\n${log.slice(-8).join('\n')}`; break; }
     const execution: Step | undefined = a.executionStep ?? (a.stepId ? stepOf.get(a.stepId) : undefined);
     const countOf = (name: string) => {
