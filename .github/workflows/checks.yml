@@ -52,8 +52,9 @@ jobs:
     env:
       ELECTRON_SKIP_BINARY_DOWNLOAD: '1'
       GATE_SEGMENT: ${{ matrix.segment }}
-      # Recheck every 20th reused training forecast against a fresh one (src/domain/training/methodRates.ts scopedMemo).
-      TRAINING_SCOPE_VERIFY: '20'
+      # Recheck every 100th reused training forecast against a fresh one (src/domain/training/methodRates.ts scopedMemo); a scope gap
+      # recurs thousands of times a run, and denser checks slow the decisions the budget measures.
+      TRAINING_SCOPE_VERIFY: '100'
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
