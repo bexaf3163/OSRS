@@ -33,6 +33,12 @@ interface Resource {
 }
 interface SkillSpot {
   resource: string; label: string; place: Point & { label: string }; count?: number; members: boolean; bank?: string; why?: string;
+  /** One tile with three rocks around it (the wiki's iron triangle): no step between them, each ore dropped while the next is mined. */
+  triangle?: boolean;
+  /** Rocks respawn in half the time (the members' Mining Guild). */
+  halvedRespawn?: boolean;
+  /** The skill level the place needs (a guild). */
+  level?: number;
   /** A spot under the ground: its way in (a dungeon entrance of the place data), then the spot. */
   waypoints?: (Point & { label?: string })[];
   /** Aggressive NPCs standing at the spot (their own wiki spawn lines), with their levels. */
@@ -130,8 +136,10 @@ function paceAt(r: Resource, spot: SkillSpot, level: number, tool: ToolUse): { c
       return Math.max(gather + TREE_MOVE[i] / perTree, cap);
     }
     if (r.skill === 'mining') {
-      const cap = spot.count ? (respawn + gather + ROCK_MOVE[i]) / spot.count : 0;
-      return Math.max(gather + ROCK_MOVE[i], cap);
+      const move = spot.triangle ? 0 : ROCK_MOVE[i];
+      const rocks = spot.triangle ? 3 : spot.count;
+      const cap = rocks ? ((spot.halvedRespawn ? respawn / 2 : respawn) + gather + move) / rocks : 0;
+      return Math.max(gather + move, cap);
     }
     return gather + (SPOT_MOVE[i] * gather) / SPOT_LIFE[i];
   };
@@ -151,8 +159,9 @@ function spotRate(r: Resource, spot: SkillSpot, level: number, state: PlayerStat
   const trip = spot.bank ? bankTrip({ place: spot.place, bank: spot.bank, ...(spot.waypoints ? { waypoints: spot.waypoints } : {}) }) : null;
   const bankPer = (i: 0 | 1) => (trip ? (trip.minutes[i] * 60) / slots : Infinity);
   const mid = (f: (i: 0 | 1) => number) => (f(0) + f(1)) / 2;
-  const banks = !drop && trip !== null && bankingPays(valueEach, mid(bankPer) - mid((i) => DROP[i]), coinRate);
-  const perItem = (i: 0 | 1) => atSpot(i) + (banks ? bankPer(i) : DROP[i]);
+  const dropAt = (i: 0 | 1) => (spot.triangle ? 0 : DROP[i]);
+  const banks = !drop && trip !== null && bankingPays(valueEach, mid(bankPer) - mid(dropAt), coinRate);
+  const perItem = (i: 0 | 1) => atSpot(i) + (banks ? bankPer(i) : dropAt(i));
   const perHour = (i: 0 | 1) => 3600 / perItem(i);
   const xph: [number, number] = [(xpEach * perHour(1)) / (1 + MARGIN), xpEach * perHour(0)];
   const items = mid(perHour);
@@ -194,7 +203,7 @@ export function gatherRate(m: TrainingMethod, skill: string, state: PlayerState,
     const r = reg.resources.find((x) => x.id === id);
     if (!r || r.skill !== skill) continue;
     for (const spot of reg.spots) {
-      if (spot.resource !== id || (spot.members && state.mode !== 'members')) continue;
+      if (spot.resource !== id || (spot.members && state.mode !== 'members') || level < (spot.level ?? 0)) continue;
       const s = spotRate(r, spot, level, state, market, coinRate, reg, undefined, m.drop);
       if (s && (!best || better(s, best.s, home))) best = { s, r, spot };
     }
@@ -253,7 +262,7 @@ export function gatherPace(product: string, near: Point & { plane?: number }, st
   // A resource that runs out (a tree falls, a rock empties) is capped by how many the spot has; a spot without a count would be timed as endless.
   if (r.products[0].respawn && !spot.count) return null;
   const level = levelOf(state, r.skill);
-  if (level === undefined) return null;
+  if (level === undefined || level < (spot.level ?? 0)) return null;
   const family = reg.tools[r.tool];
   const named = family && toolName ? family.tiers.find((t) => t.item.toLowerCase() === toolName.toLowerCase() && level >= t.level && !(toolUse(t.item)?.members && state.mode !== 'members')) : undefined;
   // An evaluator explicitly planned this tool: do not substitute another tool or use an unavailable tier.
@@ -306,7 +315,7 @@ export function alongRate(m: TrainingMethod, gatherSkill: string, processSkill: 
     if (!recipes.some(Boolean)) continue;
     const kinds = new Set(recipes.flatMap((x) => (x ? [x.facility] : [])));
     for (const spot of reg.spots) {
-      if (spot.resource !== id || !usable(spot)) continue;
+      if (spot.resource !== id || !usable(spot) || level < (spot.level ?? 0)) continue;
       const near = preg.stations.filter((s) => kinds.has(s.kind) && usable(s) && s.place.plane === spot.place.plane)
         .map((s) => ({ s, far: Math.max(Math.abs(s.place.x - spot.place.x), Math.abs(s.place.y - spot.place.y)) }))
         .filter((x) => x.far <= ALONG_REACH).sort((a, b) => a.far - b.far)[0];

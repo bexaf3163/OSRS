@@ -17,7 +17,8 @@ const OUT = `${root}src/data/generated/skilling.json`;
 
 interface ToolDef { skill: string; page: string; tiers: string[] }
 interface ResourceDef { id: string; skill: string; object: string; chart: string; products: string[]; tool: string; bait?: string; ticks?: string }
-interface SpotDef { resource: string; location?: string; near?: string; members?: boolean; bank?: string; why?: string; /** The way in of a spot under the ground: a dungeon of majorLocations.json. */ entrance?: string }
+interface Said { page: string; evidence: string }
+interface SpotDef { triangle?: Said; halvedRespawn?: Said; /** The level the place needs, stated in its evidence. */ guild?: Said & { level: number }; resource: string; location?: string; near?: string; members?: boolean; bank?: string; why?: string; /** The way in of a spot under the ground: a dungeon of majorLocations.json. */ entrance?: string }
 interface Defs {
   reach: number;
   hostiles: { range: number; pages: string[] };
@@ -123,6 +124,7 @@ for (const r of defs.resources) {
 /** The map's dungeon space lies this many tiles north of the surface above it (the same rule as bankTrip.ts). */
 const UNDERGROUND = 6400;
 const spawnCache = new Map<string, ReturnType<typeof locLines>>();
+const said = async (c: Said) => (await wikitext(c.page)).replace(/\[\[(?:[^|\]]+\|)?([^\]]+)\]\]/g, '$1').includes(c.evidence);
 const spots = [];
 for (const s of defs.spots) {
   const r = defs.resources.find((x) => x.id === s.resource);
@@ -140,6 +142,10 @@ for (const s of defs.spots) {
   const line = spawnCache.get(r.object)!.find((l) => l.location === s.location && l.pts.length);
   if (!line) { fail(what, `no ObjectLocLine with location "${s.location}" on ${r.object}`); continue; }
   const label = `${line.location.replace(/\[\[([^\]|]+\|)?([^\]]+)\]\]/g, '$2')}`;
+  const claims = [s.triangle, s.halvedRespawn, s.guild].filter((c): c is Said => c !== undefined);
+  if ((s.guild && !s.guild.evidence.includes(`${s.guild.level}`)) || !(await Promise.all(claims.map(said))).every(Boolean)) {
+    fail(what, 'a triangle, respawn or level line is not on its page'); continue;
+  }
   const mid = middleOf(line.pts);
   // Under the ground (the map's dungeon space, 6400 tiles north of the surface above it): the walk needs the way in, and it must be above the spawns.
   let waypoints: Pt[] | undefined;
@@ -152,6 +158,7 @@ for (const s of defs.spots) {
   spots.push({
     resource: s.resource, label, place: { ...mid, label }, count: line.pts.length, members: line.members,
     ...(waypoints ? { waypoints } : {}), ...(s.bank ? { bank: s.bank } : {}), ...(s.why ? { why: s.why } : {}),
+    ...(s.triangle ? { triangle: true } : {}), ...(s.halvedRespawn ? { halvedRespawn: true } : {}), ...(s.guild ? { level: s.guild.level } : {}),
   });
 }
 

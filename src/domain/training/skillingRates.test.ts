@@ -22,6 +22,8 @@ function stateOf(levels: Record<string, number>, items: Record<string, [number, 
   return buildPlayerState({ mode, stats: levels as never, progress: { ...emptyProgress(), levels }, owned: owned as never, gear: { equipment: [], inventory: [], coins: 0, bankCoins: 0 } as never, questsDone, connected: true });
 }
 /** A fixed exchange: these sell prices, and cowhides at 116 (the earning rate the keep rule compares with). */
+// Combat above 28, so the level-14 Al Kharid scorpions leave the miner alone.
+const FIGHTER = { attack: 40, strength: 40, defence: 40, hitpoints: 40 };
 const prices = (sell: Record<string, number>): PriceView => ({
   status: 'live', at: 1, idOf: () => undefined, limitOf: () => undefined, buy: () => null,
   sell: (name) => {
@@ -110,11 +112,26 @@ describe('the skilling success function', () => {
 
 describe('the gathering engine on the real registry', () => {
   it('iron at 61 with a rune pickaxe, dropping: the wiki\'s "three ores every 12 ticks", about 50,000 XP an hour', () => {
-    const r = gatherRate(method('mi-iron'), 'mining', stateOf({ mining: 61, attack: 40 }, { 'Rune pickaxe': [1, 0] }), {})!;
+    const r = gatherRate(method('mi-iron'), 'mining', stateOf({ mining: 61, ...FIGHTER }, { 'Rune pickaxe': [1, 0] }), {})!;
     expect(r.basis).toBe('Rune pickaxe');
     expect(r.spot?.how).toBe('drop');
+    expect(r.xph[1]).toBeGreaterThan(52_000);
+    expect(r.xph[1]).toBeLessThanOrEqual(52_500);
+  });
+  it('iron at 41 with a rune pickaxe at the Al Kharid triangle: the wiki\'s "around 50,000" an hour', () => {
+    const r = gatherRate(method('mi-iron'), 'mining', stateOf({ mining: 41, ...FIGHTER }, { 'Rune pickaxe': [1, 0] }), {})!;
+    expect(r.spot?.label).toBe('Al Kharid mine');
     expect(r.xph[1]).toBeGreaterThan(45_000);
-    expect(r.xph[1]).toBeLessThan(56_000);
+    expect(r.xph[1]).toBeLessThan(55_000);
+  });
+  it('members mine iron in the Mining Guild from 60, where rocks respawn twice as fast: the wiki\'s 70,000-80,000 an hour', () => {
+    const at = (mining: number, mode: 'f2p' | 'members', pickaxe: string) =>
+      gatherRate(method('mi-iron'), 'mining', stateOf({ mining, ...FIGHTER }, { [pickaxe]: [1, 0] }, mode), {})!;
+    expect(at(65, 'members', 'Dragon pickaxe').spot?.label).toBe('Mining Guild (P2P)');
+    expect(at(65, 'members', 'Dragon pickaxe').xph[1]).toBeGreaterThan(70_000);
+    expect(at(65, 'members', 'Dragon pickaxe').xph[1]).toBeLessThan(80_000);
+    expect(at(65, 'f2p', 'Rune pickaxe').xph[1]).toBeLessThanOrEqual(52_500);
+    expect(at(59, 'members', 'Rune pickaxe').spot?.label).toBe('Al Kharid mine');
   });
 
   it('the tool the player has: a better axe is faster; while the bank is unread, no rate at all', () => {

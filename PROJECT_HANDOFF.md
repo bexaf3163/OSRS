@@ -157,7 +157,7 @@ Maps read the Wiki's atlas metadata with a verified **2019-10-31_1 archive fallb
 
 ## Handover — state on 2026-11-14
 
-- **State:** v2.163.0 published, all gates passed; nothing tested in the real game since 2.87.
+- **State:** v2.164.0 published, all gates passed; nothing tested in the real game since 2.87.
 - **Owner decisions (2.93–2.94.5):** version/update on the rail; one preparation behaviour (two steps ahead, quiet, times shown); training is always Balanced (2.135.0); Money asks once about trade limits; the welcome card links Reference; update Cancel stays.
 - **Now (owner, 2026-11-22):** the skills rework resumed after the speed work; quests paused (branch `quests-2.158-wip`, gate stops at MEP1). `tests/trainingPaths.test.ts` fails slower, untimed or unusable plan legs. Speed debt: early Members decisions take seconds (coins keyed exactly). Open skills work: Slayer masters (Turael only), Ranged, Mining, darts, bursting, Chaos altar, libation bowl; F2P ranges, Ogress, maples, quest-XP, funding.
 - **Next:** 1) P4. 2) Members (owner): Members unlocks everything; money guides hand-reviewed (106) or held back; once subscribed, quests and training are one path; a reached followed goal hands back (`nextAfterReached`). Next: Members methods for every skill, Members quests in batches of 3 to 5, fight profiles. After the last quest (owner, 2026-11-18): backfill later features into earlier quests, add guide help, then audit the whole run from a fresh F2P account. 3) Quest times measured from the player's own runs.

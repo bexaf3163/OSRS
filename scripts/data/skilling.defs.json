@@ -334,7 +334,11 @@
     {
       "resource": "iron",
       "location": "[[Al Kharid mine]]",
-      "bank": "Al Kharid Bank"
+      "bank": "Al Kharid Bank",
+      "triangle": {
+        "page": "Free-to-play Mining training",
+        "evidence": "one tile surrounded by three iron ores is Al Kharid Mine"
+      }
     },
     {
       "resource": "iron",
@@ -352,6 +356,25 @@
       "entrance": "Dwarven Mine",
       "bank": "Falador East Bank",
       "why": "Reached by the Ice Mountain ladder (the place data's way in); the Falador staircase is not in the place data yet, so the walk to the bank is a long estimate."
+    },
+    {
+      "resource": "iron",
+      "location": "[[Mining Guild]] (P2P)",
+      "entrance": "Dwarven Mine",
+      "why": "The members' area of the Mining Guild under Falador, reached through the Dwarven Mine (the place data's way in); the guild's own ladder is not in the place data yet. Iron is dropped, so no bank.",
+      "triangle": {
+        "page": "Pay-to-play Mining training",
+        "evidence": "the pay-to-play area in the Mining Guild, which has a triangle spot near to the bank chest"
+      },
+      "halvedRespawn": {
+        "page": "Pay-to-play Mining training",
+        "evidence": "the respawn time for rocks mined in this area is halved"
+      },
+      "guild": {
+        "page": "Mining Guild",
+        "evidence": "available to players with at least 60 Mining",
+        "level": 60
+      }
     },
     {
       "resource": "coal",

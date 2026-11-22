@@ -848,6 +848,8 @@ function trainingMilestones(skill: string, methods: readonly TrainingMethod[], m
   for (const r of PROCESSING.recipes) if (recipes.has(r.id) && !(r.members && mode === 'f2p')) {
     levels.push(r.level, ...r.requires?.filter(q => q.skill === skill).map(q => q.level) ?? []);
   }
+  const resources = new Set(relevant.flatMap(m => SKILLING.methods[m.id] ?? []));
+  for (const s of SKILLING.spots) if (s.level && resources.has(s.resource) && !(s.members && mode === 'f2p')) levels.push(s.level);
   if (skill === 'magic') levels.push(...SPELLS.map(s => s.level));
   return new Set(levels.filter(n => Number.isInteger(n) && n >= 1 && n <= 99));
 }

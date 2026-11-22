@@ -1,6 +1,6 @@
 {
   "source": "scripts/data/skilling.defs.json checked against the OSRS Wiki (skilling success charts, info templates, tool tables, action lengths, ObjectLocLine spawns) by scripts/data/build-skilling.ts",
-  "generatedAt": "2026-10-29",
+  "generatedAt": "2026-11-22",
   "tools": {
     "axe": {
       "skill": "woodcutting",
@@ -892,6 +892,7 @@
       "count": 9,
       "members": false,
       "bank": "Al Kharid Bank",
+      "triangle": true,
       "hostiles": [
         {
           "npc": "Scorpion",
@@ -964,6 +965,36 @@
           "count": 13
         }
       ]
+    },
+    {
+      "resource": "iron",
+      "label": "Mining Guild (P2P)",
+      "place": {
+        "x": 3025,
+        "y": 9725,
+        "plane": 0,
+        "label": "Mining Guild (P2P)"
+      },
+      "count": 8,
+      "members": true,
+      "waypoints": [
+        {
+          "x": 3018,
+          "y": 3450,
+          "plane": 0,
+          "label": "Dwarven Mine"
+        },
+        {
+          "x": 3025,
+          "y": 9725,
+          "plane": 0,
+          "label": "Mining Guild (P2P)"
+        }
+      ],
+      "why": "The members' area of the Mining Guild under Falador, reached through the Dwarven Mine (the place data's way in); the guild's own ladder is not in the place data yet. Iron is dropped, so no bank.",
+      "triangle": true,
+      "halvedRespawn": true,
+      "level": 60
     },
     {
       "resource": "coal",
