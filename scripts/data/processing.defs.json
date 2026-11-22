@@ -468,6 +468,162 @@
       }
     },
     {
+      "id": "offer-bones",
+      "page": "Bones",
+      "skill": "prayer",
+      "facility": null,
+      "members": true,
+      "consume": {
+        "level": 1,
+        "xp": 4.5,
+        "xpEvidence": "Bones give 4.5 [[Prayer]] experience when buried.",
+        "action": {
+          "page": "Game tick/Action lengths",
+          "evidence": "[[Player-owned house]] [[Altar space|altar]] offerings:",
+          "ticks": 3
+        },
+        "altar": {
+          "page": "Pay-to-play Prayer training",
+          "bonus": "the altar gives 350% experience per bone when a bone is offered at it",
+          "percent": 350,
+          "pace": "players can offer 2,550 bones per hour when manually using the bones on the altar",
+          "perHour": 2550,
+          "fee": "unnote them at Phials located in the Rimmington General Store store for 5 coins each",
+          "coins": 5
+        }
+      }
+    },
+    {
+      "id": "offer-big-bones",
+      "page": "Big bones",
+      "skill": "prayer",
+      "facility": null,
+      "members": true,
+      "consume": {
+        "level": 1,
+        "xp": 15,
+        "xpEvidence": "Big bones give 15 [[Prayer]] experience when buried.",
+        "action": {
+          "page": "Game tick/Action lengths",
+          "evidence": "[[Player-owned house]] [[Altar space|altar]] offerings:",
+          "ticks": 3
+        },
+        "altar": {
+          "page": "Pay-to-play Prayer training",
+          "bonus": "the altar gives 350% experience per bone when a bone is offered at it",
+          "percent": 350,
+          "pace": "players can offer 2,550 bones per hour when manually using the bones on the altar",
+          "perHour": 2550,
+          "fee": "unnote them at Phials located in the Rimmington General Store store for 5 coins each",
+          "coins": 5
+        }
+      }
+    },
+    {
+      "id": "offer-babydragon-bones",
+      "page": "Babydragon bones",
+      "skill": "prayer",
+      "facility": null,
+      "members": true,
+      "consume": {
+        "level": 1,
+        "xp": 30,
+        "xpEvidence": "Babydragon bones give 30 [[Prayer]] experience when buried",
+        "action": {
+          "page": "Game tick/Action lengths",
+          "evidence": "[[Player-owned house]] [[Altar space|altar]] offerings:",
+          "ticks": 3
+        },
+        "altar": {
+          "page": "Pay-to-play Prayer training",
+          "bonus": "the altar gives 350% experience per bone when a bone is offered at it",
+          "percent": 350,
+          "pace": "players can offer 2,550 bones per hour when manually using the bones on the altar",
+          "perHour": 2550,
+          "fee": "unnote them at Phials located in the Rimmington General Store store for 5 coins each",
+          "coins": 5
+        }
+      }
+    },
+    {
+      "id": "offer-dragon-bones",
+      "page": "Dragon bones",
+      "skill": "prayer",
+      "facility": null,
+      "members": true,
+      "consume": {
+        "level": 1,
+        "xp": 72,
+        "xpEvidence": "which give 72 [[Prayer]] experience when buried",
+        "action": {
+          "page": "Game tick/Action lengths",
+          "evidence": "[[Player-owned house]] [[Altar space|altar]] offerings:",
+          "ticks": 3
+        },
+        "altar": {
+          "page": "Pay-to-play Prayer training",
+          "bonus": "the altar gives 350% experience per bone when a bone is offered at it",
+          "percent": 350,
+          "pace": "players can offer 2,550 bones per hour when manually using the bones on the altar",
+          "perHour": 2550,
+          "fee": "unnote them at Phials located in the Rimmington General Store store for 5 coins each",
+          "coins": 5
+        }
+      }
+    },
+    {
+      "id": "offer-wyvern-bones",
+      "page": "Wyvern bones",
+      "skill": "prayer",
+      "facility": null,
+      "members": true,
+      "consume": {
+        "level": 1,
+        "xp": 72,
+        "xpEvidence": "and give 72 [[Prayer]] experience when buried",
+        "action": {
+          "page": "Game tick/Action lengths",
+          "evidence": "[[Player-owned house]] [[Altar space|altar]] offerings:",
+          "ticks": 3
+        },
+        "altar": {
+          "page": "Pay-to-play Prayer training",
+          "bonus": "the altar gives 350% experience per bone when a bone is offered at it",
+          "percent": 350,
+          "pace": "players can offer 2,550 bones per hour when manually using the bones on the altar",
+          "perHour": 2550,
+          "fee": "unnote them at Phials located in the Rimmington General Store store for 5 coins each",
+          "coins": 5
+        }
+      }
+    },
+    {
+      "id": "offer-dagannoth-bones",
+      "page": "Dagannoth bones",
+      "skill": "prayer",
+      "facility": null,
+      "members": true,
+      "consume": {
+        "level": 1,
+        "xp": 125,
+        "xpEvidence": "Dagannoth bones give 125 [[Prayer]] experience when buried",
+        "action": {
+          "page": "Game tick/Action lengths",
+          "evidence": "[[Player-owned house]] [[Altar space|altar]] offerings:",
+          "ticks": 3
+        },
+        "altar": {
+          "page": "Pay-to-play Prayer training",
+          "bonus": "the altar gives 350% experience per bone when a bone is offered at it",
+          "percent": 350,
+          "pace": "players can offer 2,550 bones per hour when manually using the bones on the altar",
+          "perHour": 2550,
+          "fee": "unnote them at Phials located in the Rimmington General Store store for 5 coins each",
+          "coins": 5
+        }
+      }
+    },
+    {
       "id": "enchant-sapphire-amulet",
       "page": "Amulet of magic",
       "skill": "magic",
@@ -1304,6 +1460,14 @@
       "monkfish",
       "shark",
       "anglerfish"
+    ],
+    "pr-gilded": [
+      "offer-bones",
+      "offer-big-bones",
+      "offer-babydragon-bones",
+      "offer-dragon-bones",
+      "offer-wyvern-bones",
+      "offer-dagannoth-bones"
     ]
   },
   "light": {

@@ -1634,6 +1634,132 @@
       "source": "https://oldschool.runescape.wiki/w/Vile_ashes"
     },
     {
+      "id": "offer-bones",
+      "skill": "prayer",
+      "level": 1,
+      "xp": 15.75,
+      "ticks": 3,
+      "perHour": 2550,
+      "fee": 5,
+      "facility": null,
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Bones",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": null,
+      "members": true,
+      "source": "https://oldschool.runescape.wiki/w/Bones"
+    },
+    {
+      "id": "offer-big-bones",
+      "skill": "prayer",
+      "level": 1,
+      "xp": 52.5,
+      "ticks": 3,
+      "perHour": 2550,
+      "fee": 5,
+      "facility": null,
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Big bones",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": null,
+      "members": true,
+      "source": "https://oldschool.runescape.wiki/w/Big_bones"
+    },
+    {
+      "id": "offer-babydragon-bones",
+      "skill": "prayer",
+      "level": 1,
+      "xp": 105,
+      "ticks": 3,
+      "perHour": 2550,
+      "fee": 5,
+      "facility": null,
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Babydragon bones",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": null,
+      "members": true,
+      "source": "https://oldschool.runescape.wiki/w/Babydragon_bones"
+    },
+    {
+      "id": "offer-dragon-bones",
+      "skill": "prayer",
+      "level": 1,
+      "xp": 252,
+      "ticks": 3,
+      "perHour": 2550,
+      "fee": 5,
+      "facility": null,
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Dragon bones",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": null,
+      "members": true,
+      "source": "https://oldschool.runescape.wiki/w/Dragon_bones"
+    },
+    {
+      "id": "offer-wyvern-bones",
+      "skill": "prayer",
+      "level": 1,
+      "xp": 252,
+      "ticks": 3,
+      "perHour": 2550,
+      "fee": 5,
+      "facility": null,
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Wyvern bones",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": null,
+      "members": true,
+      "source": "https://oldschool.runescape.wiki/w/Wyvern_bones"
+    },
+    {
+      "id": "offer-dagannoth-bones",
+      "skill": "prayer",
+      "level": 1,
+      "xp": 437.5,
+      "ticks": 3,
+      "perHour": 2550,
+      "fee": 5,
+      "facility": null,
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Dagannoth bones",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": null,
+      "members": true,
+      "source": "https://oldschool.runescape.wiki/w/Dagannoth_bones"
+    },
+    {
       "id": "enchant-sapphire-amulet",
       "skill": "magic",
       "level": 7,
@@ -4276,6 +4402,14 @@
       "monkfish",
       "shark",
       "anglerfish"
+    ],
+    "pr-gilded": [
+      "offer-bones",
+      "offer-big-bones",
+      "offer-babydragon-bones",
+      "offer-dragon-bones",
+      "offer-wyvern-bones",
+      "offer-dagannoth-bones"
     ]
   }
 }

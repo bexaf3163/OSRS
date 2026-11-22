@@ -30,6 +30,9 @@ interface Recipe {
   id: string; skill: string; level: number; xp: number; ticks: number; facility: Facility | null; tools: string[];
   /** output: null - nothing kept (logs burnt). retry: a failed attempt keeps the material and costs only its time (lighting a log). */
   inputs: (Consumption & { name: string; stacks: boolean; staff?: string; anyOf?: string[] })[]; output: { name: string; qty: number } | null; retry?: boolean;
+  /** The wiki guide's pace with its bank trips included (a house-party altar), used instead of ticks, and the coins paid per action. */
+  perHour?: number;
+  fee?: number;
   /** The skilling success formula's low and high (cooking: the food is not burnt), or a flat chance (an iron bar); neither - always. */
   success?: { low: number; high: number }; chance?: number; members?: boolean;
   /** Plan-specific batch size and one shared wait after the batch, not a delay on every input. */
@@ -89,7 +92,7 @@ function mixableRecipe(r: Recipe, method: TrainingMethod, ids: readonly string[]
     q.skill, q.level, q.xp, q.ticks, q.facility, q.tools,
     q.success ? [q.success.low, q.success.high] : null, q.chance ?? 1, q.retry ?? false, q.members ?? false,
     q.batchSize, q.batchWaitTicks, q.requires, q.wholeBatch, q.multiplierEvery, q.access, q.station,
-    q.inputs.map(i => [i.qty, i.stacks, i.staff, i.initialReserve]), q.output?.qty ?? 0,
+    q.inputs.map(i => [i.qty, i.stacks, i.staff, i.initialReserve]), q.output?.qty ?? 0, q.perHour ?? 0, q.fee ?? 0,
   ]);
   const expected = shape(r);
   const names = [...new Set([need.name, ...need.anyOf])];
@@ -169,7 +172,7 @@ function option(r: Recipe, at: { spot: RateSpot | null; trip: [number, number]; 
   const tries = r.retry ? 1 / chance : 1;
   const success = r.retry ? 1 : chance;
   const seconds = (i: 0 | 1) => r.ticks * TICK * tries / (r.wholeBatch ? actions : 1) + (at.trip[i] * 60 + (at.lit ? lightSeconds(state) : 0) + (r.batchWaitTicks ?? 0) * TICK) / actions;
-  const perHour = (i: 0 | 1) => 3600 / seconds(i);
+  const perHour = (i: 0 | 1) => r.perHour ?? 3600 / seconds(i);
   const xph: [number, number] = [(r.xp * success * perHour(1)) / (1 + MARGIN), r.xp * success * perHour(0)];
   const done = (perHour(0) + perHour(1)) / 2;
   // Materials at the price to replace them; a material the player already holds costs what selling it would bring, so 62 rubies
@@ -184,7 +187,7 @@ function option(r: Recipe, at: { spot: RateSpot | null; trip: [number, number]; 
       const held = (heldOf(state, i.name).total ?? 0) > 0 ? prices?.sell(i.name)?.price : undefined;
       const p = held ?? supplyPrice(i.name, prices, state.mode);
       return a === null || p === null ? null : a + p * i.qty;
-    }, 0);
+    }, r.fee ?? 0);
     const sale = r.output ? dropValue(r.output.name, prices, market.restriction) : 0;
     // A product the trade rules keep from being sold is worth nothing to sell; one with no price is unknown, and then so are the coins.
     const value = sale ?? (market.restriction === 'RESTRICTED' && isRestrictedItem(r.output!.name) ? 0 : null);

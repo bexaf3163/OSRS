@@ -3415,6 +3415,23 @@
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_Prayer_training"
     },
     {
+      "id": "pr-gilded",
+      "skill": "prayer",
+      "from": 1,
+      "to": 99,
+      "name": "Gilded altar at a house party",
+      "members": true,
+      "needs": [],
+      "act": "bone|bones",
+      "effort": "high",
+      "cost": "cost",
+      "risk": "none",
+      "where": "At the Rimmington house portal on world 330: offer bones at a host's gilded altar with both incense burners lit",
+      "place": "Rimmington",
+      "note": "Buy noted bones, unnote them at Phials in the Rimmington General Store for 5 coins each, enter a house party host's house and use each bone on the gilded altar by hand. The altar gives 350% of the burying XP, and the wiki guide's pace is 2,550 bones an hour with banking, about 643,000 XP an hour with dragon bones.",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Prayer_training"
+    },
+    {
       "id": "sm-smelting",
       "skill": "smithing",
       "from": 1,

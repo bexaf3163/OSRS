@@ -19,8 +19,10 @@ interface StationDef { objectName?: string; kind: Kind; page: string; row?: stri
   /** A fire the player lights a few tiles from a bank (the Grand Exchange, where its building forbids fires): bankTiles away from it. */
   lit?: boolean; bankTiles?: number }
 interface TickEvidence { page: string; evidence: string; ticks: number }
+/** A house-party gilded altar: the guide's sentences for the XP bonus, the hourly pace (bank trips included) and the unnoting fee. */
+interface AltarDef { page: string; bonus: string; percent: number; pace: string; perHour: number; fee: string; coins: number }
 interface RecipeDef { id: string; page: string; skill: string; facility: Kind | null; members?: boolean; /** Lit with a tinderbox (Firemaking): read from the log's {{Firemaking info}}. */ light?: boolean;
-  consume?: { level: number; xp: number; xpEvidence: string; action: TickEvidence; samePace?: { page: string; evidence: string } };
+  consume?: { level: number; xp: number; xpEvidence: string; action: TickEvidence; samePace?: { page: string; evidence: string }; altar?: AltarDef };
   spell?: { page: string; materialPage: string; successEvidence: string; batchSize: number };
   /** The item (the page) alched with this spell for coins. */
   alch?: { spell: string };
@@ -180,12 +182,15 @@ for (const d of defs.recipes) {
     const xpMatch = /give (\d+(?:\.\d+)?) \[\[Prayer\]\] experience when (?:buried|scattered)/.exec(c.xpEvidence);
     // Ashes: the Wiki times scattering only alongside burying (the same pace), so the burying line carries the ticks.
     const paced = !c.samePace || (await wikitext(c.samePace.page)).includes(c.samePace.evidence);
+      const guide = c.altar ? plain(await page(c.altar.page)) : '';
+      const altarOk = !c.altar || [[c.altar.bonus, `${c.altar.percent}%`], [c.altar.pace, c.altar.perHour.toLocaleString('en-US')], [c.altar.fee, `${c.altar.coins} coins`]]
+        .every(([line, value]) => guide.includes(line) && line.includes(value));
     if (!item || !text.includes(c.xpEvidence) || !xpMatch || Number(xpMatch[1]) !== c.xp || d.skill !== 'prayer'
-      || !action || !paced || !action.includes(`${c.action.ticks} ticks per bone`) || !(c.level > 0) || !(c.xp > 0) || !(c.action.ticks > 0)) {
+      || !action || !paced || !altarOk || !action.includes(`${c.action.ticks} ticks per bone`) || !(c.level > 0) || !(c.xp > 0) || !(c.action.ticks > 0)) {
       fail(d.id, 'consumption XP/action evidence does not match the source'); continue;
     }
-    recipes.push({ id: d.id, skill: d.skill, level: c.level, xp: c.xp, ticks: c.action.ticks, facility: null, tools: [],
-      inputs: [{ name: plain(d.page), qty: 1, stacks: await stacks(d.page) }], output: null, members: /^yes$/i.test(item.members ?? ''),
+    recipes.push({ id: d.id, skill: d.skill, level: c.level, xp: c.xp * (c.altar?.percent ?? 100) / 100, ticks: c.action.ticks, ...(c.altar ? { perHour: c.altar.perHour, fee: c.altar.coins } : {}), facility: null, tools: [],
+      inputs: [{ name: plain(d.page), qty: 1, stacks: await stacks(d.page) }], output: null, members: !!c.altar || /^yes$/i.test(item.members ?? ''),
       source: `https://oldschool.runescape.wiki/w/${encodeURIComponent(d.page.replace(/ /g, '_'))}` });
     continue;
   }

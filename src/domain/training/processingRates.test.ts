@@ -86,6 +86,12 @@ describe('costs and gains by the shared rules', () => {
     expect(r.lootPerHour).toBeUndefined();
     expect(steel(prices({ 'Steel bar': 500 }, {})).costPerHour).toBeNull();
   });
+  it('a house-party altar keeps the guide pace of 2,550 bones an hour and adds the 5-coin unnoting fee to each bone', () => {
+    const reg = { ...PROCESSING, methods: { ...PROCESSING.methods, 'pr-gilded': ['offer-dragon-bones'] } };
+    const r = processRate(method('pr-gilded'), 'prayer', stateOf({ prayer: 1 }, 'members'), { prices: prices({ 'Dragon bones': 3_000 }, {}) }, reg)!;
+    expect(r.xph[1]).toBeCloseTo(252 * 2_550);
+    expect(r.costPerHour).toBeCloseTo(3_005 * 2_550);
+  });
 });
 
 // A synthetic recipe and stations: two furnaces, one far and one members-only near the bank. Not game data.
