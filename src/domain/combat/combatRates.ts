@@ -66,7 +66,7 @@ export function combatUpgrades(m: TrainingMethod, skill: string, state: PlayerSt
   const quests = state.quests.known ? new Set(state.quests.value) : undefined;
   // The style registry and bow model are the F2P starter kit's verified weapon list, shared with rangedNeeds.
   const weapons: Pick<GearPiece, 'name' | 'twoHanded'>[] = skill === 'ranged' || skill === 'magic'
-    ? STYLE_GEAR[skill].weapon.filter((o) => usableStyleOption(o, (s) => levelOf(state, s), (q) => questOf(state, q) === 'DONE'))
+    ? STYLE_GEAR[skill].weapon.filter((o) => usableStyleOption(o, (s) => levelOf(state, s), (q) => questOf(state, q) === 'DONE', state.mode))
       .flatMap((o) => o.names.flatMap((name): Pick<GearPiece, 'name' | 'twoHanded'>[] => {
         const p = gearPieceByName(name);
         // Unmodelled special staves cannot acquire a made-up zero Magic bonus.

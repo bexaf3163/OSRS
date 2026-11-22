@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { parseOption } from '../../../scripts/data/style-gear-parse';
-import { STYLE_GEAR } from './styleGear';
+import { STYLE_GEAR, ammoFits, usableStyleOption } from './styleGear';
 
 describe('parsing the "Recommended equipment" block', () => {
   it('two requirements separated by commas, and a quest', () => {
@@ -32,5 +32,16 @@ describe('wiki data', () => {
   it('Bryophyta\'s staff has both requirements — Attack and Magic', () => {
     const o = STYLE_GEAR.magic.weapon.find((x) => x.names.includes("Bryophyta's staff"))!;
     expect(o.reqs.map((r) => r.skill).sort()).toEqual(['attack', 'magic']);
+  });
+  it('members bows from the Bow table: usable on members accounts at their level, firing every arrow up to their best', () => {
+    const option = (name: string) => [...STYLE_GEAR.ranged.weapon, ...STYLE_GEAR.ranged.ammo].find((x) => x.names.includes(name))!;
+    expect(usableStyleOption(option('Magic shortbow'), () => 50, () => true, 'members')).toBe(true);
+    expect(usableStyleOption(option('Magic shortbow'), () => 50, () => true, 'f2p')).toBe(false);
+    expect(usableStyleOption(option('Magic shortbow'), () => 49, () => true, 'members')).toBe(false);
+    const fits = (arrow: string, bow: string) => ammoFits(option(arrow), bow, STYLE_GEAR.ranged.weapon) === null;
+    expect(fits('Amethyst arrow', 'Magic shortbow')).toBe(true);
+    expect(fits('Adamant arrow', 'Magic shortbow')).toBe(true);
+    expect(fits('Amethyst arrow', 'Yew shortbow')).toBe(false);
+    expect(fits('Rune arrow', 'Maple shortbow')).toBe(false);
   });
 });

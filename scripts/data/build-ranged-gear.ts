@@ -19,6 +19,8 @@ const PAGES = [
   // Quest fights' own bows and ammunition (fightMechanics.json ammo): Temple of Ikov's ice arrows, Zogre Flesh Eaters' brutal arrows,
   // the crossbow and bolts that spawn for Another Slice of H.A.M.
   'Yew shortbow', 'Ice arrows', 'Ogre bow', 'Bronze brutal', 'Crossbow', 'Bronze bolts',
+  // Members shortbows of the kit (build-style-gear reads them from the Bow article) and the arrows they fire.
+  'Magic shortbow', 'Rune arrow', 'Amethyst arrow',
 ];
 
 

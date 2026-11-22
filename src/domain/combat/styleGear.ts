@@ -4,17 +4,24 @@
 import { styleGearJson as styleJson } from '../../data';
 
 export interface StyleReq { skill: string; level: number }
-export interface StyleOption { names: string[]; reqs: StyleReq[]; quests: string[]; note?: string }
+export interface StyleOption { names: string[]; reqs: StyleReq[]; quests: string[]; note?: string;
+  /** A members bow from the wiki's Bow table, and the best arrow it fires ("Up to rune arrows"). */
+  members?: boolean; upTo?: string }
 export type StyleSlots = Record<string, StyleOption[]>;
 
 export const STYLE_GEAR = styleJson as unknown as { generatedAt: string; magic: StyleSlots; ranged: StyleSlots };
 /** A wearable option needs positive evidence for every requirement, unlike an informational unlock row. */
-export function usableStyleOption(o: StyleOption, level: (skill: string) => number | undefined, questDone: (quest: string) => boolean): boolean {
-  return o.reqs.every((r) => { const have = level(r.skill); return have !== undefined && have >= r.level; }) && o.quests.every(questDone);
+export function usableStyleOption(o: StyleOption, level: (skill: string) => number | undefined, questDone: (quest: string) => boolean, mode?: 'f2p' | 'members'): boolean {
+  return (!o.members || mode === 'members') && o.reqs.every((r) => { const have = level(r.skill); return have !== undefined && have >= r.level; }) && o.quests.every(questDone);
 }
 
 /** The wiki note "(Maple shortbow only)" / "(Willow shortbow or higher)": arrows do not suit every bow. */
 export function ammoFits(o: StyleOption, weapon: string | null, weapons: readonly StyleOption[]): string | null {
+  const cap = weapons.find((w) => weapon !== null && w.names.includes(weapon))?.upTo;
+  if (cap) {
+    const tier = (n: string) => STYLE_GEAR.ranged.ammo.findIndex((a) => a.names.includes(n));
+    return tier(o.names[0]) >= tier(cap) ? null : `${o.names[0]} is beyond the ${weapon}, which fires up to ${cap}`;
+  }
   const m = /^\((.+?) (only|or higher)\)$/.exec(o.note ?? '');
   if (!m || !weapon) return null;
   const rank = (n: string) => weapons.findIndex((w) => w.names.includes(n));

@@ -1,6 +1,6 @@
 {
  "source": "OSRS Wiki: \"Recommended equipment\" in the articles Free-to-play Magic training and Free-to-play Ranged training",
- "generatedAt": "2026-10-03",
+ "generatedAt": "2026-11-22",
  "magic": {
   "head": [
    {
@@ -436,6 +436,34 @@
   "weapon": [
    {
     "names": [
+     "Magic shortbow"
+    ],
+    "reqs": [
+     {
+      "skill": "ranged",
+      "level": 50
+     }
+    ],
+    "quests": [],
+    "members": true,
+    "upTo": "Amethyst arrow"
+   },
+   {
+    "names": [
+     "Yew shortbow"
+    ],
+    "reqs": [
+     {
+      "skill": "ranged",
+      "level": 40
+     }
+    ],
+    "quests": [],
+    "members": true,
+    "upTo": "Rune arrow"
+   },
+   {
+    "names": [
      "Maple shortbow"
     ],
     "reqs": [
@@ -479,6 +507,22 @@
    }
   ],
   "ammo": [
+   {
+    "names": [
+     "Amethyst arrow"
+    ],
+    "reqs": [],
+    "quests": [],
+    "note": "(Magic shortbow or higher)"
+   },
+   {
+    "names": [
+     "Rune arrow"
+    ],
+    "reqs": [],
+    "quests": [],
+    "note": "(Yew shortbow or higher)"
+   },
    {
     "names": [
      "Adamant arrow"

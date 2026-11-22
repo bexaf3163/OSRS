@@ -51,7 +51,7 @@ describe('arrows for a Ranged goal', () => {
 
   it('never guesses: an unknown bow or an opponent without ranged defence gives no count; an unknown worn item is named', () => {
     const frog = foe('Giant frog', 'Level 13');
-    expect(arrowsForGoal({ xp: 0, goalLevel: 10, bow: 'Magic shortbow', arrow: 'Bronze arrow', worn: [], foe: frog })).toBeNull();
+    expect(arrowsForGoal({ xp: 0, goalLevel: 10, bow: 'Dark bow', arrow: 'Bronze arrow', worn: [], foe: frog })).toBeNull();
     expect(arrowsForGoal({ xp: 0, goalLevel: 10, bow: 'Shortbow', arrow: 'Bronze arrow', worn: [], foe: { ...frog, defence: { ...frog.defence, ranged: undefined } } })).toBeNull();
     expect(arrowsForGoal({ xp: 0, goalLevel: 10, bow: 'Shortbow', arrow: 'Bronze arrow', worn: ['Party hat'], foe: frog })?.notCounted).toEqual(['Party hat']);
     expect(arrowsForGoal({ xp: xpForLevel(50), goalLevel: 50, bow: 'Shortbow', arrow: 'Bronze arrow', worn: [], foe: frog })?.shots.mid).toBe(0);

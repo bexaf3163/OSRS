@@ -17,7 +17,11 @@ import { rangedGearJson } from '../../data';
 const LONG: Readonly<Record<string, string>> = { Shortbow: 'Longbow', 'Oak shortbow': 'Oak longbow', 'Willow shortbow': 'Willow longbow', 'Maple shortbow': 'Maple longbow' };
 const bows = STYLE_GEAR.ranged.weapon.map(o => ({ ...o, names: [...o.names, ...o.names.flatMap(n => LONG[n] ? [LONG[n]] : [])] }));
 const ammo = STYLE_GEAR.ranged.ammo;
-export const RANGED_WATCH = [...new Set([...bows.flatMap(o => o.names), ...Object.values(STYLE_GEAR.ranged).flatMap(options => options.flatMap(o => o.names))])];
+// shortcut: members bows and the arrows only they fire are watched only as the picked kit (the step's own items), because the plugin
+// watch list holds 40 names and the free kit fills most of it; watch them all once the in-game target knows the account's mode.
+const MEMBERS_ONLY = new Set(bows.filter(o => o.members).flatMap(o => [...o.names, ...(o.upTo ? [o.upTo] : [])]));
+export const RANGED_WATCH = [...new Set([...bows.flatMap(o => o.names), ...Object.values(STYLE_GEAR.ranged).flatMap(options => options.flatMap(o => o.names))])]
+  .filter(n => !MEMBERS_ONLY.has(n));
 const stats = rangedGearJson.items;
 const armourSlots = ['head', 'body', 'legs', 'hands', 'neck', 'feet', 'cape'] as const;
 const starter = (options: readonly StyleOption[]) => options.filter(o => !o.reqs.length && !o.quests.length).flatMap(o => o.names)
@@ -60,7 +64,7 @@ export function rangedNeeds(state: PlayerState, prices?: PriceView | null): read
 }
 
 function computeRangedNeeds(state: PlayerState, prices?: PriceView | null): MethodNeed[] {
-  const usable = bows.filter(o => usableStyleOption(o, (s) => levelOf(state, s), (q) => questOf(state, q) === 'DONE'));
+  const usable = bows.filter(o => usableStyleOption(o, (s) => levelOf(state, s), (q) => questOf(state, q) === 'DONE', state.mode));
   const options = usable.flatMap(o => o.names);
   const worn = new Set(Object.values(state.equipment).map(nameKey));
   let bow = options.find(name => worn.has(nameKey(name))) ?? options.find(name => (heldOf(state, name).total ?? 0) > 0) ?? 'Shortbow';

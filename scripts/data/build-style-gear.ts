@@ -5,7 +5,7 @@
 
 import { writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { wikitext } from './wiki.ts';
+import { wikitables, wikitext } from './wiki.ts';
 import { parseEquipment } from './style-gear-parse.ts';
 
 const root = fileURLToPath(new URL('../..', import.meta.url));
@@ -22,4 +22,19 @@ for (const [style, page] of Object.entries(pages)) {
   console.log(`${style}: slots ${Object.keys(slots).length}, variants ${Object.values(slots).reduce((n, s) => n + s.length, 0)}`);
   out[style] = slots;
 }
+// Members shortbows from the Bow article's table (level, the best arrow, members), ahead of the free ones. A new arrow is noted with
+// the lowest bow that fires it, so no free bow gets it; a members bow fires every arrow up to its own (StyleOption.upTo).
+const MEMBERS_BOWS = ['Yew shortbow', 'Magic shortbow'];
+const arrowName = (s: string) => s.replace(/s$/, '').replace(/^./, (c) => c.toUpperCase());
+const bowRows = wikitables(await wikitext('Bow')).flatMap((t) => t.rows);
+const added = MEMBERS_BOWS.map((bow) => {
+  const row = bowRows.find((r) => r.some((c) => c.includes(`{{plinkt|${bow}}}`)));
+  const level = Number(row?.[0]), upTo = /Up to \[\[([^\]|]+)/.exec(row?.[3] ?? '')?.[1];
+  if (!row || !(level > 0) || !upTo || !/yes/i.test(row[4] ?? '')) throw new Error(`Bow article: no level, best arrow or members cell for ${bow}: ${JSON.stringify(row)}`);
+  return { bow, level, upTo: arrowName(upTo) };
+}).sort((a, b) => b.level - a.level);
+const ranged = out.ranged as Record<string, { names: string[]; note?: string }[]>;
+ranged.weapon.unshift(...added.map((b) => ({ names: [b.bow], reqs: [{ skill: 'ranged', level: b.level }], quests: [], members: true, upTo: b.upTo })));
+const known = new Set(ranged.ammo.flatMap((o) => o.names));
+ranged.ammo.unshift(...added.filter((b) => !known.has(b.upTo)).map((b) => ({ names: [b.upTo], reqs: [], quests: [], note: `(${b.bow} or higher)` })));
 writeFileSync(OUT, `${JSON.stringify(out, null, 1)}\n`);

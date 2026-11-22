@@ -1,6 +1,6 @@
 {
   "source": "OSRS Wiki: Infobox Bonuses of each article (scripts/data/build-ranged-gear.ts)",
-  "generatedAt": "2026-11-20",
+  "generatedAt": "2026-11-22",
   "items": [
     {
       "name": "Shortbow",
@@ -249,6 +249,28 @@
       "slot": "ammo",
       "rangedAttack": 0,
       "rangedStrength": 10,
+      "defence": 0
+    },
+    {
+      "name": "Magic shortbow",
+      "slot": "2h",
+      "rangedAttack": 69,
+      "rangedStrength": 0,
+      "defence": 0,
+      "speed": 4
+    },
+    {
+      "name": "Rune arrow",
+      "slot": "ammo",
+      "rangedAttack": 0,
+      "rangedStrength": 49,
+      "defence": 0
+    },
+    {
+      "name": "Amethyst arrow",
+      "slot": "ammo",
+      "rangedAttack": 0,
+      "rangedStrength": 55,
       "defence": 0
     }
   ]
