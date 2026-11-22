@@ -36,7 +36,8 @@ jobs:
   # A fresh account played turn by turn through the planner over the 23 F2P quests (tests/gates): fails when the plan stops at a check.
   route-gate:
     runs-on: ubuntu-24.04
-    # The Members replay (40 minutes in one runner) runs as 5 parts from saved checkpoints (GATE_SEGMENT in tests/gates).
+    # The Members replay (40 minutes in one runner) runs as 5 parts from saved checkpoints (GATE_SEGMENT in tests/gates). The 15-minute
+    # limits here and on the plugin and portable jobs fail a release that has become slow (2.161.0: 1-3, 5 and 7 minutes).
     strategy:
       fail-fast: false
       matrix:
@@ -47,10 +48,12 @@ jobs:
           - { mode: Members, segment: 3/5 }
           - { mode: Members, segment: 4/5 }
           - { mode: Members, segment: 5/5 }
-    timeout-minutes: 90
+    timeout-minutes: 15
     env:
       ELECTRON_SKIP_BINARY_DOWNLOAD: '1'
       GATE_SEGMENT: ${{ matrix.segment }}
+      # Recheck every 20th reused training forecast against a fresh one (src/domain/training/methodRates.ts scopedMemo).
+      TRAINING_SCOPE_VERIFY: '20'
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -62,7 +65,7 @@ jobs:
 
   runelite-bridge:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 15
     defaults:
       run:
         working-directory: runelite-bridge
@@ -78,7 +81,7 @@ jobs:
 
   portable:
     runs-on: windows-latest
-    timeout-minutes: 30
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

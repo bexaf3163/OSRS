@@ -131,12 +131,14 @@ export function scopedRateKeyOf(s: PlayerState, scope: ItemScope): string {
   }
   return id;
 }
-/** The route gate sets verify: every reused scoped result is then recomputed and any difference fails (an item the scope missed). */
-export const scopeCheck = { verify: false };
+/** The route gate sets every: each Nth reused scoped result is recomputed and any difference fails (something the scope missed);
+ * 1 checks every reuse and names what differs. */
+export const scopeCheck = { every: 0 };
+let reuses = 0;
 /** A result kept by an item-scoped key (scopedRateKeyOf). shortcut: callers must not change a returned value in place. */
 export function scopedMemo<T>(cache: Map<string, { out: T; state?: PlayerState }>, key: string, state: PlayerState, label: string, fresh: () => T, cap = 100_000): T {
   const kept = cache.get(key);
-  if (kept && !scopeCheck.verify) return kept.out;
+  if (kept && !(scopeCheck.every && ++reuses % scopeCheck.every === 0)) return kept.out;
   const out = fresh();
   if (kept && JSON.stringify(kept.out) !== JSON.stringify(out)) {
     const items = (s?: PlayerState) => new Map([...s?.owned?.items ?? []].map(([k, o]) => [k, `${o.carried}/${o.noted}/${o.bank}`]));
@@ -144,11 +146,12 @@ export function scopedMemo<T>(cache: Map<string, { out: T; state?: PlayerState }
     const lv = (x?: PlayerState) => Object.entries(x?.levels ?? {}).map(([k, v]) => `${k} ${v.known ? v.value : '?'}`);
     const qs = (x?: PlayerState) => (x?.quests.known ? x.quests.value : []);
     const only = (p: string[], q: string[]) => p.filter(v => !q.includes(v));
+    if (!kept.state) throw new Error(`${label}: a reused training forecast differs from a fresh one; rerun the gate with TRAINING_SCOPE_VERIFY=1 to see what the scope misses`);
     throw new Error(`${label}: the scope misses one of items ${[...new Set([...a.keys(), ...b.keys()])].filter(k => a.get(k) !== b.get(k)).join(', ')}; levels ${only(lv(kept.state), lv(state)).join(', ')} -> ${only(lv(state), lv(kept.state)).join(', ')}; quests ${[...only(qs(kept.state), qs(state)), ...only(qs(state), qs(kept.state))].join(', ')}`);
   }
   // A checked entry holds its whole state, so far fewer are kept.
-  if (cache.size > (scopeCheck.verify ? Math.min(cap, 2_000) : cap)) cache.clear();
-  if (!kept) cache.set(key, { out, ...(scopeCheck.verify ? { state } : {}) });
+  if (cache.size > (scopeCheck.every === 1 ? Math.min(cap, 2_000) : cap)) cache.clear();
+  if (!kept) cache.set(key, { out, ...(scopeCheck.every === 1 ? { state } : {}) });
   return out;
 }
 const NO_ITEMS: NonNullable<PlayerState['owned']>['items'] = new Map();

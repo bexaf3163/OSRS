@@ -27,8 +27,8 @@ import type { GameMode, Step } from '../../src/types';
 import { SKILL_NAMES } from '../../src/domain/training/skillTrack';
 import { scopeCheck } from '../../src/domain/training/methodRates';
 
-// TRAINING_SCOPE_VERIFY=1 recomputes every training forecast reused across states and fails on any difference.
-scopeCheck.verify = Boolean(process.env.TRAINING_SCOPE_VERIFY);
+// TRAINING_SCOPE_VERIFY=N recomputes every Nth training forecast reused across states and fails on any difference (CI checks a sample).
+scopeCheck.every = Number(process.env.TRAINING_SCOPE_VERIFY) || 0;
 
 const stepOf = new Map(allSteps.map(s => [s.id, s]));
 const fixture = JSON.parse(readFileSync('tests/fixtures/gePrices.json', 'utf8')) as { prices: Record<string, { buy: number; sell: number }> };
@@ -60,6 +60,15 @@ const UNKNOWN_TIME_DEBT = 0;
 // A fresh Members account finishes every quest; the turns whose remaining time is unknown are known debt. Lower it as it
 // shrinks, never raise it.
 const MEMBERS_UNKNOWN_TIME_DEBT = 0;
+// The app runs this decision on every game update. CI fails when a run's median or slowest-5% decision gets about twice as slow as
+// on 2026-11-22 (CI, per part: F2P 72/337 ms, Members at most 1,303/4,541 ms); local runs only print the times, as parallel parts
+// share the CPU. Raise a budget only with the owner's agreement.
+const DECISION_BUDGET_MS: Record<GameMode, { p50: number; p95: number }> = { f2p: { p50: 150, p95: 700 }, members: { p50: 2_600, p95: 9_000 } };
+const withinBudget = (mode: GameMode, ms: { p50: number; p95: number }) => {
+  if (!process.env.CI) return;
+  expect(ms.p50, `${mode} median decision time (ms)`).toBeLessThanOrEqual(DECISION_BUDGET_MS[mode].p50);
+  expect(ms.p95, `${mode} slowest-5% decision time (ms)`).toBeLessThanOrEqual(DECISION_BUDGET_MS[mode].p95);
+};
 // GATE_SEGMENT=k/n replays part k of the Members route from the checkpoint saved before it, so CI runs the parts in parallel; without
 // it the whole route is replayed from a fresh account. GATE_CHECKPOINTS=n on a whole Members run saves the n-1 checkpoints that split
 // its time evenly (rerun it when quest steps change).
@@ -208,7 +217,7 @@ function play(mode: GameMode) {
   console.log(`Route gate (${mode}) earned with: ${earned.join(', ') || 'nothing'}.`);
   // GATE_LOG=<file> keeps the whole turn log for diagnosis.
   if (process.env.GATE_LOG) writeFileSync(`${process.env.GATE_LOG}.${mode}.txt`, log.join('\n'));
-  return { open, blocked, unknownTime, log };
+  return { open, blocked, unknownTime, log, decisionMs: { p50: at(0.5), p95: at(0.95) } };
 }
 
 it('a fresh account finishes the 23 F2P quests through planned actions, without a check', () => {
@@ -216,6 +225,7 @@ it('a fresh account finishes the 23 F2P quests through planned actions, without 
   expect(run.blocked ?? null).toBeNull();
   expect(run.open, run.log.slice(-8).join('\n')).toEqual([]);
   expect(run.unknownTime, 'turns with an unknown remaining time (known debt)').toBeLessThanOrEqual(UNKNOWN_TIME_DEBT);
+  withinBudget('f2p', run.decisionMs);
 }, 1_800_000);
 
 it('a fresh Members account finishes every quest through planned actions, without a check', () => {
@@ -223,4 +233,5 @@ it('a fresh Members account finishes every quest through planned actions, withou
   expect(run.blocked ?? null).toBeNull();
   expect(run.open, run.log.slice(-8).join('\n')).toEqual([]);
   expect(run.unknownTime, 'Members turns with an unknown remaining time (known debt)').toBeLessThanOrEqual(MEMBERS_UNKNOWN_TIME_DEBT);
+  withinBudget('members', run.decisionMs);
 }, 5_400_000);
