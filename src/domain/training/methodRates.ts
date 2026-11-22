@@ -107,18 +107,19 @@ export function rateKeyOf(s: PlayerState): string {
   return id;
 }
 
-/** The owned items one skill's training reads, by name key. */
-export interface ItemScope { id: string; has: (key: string) => boolean }
+/** What one skill's training reads of the state: these owned items (by name key), these levels and these quests (by name key). */
+export interface ItemScope { id: string; has: (key: string) => boolean; levels: ReadonlySet<string>; quests: ReadonlySet<string> }
 const scopedKeys = new WeakMap<PlayerState, Map<string, string>>();
-/** rateKeyOf with only the scope's owned items: states that differ in other items (a log chopped while training Attack) share
- * training forecasts. Levels, quests, coins and worn gear stay whole. */
+/** rateKeyOf with only the scope's owned items, levels and quests: states that differ elsewhere (a log chopped or a Woodcutting
+ * level while training Crafting, a quest no training reads) share training forecasts. Coins and worn gear stay whole. */
 export function scopedRateKeyOf(s: PlayerState, scope: ItemScope): string {
   let byScope = scopedKeys.get(s);
   if (!byScope) scopedKeys.set(s, byScope = new Map());
   let id = byScope.get(scope.id);
   if (id === undefined) {
-    let rest = restKeys.get(s);
-    if (rest === undefined) restKeys.set(s, rest = rateKeyOf({ ...s, owned: s.owned && { ...s.owned, items: NO_ITEMS } }));
+    const rest = rateKeyOf({ ...s, levels: picked(s.levels, scope, l => Object.fromEntries(Object.entries(l).filter(([k]) => scope.levels.has(k)))),
+      quests: picked(s.quests, scope, q => (q.known ? { ...q, value: q.value.filter(x => scope.quests.has(nameKey(x))) } : q)),
+      owned: s.owned && { ...s.owned, items: NO_ITEMS } });
     const full = `${scope.id}|${rest}|${s.owned ? scopedItemsOf(s.owned.items, scope) : '-'}`;
     id = scopedIds.get(full);
     if (id === undefined) {
@@ -140,7 +141,10 @@ export function scopedMemo<T>(cache: Map<string, { out: T; state?: PlayerState }
   if (kept && JSON.stringify(kept.out) !== JSON.stringify(out)) {
     const items = (s?: PlayerState) => new Map([...s?.owned?.items ?? []].map(([k, o]) => [k, `${o.carried}/${o.noted}/${o.bank}`]));
     const a = items(kept.state), b = items(state);
-    throw new Error(`${label}: the item scope misses one of ${[...new Set([...a.keys(), ...b.keys()])].filter(k => a.get(k) !== b.get(k)).join(', ')}`);
+    const lv = (x?: PlayerState) => Object.entries(x?.levels ?? {}).map(([k, v]) => `${k} ${v.known ? v.value : '?'}`);
+    const qs = (x?: PlayerState) => (x?.quests.known ? x.quests.value : []);
+    const only = (p: string[], q: string[]) => p.filter(v => !q.includes(v));
+    throw new Error(`${label}: the scope misses one of items ${[...new Set([...a.keys(), ...b.keys()])].filter(k => a.get(k) !== b.get(k)).join(', ')}; levels ${only(lv(kept.state), lv(state)).join(', ')} -> ${only(lv(state), lv(kept.state)).join(', ')}; quests ${[...only(qs(kept.state), qs(state)), ...only(qs(state), qs(kept.state))].join(', ')}`);
   }
   // A checked entry holds its whole state, so far fewer are kept.
   if (cache.size > (scopeCheck.verify ? Math.min(cap, 2_000) : cap)) cache.clear();
@@ -148,7 +152,15 @@ export function scopedMemo<T>(cache: Map<string, { out: T; state?: PlayerState }
   return out;
 }
 const NO_ITEMS: NonNullable<PlayerState['owned']>['items'] = new Map();
-const restKeys = new WeakMap<PlayerState, string>();
+// One narrowed copy per source object and scope, so rateKeyOf's per-object part cache still hits across level copies.
+const pickedParts = new WeakMap<object, Map<string, object>>();
+function picked<T extends object>(o: T, scope: ItemScope, pick: (o: T) => T): T {
+  let byScope = pickedParts.get(o);
+  if (!byScope) pickedParts.set(o, byScope = new Map());
+  let out = byScope.get(scope.id) as T | undefined;
+  if (!out) byScope.set(scope.id, out = pick(o));
+  return out;
+}
 const scopedIds = new Map<string, string>();
 let nextScopedId = 0;
 // Projected states often share one item map: it is sorted once, and each name is tested against a scope once.

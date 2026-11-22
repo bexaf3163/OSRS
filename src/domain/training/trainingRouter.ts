@@ -10,7 +10,8 @@ import { nameKey } from '../items/itemKey';
 //    Supported action-XP and remaining-work calculations use the shared models, not a second UI formula.
 
 import type { GameMode, Progress, Step } from '../../types';
-import { trainingMethodsJson as methodsJson, toolProgressionJson } from '../../data';
+import { trainingMethodsJson as methodsJson, toolProgressionJson, gearJson, styleGearJson, transportJson, trainersJson, spellsJson, processingJson, skillingJson } from '../../data';
+import { ACCESS_RULE_QUESTS, ACCESS_RULE_SKILLS } from '../market/shopAccess';
 import { withPlannedKit } from './stages';
 import { hoursText, purchaseTripHours, toolUpgrade, upgradeXp, type ToolUpgrade } from './toolUpgrade';
 import { toolFamilyOf, toolUse } from '../items/toolTiers';
@@ -250,14 +251,32 @@ export function methodNeeds(m: TrainingMethod, state: PlayerState, prices?: Pric
 
 const MELEE_SKILLS = ['attack', 'strength', 'defence'];
 
-// The owned items a skill's training can read by name: its methods' needs, recipes, gathering tools and products, and for a
-// method with a fight or kit, every gear, food, ammunition, rune and staff name. A gate run with TRAINING_SCOPE_VERIFY=1 proves it.
+// What a skill's training can read: the owned items its methods' needs, recipes, gathering tools and products name (for a fight
+// or kit, every gear, food, ammunition, rune and staff), its own, combat and required levels, and the quests any engine checks.
+// A gate run with TRAINING_SCOPE_VERIFY=1 proves it.
 const FIGHT_ITEMS = new Set<string>();
 const collectNames = (o: unknown): void => {
   if (Array.isArray(o)) o.forEach(collectNames);
   else if (o && typeof o === 'object') for (const [k, v] of Object.entries(o)) {
     if (k === 'name' || k === 'nameEn') { if (typeof v === 'string') FIGHT_ITEMS.add(nameKey(v)); } else if (k === 'names' && Array.isArray(v)) v.forEach(n => typeof n === 'string' && FIGHT_ITEMS.add(nameKey(n))); else collectNames(v);
   }
+};
+// Every quest a training engine can check (method unlocks, gear, spells, stations, transport, trainers, shop and spawn rules): a
+// quest outside it never changes a forecast.
+let readQuests: Set<string> | undefined;
+const questsRead = (): Set<string> => {
+  if (readQuests) return readQuests;
+  const out = new Set<string>([nameKey('Prince Ali Rescue'), ...ACCESS_RULE_QUESTS.map(nameKey),
+    ...trainingMethods.flatMap(m => (m.kind === 'quest' || m.questGuide ? [nameKey(m.questGuide?.name ?? m.name)] : []))]);
+  const walk = (o: unknown): void => {
+    if (Array.isArray(o)) o.forEach(walk);
+    else if (o && typeof o === 'object') for (const [k, v] of Object.entries(o)) {
+      if ((k === 'quest' || k === 'quests') && (typeof v === 'string' || Array.isArray(v))) [v].flat().forEach(q => typeof q === 'string' && out.add(nameKey(q)));
+      else walk(v);
+    }
+  };
+  [methodsJson, gearJson, styleGearJson, transportJson, trainersJson, spellsJson, processingJson, skillingJson].forEach(walk);
+  return (readQuests = out);
 };
 const KIT_ITEM = / rune$|staff|arrows?$|bolts?$|darts?$|knife$|knives$|javelin|thrownaxe|bow$|bow \(u\)$| ore$|^coal$/;
 const itemScopes = new Map<string, ItemScope>();
@@ -268,17 +287,22 @@ export function trainingItemScope(skill: string): ItemScope {
   const names = new Set<string>(['coins']);
   const add = (...list: (string | undefined)[]) => list.forEach(n => n && names.add(nameKey(n)));
   let fights = ['attack', 'strength', 'defence', 'hitpoints', 'ranged', 'magic', 'prayer', 'slayer'].includes(skill);
+  // Combat levels decide danger at a spot and which gear is worn; shop and spawn rules ask for a few skills.
+  const levels = new Set<string>([skill, 'attack', 'strength', 'defence', 'hitpoints', 'ranged', 'magic', 'prayer', ...ACCESS_RULE_SKILLS]);
   for (const m of methodsFor(skill)) {
     if (m.kit || m.npcNames?.length) fights = true;
     for (const n of m.needs) {
+      if (n.type === 'skill' || n.type === 'tool') levels.add(n.skill);
       if (n.type === 'item') add(n.name, ...n.anyOf ?? []);
       if (n.type === 'tool') add(...tools[n.skill].map(t => t.tier), ...toolFamilyOf(n.skill === 'woodcutting' ? 'axe' : 'pickaxe') ?? []);
     }
     for (const id of PROCESSING.methods[m.id] ?? []) {
       const r = PROCESSING.recipes.find(x => x.id === id);
-      // A fire is lit with a held tinderbox and logs; an input may be a staff, and a station may need a carried or worn item.
+      // A fire is lit with a held tinderbox, logs and the Firemaking level for them; an input may be a staff, and a station may need a carried or worn item.
       if (r) add(...r.inputs.flatMap(i => [i.name, i.staff, ...i.anyOf ?? []]), r.output?.name, ...r.tools ?? [], r.access?.carried, r.access?.equipped,
         ...r.facility === 'fire' ? ['Tinderbox', 'Logs'] : []);
+      r?.requires?.forEach(q => levels.add(q.skill));
+      if (r?.facility === 'fire') levels.add('firemaking');
     }
     for (const id of SKILLING.methods[m.id] ?? []) {
       const r = SKILLING.resources.find(x => x.id === id);
@@ -286,7 +310,7 @@ export function trainingItemScope(skill: string): ItemScope {
     }
   }
   const has = fights ? (k: string) => names.has(k) || FIGHT_ITEMS.has(k) || KIT_ITEM.test(k) : (k: string) => names.has(k);
-  itemScopes.set(skill, scope = { id: `items:${skill}`, has });
+  itemScopes.set(skill, scope = { id: `scope:${skill}`, has, levels, quests: questsRead() });
   return scope;
 }
 

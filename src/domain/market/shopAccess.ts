@@ -143,6 +143,9 @@ const SPAWN_RULES: SpawnRule[] = [
   { re: /tutorial island/i, rule: { blocked: 'Tutorial Island cannot be visited again' } },
   { re: /emir's arena|citharede abbey|castle wars/i, rule: { members: true } },
 ];
+/** The quests and skills any shop or spawn rule asks for: training forecasts that buy supplies read them. */
+export const ACCESS_RULE_QUESTS = [...Object.values(RULES), ...SPAWN_RULES.map(r => r.rule)].flatMap(r => (r.quest ? [r.quest] : []));
+export const ACCESS_RULE_SKILLS = [...Object.values(RULES), ...SPAWN_RULES.map(r => r.rule)].flatMap(r => (r.skill ? [r.skill.id] : []));
 
 /**
  * Whether the player may pick up an item lying at a named place. open for the free world's towns and dungeons; conditional where a quest under way
