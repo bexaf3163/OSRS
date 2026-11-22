@@ -2206,6 +2206,142 @@
       "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Firemaking_training"
     },
     {
+      "id": "sm-foundry",
+      "skill": "smithing",
+      "from": 15,
+      "to": 30,
+      "name": "Giants' Foundry (bronze/iron swords)",
+      "members": true,
+      "needs": [
+        {
+          "type": "quest",
+          "quest": "Sleeping Giants"
+        },
+        {
+          "type": "item",
+          "name": "Bronze bar",
+          "count": 14
+        },
+        {
+          "type": "item",
+          "name": "Iron bar",
+          "count": 14
+        }
+      ],
+      "xph": [
+        97920,
+        97920
+      ],
+      "effort": "medium",
+      "cost": "profit",
+      "risk": "none",
+      "where": "The Giants' Foundry",
+      "note": "Take Kovac's commission, set the moulds, melt bronze and iron bars 1:1 in the crucible and work the sword at the right heat. XP per hour is the wiki guide's rate with the best moulds, which assumes level 81; with fewer moulds it is lower. It makes about 141,000 coins an hour with bought bars.",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Smithing_training"
+    },
+    {
+      "id": "sm-foundry-30",
+      "skill": "smithing",
+      "from": 30,
+      "to": 50,
+      "name": "Giants' Foundry (iron/steel swords)",
+      "members": true,
+      "needs": [
+        {
+          "type": "quest",
+          "quest": "Sleeping Giants"
+        },
+        {
+          "type": "item",
+          "name": "Iron bar",
+          "count": 14
+        },
+        {
+          "type": "item",
+          "name": "Steel bar",
+          "count": 14
+        }
+      ],
+      "xph": [
+        133920,
+        133920
+      ],
+      "effort": "medium",
+      "cost": "profit",
+      "risk": "none",
+      "where": "The Giants' Foundry",
+      "note": "Take Kovac's commission, set the moulds, melt iron and steel bars 1:1 in the crucible and work the sword at the right heat. XP per hour is the wiki guide's rate with the best moulds, which assumes level 81; with fewer moulds it is lower. It makes about 134,000 coins an hour with bought bars.",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Smithing_training"
+    },
+    {
+      "id": "sm-foundry-50",
+      "skill": "smithing",
+      "from": 50,
+      "to": 70,
+      "name": "Giants' Foundry (steel/mithril swords)",
+      "members": true,
+      "needs": [
+        {
+          "type": "quest",
+          "quest": "Sleeping Giants"
+        },
+        {
+          "type": "item",
+          "name": "Steel bar",
+          "count": 14
+        },
+        {
+          "type": "item",
+          "name": "Mithril bar",
+          "count": 14
+        }
+      ],
+      "xph": [
+        164640,
+        164640
+      ],
+      "effort": "medium",
+      "cost": "profit",
+      "risk": "none",
+      "where": "The Giants' Foundry",
+      "note": "Take Kovac's commission, set the moulds, melt steel and mithril bars 1:1 in the crucible and work the sword at the right heat. XP per hour is the wiki guide's rate with the best moulds, which assumes level 81; with fewer moulds it is lower. It makes about 80,000 coins an hour with bought bars.",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Smithing_training"
+    },
+    {
+      "id": "sm-foundry-70",
+      "skill": "smithing",
+      "from": 70,
+      "to": 99,
+      "name": "Giants' Foundry (mithril/adamantite swords)",
+      "members": true,
+      "needs": [
+        {
+          "type": "quest",
+          "quest": "Sleeping Giants"
+        },
+        {
+          "type": "item",
+          "name": "Mithril bar",
+          "count": 14
+        },
+        {
+          "type": "item",
+          "name": "Adamantite bar",
+          "count": 14
+        }
+      ],
+      "xph": [
+        198000,
+        198000
+      ],
+      "effort": "medium",
+      "cost": "cost",
+      "risk": "none",
+      "where": "The Giants' Foundry",
+      "note": "Take Kovac's commission, set the moulds, melt mithril and adamantite bars 1:1 in the crucible and work the sword at the right heat. XP per hour is the wiki guide's rate with the best moulds, which assumes level 81; with fewer moulds it is lower. It costs about 37,000 coins an hour with bought bars.",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Smithing_training"
+    },
+    {
       "id": "ra-lumb",
       "skill": "ranged",
       "from": 1,
