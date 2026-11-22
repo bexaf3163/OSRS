@@ -160,7 +160,10 @@ function spotRate(r: Resource, spot: SkillSpot, level: number, state: PlayerStat
   const bankPer = (i: 0 | 1) => (trip ? (trip.minutes[i] * 60) / slots : Infinity);
   const mid = (f: (i: 0 | 1) => number) => (f(0) + f(1)) / 2;
   const dropAt = (i: 0 | 1) => (spot.triangle ? 0 : DROP[i]);
-  const banks = !drop && trip !== null && bankingPays(valueEach, mid(bankPer) - mid(dropAt), coinRate);
+  // F2P never trains at a loss (owner, 2026-11-23): bait thrown away with a dropped catch is a loss the banked catch pays back.
+  const baitEach = r.bait && market.prices ? supplyPrice(r.bait, market.prices, state.mode) : null;
+  const repays = state.mode === 'f2p' && baitEach !== null && baitEach > 0 && valueEach >= baitEach;
+  const banks = !drop && trip !== null && (repays || bankingPays(valueEach, mid(bankPer) - mid(dropAt), coinRate));
   const perItem = (i: 0 | 1) => atSpot(i) + (banks ? bankPer(i) : dropAt(i));
   const perHour = (i: 0 | 1) => 3600 / perItem(i);
   const xph: [number, number] = [(xpEach * perHour(1)) / (1 + MARGIN), xpEach * perHour(0)];
@@ -175,6 +178,7 @@ function spotRate(r: Resource, spot: SkillSpot, level: number, state: PlayerStat
     xph, costPerHour: r.bait ? (baitPrice === null ? null : items * baitPrice) : 0, basis: tool.name, selectedTool: tool.name,
     ...(r.bait ? { costName: r.bait === 'Feather' ? 'feathers' : r.bait.toLowerCase() } : {}),
     ...(lootPerHour > 0 ? { lootPerHour, loot: main.name } : {}), spot: where,
+    ...(r.bait && r.products.some((p) => dropValue(p.name, market.prices, market.restriction) === null) ? { coinsUnknown: true as const } : {}),
   };
   // The time per XP, the coins banked counted as the time cows would take to earn them (lootValue.coinsPerMinute).
   // Coins net of the bait used up; an unknown bait price leaves coins out of the score rather than taking the bait as free.

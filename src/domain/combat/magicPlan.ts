@@ -55,16 +55,20 @@ function ownedMagicClothing(state: PlayerState): MethodNeed[] {
 /** Prefer a higher unlocked Strike only when its actual ingredients are already confirmed.
  * Otherwise Wind Strike is the inexpensive fallback; no unavailable price is treated as an affordable upgrade.
  */
-export function strikeRecipe(state: PlayerState, preparedWeapon?: string): { spell: Spell; needs: MethodNeed[] } {
+/** The combat spells the player's Magic level allows, weakest first. */
+export const combatSpellsAt = (state: PlayerState): Spell[] => SPELLS.filter((s) => isCombatSpell(s) && s.level <= (levelOf(state, 'magic') ?? 1));
+
+/** spellName: a spell the caller weighs instead (the strongest one that does not lose coins). */
+export function strikeRecipe(state: PlayerState, preparedWeapon?: string, spellName?: string): { spell: Spell; needs: MethodNeed[] } {
   const worn = wornItemsOf(state);
   const staves = Object.entries(STAFFS);
   // An evaluated purchase must use that weapon's rune substitution without pretending it is already owned/worn.
   const staff = preparedWeapon !== undefined ? staves.find(([, s]) => s.name.toLowerCase() === preparedWeapon.toLowerCase())
     : staves.find(([, s]) => countWorn(worn, n => n.toLowerCase() === s.name.toLowerCase()).count > 0)
       ?? staves.find(([, s]) => (heldExact(state, s.name).total ?? 0) > 0);
-  const pool = SPELLS.filter((s) => isCombatSpell(s) && s.level <= (levelOf(state, 'magic') ?? 1));
+  const pool = combatSpellsAt(state);
   const spent = (s: Spell) => Object.entries(s.runes).filter(([element]) => element !== staff?.[0]);
-  const spell = [...pool].reverse().find(s => spent(s).every(([element, qty]) => (heldExact(state, `${element[0].toUpperCase()}${element.slice(1)} rune`).total ?? 0) >= qty * 20)) ?? pool[0];
+  const spell = pool.find((s) => s.name === spellName) ?? [...pool].reverse().find(s => spent(s).every(([element, qty]) => (heldExact(state, `${element[0].toUpperCase()}${element.slice(1)} rune`).total ?? 0) >= qty * 20)) ?? pool[0];
   const batch = spent(spell).every(([element, qty]) => (heldExact(state, `${element[0].toUpperCase()}${element.slice(1)} rune`).total ?? 0) >= qty * 20) ? 20 : 100;
   const foods = ['Trout', 'Salmon', 'Tuna', 'Lobster', 'Swordfish'];
   const foodCount = foods.some(name => (heldExact(state, name).bag ?? 0) > 0) ? 1 : 5;

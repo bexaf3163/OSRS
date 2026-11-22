@@ -12,13 +12,16 @@ async function stockScenarios(browser: Browser) {
   const stats = { ranged: 1, attack: 40, strength: 40, defence: 1, hitpoints: 30 };
   const equipped = ['Shortbow', 'Leather cowl', 'Leather body', 'Leather chaps', 'Leather vambraces', 'Leather boots'];
   const equipment = equipped.map((name, i) => ({ name, id: findLocalItem(name)?.id ?? 50000 + i, count: 1, slot: ['weapon', 'head', 'body', 'legs', 'hands', 'feet'][i] }));
-  const marketQuotes = Object.fromEntries(RANGED_WATCH.flatMap(name => {
+  // Salmon: the plan trains on giant frogs from Ranged 1 (their bones pay for the arrows), and they hit back. The bank reports every
+  // food the kit accepts instead, or the salmon stays unconfirmed and no optional stock is offered.
+  const foods = (JSON.parse(readFileSync(new URL('../../../../src/data/generated/threats.json', import.meta.url), 'utf8')).foods as { name: string }[]).map(f => f.name);
+  const marketQuotes = Object.fromEntries([...RANGED_WATCH, 'Salmon'].flatMap(name => {
     const id = findLocalItem(name)?.id;
     return id === undefined ? [] : [[name, { id, price: name.endsWith('arrow') ? 1 : 100, limit: name.endsWith('arrow') ? 10000 : 100 }]];
   }));
   for (const cash of [20000, 120]) {
     const gear = { equipment, inventory: [], coins: cash, bankCoins: 0 };
-    const items = RANGED_WATCH.map(name => ({ name, carried: 0, noted: 0, bank: 0 }));
+    const items = [...RANGED_WATCH, ...foods].map(name => ({ name, carried: 0, noted: 0, bank: 0 }));
     const { page, errors } = await open(browser, 1280, {
       market: true, marketQuotes, progress: progressBefore('S5-01', { gameMode: 'f2p', levels: stats }),
       localStorage: { 'osrs-put:skill-track': JSON.stringify({ skill: 'ranged', mode: 'f2p', target: 40 }) },
@@ -203,7 +206,8 @@ async function rangedPreparationScenarios(browser: Browser) {
     await settle(page);
     const initial = await snapshot();
     expect(/Train ranged to 5 at /.test(JSON.stringify(initial?.step?.guide?.steps)), `ranged (${width}): the actual game guide stops at the first bow milestone, not40`);
-    expect(initial?.step?.npcNames?.includes('Seagull') && initial.step.worldPoint?.label?.includes('Port Sarim'), `ranged (${width}): a beginner gets the current surface trainer, not ogresses`);
+    // Seagulls' bones do not pay for the broken arrows; the giant frogs' big bones do, and F2P never trains at a loss (owner, 2026-11-23).
+    expect(initial?.step?.npcNames?.includes('Giant frog') && initial.step.worldPoint?.label?.includes('Lumbridge Swamp'), `ranged (${width}): a beginner trains on giant frogs, whose bones pay for the arrows, not ogresses`);
     expect(initial?.step?.checklist?.some((r: any) => r.name === 'Bronze arrow' && r.count === 100 && r.equip) && initial.plan?.lines?.find((r: any) => r.name === 'Bronze arrow')?.where !== 'EQUIPPED', `ranged (${width}): one worn arrow cannot satisfy the starter stack`);
     expect(clothes.every(c => initial?.step?.checklist?.some((r: any) => r.name === c.name && r.equip) && initial.plan?.lines?.find((r: any) => r.name === c.name)?.where === 'BANK'), `ranged (${width}): the whole owned ranged outfit is prepared from the bank`);
     const equipped = { ...gear, equipment: [weapon, { ...arrow, count: 100 }, ...clothes] };

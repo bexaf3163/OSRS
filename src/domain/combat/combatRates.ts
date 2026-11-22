@@ -18,7 +18,7 @@ import { spotsOf, termsFor, TRAINER_LEVELS } from './spots';
 import { coinsPerMinute, dropValue, lootSecondsPerKill } from '../market/lootValue';
 import { ARROW_BREAK, goalArrows, methodFoe, rangedKitOf, rangedHit, RANGED_GEAR, trainingRangedStyle } from './rangedAmmo';
 import { rangedEquipment, rangedNeeds } from './rangedLoadout';
-import { spellHit, STAFFS, strikeRecipe } from './magicPlan';
+import { combatSpellsAt, spellHit, STAFFS, strikeRecipe } from './magicPlan';
 import { FOODS } from '../../data/threats';
 import { mergeGoalNeeds } from '../items/consumption';
 import { heldOf, levelOf, questOf, wornItemsOf, type PlayerState } from '../player/playerState';
@@ -120,7 +120,19 @@ export function combatRate(m: TrainingMethod, skill: string, state: PlayerState,
     return best ? withLoot({ ...best, xph: [best.xph[0] / 4, best.xph[1] / 4] }, foe, market, state.mode) : null;
   }
   if (skill === 'ranged' && m.kit === 'f2p-bow') return withLoot(rangedRate(m, state, market.prices), methodFoe(m)?.name ?? m.npcNames[0], market, state.mode);
-  if (skill === 'magic' && m.kit === 'strike-spell') return withLoot(magicRate(m, state, market.prices), methodFoe(m)?.name ?? m.npcNames[0], market, state.mode);
+  if (skill === 'magic' && m.kit === 'strike-spell') {
+    const foe = methodFoe(m)?.name ?? m.npcNames[0];
+    const cast = (spell?: string) => withLoot(magicRate(m, state, market.prices, spell), foe, market, state.mode);
+    const loses = (r: ModelRate | null) => r !== null && r.costPerHour !== null && (r.lootPerHour ?? 0) < r.costPerHour;
+    const planned = cast();
+    // F2P never trains at a loss (owner, 2026-11-23): when the planned spell's runes cost more than its drops pay, the strongest spell that does not.
+    if (state.mode !== 'f2p' || !loses(planned)) return planned;
+    for (const s of combatSpellsAt(state).reverse()) {
+      const r = cast(s.name);
+      if (r !== null && r.costPerHour !== null && !loses(r)) return r;
+    }
+    return planned;
+  }
   return null;
 }
 
@@ -325,8 +337,8 @@ function improvesCombatRate(rate: ModelRate | null, before: ModelRate): boolean 
       || rate.costPerHour !== null && before.costPerHour !== null && rate.costPerHour < before.costPerHour);
 }
 
-function magicRate(m: TrainingMethod, state: PlayerState, prices?: PriceView | null): KillRate | null {
-  const recipe = strikeRecipe(state);
+function magicRate(m: TrainingMethod, state: PlayerState, prices?: PriceView | null, spell?: string): KillRate | null {
+  const recipe = strikeRecipe(state, undefined, spell);
   const clothing = recipe.needs.filter(need => {
     const piece = need.type === 'item' && need.equip ? gearPieceByName(need.name) : null;
     return piece !== null && piece.slot !== 'weapon';

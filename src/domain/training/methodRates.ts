@@ -53,6 +53,8 @@ export interface ModelRate {
   lootPerHour?: number;
   /** Coins an hour at market prices, without the planning margin: what methods are ranked by (processRates). */
   marketNetPerHour?: number;
+  /** The coins cannot be judged: the bait has a price, the catch none, so a dropped catch is no proof of a loss (F2P no-loss rule). */
+  coinsUnknown?: true;
   /** What is banked: "Big bones", "Willow logs". */
   loot?: string;
   /** One safety line when the picked spot has NPCs that attack this player (every safer spot was worse or absent). */

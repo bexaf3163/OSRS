@@ -95,6 +95,7 @@ export interface TrainingMethod {
   drop?: boolean;
   /** Coins an hour at market prices, without the planning margin: what methods are ranked by. */
   marketNetPerHour?: number;
+  coinsUnknown?: true;
   lootName?: string;
   /** Better tools the player could buy, priced, with the rate each would give (the gathering engine). */
   upgrades?: ModelRate['upgrades'];
@@ -453,7 +454,7 @@ export function practicalRate(m: TrainingMethod): number | null {
  * The order of methods: the practical hours to the goal, a method whose items are missing paying its setup; locked
  * ones last.
  */
-function compare(xpLeft?: number, level?: number, coinRate: number | null = null) {
+function compare(xpLeft?: number, level?: number, coinRate: number | null = null, mode?: GameMode) {
   return (a: MethodView, b: MethodView): number => {
     if (Boolean(a.fundingShortfall) !== Boolean(b.fundingShortfall)) return Number(Boolean(a.fundingShortfall)) - Number(Boolean(b.fundingShortfall));
     if (Boolean(a.unpriced) !== Boolean(b.unpriced)) return Number(Boolean(a.unpriced)) - Number(Boolean(b.unpriced));
@@ -490,6 +491,9 @@ function compare(xpLeft?: number, level?: number, coinRate: number | null = null
     const preferredEntry = (m: TrainingMethod) => m.suggestedFrom !== undefined && level !== undefined && m.suggestedFrom <= level ? m.suggestedFrom : m.from;
     const byEntry = preferredEntry(b.method) - preferredEntry(a.method);
     if (a.status === 'LOCKED' || b.status === 'LOCKED') { if (s) return s; }
+    // F2P never trains at a loss while a free or earning method is open (owner, 2026-11-23); among losing ones the balance below decides.
+    if (mode === 'f2p' && losesTo(a.method, b.method)) return 1;
+    if (mode === 'f2p' && losesTo(b.method, a.method)) return -1;
     const pa = practicalRate(a.method);
     const pb = practicalRate(b.method);
     if (pa && pb && xpLeft && xpLeft > 0) {
@@ -519,6 +523,17 @@ function compare(xpLeft?: number, level?: number, coinRate: number | null = null
     return s || byBracket || EFFORT_RANK[a.method.effort] - EFFORT_RANK[b.method.effort] || COST_RANK[a.method.cost] - COST_RANK[b.method.cost] || byRate || byEntry;
   };
 }
+
+/** A known loss of coins against a known break-even or gain; unknown coins (no prices) are never judged. */
+const losesTo = (loser: TrainingMethod, other: TrainingMethod): boolean => {
+  if (loser.coinsUnknown || other.coinsUnknown) return false;
+  const a = loser.marketNetPerHour ?? netCoinsPerHour(loser), b = other.marketNetPerHour ?? netCoinsPerHour(other);
+  return a !== null && b !== null && a < 0 && b >= 0;
+};
+/** An F2P plan does not keep a losing method for its speed when the next one breaks even or earns. */
+const keepsLoss = (held: TrainingMethod, next: TrainingMethod, mode?: GameMode): boolean => mode === 'f2p' && losesTo(held, next);
+/** The loss rule weighs market coins: without prices a catch has no value and its bait reads as a loss it is not. */
+const lossRuleMode = (input: { mode: GameMode; prices?: unknown }): GameMode | undefined => (input.prices ? input.mode : undefined);
 
 export const methodsFor = (skill: string, methods: readonly TrainingMethod[] = trainingMethods): TrainingMethod[] =>
   methods.filter((m) => m.skills.includes(skill));
@@ -665,6 +680,7 @@ export function personalize(methods: readonly TrainingMethod[], skill: string, s
       })] } : {}),
       ...(r.lootPerHour ? { lootPerHour: r.lootPerHour, lootName: r.loot } : {}),
       ...(r.marketNetPerHour !== undefined ? { marketNetPerHour: r.marketNetPerHour } : {}),
+      ...(r.coinsUnknown ? { coinsUnknown: true as const } : {}),
       ...(r.costName ? { costName: r.costName } : {}),
       ...(r.warning ? { rateWarning: r.warning } : {}),
       ...(r.upgrades?.length ? { upgrades: r.upgrades } : {}),
@@ -790,16 +806,17 @@ function pathFresh(skill: string, level: number, target: number, input: AdviceIn
     }
     const cands = [...views];
     // Each level is weighed as the first one is (adviseTraining): the hours from here to the goal, less what the banked drops are worth.
-    cands.sort(compare(Math.max(0, xpForLevel(target) - xpForLevel(lv)), lv, coinsPerMinute(input.prices, input.mode)));
+    cands.sort(compare(Math.max(0, xpForLevel(target) - xpForLevel(lv)), lv, coinsPerMinute(input.prices, input.mode), lossRuleMode(input)));
     let pick = (lv === level ? cands.find(c => c.method.id === first?.id)?.method : undefined) ?? cands[0]?.method;
     // A method whose rate this state cannot price (a fight kit with no coins) leaves the whole goal untimed; a priced one is a plan.
     if (pick && practicalRate(pick) === null) pick = cands.find(c => practicalRate(c.method) !== null && (c.method.to === null || lv < c.method.to))?.method ?? pick;
     if (!pick) { timed = false; continue; }
     const last = legs[legs.length - 1];
-    if (last && last.method.id !== pick.id && cands.some((c) => c.method.id === last.method.id)) {
-      const now = practicalRate(cands.find((c) => c.method.id === last.method.id)!.method);
+    const held = last && last.method.id !== pick.id ? cands.find((c) => c.method.id === last.method.id)?.method : undefined;
+    if (held && !keepsLoss(held, pick, lossRuleMode(input))) {
+      const now = practicalRate(held);
       const next = practicalRate(pick);
-      if (now !== null && next !== null && next < now * SWITCH_GAIN) pick = cands.find((c) => c.method.id === last.method.id)!.method;
+      if (now !== null && next !== null && next < now * SWITCH_GAIN) pick = held;
     }
     // By name: one method changes its spell, bar or fish by level ("Water Strike", "Make Iron bar").
     if (input.untilChange && legs.length > 0 && pick.name !== legs[0].method.name) { handover = pick.name; break; }
@@ -904,13 +921,14 @@ export function adviseTraining(input0: AdviceInput): TrainingAdvice {
 
   const xpNow0 = input.xp ?? xpForLevel(level);
   const coinRate = coinsPerMinute(input.prices, input.mode);
-  const cmp = compare(Math.max(0, xpForLevel(target) - xpNow0), level, coinRate);
+  const cmp = compare(Math.max(0, xpForLevel(target) - xpNow0), level, coinRate, lossRuleMode(input));
   const views = methodsFor(skill, methods).filter((m) => recommendedAt(m, level, mode) || (m.id === input0.followed && availableAt(m, level, mode))).map((m) => viewMethod(m, state, input.prices)).sort(cmp);
   const top = views.find((v) => !v.method.manualSetup && v.status !== 'LOCKED') ?? null;
   // S04: the method the game already follows stays the pick while it is ready and the new top is not materially faster
   // (the planner's switch threshold), so a level-up never flips the plan for a marginal gain.
   const running = input0.followed ? views.find((v) => v.method.id === input0.followed && v.status === 'READY') : undefined;
-  const keep = running && top && running !== top && (rateLow(running.method) ?? 0) >= (rateLow(top.method) ?? Infinity) * (1 - SWITCH_MARGIN);
+  const keep = running && top && running !== top && !keepsLoss(running.method, top.method, lossRuleMode(input))
+    && (rateLow(running.method) ?? 0) >= (rateLow(top.method) ?? Infinity) * (1 - SWITCH_MARGIN);
   const pickV = keep ? running : top;
   const switched = running && top && !keep && running !== top ? ` Switched from ${running.method.name}: it is materially slower now.` : '';
   const said = (v: MethodView): MethodView => ({ ...v, reason: reasonFor(v, level) });
