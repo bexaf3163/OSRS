@@ -2342,6 +2342,23 @@
       "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Smithing_training"
     },
     {
+      "id": "ma-bolts",
+      "skill": "magic",
+      "from": 4,
+      "to": null,
+      "name": "Enchant crossbow bolts",
+      "members": true,
+      "needs": [],
+      "act": "cast|casts",
+      "effort": "low",
+      "cost": "cost",
+      "risk": "none",
+      "where": "At the Grand Exchange bank: buy gem-tipped bolts and runes, and cast Enchant Crossbow Bolt on the stack",
+      "note": "Each cast enchants 10 bolts: opal (4), sapphire (7), pearl (24), emerald (27), topaz (29), ruby (49), diamond (57), dragonstone (68), onyx (87). The shared model prices the bolts, the runes or a matching staff, and the enchanted bolts at the exchange; it casts automatically every 3 ticks, and fast manual casting is about 2.75 times quicker. It costs money at most prices.",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Magic_training",
+      "place": "Grand Exchange"
+    },
+    {
       "id": "ra-lumb",
       "skill": "ranged",
       "from": 1,

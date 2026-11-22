@@ -1762,6 +1762,411 @@
       "source": "https://oldschool.runescape.wiki/w/Amulet_of_power"
     },
     {
+      "id": "enchant-opal-bolts",
+      "skill": "magic",
+      "level": 4,
+      "xp": 9,
+      "ticks": 3,
+      "facility": null,
+      "tools": [],
+      "members": true,
+      "inputs": [
+        {
+          "name": "Opal bolts",
+          "qty": 10,
+          "stacks": true
+        },
+        {
+          "name": "Air rune",
+          "qty": 2,
+          "stacks": true,
+          "staff": "Staff of air"
+        },
+        {
+          "name": "Cosmic rune",
+          "qty": 1,
+          "stacks": true
+        }
+      ],
+      "output": {
+        "name": "Opal bolts (e)",
+        "qty": 10
+      },
+      "source": "https://oldschool.runescape.wiki/w/Opal_bolts_(e)"
+    },
+    {
+      "id": "enchant-sapphire-bolts",
+      "skill": "magic",
+      "level": 7,
+      "xp": 17.5,
+      "ticks": 3,
+      "facility": null,
+      "tools": [],
+      "members": true,
+      "inputs": [
+        {
+          "name": "Sapphire bolts",
+          "qty": 10,
+          "stacks": true
+        },
+        {
+          "name": "Water rune",
+          "qty": 1,
+          "stacks": true,
+          "staff": "Staff of water"
+        },
+        {
+          "name": "Mind rune",
+          "qty": 1,
+          "stacks": true
+        },
+        {
+          "name": "Cosmic rune",
+          "qty": 1,
+          "stacks": true
+        }
+      ],
+      "output": {
+        "name": "Sapphire bolts (e)",
+        "qty": 10
+      },
+      "source": "https://oldschool.runescape.wiki/w/Sapphire_bolts_(e)"
+    },
+    {
+      "id": "enchant-pearl-bolts",
+      "skill": "magic",
+      "level": 24,
+      "xp": 29.5,
+      "ticks": 3,
+      "facility": null,
+      "tools": [],
+      "members": true,
+      "inputs": [
+        {
+          "name": "Pearl bolts",
+          "qty": 10,
+          "stacks": true
+        },
+        {
+          "name": "Water rune",
+          "qty": 2,
+          "stacks": true,
+          "staff": "Staff of water"
+        },
+        {
+          "name": "Cosmic rune",
+          "qty": 1,
+          "stacks": true
+        }
+      ],
+      "output": {
+        "name": "Pearl bolts (e)",
+        "qty": 10
+      },
+      "source": "https://oldschool.runescape.wiki/w/Pearl_bolts_(e)"
+    },
+    {
+      "id": "enchant-emerald-bolts",
+      "skill": "magic",
+      "level": 27,
+      "xp": 37,
+      "ticks": 3,
+      "facility": null,
+      "tools": [],
+      "members": true,
+      "inputs": [
+        {
+          "name": "Emerald bolts",
+          "qty": 10,
+          "stacks": true
+        },
+        {
+          "name": "Air rune",
+          "qty": 3,
+          "stacks": true,
+          "staff": "Staff of air"
+        },
+        {
+          "name": "Nature rune",
+          "qty": 1,
+          "stacks": true
+        },
+        {
+          "name": "Cosmic rune",
+          "qty": 1,
+          "stacks": true
+        }
+      ],
+      "output": {
+        "name": "Emerald bolts (e)",
+        "qty": 10
+      },
+      "source": "https://oldschool.runescape.wiki/w/Emerald_bolts_(e)"
+    },
+    {
+      "id": "enchant-topaz-bolts",
+      "skill": "magic",
+      "level": 29,
+      "xp": 33,
+      "ticks": 3,
+      "facility": null,
+      "tools": [],
+      "members": true,
+      "inputs": [
+        {
+          "name": "Topaz bolts",
+          "qty": 10,
+          "stacks": true
+        },
+        {
+          "name": "Fire rune",
+          "qty": 2,
+          "stacks": true,
+          "staff": "Staff of fire"
+        },
+        {
+          "name": "Cosmic rune",
+          "qty": 1,
+          "stacks": true
+        }
+      ],
+      "output": {
+        "name": "Topaz bolts (e)",
+        "qty": 10
+      },
+      "source": "https://oldschool.runescape.wiki/w/Topaz_bolts_(e)"
+    },
+    {
+      "id": "enchant-ruby-bolts",
+      "skill": "magic",
+      "level": 49,
+      "xp": 59,
+      "ticks": 3,
+      "facility": null,
+      "tools": [],
+      "members": true,
+      "inputs": [
+        {
+          "name": "Ruby bolts",
+          "qty": 10,
+          "stacks": true
+        },
+        {
+          "name": "Fire rune",
+          "qty": 5,
+          "stacks": true,
+          "staff": "Staff of fire"
+        },
+        {
+          "name": "Blood rune",
+          "qty": 1,
+          "stacks": true
+        },
+        {
+          "name": "Cosmic rune",
+          "qty": 1,
+          "stacks": true
+        }
+      ],
+      "output": {
+        "name": "Ruby bolts (e)",
+        "qty": 10
+      },
+      "source": "https://oldschool.runescape.wiki/w/Ruby_bolts_(e)"
+    },
+    {
+      "id": "enchant-diamond-bolts",
+      "skill": "magic",
+      "level": 57,
+      "xp": 67,
+      "ticks": 3,
+      "facility": null,
+      "tools": [],
+      "members": true,
+      "inputs": [
+        {
+          "name": "Diamond bolts",
+          "qty": 10,
+          "stacks": true
+        },
+        {
+          "name": "Earth rune",
+          "qty": 10,
+          "stacks": true,
+          "staff": "Staff of earth"
+        },
+        {
+          "name": "Cosmic rune",
+          "qty": 1,
+          "stacks": true
+        },
+        {
+          "name": "Law rune",
+          "qty": 2,
+          "stacks": true
+        }
+      ],
+      "output": {
+        "name": "Diamond bolts (e)",
+        "qty": 10
+      },
+      "source": "https://oldschool.runescape.wiki/w/Diamond_bolts_(e)"
+    },
+    {
+      "id": "enchant-dragonstone-bolts",
+      "skill": "magic",
+      "level": 68,
+      "xp": 78,
+      "ticks": 3,
+      "facility": null,
+      "tools": [],
+      "members": true,
+      "inputs": [
+        {
+          "name": "Dragonstone bolts",
+          "qty": 10,
+          "stacks": true
+        },
+        {
+          "name": "Earth rune",
+          "qty": 15,
+          "stacks": true,
+          "staff": "Staff of earth"
+        },
+        {
+          "name": "Soul rune",
+          "qty": 1,
+          "stacks": true
+        },
+        {
+          "name": "Cosmic rune",
+          "qty": 1,
+          "stacks": true
+        }
+      ],
+      "output": {
+        "name": "Dragonstone bolts (e)",
+        "qty": 10
+      },
+      "source": "https://oldschool.runescape.wiki/w/Dragonstone_bolts_(e)"
+    },
+    {
+      "id": "enchant-onyx-bolts",
+      "skill": "magic",
+      "level": 87,
+      "xp": 97,
+      "ticks": 3,
+      "facility": null,
+      "tools": [],
+      "members": true,
+      "inputs": [
+        {
+          "name": "Onyx bolts",
+          "qty": 10,
+          "stacks": true
+        },
+        {
+          "name": "Fire rune",
+          "qty": 20,
+          "stacks": true,
+          "staff": "Staff of fire"
+        },
+        {
+          "name": "Death rune",
+          "qty": 1,
+          "stacks": true
+        },
+        {
+          "name": "Cosmic rune",
+          "qty": 1,
+          "stacks": true
+        }
+      ],
+      "output": {
+        "name": "Onyx bolts (e)",
+        "qty": 10
+      },
+      "source": "https://oldschool.runescape.wiki/w/Onyx_bolts_(e)"
+    },
+    {
+      "id": "enchant-dragonstone-amulet",
+      "skill": "magic",
+      "level": 68,
+      "xp": 78,
+      "ticks": 3,
+      "facility": null,
+      "tools": [],
+      "members": true,
+      "inputs": [
+        {
+          "name": "Dragonstone amulet",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Cosmic rune",
+          "qty": 1,
+          "stacks": true
+        },
+        {
+          "name": "Water rune",
+          "qty": 15,
+          "stacks": true,
+          "staff": "Staff of water"
+        },
+        {
+          "name": "Earth rune",
+          "qty": 15,
+          "stacks": true,
+          "staff": "Staff of earth"
+        }
+      ],
+      "output": {
+        "name": "Amulet of glory",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Amulet_of_glory"
+    },
+    {
+      "id": "enchant-onyx-amulet",
+      "skill": "magic",
+      "level": 87,
+      "xp": 97,
+      "ticks": 3,
+      "facility": null,
+      "tools": [],
+      "members": true,
+      "inputs": [
+        {
+          "name": "Onyx amulet",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Cosmic rune",
+          "qty": 1,
+          "stacks": true
+        },
+        {
+          "name": "Fire rune",
+          "qty": 20,
+          "stacks": true,
+          "staff": "Staff of fire"
+        },
+        {
+          "name": "Earth rune",
+          "qty": 20,
+          "stacks": true,
+          "staff": "Staff of earth"
+        }
+      ],
+      "output": {
+        "name": "Amulet of fury",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Amulet_of_fury"
+    },
+    {
       "id": "alch-gold-necklace",
       "skill": "magic",
       "level": 55,
@@ -3820,7 +4225,20 @@
       "enchant-sapphire-amulet",
       "enchant-emerald-amulet",
       "enchant-ruby-amulet",
-      "enchant-diamond-amulet"
+      "enchant-diamond-amulet",
+      "enchant-dragonstone-amulet",
+      "enchant-onyx-amulet"
+    ],
+    "ma-bolts": [
+      "enchant-opal-bolts",
+      "enchant-sapphire-bolts",
+      "enchant-pearl-bolts",
+      "enchant-emerald-bolts",
+      "enchant-topaz-bolts",
+      "enchant-ruby-bolts",
+      "enchant-diamond-bolts",
+      "enchant-dragonstone-bolts",
+      "enchant-onyx-bolts"
     ],
     "ma-halch": [
       "alch-gold-necklace",

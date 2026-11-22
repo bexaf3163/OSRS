@@ -1,5 +1,5 @@
 {
- "source": "OSRS Wiki real-time prices API /latest (high = buy, low = sell), F2P route items and gear, read 2026-11-10; Members route items added 2026-11-14 and 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-17; Members route items added 2026-11-17; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-19; Members route items added 2026-11-19; Members route items added 2026-11-19; Members route items added 2026-11-19; Members route items added 2026-11-19; Members route items added 2026-11-19; Members route items added 2026-11-19; Members route items added 2026-11-19; Members route items added 2026-11-19; Members route items added 2026-11-19; Members route items added 2026-11-20; Members route items added 2026-11-20; Members route items added 2026-11-20; Members route items added 2026-11-20; Members route items added 2026-11-21",
+ "source": "OSRS Wiki real-time prices API /latest (high = buy, low = sell), F2P route items and gear, read 2026-11-10; Members route items added 2026-11-14 and 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-17; Members route items added 2026-11-17; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-18; Members route items added 2026-11-19; Members route items added 2026-11-19; Members route items added 2026-11-19; Members route items added 2026-11-19; Members route items added 2026-11-19; Members route items added 2026-11-19; Members route items added 2026-11-19; Members route items added 2026-11-19; Members route items added 2026-11-19; Members route items added 2026-11-19; Members route items added 2026-11-20; Members route items added 2026-11-20; Members route items added 2026-11-20; Members route items added 2026-11-20; Members route items added 2026-11-21; bolt enchanting items added 2026-11-22; bolt enchanting items added 2026-11-22",
  "prices": {
   "Adamant 2h sword": {
    "buy": 3670,
@@ -3348,6 +3348,86 @@
   "Raw monkfish": {
    "buy": 104,
    "sell": 96
+  },
+  "Opal bolts": {
+   "buy": 15,
+   "sell": 3
+  },
+  "Opal bolts (e)": {
+   "buy": 55,
+   "sell": 11
+  },
+  "Sapphire bolts": {
+   "buy": 42,
+   "sell": 30
+  },
+  "Sapphire bolts (e)": {
+   "buy": 5,
+   "sell": 9
+  },
+  "Pearl bolts": {
+   "buy": 37,
+   "sell": 31
+  },
+  "Pearl bolts (e)": {
+   "buy": 8,
+   "sell": 6
+  },
+  "Emerald bolts": {
+   "buy": 98,
+   "sell": 84
+  },
+  "Emerald bolts (e)": {
+   "buy": 13,
+   "sell": 11
+  },
+  "Topaz bolts": {
+   "buy": 195,
+   "sell": 166
+  },
+  "Topaz bolts (e)": {
+   "buy": 3,
+   "sell": 2
+  },
+  "Ruby bolts": {
+   "buy": 220,
+   "sell": 195
+  },
+  "Ruby bolts (e)": {
+   "buy": 207,
+   "sell": 196
+  },
+  "Diamond bolts (e)": {
+   "buy": 117,
+   "sell": 110
+  },
+  "Dragonstone bolts": {
+   "buy": 392,
+   "sell": 383
+  },
+  "Dragonstone bolts (e)": {
+   "buy": 324,
+   "sell": 315
+  },
+  "Onyx bolts": {
+   "buy": 8507,
+   "sell": 8351
+  },
+  "Onyx bolts (e)": {
+   "buy": 8510,
+   "sell": 8507
+  },
+  "Dragonstone amulet": {
+   "buy": 12018,
+   "sell": 11750
+  },
+  "Onyx amulet": {
+   "buy": 2050000,
+   "sell": 1750000
+  },
+  "Amulet of fury": {
+   "buy": 2047016,
+   "sell": 1990166
   }
  }
 }

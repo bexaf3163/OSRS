@@ -492,6 +492,83 @@
       "facility": null
     },
     {
+      "id": "enchant-opal-bolts",
+      "page": "Opal bolts (e)",
+      "skill": "magic",
+      "facility": null,
+      "members": true
+    },
+    {
+      "id": "enchant-sapphire-bolts",
+      "page": "Sapphire bolts (e)",
+      "skill": "magic",
+      "facility": null,
+      "members": true
+    },
+    {
+      "id": "enchant-pearl-bolts",
+      "page": "Pearl bolts (e)",
+      "skill": "magic",
+      "facility": null,
+      "members": true
+    },
+    {
+      "id": "enchant-emerald-bolts",
+      "page": "Emerald bolts (e)",
+      "skill": "magic",
+      "facility": null,
+      "members": true
+    },
+    {
+      "id": "enchant-topaz-bolts",
+      "page": "Topaz bolts (e)",
+      "skill": "magic",
+      "facility": null,
+      "members": true
+    },
+    {
+      "id": "enchant-ruby-bolts",
+      "page": "Ruby bolts (e)",
+      "skill": "magic",
+      "facility": null,
+      "members": true
+    },
+    {
+      "id": "enchant-diamond-bolts",
+      "page": "Diamond bolts (e)",
+      "skill": "magic",
+      "facility": null,
+      "members": true
+    },
+    {
+      "id": "enchant-dragonstone-bolts",
+      "page": "Dragonstone bolts (e)",
+      "skill": "magic",
+      "facility": null,
+      "members": true
+    },
+    {
+      "id": "enchant-onyx-bolts",
+      "page": "Onyx bolts (e)",
+      "skill": "magic",
+      "facility": null,
+      "members": true
+    },
+    {
+      "id": "enchant-dragonstone-amulet",
+      "page": "Amulet of glory",
+      "skill": "magic",
+      "facility": null,
+      "members": true
+    },
+    {
+      "id": "enchant-onyx-amulet",
+      "page": "Amulet of fury",
+      "skill": "magic",
+      "facility": null,
+      "members": true
+    },
+    {
       "id": "alch-gold-necklace",
       "page": "Gold necklace",
       "skill": "magic",
@@ -1176,7 +1253,20 @@
       "enchant-sapphire-amulet",
       "enchant-emerald-amulet",
       "enchant-ruby-amulet",
-      "enchant-diamond-amulet"
+      "enchant-diamond-amulet",
+      "enchant-dragonstone-amulet",
+      "enchant-onyx-amulet"
+    ],
+    "ma-bolts": [
+      "enchant-opal-bolts",
+      "enchant-sapphire-bolts",
+      "enchant-pearl-bolts",
+      "enchant-emerald-bolts",
+      "enchant-topaz-bolts",
+      "enchant-ruby-bolts",
+      "enchant-diamond-bolts",
+      "enchant-dragonstone-bolts",
+      "enchant-onyx-bolts"
     ],
     "ma-halch": [
       "alch-gold-necklace",
