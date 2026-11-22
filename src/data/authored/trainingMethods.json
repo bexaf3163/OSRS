@@ -1560,6 +1560,652 @@
       "note": "Take unnoted rune essence or pure essence. Use the talisman on the mysterious ruins, or wear the corresponding tiara to enter. Craft at the altar, leave through the portal, then bank and refill. The walking estimate excludes teleports and essence pouches."
     },
     {
+      "id": "rc-gotr",
+      "skill": "runecraft",
+      "from": 27,
+      "to": 50,
+      "name": "Guardians of the Rift",
+      "members": true,
+      "needs": [
+        {
+          "type": "quest",
+          "quest": "Temple of the Eye"
+        },
+        {
+          "type": "tool",
+          "skill": "mining"
+        }
+      ],
+      "xph": [
+        25000,
+        25000
+      ],
+      "effort": "medium",
+      "cost": "profit",
+      "risk": "none",
+      "where": "The Temple of the Eye, through the portal in the Wizards' Tower basement",
+      "place": "Wizards' Tower",
+      "note": "Mine guardian fragments, craft essence, make runes at the altars the guardian opens and power the Great Guardian. The minigame also gives Crafting and Mining XP, runes and rewards such as the Raiments of the Eye and the colossal pouch. XP per hour is the wiki guide's rate for levels 40-50; it gives none below 40, where the real rate is lower.",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Runecraft_training"
+    },
+    {
+      "id": "rc-gotr-50",
+      "skill": "runecraft",
+      "from": 50,
+      "to": 75,
+      "name": "Guardians of the Rift",
+      "members": true,
+      "needs": [
+        {
+          "type": "quest",
+          "quest": "Temple of the Eye"
+        },
+        {
+          "type": "tool",
+          "skill": "mining"
+        }
+      ],
+      "xph": [
+        40000,
+        40000
+      ],
+      "effort": "medium",
+      "cost": "profit",
+      "risk": "none",
+      "where": "The Temple of the Eye, through the portal in the Wizards' Tower basement",
+      "place": "Wizards' Tower",
+      "note": "Mine guardian fragments, craft essence, make runes at the altars the guardian opens and power the Great Guardian. The minigame also gives Crafting and Mining XP, runes and rewards such as the Raiments of the Eye and the colossal pouch. XP per hour is the wiki guide's rate for levels 50-75.",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Runecraft_training"
+    },
+    {
+      "id": "rc-gotr-75",
+      "skill": "runecraft",
+      "from": 75,
+      "to": 85,
+      "name": "Guardians of the Rift",
+      "members": true,
+      "needs": [
+        {
+          "type": "quest",
+          "quest": "Temple of the Eye"
+        },
+        {
+          "type": "tool",
+          "skill": "mining"
+        }
+      ],
+      "xph": [
+        50000,
+        50000
+      ],
+      "effort": "medium",
+      "cost": "profit",
+      "risk": "none",
+      "where": "The Temple of the Eye, through the portal in the Wizards' Tower basement",
+      "place": "Wizards' Tower",
+      "note": "Mine guardian fragments, craft essence, make runes at the altars the guardian opens and power the Great Guardian. The minigame also gives Crafting and Mining XP, runes and rewards such as the Raiments of the Eye and the colossal pouch. XP per hour is the wiki guide's rate for levels 75-85.",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Runecraft_training"
+    },
+    {
+      "id": "rc-gotr-85",
+      "skill": "runecraft",
+      "from": 85,
+      "to": 99,
+      "name": "Guardians of the Rift",
+      "members": true,
+      "needs": [
+        {
+          "type": "quest",
+          "quest": "Temple of the Eye"
+        },
+        {
+          "type": "tool",
+          "skill": "mining"
+        }
+      ],
+      "xph": [
+        65000,
+        65000
+      ],
+      "effort": "medium",
+      "cost": "profit",
+      "risk": "none",
+      "where": "The Temple of the Eye, through the portal in the Wizards' Tower basement",
+      "place": "Wizards' Tower",
+      "note": "Mine guardian fragments, craft essence, make runes at the altars the guardian opens and power the Great Guardian. The minigame also gives Crafting and Mining XP, runes and rewards such as the Raiments of the Eye and the colossal pouch. From level 85 the wiki guide's rate assumes a small coordinated team.",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Runecraft_training"
+    },
+    {
+      "id": "rc-lava",
+      "skill": "runecraft",
+      "from": 23,
+      "to": 99,
+      "name": "Lava runes",
+      "members": true,
+      "needs": [
+        {
+          "type": "item",
+          "name": "Fire tiara",
+          "anyOf": [
+            "Fire talisman"
+          ]
+        },
+        {
+          "type": "item",
+          "name": "Earth talisman"
+        },
+        {
+          "type": "item",
+          "name": "Binding necklace"
+        },
+        {
+          "type": "item",
+          "name": "Earth rune",
+          "count": 24
+        },
+        {
+          "type": "item",
+          "name": "Pure essence",
+          "count": 24
+        }
+      ],
+      "xph": [
+        42400,
+        42400
+      ],
+      "effort": "high",
+      "cost": "cost",
+      "risk": "none",
+      "where": "The Fire Altar west of Emir's Arena",
+      "act": "essence|essence",
+      "note": "Use an earth talisman on the Fire Altar with pure essence and at least as many earth runes; a binding necklace makes every rune a lava rune. XP per hour is the wiki guide's level-23 rate without essence pouches or the Raiments of the Eye; pouches raise it later (55,700 at 50, 64,800 at 75). It costs about 1 gp per XP or breaks even.",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Runecraft_training"
+    },
+    {
+      "id": "fi-barb",
+      "skill": "fishing",
+      "from": 48,
+      "to": 58,
+      "name": "Barbarian Fishing (leaping trout)",
+      "members": true,
+      "needs": [
+        {
+          "type": "skill",
+          "skill": "agility",
+          "min": 15
+        },
+        {
+          "type": "skill",
+          "skill": "strength",
+          "min": 15
+        },
+        {
+          "type": "item",
+          "name": "Barbarian rod"
+        },
+        {
+          "type": "item",
+          "name": "Feather",
+          "count": 100
+        }
+      ],
+      "xph": [
+        23000,
+        23000
+      ],
+      "act": "fish",
+      "effort": "low",
+      "cost": "free",
+      "risk": "none",
+      "where": "The pond by Otto's Grotto, south of the Barbarian Outpost; drop the fish",
+      "note": "Otto's Barbarian Training must be started for leaping fish, and he gives the barbarian rod. XP per hour is the wiki guide's rate at level 48 without tick manipulation, and the catches also give a little Agility and Strength XP.",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Fishing_training"
+    },
+    {
+      "id": "fi-barb-58",
+      "skill": "fishing",
+      "from": 58,
+      "to": 70,
+      "name": "Barbarian Fishing (leaping salmon)",
+      "members": true,
+      "needs": [
+        {
+          "type": "skill",
+          "skill": "agility",
+          "min": 30
+        },
+        {
+          "type": "skill",
+          "skill": "strength",
+          "min": 30
+        },
+        {
+          "type": "item",
+          "name": "Barbarian rod"
+        },
+        {
+          "type": "item",
+          "name": "Feather",
+          "count": 100
+        }
+      ],
+      "xph": [
+        37000,
+        37000
+      ],
+      "act": "fish",
+      "effort": "low",
+      "cost": "free",
+      "risk": "none",
+      "where": "The pond by Otto's Grotto, south of the Barbarian Outpost; drop the fish",
+      "note": "Otto's Barbarian Training must be started for leaping fish, and he gives the barbarian rod. XP per hour is the wiki guide's rate at level 58 without tick manipulation, and the catches also give a little Agility and Strength XP.",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Fishing_training"
+    },
+    {
+      "id": "fi-barb-70",
+      "skill": "fishing",
+      "from": 70,
+      "to": 80,
+      "name": "Barbarian Fishing (leaping sturgeon)",
+      "members": true,
+      "needs": [
+        {
+          "type": "skill",
+          "skill": "agility",
+          "min": 45
+        },
+        {
+          "type": "skill",
+          "skill": "strength",
+          "min": 45
+        },
+        {
+          "type": "item",
+          "name": "Barbarian rod"
+        },
+        {
+          "type": "item",
+          "name": "Feather",
+          "count": 100
+        }
+      ],
+      "xph": [
+        48000,
+        48000
+      ],
+      "act": "fish",
+      "effort": "low",
+      "cost": "free",
+      "risk": "none",
+      "where": "The pond by Otto's Grotto, south of the Barbarian Outpost; drop the fish",
+      "note": "Otto's Barbarian Training must be started for leaping fish, and he gives the barbarian rod. XP per hour is the wiki guide's rate at level 70 without tick manipulation, and the catches also give a little Agility and Strength XP.",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Fishing_training"
+    },
+    {
+      "id": "fi-barb-80",
+      "skill": "fishing",
+      "from": 80,
+      "to": 90,
+      "name": "Barbarian Fishing (leaping sturgeon)",
+      "members": true,
+      "needs": [
+        {
+          "type": "skill",
+          "skill": "agility",
+          "min": 45
+        },
+        {
+          "type": "skill",
+          "skill": "strength",
+          "min": 45
+        },
+        {
+          "type": "item",
+          "name": "Barbarian rod"
+        },
+        {
+          "type": "item",
+          "name": "Feather",
+          "count": 100
+        }
+      ],
+      "xph": [
+        52000,
+        52000
+      ],
+      "act": "fish",
+      "effort": "low",
+      "cost": "free",
+      "risk": "none",
+      "where": "The pond by Otto's Grotto, south of the Barbarian Outpost; drop the fish",
+      "note": "Otto's Barbarian Training must be started for leaping fish, and he gives the barbarian rod. XP per hour is the wiki guide's rate at level 80 without tick manipulation, and the catches also give a little Agility and Strength XP.",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Fishing_training"
+    },
+    {
+      "id": "fi-barb-90",
+      "skill": "fishing",
+      "from": 90,
+      "to": 99,
+      "name": "Barbarian Fishing (leaping sturgeon)",
+      "members": true,
+      "needs": [
+        {
+          "type": "skill",
+          "skill": "agility",
+          "min": 45
+        },
+        {
+          "type": "skill",
+          "skill": "strength",
+          "min": 45
+        },
+        {
+          "type": "item",
+          "name": "Barbarian rod"
+        },
+        {
+          "type": "item",
+          "name": "Feather",
+          "count": 100
+        }
+      ],
+      "xph": [
+        54000,
+        54000
+      ],
+      "act": "fish",
+      "effort": "low",
+      "cost": "free",
+      "risk": "none",
+      "where": "The pond by Otto's Grotto, south of the Barbarian Outpost; drop the fish",
+      "note": "Otto's Barbarian Training must be started for leaping fish, and he gives the barbarian rod. XP per hour is the wiki guide's rate at level 90 without tick manipulation, and the catches also give a little Agility and Strength XP.",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Fishing_training"
+    },
+    {
+      "id": "fi-tempoross",
+      "skill": "fishing",
+      "from": 35,
+      "to": 70,
+      "name": "Tempoross",
+      "members": true,
+      "needs": [
+        {
+          "type": "item",
+          "name": "Harpoon",
+          "anyOf": [
+            "Barb-tail harpoon",
+            "Dragon harpoon",
+            "Infernal harpoon",
+            "Crystal harpoon"
+          ]
+        }
+      ],
+      "xph": [
+        30000,
+        30000
+      ],
+      "effort": "low",
+      "cost": "free",
+      "risk": "none",
+      "where": "Tempoross Cove, by boat from the Port Sarim docks",
+      "place": "Port Sarim",
+      "note": "Fight the storm spirit with other players and do not cook the harpoonfish, which gives the most Fishing XP. XP per hour is the wiki guide's rate at level 35 with a regular harpoon; the reward pool gives loot and the angler's outfit.",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Fishing_training"
+    },
+    {
+      "id": "fi-tempoross-70",
+      "skill": "fishing",
+      "from": 70,
+      "to": 80,
+      "name": "Tempoross",
+      "members": true,
+      "needs": [
+        {
+          "type": "item",
+          "name": "Harpoon",
+          "anyOf": [
+            "Barb-tail harpoon",
+            "Dragon harpoon",
+            "Infernal harpoon",
+            "Crystal harpoon"
+          ]
+        }
+      ],
+      "xph": [
+        62000,
+        62000
+      ],
+      "effort": "low",
+      "cost": "free",
+      "risk": "none",
+      "where": "Tempoross Cove, by boat from the Port Sarim docks",
+      "place": "Port Sarim",
+      "note": "Fight the storm spirit with other players and do not cook the harpoonfish, which gives the most Fishing XP. XP per hour is the wiki guide's rate at level 70 with a regular harpoon; the reward pool gives loot and the angler's outfit.",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Fishing_training"
+    },
+    {
+      "id": "fi-tempoross-80",
+      "skill": "fishing",
+      "from": 80,
+      "to": 90,
+      "name": "Tempoross",
+      "members": true,
+      "needs": [
+        {
+          "type": "item",
+          "name": "Harpoon",
+          "anyOf": [
+            "Barb-tail harpoon",
+            "Dragon harpoon",
+            "Infernal harpoon",
+            "Crystal harpoon"
+          ]
+        }
+      ],
+      "xph": [
+        65000,
+        65000
+      ],
+      "effort": "low",
+      "cost": "free",
+      "risk": "none",
+      "where": "Tempoross Cove, by boat from the Port Sarim docks",
+      "place": "Port Sarim",
+      "note": "Fight the storm spirit with other players and do not cook the harpoonfish, which gives the most Fishing XP. XP per hour is the wiki guide's rate at level 80 with a regular harpoon; the reward pool gives loot and the angler's outfit.",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Fishing_training"
+    },
+    {
+      "id": "fi-tempoross-90",
+      "skill": "fishing",
+      "from": 90,
+      "to": 99,
+      "name": "Tempoross",
+      "members": true,
+      "needs": [
+        {
+          "type": "item",
+          "name": "Harpoon",
+          "anyOf": [
+            "Barb-tail harpoon",
+            "Dragon harpoon",
+            "Infernal harpoon",
+            "Crystal harpoon"
+          ]
+        }
+      ],
+      "xph": [
+        68000,
+        68000
+      ],
+      "effort": "low",
+      "cost": "free",
+      "risk": "none",
+      "where": "Tempoross Cove, by boat from the Port Sarim docks",
+      "place": "Port Sarim",
+      "note": "Fight the storm spirit with other players and do not cook the harpoonfish, which gives the most Fishing XP. XP per hour is the wiki guide's rate at level 90 with a regular harpoon; the reward pool gives loot and the angler's outfit.",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Fishing_training"
+    },
+    {
+      "id": "fm-wintertodt",
+      "skill": "firemaking",
+      "from": 50,
+      "to": 60,
+      "name": "Wintertodt",
+      "members": true,
+      "needs": [
+        {
+          "type": "tool",
+          "skill": "woodcutting"
+        },
+        {
+          "type": "item",
+          "name": "Tinderbox"
+        },
+        {
+          "type": "item",
+          "name": "Hammer"
+        }
+      ],
+      "xph": [
+        161000,
+        161000
+      ],
+      "effort": "low",
+      "cost": "profit",
+      "risk": "low",
+      "where": "The Wintertodt camp in the far north of Great Kourend",
+      "note": "Chop bruma roots and burn them in a brazier; fix it with the hammer and relight it with the tinderbox. The cold hurts, so bring food and warm clothing. XP per hour is the wiki guide's rate at level 50 on a fast world without fletching the roots; the reward crates give loot and the Pyromancer outfit, and chopping gives some Woodcutting XP.",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Firemaking_training"
+    },
+    {
+      "id": "fm-wintertodt-60",
+      "skill": "firemaking",
+      "from": 60,
+      "to": 70,
+      "name": "Wintertodt",
+      "members": true,
+      "needs": [
+        {
+          "type": "tool",
+          "skill": "woodcutting"
+        },
+        {
+          "type": "item",
+          "name": "Tinderbox"
+        },
+        {
+          "type": "item",
+          "name": "Hammer"
+        }
+      ],
+      "xph": [
+        193000,
+        193000
+      ],
+      "effort": "low",
+      "cost": "profit",
+      "risk": "low",
+      "where": "The Wintertodt camp in the far north of Great Kourend",
+      "note": "Chop bruma roots and burn them in a brazier; fix it with the hammer and relight it with the tinderbox. The cold hurts, so bring food and warm clothing. XP per hour is the wiki guide's rate at level 60 on a fast world without fletching the roots; the reward crates give loot and the Pyromancer outfit, and chopping gives some Woodcutting XP.",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Firemaking_training"
+    },
+    {
+      "id": "fm-wintertodt-70",
+      "skill": "firemaking",
+      "from": 70,
+      "to": 80,
+      "name": "Wintertodt",
+      "members": true,
+      "needs": [
+        {
+          "type": "tool",
+          "skill": "woodcutting"
+        },
+        {
+          "type": "item",
+          "name": "Tinderbox"
+        },
+        {
+          "type": "item",
+          "name": "Hammer"
+        }
+      ],
+      "xph": [
+        226000,
+        226000
+      ],
+      "effort": "low",
+      "cost": "profit",
+      "risk": "low",
+      "where": "The Wintertodt camp in the far north of Great Kourend",
+      "note": "Chop bruma roots and burn them in a brazier; fix it with the hammer and relight it with the tinderbox. The cold hurts, so bring food and warm clothing. XP per hour is the wiki guide's rate at level 70 on a fast world without fletching the roots; the reward crates give loot and the Pyromancer outfit, and chopping gives some Woodcutting XP.",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Firemaking_training"
+    },
+    {
+      "id": "fm-wintertodt-80",
+      "skill": "firemaking",
+      "from": 80,
+      "to": 90,
+      "name": "Wintertodt",
+      "members": true,
+      "needs": [
+        {
+          "type": "tool",
+          "skill": "woodcutting"
+        },
+        {
+          "type": "item",
+          "name": "Tinderbox"
+        },
+        {
+          "type": "item",
+          "name": "Hammer"
+        }
+      ],
+      "xph": [
+        258000,
+        258000
+      ],
+      "effort": "low",
+      "cost": "profit",
+      "risk": "low",
+      "where": "The Wintertodt camp in the far north of Great Kourend",
+      "note": "Chop bruma roots and burn them in a brazier; fix it with the hammer and relight it with the tinderbox. The cold hurts, so bring food and warm clothing. XP per hour is the wiki guide's rate at level 80 on a fast world without fletching the roots; the reward crates give loot and the Pyromancer outfit, and chopping gives some Woodcutting XP.",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Firemaking_training"
+    },
+    {
+      "id": "fm-wintertodt-90",
+      "skill": "firemaking",
+      "from": 90,
+      "to": 99,
+      "name": "Wintertodt",
+      "members": true,
+      "needs": [
+        {
+          "type": "tool",
+          "skill": "woodcutting"
+        },
+        {
+          "type": "item",
+          "name": "Tinderbox"
+        },
+        {
+          "type": "item",
+          "name": "Hammer"
+        }
+      ],
+      "xph": [
+        290000,
+        290000
+      ],
+      "effort": "low",
+      "cost": "profit",
+      "risk": "low",
+      "where": "The Wintertodt camp in the far north of Great Kourend",
+      "note": "Chop bruma roots and burn them in a brazier; fix it with the hammer and relight it with the tinderbox. The cold hurts, so bring food and warm clothing. XP per hour is the wiki guide's rate at level 90 on a fast world without fletching the roots; the reward crates give loot and the Pyromancer outfit, and chopping gives some Woodcutting XP.",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Firemaking_training"
+    },
+    {
       "id": "ra-lumb",
       "skill": "ranged",
       "from": 1,

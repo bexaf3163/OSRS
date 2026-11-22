@@ -12,7 +12,8 @@ const prices = fakePrices(JSON.parse(readFileSync('tests/fixtures/gePrices.json'
 // D'hide bodies (63) rank below the 4 shown Crafting methods at these prices, so the build's recipe check covers them.
 describe('Members training methods from Wiki recipes', () => {
   it.each([['crafting', 46, 'cr-glass'], ['crafting', 54, 'cr-battlestaff'], ['smithing', 35, 'sm-cannonball'],
-    ['cooking', 30, 'ck-karambwan'], ['cooking', 62, 'ck-members-fish']] as const)('%s %i offers %s with a known rate', (skill, level, id) => {
+    ['cooking', 30, 'ck-karambwan'], ['cooking', 62, 'ck-members-fish'],
+    ['runecraft', 30, 'rc-lava'], ['runecraft', 40, 'rc-gotr'], ['fishing', 40, 'fi-tempoross'], ['fishing', 50, 'fi-barb'], ['firemaking', 55, 'fm-wintertodt']] as const)('%s %i offers %s with a known rate', (skill, level, id) => {
     const stats = Object.fromEntries(allLevelSkills.map((s) => [s.id, s.id === skill ? level : 40]));
     const state = buildPlayerState({ mode: 'members', stats, progress: emptyProgress(), gear: null, questsDone: questCatalogue.map((q) => q.id), owned: null } as never);
     const a = adviseTraining({ skill, target: level + 5, state, mode: 'members', prices } as never);

@@ -42,7 +42,10 @@ const namesOf = (steps: Step[]) => {
 // Training recipes buy and make their own items (Herblore potions for The Dig Site); their tools (moulds, a glassblowing pipe) are tracked too,
 // or the route asks the player to check the bank for them and that turn has no time.
 const recipeItems = (Object.values(JSON.parse(readFileSync('src/data/generated/processing.json', 'utf8')).recipes) as { inputs: { name: string }[]; output: { name: string } | null; tools?: string[] }[])
-  .flatMap(r => [...r.inputs.map(i => i.name), ...(r.output ? [r.output.name] : []), ...(r.tools ?? [])]);
+  .flatMap(r => [...r.inputs.map(i => i.name), ...(r.output ? [r.output.name] : []), ...(r.tools ?? [])])
+  // A training method's own kit (a barbarian rod, a binding necklace) is tracked too, or its stock would be unknown.
+  .concat((JSON.parse(readFileSync('src/data/authored/trainingMethods.json', 'utf8')).methods as { needs?: { type: string; name?: string; anyOf?: string[] }[] }[])
+    .flatMap(m => (m.needs ?? []).flatMap(n => (n.type === 'item' && n.name ? [n.name, ...n.anyOf ?? []] : []))));
 const rate = { methodId: 'cowhides', title: 'Collect cowhides', netPerHour: { fast: 25_000, typical: 18_000, slow: 12_000 } };
 const walk: RuntimePlanInput['walk'] = (from, to) => {
   if (!from) return null;
