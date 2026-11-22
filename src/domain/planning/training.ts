@@ -9,7 +9,10 @@ import type { TrackedSkill } from '../training/skillTrack';
 import { levelOf } from '../player/playerState';
 import { coherentSkillXp, levelForXp, xpForLevel } from '../player/xp';
 import { processingGoalFlows } from '../training/processingGoal';
-import { adviseTraining } from '../training/trainingRouter';
+import { adviseTraining, priceKeyOf, trainingItemScope } from '../training/trainingRouter';
+import { scopedMemo, scopedRateKeyOf } from '../training/methodRates';
+import type { PlayerState } from '../player/playerState';
+import type { GameMode } from '../../types';
 import type { CandidateAction, Minutes, PlanningSnapshot, Projection, ResourceChange } from './contracts';
 import { noTime, validMinutes } from './cost';
 import { acceptsDecision } from './scope';
@@ -81,6 +84,22 @@ export function prerequisiteTraining(input: TrainingOptions & {
   } };
 }
 
+// The projected states of a decision, and the next observations (a log chopped), differ mostly in items a skill never reads, so a
+// forecast is kept by the skill's item scope instead of the whole state.
+const forecasts = new Map<string, { out: Minutes | null; state?: PlayerState }>();
+function forecastMinutes(skill: string, target: number, xp: number, context: { state: PlayerState; mode: GameMode }, options: TrainingOptions): Minutes | null {
+  const key = [skill, target, xp, scopedRateKeyOf(context.state, trainingItemScope(skill)), context.state.connected ? 1 : 0, context.mode,
+    priceKeyOf(options.prices), options.restriction ?? '-', options.selection ? JSON.stringify(options.selection) : '-'].join('|');
+  return scopedMemo(forecasts, key, context.state, `${skill} to ${target}`, () => {
+    const advice = adviseTraining({ skill, target, state: context.state, mode: context.mode, xp, prices: options.prices, restriction: options.restriction });
+    const time = advice.time;
+    if (!time || !advice.path.length || advice.path[advice.path.length - 1].toLevel !== target) return null;
+    const estimate = { fast: time.minHours * 60, typical: (time.minHours + time.maxHours) * 30, slow: time.maxHours * 60,
+      source: `Shared phased trainingRouter ${time.source} forecast; conditional ${skill} XP ${xp}` };
+    return validMinutes(estimate) ? estimate : null;
+  });
+}
+
 /** Search-only costs reuse trainingRouter's complete phased forecast. Conditional stats never become execution evidence. */
 export function createTrainingCost(snapshot: PlanningSnapshot, options: TrainingOptions = {}) {
   const cache = new WeakMap<Projection, Map<string, Minutes | null>>();
@@ -104,13 +123,7 @@ export function createTrainingCost(snapshot: PlanningSnapshot, options: Training
           [skill]: { known: true as const, value: levelForXp(xp), source: 'profile' as const } },
         };
         const context = trackedTrainingContext(options.selection ?? null, skill, state, snapshot.scope.mode);
-        const advice = adviseTraining({ skill, target, state: context.state, mode: context.mode, xp,
-          prices: options.prices, restriction: options.restriction });
-        const time = advice.time;
-        if (!time || !advice.path.length || advice.path[advice.path.length - 1].toLevel !== target) return null;
-        const estimate = { fast: time.minHours * 60, typical: (time.minHours + time.maxHours) * 30, slow: time.maxHours * 60,
-          source: `Shared phased trainingRouter ${time.source} forecast; conditional ${skill} XP ${xp}` };
-        return validMinutes(estimate) ? estimate : null;
+        return forecastMinutes(skill, target, xp, context, options);
       };
       const low = at(min), high = min === max ? low : at(max);
       if (low && high) {

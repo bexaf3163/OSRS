@@ -6,16 +6,26 @@ import { SKILL_NAMES, type SkillName } from './skillTrack';
 import type { TrackedSkill } from './skillTrack';
 import { freeOnlyOf, trackedTrainingContext } from './skillTrack';
 import { f2pAdviceFor } from './f2pSkillAdvice';
-import { adviseTraining, methodsFor } from './trainingRouter';
+import { adviseTraining, methodsFor, priceKeyOf, trainingItemScope } from './trainingRouter';
 import { pickTraining } from './methodPick';
 import type { TimeEstimate, TrainingAdvice } from './trainingRouter';
 import { withTrainingMethod } from './methodStep';
-import type { Market } from './methodRates';
+import { scopedMemo, scopedRateKeyOf, type Market } from './methodRates';
 
 export interface TrackedTraining { step: Step; target: number; complete: boolean; advice?: TrainingAdvice | null }
 
+// Every observation asks again for each quest's skill requirements; a chopped log or another quest's item changes nothing here.
+// Whole advice is large, so at most 2,000 are kept.
+const tracks = new Map<string, { out: TrackedTraining | null; state?: PlayerState }>();
 export function trackedTraining(tracked: TrackedSkill | null, observed: PlayerState, mode: GameMode,
   market: Market = {}, xp?: Readonly<Record<string, number>>): TrackedTraining | null {
+  if (!tracked || !methodsFor(tracked.skill).length) return null;
+  const key = [JSON.stringify(tracked), scopedRateKeyOf(observed, trainingItemScope(tracked.skill)), observed.connected ? 1 : 0, mode,
+    priceKeyOf(market.prices), market.restriction ?? '-', xp ? JSON.stringify(xp) : '-'].join('|');
+  return scopedMemo(tracks, key, observed, `${tracked.skill} followed`, () => trackedTrainingFresh(tracked, observed, mode, market, xp), 2_000);
+}
+function trackedTrainingFresh(tracked: TrackedSkill, observed: PlayerState, mode: GameMode,
+  market: Market, xp?: Readonly<Record<string, number>>): TrackedTraining | null {
   if (!tracked || !methodsFor(tracked.skill).length) return null;
   const context = trackedTrainingContext(tracked, tracked.skill, observed, mode);
   const state = context.state, free = context.mode === 'f2p';

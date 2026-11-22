@@ -25,6 +25,10 @@ import { carryOverFrom } from '../../src/domain/prep/shopping';
 import { ctxOf, fakePrices, fakeSnap } from '../funding/helpers';
 import type { GameMode, Step } from '../../src/types';
 import { SKILL_NAMES } from '../../src/domain/training/skillTrack';
+import { scopeCheck } from '../../src/domain/training/methodRates';
+
+// TRAINING_SCOPE_VERIFY=1 recomputes every training forecast reused across states and fails on any difference.
+scopeCheck.verify = Boolean(process.env.TRAINING_SCOPE_VERIFY);
 
 const stepOf = new Map(allSteps.map(s => [s.id, s]));
 const fixture = JSON.parse(readFileSync('tests/fixtures/gePrices.json', 'utf8')) as { prices: Record<string, { buy: number; sell: number }> };
@@ -53,20 +57,33 @@ const UNKNOWN_TIME_DEBT = 0;
 // A fresh Members account finishes every quest; the turns whose remaining time is unknown are known debt. Lower it as it
 // shrinks, never raise it.
 const MEMBERS_UNKNOWN_TIME_DEBT = 0;
+// GATE_SEGMENT=k/n replays part k of the Members route from the checkpoint saved before it, so CI runs the parts in parallel; without
+// it the whole route is replayed from a fresh account. GATE_CHECKPOINTS=n on a whole Members run saves the n-1 checkpoints that split
+// its time evenly (rerun it when quest steps change).
+const CHECKPOINTS = 'tests/fixtures/membersGateCheckpoints.json';
+interface Checkpoint {
+  turn: number; done: number; xp: Record<string, number>; bag: [string, number][]; bank: [string, number][]; worn: string[]; coins: number;
+  position: { x: number; y: number; plane: number }; quests: Record<string, { state: 'NOT_STARTED' | 'IN_PROGRESS' | 'COMPLETED'; stepId?: string }>;
+}
 
 // One fresh account played through the route of a mode; it stops at the first check and returns what is left.
 function play(mode: GameMode) {
   const steps = stepsFor(mode), NAMES = namesOf(steps), SKILLS: readonly string[] = mode === 'members' ? SKILL_NAMES : F2P_SKILLS;
+  const [part, parts] = mode === 'members' && process.env.GATE_SEGMENT ? process.env.GATE_SEGMENT.split('/').map(Number) : [1, 1];
+  const saved: Checkpoint[] = parts > 1 ? JSON.parse(readFileSync(CHECKPOINTS, 'utf8')) : [];
+  if (saved.length !== parts - 1) throw new Error(`${CHECKPOINTS} has ${saved.length} checkpoints, GATE_SEGMENT needs ${parts - 1}`);
+  const from = saved[part - 2], stopAt = part < parts ? saved[part - 1].done : Infinity;
+  const writeParts = mode === 'members' && parts === 1 ? Number(process.env.GATE_CHECKPOINTS) || 0 : 0, snaps: { t: number; done: number; cp: string }[] = [];
   let blocked: string | undefined;
-  const xp: Record<string, number> = Object.fromEntries(SKILLS.map(s => [s, s === 'hitpoints' ? xpForLevel(10) : 0]));
-  const bag = new Map<string, number>(), bank = new Map<string, number>(), worn: string[] = [];
+  const xp: Record<string, number> = from ? { ...from.xp } : Object.fromEntries(SKILLS.map(s => [s, s === 'hitpoints' ? xpForLevel(10) : 0]));
+  const bag = new Map<string, number>(from?.bag), bank = new Map<string, number>(from?.bank), worn: string[] = [...from?.worn ?? []];
   const add = (name: string, n: number) => bag.set(name, Math.max(0, (bag.get(name) ?? 0) + n));
   // A quest amulet the gear data lacks (the Ghostspeak amulet) is still worn on the neck, never in the weapon slot.
   const slotOf = (name: string) => { const p = gearPieceByName(name); return p ? (p.slot === 'neck' ? 'amulet' : p.slot) : /amulet|necklace/i.test(name) ? 'amulet' : 'weapon'; };
-  let coins = 0, position = { x: 3222, y: 3218, plane: 0 }, previous: CommittedDecision | undefined, unknownTime = 0, turn = 0;
-  const quests: Record<string, { state: 'NOT_STARTED' | 'IN_PROGRESS' | 'COMPLETED'; stepId?: string }> =
+  let coins = from?.coins ?? 0, position = from?.position ?? { x: 3222, y: 3218, plane: 0 }, previous: CommittedDecision | undefined, unknownTime = 0, turn = from?.turn ?? 0;
+  const quests: Checkpoint['quests'] = from ? structuredClone(from.quests) :
     Object.fromEntries(questCatalogue.filter(q => mode === 'members' || !q.members).map(q => [q.id, { state: 'NOT_STARTED' }]));
-  const log: string[] = [];
+  const log: string[] = [], decisionMs: number[] = [];
   // As in the app, a Members account earns with the best method the Money ranking allows at its levels and quests.
   const rates = new Map<string, EarnRate | null>();
   const ranked = (levels: Record<string, number>, done: string[], cash: number) => {
@@ -81,6 +98,8 @@ function play(mode: GameMode) {
   for (; turn < (Number(process.env.GATE_MAX_TURNS) || MAX_TURNS[mode]); turn++) {
     const stats = Object.fromEntries(SKILLS.map(s => [s, Math.max(1, levelForXp(xp[s]))]));
     const done = Object.entries(quests).filter(([, q]) => q.state === 'COMPLETED').map(([id]) => id);
+    if (done.length >= stopAt) break;
+    if (writeParts) snaps.push({ t: Date.now(), done: done.length, cp: JSON.stringify({ turn, done: done.length, xp, bag: [...bag], bank: [...bank], worn, coins, position, quests }) });
     const owned = { bankSeen: true, items: new Map(NAMES.map(n => [n.toLowerCase(), { name: n, carried: bag.get(n) ?? 0, bank: bank.get(n) ?? 0, noted: 0 }])) };
     const equipment = worn.map(n => ({ id: gearPieceByName(n)?.id ?? 1, name: n, slot: slotOf(n), count: 1 }));
     const gear = { equipment, inventory: [...bag].filter(([, c]) => c > 0).map(([name, count]) => ({ id: 1, name, count })), coins, bankCoins: 0 };
@@ -91,8 +110,10 @@ function play(mode: GameMode) {
       manual: { 'Shield of Arrav:partner': true, "Heroes' Quest:partner": true }, questPoints: { known: true, value: qp, source: 'game' },
       quests: Object.fromEntries(Object.entries(quests).map(([id, q]) => [id, { ...q, source: 'game' }])) } as unknown as PlanningSnapshot;
     const earn: RuntimePlanInput['earn'] = (step, gp, _budget, goalId) => earnAction(snapshot, step, goalId, gp, mode === 'members' ? ranked(stats, done, coins) : rate);
+    const started = performance.now();
     const d = runtimeDecision({ snapshot, intent: { kind: 'auto' }, previous, progress: emptyProgress(), prices, steps,
       detail: id => itemById.get(id), ironman: false, earn, walk });
+    decisionMs.push(performance.now() - started);
     if (!d) break;
     previous = d;
     const a = d.activeAction;
@@ -163,9 +184,23 @@ function play(mode: GameMode) {
       }
     }
   }
-  const open = Object.entries(quests).filter(([, q]) => q.state !== 'COMPLETED').map(([id]) => id);
-  const total = Object.keys(quests).length;
-  console.log(`Route gate (${mode}): ${turn} turns, ${total - open.length} of ${total} quests, remaining time unknown on ${unknownTime} turns${blocked ? `, stopped at ${blocked.split('\n')[0]}` : ''}.`);
+  const unfinished = Object.entries(quests).filter(([, q]) => q.state !== 'COMPLETED').map(([id]) => id);
+  const total = Object.keys(quests).length, open = unfinished.length === 0 || total - unfinished.length >= stopAt ? [] : unfinished;
+  if (from || parts > 1) console.log(`Route gate (${mode}) part ${part}/${parts}: turns ${from?.turn ?? 0}-${turn}, quests ${from?.done ?? 0}-${total - unfinished.length}`);
+  if (writeParts && !blocked && !unfinished.length) {
+    const t0 = snaps[0].t, span = snaps.at(-1)!.t - t0;
+    // Each cut is the turn a quest was just completed: the part before stops there (its quest count), so the parts join exactly.
+    const cps = Array.from({ length: writeParts - 1 }, (_, i) => {
+      let j = snaps.findIndex(s => s.t - t0 >= span * (i + 1) / writeParts);
+      while (j < snaps.length - 1 && snaps[j].done === snaps[j - 1].done) j++;
+      return JSON.parse(snaps[j].cp);
+    });
+    writeFileSync(CHECKPOINTS, `${JSON.stringify(cps)}\n`);
+  }
+  console.log(`Route gate (${mode}): ${turn} turns, ${total - unfinished.length} of ${total} quests, remaining time unknown on ${unknownTime} turns${blocked ? `, stopped at ${blocked.split('\n')[0]}` : ''}.`);
+  // The app runs the same decision on every game update, so this is also its delay for this route.
+  const ms = decisionMs.sort((a, b) => a - b), at = (q: number) => Math.round(ms[Math.floor(q * (ms.length - 1))] ?? 0);
+  console.log(`Route gate (${mode}) decision time: p50 ${at(0.5)} ms, p95 ${at(0.95)} ms, max ${at(1)} ms`);
   const earned = [...new Set(log.filter(l => l.includes(' | EARN | ')).map(l => l.split(' | ')[2].replace(/^Earn [\d,]+ gp: /, '')))];
   console.log(`Route gate (${mode}) earned with: ${earned.join(', ') || 'nothing'}.`);
   // GATE_LOG=<file> keeps the whole turn log for diagnosis.

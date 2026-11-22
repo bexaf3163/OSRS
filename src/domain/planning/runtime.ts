@@ -92,7 +92,13 @@ export function runtimeDecision(input: RuntimePlanInput): CommittedDecision | nu
   };
   // The cheapest training after which a fight is won (none when the current levels win it, null when no setup does).
   // The quest's own skill requirements (Prayer 43 in Monkey Madness I) are trained and timed by the quest model first.
+  // Every projected quest asks for its fights again; the answer reads only the observed snapshot, so once per fight a decision.
+  const toWin = new Map<string, Minutes | null>();
   const trainingToWin = (step: Step): Minutes | null => {
+    if (!toWin.has(step.id)) toWin.set(step.id, trainingToWinFresh(step));
+    return toWin.get(step.id)!;
+  };
+  const trainingToWinFresh = (step: Step): Minutes | null => {
     const stats = snapshot.combat?.stats;
     const required = (step.requirements ?? []).flatMap(r => (r.type === 'skill' && stats && (stats[r.skill] ?? 0) < r.min ? [[r.skill, r.min] as const] : []));
     const after = required.length && stats ? { ...snapshot, combat: { ...snapshot.combat!, stats: { ...stats, ...Object.fromEntries(required) } } } : snapshot;

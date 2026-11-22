@@ -3,6 +3,7 @@
 // answers null when it has nothing honest to say; then the wiki's guide stays.
 
 import { coinsOf, type PlayerState } from '../player/playerState';
+import { nameKey } from '../items/itemKey';
 import type { PriceView } from '../market/quotes';
 import type { TradeRestriction } from '../market/tradeRestriction';
 import type { TrainingMethod, MethodNeed } from './trainingRouter';
@@ -104,4 +105,76 @@ export function rateKeyOf(s: PlayerState): string {
   if (id === undefined) stateIds.set(full, id = `s${stateIds.size}`);
   stateKeys.set(s, id);
   return id;
+}
+
+/** The owned items one skill's training reads, by name key. */
+export interface ItemScope { id: string; has: (key: string) => boolean }
+const scopedKeys = new WeakMap<PlayerState, Map<string, string>>();
+/** rateKeyOf with only the scope's owned items: states that differ in other items (a log chopped while training Attack) share
+ * training forecasts. Levels, quests, coins and worn gear stay whole. */
+export function scopedRateKeyOf(s: PlayerState, scope: ItemScope): string {
+  let byScope = scopedKeys.get(s);
+  if (!byScope) scopedKeys.set(s, byScope = new Map());
+  let id = byScope.get(scope.id);
+  if (id === undefined) {
+    let rest = restKeys.get(s);
+    if (rest === undefined) restKeys.set(s, rest = rateKeyOf({ ...s, owned: s.owned && { ...s.owned, items: NO_ITEMS } }));
+    const full = `${scope.id}|${rest}|${s.owned ? scopedItemsOf(s.owned.items, scope) : '-'}`;
+    id = scopedIds.get(full);
+    if (id === undefined) {
+      // Ids keep counting after a clear, so a key never takes an id another key's cached result still holds.
+      if (scopedIds.size > 200_000) scopedIds.clear();
+      scopedIds.set(full, id = `k${nextScopedId++}`);
+    }
+    byScope.set(scope.id, id);
+  }
+  return id;
+}
+/** The route gate sets verify: every reused scoped result is then recomputed and any difference fails (an item the scope missed). */
+export const scopeCheck = { verify: false };
+/** A result kept by an item-scoped key (scopedRateKeyOf). shortcut: callers must not change a returned value in place. */
+export function scopedMemo<T>(cache: Map<string, { out: T; state?: PlayerState }>, key: string, state: PlayerState, label: string, fresh: () => T, cap = 100_000): T {
+  const kept = cache.get(key);
+  if (kept && !scopeCheck.verify) return kept.out;
+  const out = fresh();
+  if (kept && JSON.stringify(kept.out) !== JSON.stringify(out)) {
+    const items = (s?: PlayerState) => new Map([...s?.owned?.items ?? []].map(([k, o]) => [k, `${o.carried}/${o.noted}/${o.bank}`]));
+    const a = items(kept.state), b = items(state);
+    throw new Error(`${label}: the item scope misses one of ${[...new Set([...a.keys(), ...b.keys()])].filter(k => a.get(k) !== b.get(k)).join(', ')}`);
+  }
+  // A checked entry holds its whole state, so far fewer are kept.
+  if (cache.size > (scopeCheck.verify ? Math.min(cap, 2_000) : cap)) cache.clear();
+  if (!kept) cache.set(key, { out, ...(scopeCheck.verify ? { state } : {}) });
+  return out;
+}
+const NO_ITEMS: NonNullable<PlayerState['owned']>['items'] = new Map();
+const restKeys = new WeakMap<PlayerState, string>();
+const scopedIds = new Map<string, string>();
+let nextScopedId = 0;
+// Projected states often share one item map: it is sorted once, and each name is tested against a scope once.
+const sortedItems = new WeakMap<object, [string, string][]>();
+const scopedItems = new WeakMap<object, Map<string, string>>();
+const scopeTests = new Map<string, Map<string, boolean>>();
+const itemListIds = new Map<string, string>();
+let nextItemListId = 0;
+function scopedItemsOf(items: NonNullable<PlayerState['owned']>['items'], scope: ItemScope): string {
+  let byScope = scopedItems.get(items);
+  if (!byScope) scopedItems.set(items, byScope = new Map());
+  let out = byScope.get(scope.id);
+  if (out !== undefined) return out;
+  let sorted = sortedItems.get(items);
+  if (!sorted) sortedItems.set(items, sorted = [...items].sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))
+    .map(([k, o]) => [k, `${k}:${o.carried}/${o.noted}/${o.bank ?? '?'}${o.legacyToolCount ? 'legacy' : 'exact'}`]));
+  let tests = scopeTests.get(scope.id);
+  if (!tests) scopeTests.set(scope.id, tests = new Map());
+  const inScope = (k: string) => { let v = tests!.get(k); if (v === undefined) tests!.set(k, v = scope.has(nameKey(k))); return v; };
+  // A fight's scope lists hundreds of gear rows: the key holds a short id for the list, from a bounded table that never reuses one.
+  const text = sorted.filter(([k]) => inScope(k)).map(([, row]) => row).join(';');
+  out = itemListIds.get(text);
+  if (out === undefined) {
+    if (itemListIds.size > 20_000) itemListIds.clear();
+    itemListIds.set(text, out = `i${nextItemListId++}`);
+  }
+  byScope.set(scope.id, out);
+  return out;
 }

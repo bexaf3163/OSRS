@@ -13,7 +13,8 @@ import type { GameMode, Progress, Step } from '../../types';
 import { trainingMethodsJson as methodsJson, toolProgressionJson } from '../../data';
 import { withPlannedKit } from './stages';
 import { hoursText, purchaseTripHours, toolUpgrade, upgradeXp, type ToolUpgrade } from './toolUpgrade';
-import { toolUse } from '../items/toolTiers';
+import { toolFamilyOf, toolUse } from '../items/toolTiers';
+import { SKILLING } from './skillingRates';
 import { evaluate, itemRequirement, type ReqState, type Requirement } from '../player/requirements';
 import { coinsOf, heldExact, heldOf, levelOf, questOf, type PlayerState } from '../player/playerState';
 import { isClosed } from '../quests/next-step';
@@ -24,7 +25,7 @@ import { STYLE_GEAR } from '../combat/styleGear';
 import { PROCESSING } from './processingRates';
 import { canWear, gearData, gearPieceByName, levelsOf, type Levels } from '../combat/gearAdvisor';
 import { pickKit } from '../combat/kitPick';
-import { methodRate, rateKeyOf, type RateSpot, type ModelRate } from './methodRates';
+import { methodRate, rateKeyOf, type ItemScope, type RateSpot, type ModelRate } from './methodRates';
 import { combatUpgrades, meleeUnsafe, rangedGoalNeeds } from '../combat/combatRates';
 import type { PriceView } from '../market/quotes';
 import { coinsPerMinute, coinTimeShare } from '../market/lootValue';
@@ -249,6 +250,64 @@ export function methodNeeds(m: TrainingMethod, state: PlayerState, prices?: Pric
 
 const MELEE_SKILLS = ['attack', 'strength', 'defence'];
 
+// The owned items a skill's training can read by name: its methods' needs, recipes, gathering tools and products, and for a
+// method with a fight or kit, every gear, food, ammunition, rune and staff name. A gate run with TRAINING_SCOPE_VERIFY=1 proves it.
+const FIGHT_ITEMS = new Set<string>();
+const collectNames = (o: unknown): void => {
+  if (Array.isArray(o)) o.forEach(collectNames);
+  else if (o && typeof o === 'object') for (const [k, v] of Object.entries(o)) {
+    if (k === 'name' || k === 'nameEn') { if (typeof v === 'string') FIGHT_ITEMS.add(nameKey(v)); } else if (k === 'names' && Array.isArray(v)) v.forEach(n => typeof n === 'string' && FIGHT_ITEMS.add(nameKey(n))); else collectNames(v);
+  }
+};
+const KIT_ITEM = / rune$|staff|arrows?$|bolts?$|darts?$|knife$|knives$|javelin|thrownaxe|bow$|bow \(u\)$| ore$|^coal$/;
+const itemScopes = new Map<string, ItemScope>();
+export function trainingItemScope(skill: string): ItemScope {
+  let scope = itemScopes.get(skill);
+  if (scope) return scope;
+  if (!FIGHT_ITEMS.size) [gearData.items, FOODS, STYLE_GEAR, STAFFS, RANGED_WATCH.map(name => ({ name }))].forEach(collectNames);
+  const names = new Set<string>(['coins']);
+  const add = (...list: (string | undefined)[]) => list.forEach(n => n && names.add(nameKey(n)));
+  let fights = ['attack', 'strength', 'defence', 'hitpoints', 'ranged', 'magic', 'prayer', 'slayer'].includes(skill);
+  for (const m of methodsFor(skill)) {
+    if (m.kit || m.npcNames?.length) fights = true;
+    for (const n of m.needs) {
+      if (n.type === 'item') add(n.name, ...n.anyOf ?? []);
+      if (n.type === 'tool') add(...tools[n.skill].map(t => t.tier), ...toolFamilyOf(n.skill === 'woodcutting' ? 'axe' : 'pickaxe') ?? []);
+    }
+    for (const id of PROCESSING.methods[m.id] ?? []) {
+      const r = PROCESSING.recipes.find(x => x.id === id);
+      // A fire is lit with a held tinderbox and logs; an input may be a staff, and a station may need a carried or worn item.
+      if (r) add(...r.inputs.flatMap(i => [i.name, i.staff, ...i.anyOf ?? []]), r.output?.name, ...r.tools ?? [], r.access?.carried, r.access?.equipped,
+        ...r.facility === 'fire' ? ['Tinderbox', 'Logs'] : []);
+    }
+    for (const id of SKILLING.methods[m.id] ?? []) {
+      const r = SKILLING.resources.find(x => x.id === id);
+      if (r) add(r.tool, ...SKILLING.tools[r.tool]?.tiers.map(t => t.item) ?? [], ...toolFamilyOf(r.tool) ?? [], ...r.products.map(p => p.name));
+    }
+  }
+  const has = fights ? (k: string) => names.has(k) || FIGHT_ITEMS.has(k) || KIT_ITEM.test(k) : (k: string) => names.has(k);
+  itemScopes.set(skill, scope = { id: `items:${skill}`, has });
+  return scope;
+}
+
+// Gear names per slot this mode, these levels and this quest list can wear: every method view of every level copy asked again.
+const wearableCache = new WeakMap<object, Map<string, Map<string, string[]>>>();
+function wearable(state: PlayerState, lv: Levels, quests: Set<string> | undefined): Map<string, string[]> {
+  let byLevels = wearableCache.get(state.quests);
+  if (!byLevels) wearableCache.set(state.quests, byLevels = new Map());
+  const key = `${state.mode}|${JSON.stringify(lv)}`;
+  let out = byLevels.get(key);
+  if (!out) {
+    byLevels.set(key, out = new Map());
+    for (const p of gearData.items) {
+      if ((state.mode !== 'members' && p.members) || p.reqUnverified || !canWear(p, lv, quests)) continue;
+      const names = out.get(p.slot);
+      if (names) names.push(p.name); else out.set(p.slot, [p.name]);
+    }
+  }
+  return out;
+}
+
 /**
  * The melee kit of a trainer through the one kit rule of every style (pickKit): per slot the best owned piece is worn and, with
  * known coins and prices, a better amulet or armour piece is bought after the method's own supplies. Pieces rank by melee
@@ -264,11 +323,9 @@ function meleeNeeds(m: TrainingMethod, state: PlayerState, prices?: PriceView | 
   const cash = coinsOf(state).total;
   const twoHanded = gearPieceByName(state.equipment.weapon ?? '')?.twoHanded;
   const slots = (['weapon', 'neck', 'head', 'body', 'legs', 'shield'] as const).filter(slot => slot !== 'shield' || !twoHanded);
-  const usable = (slot: string) => gearData.items
-    .filter(p => p.slot === slot && (state.mode === 'members' || !p.members) && !p.reqUnverified && canWear(p, lv, quests))
-    .map(p => p.name);
+  const usable = wearable(state, lv, quests);
   const kit = pickKit({
-    slots: slots.map(slot => ({ slot, names: usable(slot), wearOnly: slot === 'weapon' })),
+    slots: slots.map(slot => ({ slot, names: usable.get(slot) ?? [], wearOnly: slot === 'weapon' })),
     rank: name => { const p = gearPieceByName(name)!; return [p.strength, Math.max(p.attack.stab, p.attack.slash, p.attack.crush), p.defence.stab + p.defence.slash + p.defence.crush]; },
     // A worn piece is owned: total counts the bag and bank only, and is 0 rather than unknown once the bank was read.
     owned: name => { const h = heldExact(state, name); return (h.total ?? 0) + h.equipped > 0; },
@@ -549,7 +606,7 @@ const rateCache = new WeakMap<TrainingMethod, Map<string, TrainingMethod>>();
 /** Each price snapshot by its own identity: two views that share a timestamp but not their prices are never confused. */
 const priceIds = new WeakMap<PriceView, number>();
 let nextPriceId = 1;
-function priceKeyOf(prices: PriceView | null | undefined): string {
+export function priceKeyOf(prices: PriceView | null | undefined): string {
   if (!prices) return '-';
   let id = priceIds.get(prices);
   if (id === undefined) priceIds.set(prices, (id = nextPriceId++));

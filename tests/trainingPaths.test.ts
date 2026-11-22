@@ -13,6 +13,9 @@ const slowerLegs = (legs: readonly PathLeg[]) => legs.slice(1).flatMap((leg, i) 
   return before && now && (now[0] + now[1]) < 0.7 * (before[0] + before[1])
     ? [`${legs[i].fromLevel}-${legs[i].toLevel} ${legs[i].method.id} ${before} -> ${leg.fromLevel}-${leg.toLevel} ${leg.method.id} ${now}`] : [];
 });
+// A leg below its method's level, or a Members method in a free-to-play plan, is a plan the player cannot follow.
+const unusableLegs = (legs: readonly PathLeg[], mode: string) => legs
+  .filter((l) => l.fromLevel < l.method.from || (mode === 'f2p' && l.method.members)).map((l) => `${l.fromLevel}-${l.toLevel} ${l.method.id}`);
 const SKILLS = ['attack', 'strength', 'defence', 'ranged', 'magic', 'prayer', 'cooking', 'woodcutting', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'runecraft'];
 
 // A plan whose next leg is much slower than the one before is a planning error (a mixed wiki and model rate, an unmodelled tool,
@@ -22,7 +25,10 @@ describe('F2P training plans from 1 to 99 never slow down from one leg to the ne
     const stats = { attack: 40, strength: 40, defence: 40, hitpoints: 40, ranged: 40, magic: 40, prayer: 40, [skill]: 1 };
     const state = buildPlayerState({ mode: 'f2p', connected: true, player: 'P', stats, progress: emptyProgress(), questsDone: null,
       owned: { bankSeen: true, items: new Map() }, gear: { equipment: [], inventory: [], coins: 0, bankCoins: 5_000_000 } } as never);
-    expect(slowerLegs(adviseTraining({ skill, target: 99, state, mode: 'f2p', prices } as never).path)).toEqual([]);
+    const advice = adviseTraining({ skill, target: 99, state, mode: 'f2p', prices } as never);
+    expect(advice.time).not.toBeNull();
+    expect(slowerLegs(advice.path)).toEqual([]);
+    expect(unusableLegs(advice.path, 'f2p')).toEqual([]);
   });
 });
 
@@ -36,5 +42,6 @@ describe('Members training plans from 1 to 99 never slow down from one leg to th
     const advice = adviseTraining({ skill, target: 99, state, mode: 'members', prices } as never);
     expect(advice.time).not.toBeNull();
     expect(slowerLegs(advice.path)).toEqual([]);
+    expect(unusableLegs(advice.path, 'members')).toEqual([]);
   });
 });
