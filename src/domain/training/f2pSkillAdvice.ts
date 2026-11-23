@@ -26,7 +26,18 @@ export const F2P_SKILL_ADVICE: Partial<Record<SkillName, F2pSkillAdvice>> = {
   hitpoints: { priority: 'passive', target: null, reason: 'It comes with combat training; no separate target.' },
 };
 
-export const F2P_PRIORITY_LABEL = { good: 'Good F2P value', optional: 'Optional checkpoint', members: 'Prefer members', passive: 'Passive training' } as const;
+/** The owner's F2P order (2026-11-23), one skill at a time after the quests: skills that earn coins, then combat and gathering, then the skills that
+ * spend coins (paid from phase 1 profit, not starting coins), Runecraft left for members. */
+export const F2P_PHASES: readonly { label: string; skills: readonly SkillName[] }[] = [
+  { label: 'Phase 1, earn coins first', skills: ['crafting', 'smithing', 'magic'] },
+  { label: 'Phase 2, combat and gathering', skills: ['attack', 'strength', 'defence', 'hitpoints', 'ranged', 'woodcutting', 'fishing', 'mining'] },
+  { label: 'Phase 3, train from phase 1 profit', skills: ['firemaking', 'prayer', 'cooking'] },
+  { label: 'Phase 4, leave for members', skills: ['runecraft'] },
+];
+export const F2P_ORDER: readonly SkillName[] = F2P_PHASES.flatMap((p) => p.skills);
+export const f2pPhaseOf = (skill: string): number => F2P_PHASES.findIndex((p) => (p.skills as readonly string[]).includes(skill)) + 1;
+
+export const F2P_PRIORITY_LABEL ={ good: 'Good F2P value', optional: 'Optional checkpoint', members: 'Prefer members', passive: 'Passive training' } as const;
 const MARK = { good: '★', optional: '◇', members: '↓', passive: '·' } as const;
 
 export function f2pAdviceFor(skill: string): F2pSkillAdvice | null {

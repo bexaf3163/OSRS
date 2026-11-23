@@ -19,7 +19,7 @@ import type { NavTargetPayload } from '../../services/runeliteBridge';
 import { NavigateButton } from '../../ui/NavigateButton';
 import { usePriceView } from '../../state/hooks/usePriceView';
 import { equipmentLine } from '../../domain/training/trainingKit';
-import { F2P_SKILL_ADVICE, f2pAdviceFor } from '../../domain/training/f2pSkillAdvice';
+import { F2P_ORDER, F2P_SKILL_ADVICE, f2pAdviceFor } from '../../domain/training/f2pSkillAdvice';
 import { useTradeRestriction } from '../../state/hooks/useTradeRestriction';
 import { useDropAdvice } from '../../state/hooks/useDropAdvice';
 import { trackedTrainingContext } from '../../domain/training/skillTrack';
@@ -320,7 +320,7 @@ export function F2pStops() {
     <section className="section small stage-members" aria-label="Where F2P stops">
       <h3>Where F2P stops and membership pays more</h3>
       <ul>
-        {Object.entries(F2P_SKILL_ADVICE).filter(([, a]) => a.priority !== 'passive').map(([id, a]) => {
+        {F2P_ORDER.map((id) => [id, F2P_SKILL_ADVICE[id]!] as const).filter(([, a]) => a.priority !== 'passive').map(([id, a]) => {
           const next = membersNear(id, a.target)[0];
           return <li key={id}><strong>{skillTitle(id)}{a.target !== null ? ` ${a.target}` : ''}</strong> · {next
             ? `${next.name} from ${next.from}${next.xph ? `, ${rateText(next)}` : ''}` : a.reason}</li>;

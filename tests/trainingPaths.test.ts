@@ -60,3 +60,14 @@ describe('Members training plans from 1 to 99 never slow down from one leg to th
     expect(unusableLegs(advice.path, 'members')).toEqual([]);
   });
 });
+
+// A melee plan wears what the Gear page would buy with the coins at hand, as a Ranged plan buys its bows: never unarmed to 99.
+describe('F2P melee plans buy the weapon the gear advisor recommends', () => {
+  it.each(['attack', 'strength', 'defence'])('%s', (skill) => {
+    const state = buildPlayerState({ mode: 'f2p', connected: true, player: 'P', progress: emptyProgress(), questsDone: null,
+      stats: { attack: 40, strength: 40, defence: 40, hitpoints: 40, [skill]: 1 },
+      owned: { bankSeen: true, items: new Map() }, gear: { equipment: [], inventory: [], coins: 0, bankCoins: 5_000_000 } } as never);
+    const advice = adviseTraining({ skill, target: 99, state, mode: 'f2p', prices } as never);
+    expect(advice.path.filter((l) => l.method.rateBasis === 'unarmed').map((l) => `${l.fromLevel}-${l.toLevel}`)).toEqual([]);
+  });
+});

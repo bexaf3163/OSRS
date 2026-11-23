@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { skills } from '../../data';
-import { f2pAdviceFor, f2pAdviceLabel, F2P_SKILL_ADVICE } from './f2pSkillAdvice';
+import { f2pAdviceFor, f2pAdviceLabel, f2pPhaseOf, F2P_ORDER, F2P_SKILL_ADVICE } from './f2pSkillAdvice';
 
 describe('advisory F2P checkpoints', () => {
   it('covers every free skill and passive Hitpoints, without recommendations for members-only skills', () => {
@@ -26,6 +26,12 @@ describe('advisory F2P checkpoints', () => {
     expect(f2pAdviceLabel(cooking, 70)).toContain('reached');
     expect(f2pAdviceLabel(cooking, NaN)).not.toContain('reached');
     for (const id of ['runecraft', 'hitpoints']) expect(f2pAdviceFor(id)?.target).toBeNull();
+  });
+
+  it('puts every F2P skill in exactly one phase, earning skills first and Runecraft last', () => {
+    expect([...F2P_ORDER].sort()).toEqual(Object.keys(F2P_SKILL_ADVICE).sort());
+    expect(F2P_ORDER[0]).toBe('crafting');
+    expect([f2pPhaseOf('crafting'), f2pPhaseOf('mining'), f2pPhaseOf('prayer'), f2pPhaseOf('runecraft'), f2pPhaseOf('slayer')]).toEqual([1, 2, 3, 4, 0]);
   });
 
 });

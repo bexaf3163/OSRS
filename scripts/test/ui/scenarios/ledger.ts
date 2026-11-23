@@ -265,6 +265,7 @@ async function f2pNext(browser: Browser) {
   await settle(page);
   const next = await page.getByRole('region', { name: 'Next action' }).innerText();
   expect(/Next in F2P/.test(next) && !/Waiting for the planner/.test(next), 'F2P complete: Path offers what to do next instead of waiting');
+  if (process.env.UI_SHOTS) await page.locator('.f2p-next').screenshot({ path: `${process.env.UI_SHOTS}/f2p-next.png` }).catch(() => {});
   const rows = await page.locator('.f2p-next-row').allInnerTexts();
   expect(rows.length > 2 && /Worth it/.test(rows[0]) && rows.every(r => /Follow/.test(r) && /→/.test(r)), `F2P complete: ranked checkpoints, worth-it first, each can be followed (${rows[0]})`);
   await page.getByRole('button', { name: 'Follow' }).first().click();

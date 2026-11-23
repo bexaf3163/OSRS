@@ -25,6 +25,7 @@ import { SPELLS, STAFFS, isCombatSpell, strikeRecipe, superheatNeeds } from '../
 import { STYLE_GEAR } from '../combat/styleGear';
 import { PROCESSING } from './processingRates';
 import { canWear, gearData, gearPieceByName, levelsOf, type Levels } from '../combat/gearAdvisor';
+import { meleeUnlocks, plannedMeleeKit } from './meleeKit';
 import { pickKit } from '../combat/kitPick';
 import { methodRate, rateKeyOf, type ItemScope, type RateSpot, type ModelRate } from './methodRates';
 import { combatUpgrades, meleeUnsafe, rangedGoalNeeds } from '../combat/combatRates';
@@ -799,6 +800,11 @@ function pathFresh(skill: string, level: number, target: number, input: AdviceIn
       // Every leg, the first too, carries the tool its stage plans, so all legs are rated by the same model, not some by the wiki guess.
       const base = atLevel(projectedState, skill, lv);
       projected = withPlannedKit(base, skill, lv);
+      // Melee forecasts with the weapon and armour the Gear page would wear or buy at these levels and coins, as Ranged does with its kit.
+      // Asked only where this skill unlocks a piece: between unlocks the kit bought before is carried on (projectedState).
+      // Nothing to buy keeps the worn kit: forecastEquipment's list of worn items is the kit it is given.
+      const meleeKit = MELEE_SKILLS.includes(skill) && input.prices && (lv === level || meleeUnlocks(skill).has(lv)) ? plannedMeleeKit(projected, input.prices) : [];
+      if (meleeKit.length) projected = forecastEquipment(projected, meleeKit, input.prices!);
       const methods = lv === level && projected === base ? input.methods ?? trainingMethods : personalize(raw, skill, atLevel(projected, skill, lv), input.prices, input.restriction);
       // Advance only this skill in a copy; other skill/quest entry proofs must still be satisfied.
       views = methodsFor(skill, methods).filter((m) => !m.manualSetup && recommendedAt(m, lv, input.mode)).map((m) => viewMethod(m, projected, input.prices)).filter((v) => v.status !== 'LOCKED');

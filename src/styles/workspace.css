@@ -192,6 +192,7 @@ button.subtab { background: none; border-top: 0; border-left: 0; border-right: 0
 .f2p-next { list-style: none; margin: 14px 0 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
 .f2p-next-row { display: grid; grid-template-columns: 34px minmax(0, 1fr) auto auto; align-items: center; gap: 14px;
   padding: 10px 14px; background: #f3ead28c; border: 1px solid #8a6d3a66; }
+.f2p-next-phase { margin-top: 6px; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
 .f2p-next-row.is-good { border-left: 3px solid var(--la-ember, #b04722); }
 .f2p-next-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 .f2p-next-text b { font-family: var(--la-disp); font-weight: 600; font-size: 17px; letter-spacing: .02em; color: var(--la-ink, var(--text)); }

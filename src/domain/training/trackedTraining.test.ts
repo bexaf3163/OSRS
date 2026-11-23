@@ -120,7 +120,7 @@ describe('after the F2P quests: what to train next', () => {
     stats: { attack: 40, strength: 44, defence: 44, hitpoints: 43, ranged: 40, prayer: 8, magic: 25, woodcutting: 31, firemaking: 30, fishing: 32, cooking: 30,
       mining: 18, smithing: 29, crafting: 9, runecraft: 1, ...levels },
     gear: { equipment: [], inventory: [{ id: 1353, name: 'Steel axe', count: 1 }], coins: 10000, bankCoins: 0 }, owned: { bankSeen: true, items: new Map() } });
-  it('lists only unfinished good or optional checkpoints, good value first, then the shortest by the engine; reached and members skills are left out', () => {
+  it('lists only unfinished good or optional checkpoints, in the phase order the owner set; reached and members skills are left out', () => {
     const rows = f2pCheckpoints(character({}));
     expect(rows.length).toBeGreaterThan(3);
     for (const row of rows) {
@@ -128,19 +128,17 @@ describe('after the F2P quests: what to train next', () => {
       expect(row.level).toBeLessThan(row.target);
     }
     for (const s of ['runecraft', 'attack', 'defence']) expect(rows.map(r => r.skill)).not.toContain(s);
-    const good = rows.filter(r => r.priority === 'good'), firstOptional = rows.findIndex(r => r.priority === 'optional');
-    expect(rows.slice(0, good.length)).toEqual(good);
-    const known = (list: typeof rows) => list.filter(r => r.time).map(r => r.time!.minHours + r.time!.maxHours);
-    expect(known(good)).toEqual([...known(good)].sort((a, b) => a - b));
-    expect(firstOptional).toBe(good.length);
+    // The owner's phases: earn coins, then combat and gathering, then the skills that spend coins. Strength and Ranged are already at 40.
+    expect(rows.map(r => r.skill)).toEqual(['crafting', 'smithing', 'magic', 'woodcutting', 'fishing', 'mining', 'firemaking', 'prayer', 'cooking']);
+    expect(rows.map(r => r.phase)).toEqual([1, 1, 1, 2, 2, 2, 3, 3, 3]);
     // Reaching a checkpoint removes it.
     expect(f2pCheckpoints(character({ fishing: 58 })).some(r => r.skill === 'fishing')).toBe(false);
   });
 });
 
 describe('a reached followed goal hands over', () => {
-  const rows = [{ skill: 'fishing', level: 35, target: 35, priority: 'good', method: null, time: null },
-    { skill: 'cooking', level: 20, target: 40, priority: 'good', method: null, time: null }] as const;
+  const rows = [{ skill: 'fishing', level: 35, target: 35, priority: 'good', phase: 2, method: null, time: null },
+    { skill: 'cooking', level: 20, target: 40, priority: 'good', phase: 3, method: null, time: null }] as const;
   it('after the route a free-only checkpoint goes on to the next one; otherwise the route takes over', () => {
     const fishing = { skill: 'fishing', mode: 'fast', freeOnly: true, target: 35 } as const;
     expect(nextAfterReached(fishing, rows, false)).toEqual({ skill: 'cooking', mode: 'fast', freeOnly: true, target: 40 });
