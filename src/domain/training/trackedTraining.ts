@@ -62,24 +62,49 @@ function trackedTrainingFresh(tracked: TrackedSkill, observed: PlayerState, mode
   return { step, target, complete: (levelOf(state, skill) ?? -1) >= target, advice };
 }
 
-export interface F2pCheckpoint { skill: SkillName; level: number; target: number; priority: 'good' | 'optional'; phase: number; method: string | null; time: TimeEstimate | null }
+export interface SkillCheckpoint {
+  skill: SkillName; level: number; target: number; priority: 'good' | 'optional'; phase: number; method: string | null; time: TimeEstimate | null;
+  /** Coins the plan earns (+) or spends (-) on the way, [worst, best]; null or missing when a leg's price is unknown. */
+  coins?: [number, number] | null;
+}
+
+/** The coin balance after each checkpoint, done in list order from `start`, by each plan's worst case; a row with unknown coins adds nothing. */
+export function cashFlow(rows: readonly SkillCheckpoint[], start: number): number[] {
+  let balance = start;
+  return rows.map((r) => (balance += r.coins?.[0] ?? 0));
+}
 
 /**
  * What to train once the F2P quests are done: the unfinished F2P checkpoints in the owner's phase order (F2P_PHASES),
  * one skill at a time, each with the training engine's own forecast for this character. A list to choose from, not a forced grind (S105).
  */
-export function f2pCheckpoints(observed: PlayerState, market: Market = {}): F2pCheckpoint[] {
-  return F2P_ORDER.flatMap((skill): F2pCheckpoint[] => {
+export function f2pCheckpoints(observed: PlayerState, market: Market = {}): SkillCheckpoint[] {
+  return F2P_ORDER.flatMap((skill): SkillCheckpoint[] => {
     const advice = f2pAdviceFor(skill), level = levelOf(observed, skill);
     if (!advice?.target || (advice.priority !== 'good' && advice.priority !== 'optional') || level === undefined || level >= advice.target) return [];
     const plan = adviseTraining({ skill, target: advice.target, state: observed, mode: 'f2p', ...market });
-    return [{ skill, level, target: advice.target, priority: advice.priority, phase: f2pPhaseOf(skill), method: plan.best?.method.name ?? null, time: plan.time }];
+    return [{ skill, level, target: advice.target, priority: advice.priority, phase: f2pPhaseOf(skill), method: plan.best?.method.name ?? null, time: plan.time, coins: plan.coins ?? null }];
   });
 }
 
 /** A followed goal that is reached hands over by itself. While the route still has open steps it goes back to the
  *  route (null); after it, a free-only goal goes on to the next unfinished F2P checkpoint (the list's own order). */
-export function nextAfterReached(tracked: TrackedSkill, rows: readonly F2pCheckpoint[], routeOpen: boolean): TrackedSkill | null {
+/**
+ * Members (owner, 2026-11-23: earn, then spend): the skill levels the open quests still need, each with the training engine's own
+ * forecast, the plans that earn coins first so the ones that spend are paid from them; a plan with unknown coins counts as spending.
+ */
+export function membersCheckpoints(observed: PlayerState, needs: ReadonlyMap<string, number>, market: Market = {}): SkillCheckpoint[] {
+  const rows = [...needs].flatMap(([skill, target]): SkillCheckpoint[] => {
+    const level = levelOf(observed, skill);
+    if (level === undefined || level >= target || !methodsFor(skill).length) return [];
+    const plan = adviseTraining({ skill, target, state: observed, mode: 'members', ...market });
+    return [{ skill: skill as SkillName, level, target, priority: 'good', phase: 0, method: plan.best?.method.name ?? null, time: plan.time, coins: plan.coins ?? null }];
+  });
+  const earns = (r: SkillCheckpoint) => (r.coins?.[0] ?? -1) >= 0;
+  return [...rows.filter(earns), ...rows.filter((r) => !earns(r))];
+}
+
+export function nextAfterReached(tracked: TrackedSkill, rows: readonly SkillCheckpoint[], routeOpen: boolean): TrackedSkill | null {
   const next = !routeOpen && freeOnlyOf(tracked) ? rows.find((row) => row.skill !== tracked.skill) : undefined;
   return next ? { skill: next.skill, mode: 'fast', freeOnly: true, target: next.target } : null;
 }

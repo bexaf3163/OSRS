@@ -9,7 +9,7 @@ import { TrainingCard } from '../src/features/skills/TrainingCard';
 
 const fixture = vi.hoisted(() => ({ advice: null as TrainingAdvice | null, mode: 'f2p' as 'f2p' | 'members',
   state: null as PlayerState | null, tracked: null as TrackedSkill | null, input: null as AdviceInput | null }));
-vi.mock('../src/state/store', () => ({ useStore: () => ({ mode: fixture.mode }) }));
+vi.mock('../src/state/store', () => ({ useStore: () => ({ mode: fixture.mode, progress: emptyProgress(), setTrainingGoal: () => undefined }) }));
 vi.mock('../src/state/bridge', () => ({ useBridge: () => ({ xp: null, xpRate: () => null }) }));
 vi.mock('../src/state/playerStateContext', () => ({ usePlayerState: () => ({ state: fixture.state ?? buildPlayerState({ mode: 'f2p', connected: false, progress: emptyProgress(), stats: {}, owned: null, gear: null, questsDone: null }) }) }));
 vi.mock('../src/state/hooks/useTracked', async importOriginal => ({

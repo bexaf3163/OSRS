@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { f2pCheckpoints, nextAfterReached, trackedTraining } from './trackedTraining';
+import { cashFlow, f2pCheckpoints, membersCheckpoints, nextAfterReached, trackedTraining, type SkillCheckpoint } from './trackedTraining';
+import { fakePrices } from '../../../tests/funding/helpers';
+import { readFileSync } from 'node:fs';
 import { F2P_SKILL_ADVICE } from './f2pSkillAdvice';
 import { buildPlayerState } from '../player/playerState';
 import { emptyProgress } from '../persistence/progress';
@@ -133,6 +135,22 @@ describe('after the F2P quests: what to train next', () => {
     expect(rows.map(r => r.phase)).toEqual([1, 1, 1, 2, 2, 2, 3, 3, 3]);
     // Reaching a checkpoint removes it.
     expect(f2pCheckpoints(character({ fishing: 58 })).some(r => r.skill === 'fishing')).toBe(false);
+  });
+});
+
+describe('the coin ledger and the Members earn-then-spend order', () => {
+  const row = (skill: string, coins: [number, number] | null) => ({ skill, level: 1, target: 10, priority: 'good', phase: 0, method: null, time: null, coins }) as SkillCheckpoint;
+  it('carries the coins at hand down the list by each worst case; unknown coins add nothing', () => {
+    expect(cashFlow([row('mining', [5000, 9000]), row('prayer', [-20000, -15000]), row('magic', null)], 10000)).toEqual([15000, -5000, -5000]);
+  });
+  it('lists the quest levels that earn coins before the ones that spend them', () => {
+    const prices = fakePrices(JSON.parse(readFileSync('tests/fixtures/gePrices.json', 'utf8')).prices);
+    const st = buildPlayerState({ mode: 'members', connected: true, stats: { attack: 40, strength: 40, defence: 40, hitpoints: 40, prayer: 1, mining: 1 },
+      progress: emptyProgress(), questsDone: [], gear: { equipment: [], inventory: [], coins: 0, bankCoins: 5_000_000 }, owned: { bankSeen: true, items: new Map() } });
+    const rows = membersCheckpoints(st, new Map([['prayer', 43], ['mining', 30]]), { prices });
+    expect(rows.map((r) => r.skill)).toEqual(['mining', 'prayer']);
+    expect(rows[0].coins![0]).toBeGreaterThanOrEqual(0);
+    expect(rows[1].coins![0]).toBeLessThan(0);
   });
 });
 

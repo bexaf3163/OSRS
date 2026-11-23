@@ -3,6 +3,9 @@ import type { GameMode } from './route';
 
 export type StepStatus = 'done' | 'skipped';
 
+/** How a training plan picks its methods: the fastest XP, XP and coins together, or the most coins an hour. */
+export type TrainingGoal = 'xp' | 'balanced' | 'coins';
+
 export interface Progress {
   version: 3;
   steps: Record<string, StepStatus>;
@@ -28,6 +31,8 @@ export interface Progress {
    * Absent means the app decides from the game's quest points and total level (lib/tradeRestriction.ts).
    */
   sellRestrictions?: 'lifted' | 'active';
+  /** The player's training goal per skill (absent: balanced): the fastest XP or the most coins, always without losing coins. */
+  trainingGoals?: Partial<Record<string, TrainingGoal>>;
   /** The player's ticks of tasks that have no game check: "<stepId>:<taskId>" to true (a task with a game check is not stored here). */
   tasksDone?: Record<string, true>;
 }

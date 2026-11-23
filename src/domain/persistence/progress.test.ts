@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { known, stepById } from '../../data';
 import {
   emptyProgress, exportFileName, exportProgress, gameModeOf, importProgress, loadProgress, normalizeProgress, saveProgress, STORAGE_KEY,
-  RETIRED_STEPS, V2_FROM_V1, V3_FROM_V2, withGameMode, withLevel, withNote, withStep,
+  RETIRED_STEPS, V2_FROM_V1, V3_FROM_V2, withGameMode, withLevel, withNote, withStep, withTrainingGoal,
 } from './progress';
 import { retiredStep } from '../../../tests/fixtures/retiredSteps';
 
@@ -113,6 +113,15 @@ describe('progress: storage', () => {
     const n = normalizeProgress({ version: 3, steps: {}, levels: { attack: 30, defence: 1, hitpoints: 24 }, notes: {} }, known)!;
     expect(n.progress.levels).toEqual({ attack: 30, defence: 1, hitpoints: 24 });
     expect(n.dropped).toBe(0);
+  });
+
+  it('keeps a training goal per skill; balanced is the default and is not stored', () => {
+    const p = withTrainingGoal(withTrainingGoal(emptyProgress(), 'ranged', 'coins'), 'cooking', 'xp');
+    expect(p.trainingGoals).toEqual({ ranged: 'coins', cooking: 'xp' });
+    expect(withTrainingGoal(p, 'ranged', 'balanced').trainingGoals).toEqual({ cooking: 'xp' });
+    expect(withTrainingGoal(withTrainingGoal(p, 'ranged', 'balanced'), 'cooking', 'balanced').trainingGoals).toBeUndefined();
+    const n = normalizeProgress({ version: 3, steps: {}, trainingGoals: { ranged: 'coins', magic: 'fast', cooking: 'balanced' } }, known)!;
+    expect(n.progress.trainingGoals).toEqual({ ranged: 'coins' });
   });
 
   it('is saved and read', () => {

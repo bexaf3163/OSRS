@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
-import { adviseTraining, type PathLeg } from '../src/domain/training/trainingRouter';
+import { adviseTraining, trainingMethods, type PathLeg } from '../src/domain/training/trainingRouter';
+import { ZERO_SHARE } from '../src/domain/training/trainingGoal';
+import { coinsPerMinute, coinTimeShare } from '../src/domain/market/lootValue';
 import { buildPlayerState } from '../src/domain/player/playerState';
 import { emptyProgress } from '../src/domain/persistence/progress';
 import { fakePrices } from './funding/helpers';
@@ -8,9 +10,14 @@ import { questCatalogue } from '../src/domain/planning/catalogue';
 import { SKILL_NAMES } from '../src/domain/training/skillTrack';
 
 const prices = fakePrices(JSON.parse(readFileSync('tests/fixtures/gePrices.json', 'utf8')).prices);
+const net = (m: PathLeg['method']) => m.marketNetPerHour
+  ?? (m.costPerHour === null || (m.costPerHour === undefined && m.cost === 'cost') ? null : (m.lootPerHour ?? 0) - (m.costPerHour ?? 0));
+// The plus-or-zero rule (owner, 2026-11-23): a loss under ZERO_SHARE of the coin rate is break-even.
+const losing = (m: PathLeg['method'], mode: 'f2p' | 'members') => { const n = net(m); return n !== null && coinTimeShare(n, coinsPerMinute(prices, mode)) < -ZERO_SHARE; };
+// A slower next leg is a planning error unless the faster one began to lose coins there and the plus-or-zero rule left it.
 const slowerLegs = (legs: readonly PathLeg[]) => legs.slice(1).flatMap((leg, i) => {
   const before = legs[i].method.xph, now = leg.method.xph;
-  return before && now && (now[0] + now[1]) < 0.7 * (before[0] + before[1])
+  return before && now && (now[0] + now[1]) < 0.7 * (before[0] + before[1]) && !leg.leftLoss
     ? [`${legs[i].fromLevel}-${legs[i].toLevel} ${legs[i].method.id} ${before} -> ${leg.fromLevel}-${leg.toLevel} ${leg.method.id} ${now}`] : [];
 });
 // A leg below its method's level, or a Members method in a free-to-play plan, is a plan the player cannot follow.
@@ -37,12 +44,10 @@ describe('F2P training plans never lose coins while a free or earning method is 
   const f2pState = (skill: string, level: number) => buildPlayerState({ mode: 'f2p', connected: true, player: 'P', progress: emptyProgress(), questsDone: null,
     stats: { attack: 40, strength: 40, defence: 40, hitpoints: 40, ranged: 40, magic: 40, prayer: 40, [skill]: level },
     owned: { bankSeen: true, items: new Map() }, gear: { equipment: [], inventory: [], coins: 0, bankCoins: 5_000_000 } } as never);
-  const net = (m: PathLeg['method']) => m.marketNetPerHour
-    ?? (m.costPerHour === null || (m.costPerHour === undefined && m.cost === 'cost') ? null : (m.lootPerHour ?? 0) - (m.costPerHour ?? 0));
   it.each(SKILLS)('%s', (skill) => {
     const advise = (level: number) => adviseTraining({ skill, target: 99, state: f2pState(skill, level), mode: 'f2p', prices } as never);
-    const losing = advise(1).path.filter((l) => (net(l.method) ?? 0) < 0);
-    const avoidable = losing.filter((l) => (net(advise(l.fromLevel).best!.method) ?? -1) >= 0).map((l) => `${l.fromLevel}-${l.toLevel} ${l.method.id}`);
+    const lossLegs = advise(1).path.filter((l) => losing(l.method, 'f2p'));
+    const avoidable = lossLegs.filter((l) => !losing(advise(l.fromLevel).best!.method, 'f2p')).map((l) => `${l.fromLevel}-${l.toLevel} ${l.method.id}`);
     expect(avoidable).toEqual([]);
   });
 });
@@ -58,6 +63,24 @@ describe('Members training plans from 1 to 99 never slow down from one leg to th
     expect(advice.time).not.toBeNull();
     expect(slowerLegs(advice.path)).toEqual([]);
     expect(unusableLegs(advice.path, 'members')).toEqual([]);
+  });
+});
+
+// The player's goal (owner, 2026-11-23) changes only the method choice: Fastest XP the fastest, Most coins the best earner, both plus or zero.
+describe('the training goal picks the fastest or the best-earning method, never a losing one', () => {
+  const base = { ...trainingMethods.find((m) => m.id === 'wc-tree')!, skills: ['crafting'], from: 1, to: 99, needs: [], objectNames: undefined, place: undefined };
+  // A small break-even cost, a slower earner, and the fastest of all that loses far more than the break-even share.
+  const methods = [
+    { ...base, id: 'goal-fast', xph: [20000, 20000] as [number, number], cost: 'cost' as const, costPerHour: 500, lootPerHour: 0 },
+    { ...base, id: 'goal-rich', xph: [10000, 10000] as [number, number], cost: 'profit' as const, costPerHour: 0, lootPerHour: 50000 },
+    { ...base, id: 'goal-loss', xph: [40000, 40000] as [number, number], cost: 'cost' as const, costPerHour: 30000, lootPerHour: 0 },
+  ];
+  const pick = (goal: 'xp' | 'coins') => adviseTraining({ skill: 'crafting', target: 50, mode: 'f2p', prices, methods, state: buildPlayerState({ mode: 'f2p', connected: true, player: 'P',
+    stats: { crafting: 1 }, progress: { ...emptyProgress(), trainingGoals: { crafting: goal } }, questsDone: null,
+    owned: { bankSeen: true, items: new Map() }, gear: { equipment: [], inventory: [], coins: 0, bankCoins: 5_000_000 } } as never) } as never).best!.method;
+  it.each([['xp', 'goal-fast'], ['coins', 'goal-rich']] as const)('%s', (goal, id) => {
+    expect(pick(goal).id).toBe(id);
+    expect(losing(pick(goal), 'f2p')).toBe(false);
   });
 });
 

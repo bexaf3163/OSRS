@@ -2,7 +2,7 @@
 // The calculation is lib/trainingRouter.ts; here only the display. It starts and buys nothing: the arrow is by the player's button.
 
 import { useMemo } from 'react';
-import type { Step } from '../../types';
+import type { Step, TrainingGoal } from '../../types';
 import { levelById } from '../../data';
 import { useStore } from '../../state/store';
 import { useBridge } from '../../state/bridge';
@@ -146,6 +146,7 @@ export function TrainingCard({ skill, target, followed = null, view = 'full', ad
       {view === 'full' && <p className="readiness-head">
         <strong>What to train with: {skillTitle(skill)}</strong> <span className="muted">— now {advice.level}, goal {target}</span>
       </p>}
+      {view === 'full' && <GoalChoice skill={skill} />}
       {best ? (
         <>
           <div className="training-recommendation">
@@ -188,7 +189,8 @@ export function TrainingCard({ skill, target, followed = null, view = 'full', ad
           {advice.time && (
             <p className="small">⏱ {formatHours(advice.time)} to {target}{best.method.batchActions !== undefined ? ' (assumes future supplies; purchasing time excluded)' : arrows?.changesKit ? ' (assumes planned gear; preparation time excluded)' : advice.time.source === 'wiki' ? ' (by the wiki speed — a guide)' : advice.time.source === 'model' ? ' (for your levels and gear)' : advice.time.source === 'forecast' ? ' (across your plan)' : ' (at your pace)'}.</p>
           )}
-          {best.status === 'PREP' && (
+          {advice.coins && <p className="small">{coinsText(advice.coins)}</p>}
+        {best.status === 'PREP' && (
             <p className="small">First: <strong>{best.missing.map((x) => x.label).join(', ')}</strong> <a href={hrefTo.shopping()}>To the shopping list</a></p>
           )}
           {best.unchecked.length > 0 && <p className="small muted">Not checked: {best.unchecked.map((x) => x.label).join(', ')} — open the bank in the game.</p>}
@@ -287,6 +289,31 @@ function OtherSkillHint({ skill, target }: { skill: string; target: number }) {
       {best ? <><strong>{best.method.name}</strong>{best.method.where && <span className="muted"> — {best.method.where}</span>}{then && <>, then <strong>{then.method.name}</strong> from {then.fromLevel}</>}{advice.time && <> · {formatHours(advice.time)}</>}</> : <span className="muted">{advice?.reason}</span>}
     </p>
   );
+}
+
+const GOAL_LABELS: [TrainingGoal, string][] = [['xp', 'Fastest XP'], ['balanced', 'Balanced'], ['coins', 'Most coins']];
+
+/** The player's goal for this skill's plan; balanced is the default and is not stored. */
+function GoalChoice({ skill }: { skill: string }) {
+  const { progress, setTrainingGoal } = useStore();
+  const goal = progress.trainingGoals?.[skill] ?? 'balanced';
+  return (
+    <div className="segmented" role="group" aria-label="Training goal">
+      {GOAL_LABELS.map(([g, label]) => (
+        <button key={g} type="button" aria-pressed={goal === g} className={`seg ${goal === g ? 'is-active' : ''}`} onClick={() => setTrainingGoal(skill, g)}>{label}</button>
+      ))}
+      <span className="small muted">Every goal keeps coins at plus or zero while a free or earning method is open.</span>
+    </div>
+  );
+}
+
+/** Coins the plan earns (+) or spends (-) to the goal, as a range. */
+function coinsText([low, high]: [number, number]): string {
+  const f = (n: number) => Math.abs(n).toLocaleString('en-US');
+  const span = (a: number, b: number) => (a === b ? f(a) : `${f(a)}-${f(b)}`);
+  if (low >= 0) return `Earns about ${span(low, high)} coins on the way.`;
+  if (high <= 0) return `Costs about ${span(high, low)} coins on the way.`;
+  return `Between ${f(low)} coins spent and ${f(high)} earned on the way.`;
 }
 
 /** Members methods near the F2P stop, by level, from the method catalogue: what membership opens next. */

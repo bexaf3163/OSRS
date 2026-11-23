@@ -206,8 +206,8 @@ async function rangedPreparationScenarios(browser: Browser) {
     await settle(page);
     const initial = await snapshot();
     expect(/Train ranged to 5 at /.test(JSON.stringify(initial?.step?.guide?.steps)), `ranged (${width}): the actual game guide stops at the first bow milestone, not40`);
-    // Seagulls' bones do not pay for the broken arrows; the giant frogs' big bones do, and F2P never trains at a loss (owner, 2026-11-23).
-    expect(initial?.step?.npcNames?.includes('Giant frog') && initial.step.worldPoint?.label?.includes('Lumbridge Swamp'), `ranged (${width}): a beginner trains on giant frogs, whose bones pay for the arrows, not ogresses`);
+    // Seagulls cost a few arrows an hour, under the plus-or-zero rule's break-even share of the coin rate (owner, 2026-11-23), and cannot hit back.
+    expect(initial?.step?.npcNames?.includes('Seagull') && initial.step.worldPoint?.label?.includes('Port Sarim'), `ranged (${width}): a beginner trains on the Wiki's seagulls, which cannot hit back, not ogresses`);
     expect(initial?.step?.checklist?.some((r: any) => r.name === 'Bronze arrow' && r.count === 100 && r.equip) && initial.plan?.lines?.find((r: any) => r.name === 'Bronze arrow')?.where !== 'EQUIPPED', `ranged (${width}): one worn arrow cannot satisfy the starter stack`);
     expect(clothes.every(c => initial?.step?.checklist?.some((r: any) => r.name === c.name && r.equip) && initial.plan?.lines?.find((r: any) => r.name === c.name)?.where === 'BANK'), `ranged (${width}): the whole owned ranged outfit is prepared from the bank`);
     const equipped = { ...gear, equipment: [weapon, { ...arrow, count: 100 }, ...clothes] };

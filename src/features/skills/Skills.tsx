@@ -12,6 +12,11 @@ import { SkillDetailPage } from './SkillDetail';
 import { Eyebrow, Page } from '../../ledger';
 import { f2pAdviceFor, f2pAdviceLabel, F2P_PRIORITY_LABEL } from '../../domain/training/f2pSkillAdvice';
 import { hrefTo } from '../../domain/pages/pages';
+import { usePlayerState } from '../../state/playerStateContext';
+import { usePriceView } from '../../state/hooks/usePriceView';
+import { useTradeRestriction } from '../../state/hooks/useTradeRestriction';
+import { membersCheckpoints } from '../../domain/training/trackedTraining';
+import { CheckpointList } from './CheckpointList';
 import { questLevelNeeds, questNeedLabel, SKILL_TAB_ORDER } from '../../domain/planning/questLevelNeeds';
 
 /** Free-to-play: the guide's order, Hitpoints with Melee. Members: every skill, in the in-game skill tab's order. */
@@ -41,6 +46,7 @@ export function SkillsPage({ param, selectedSkill, goal }: { param?: string; sel
       <div className="skill-grid skill-grid-compact">
         {(mode === 'members' ? membersGrid : f2pGrid).map(([id, s]) => <SkillCard key={id} skill={s} id={id} need={needs?.get(id)} />)}
       </div>
+      {needs && <MembersQuestSkills needs={needs} />}
     </div>
     </Page>
     <Page side="r" className="skills-detail" label="Skill">
@@ -58,6 +64,21 @@ export function SkillsPage({ param, selectedSkill, goal }: { param?: string; sel
       </div>
     </Page>
     </>
+  );
+}
+
+/** Members: the levels the open quests still need, the skills that earn coins first (the shared checkpoint list and its coin ledger). */
+function MembersQuestSkills({ needs }: { needs: ReadonlyMap<string, number> }) {
+  const { state } = usePlayerState();
+  const prices = usePriceView(true);
+  const trade = useTradeRestriction();
+  const rows = useMemo(() => membersCheckpoints(state, needs, { prices, restriction: trade.state }), [state, needs, prices, trade.state]);
+  if (!rows.length) return null;
+  return (
+    <section className="section" aria-label="Quest skill levels">
+      <h3>Quest skill levels: earn first, then spend</h3>
+      <CheckpointList rows={rows} label="Members quest skill levels" />
+    </section>
   );
 }
 

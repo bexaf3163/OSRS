@@ -28,6 +28,10 @@ describe('method data', () => {
       for (const s of m.skills) expect(known.has(s), `${m.id}: skill ${s}`).toBe(true);
       expect(m.url, m.id).toMatch(/^https:\/\/oldschool\.runescape\.wiki\/w\//);
       expect(m.where.length, m.id).toBeGreaterThan(2);
+      // An unknown effort, cost or risk makes the practical speed NaN and drops the method from every speed comparison (ra-brutus, 2.171.0).
+      expect(['afk', 'low', 'medium', 'high'], m.id).toContain(m.effort);
+      expect(['free', 'profit', 'cost'], m.id).toContain(m.cost);
+      expect(['none', 'low', 'high'], m.id).toContain(m.risk);
     }
   });
 

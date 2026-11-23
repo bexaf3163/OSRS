@@ -1,7 +1,8 @@
 // How training methods are chosen: the practical time to the goal, counting the setup of missing items, attention and material cost.
 
 import { describe, expect, it } from 'vitest';
-import { adviseTraining, BANK_SETUP_HOURS, practicalRate, SETUP_HOURS, type TrainingMethod } from '../src/domain/training/trainingRouter';
+import { adviseTraining, BANK_SETUP_HOURS, SETUP_HOURS, type TrainingMethod } from '../src/domain/training/trainingRouter';
+import { practicalRate } from '../src/domain/training/trainingGoal';
 import { buildPlayerState } from '../src/domain/player/playerState';
 import { xpForLevel } from '../src/domain/player/xp';
 import type { OwnedState } from '../src/domain/items/checklist';

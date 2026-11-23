@@ -21,8 +21,8 @@ describe('shared staged training, not a starter grind to the final goal', () => 
     const st = state({ ranged: 1 }, { Salmon: 20 });
     const advice = adviseTraining({ skill: 'ranged', target: 40, mode: 'f2p', state: st, prices: market() });
     expect(advice.actionTarget).toBe(5);
-    // Seagulls drop nothing that pays for the arrows; the giant frogs' big bones do, and F2P never trains at a loss (owner, 2026-11-23).
-    expect(advice.path[0].method.id).toBe('ra-frog');
+    // Seagulls cost a few arrows an hour, under the plus-or-zero rule's break-even share of the coin rate, so the beginner trainer leads again.
+    expect(advice.path[0].method.id).toBe('ra-lumb');
     expect(advice.path.every(l => l.method.id !== 'ra-lumb' || l.toLevel <= 20)).toBe(true);
     expect(advice.path.some(l => l.fromLevel === 5 && l.needs?.some(n => n.type === 'item' && n.name === 'Oak shortbow'))).toBe(true);
     expect(advice.path.some(l => l.fromLevel >= 20 && l.method.id !== 'ra-lumb')).toBe(true);

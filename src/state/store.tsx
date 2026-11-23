@@ -1,11 +1,11 @@
 // The progress state: one source for the whole app, saving (localStorage + a file in the desktop app), undo.
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
-import type { GameMode, Progress, Step, StepStatus } from '../types';
+import type { GameMode, Progress, Step, StepStatus, TrainingGoal } from '../types';
 import { BASE_QP, known, maxQpFor, stepsFor } from '../data';
 import {
   emptyProgress, gameModeOf, STORAGE_KEY,
-  withGameMode, withLevel, withLevels, withNote, withStep, withUpgradeDismissed, withOwnedManual, withSellRestrictions, withTaskDone,
+  withGameMode, withLevel, withLevels, withNote, withStep, withUpgradeDismissed, withOwnedManual, withSellRestrictions, withTaskDone, withTrainingGoal,
 } from '../domain/persistence/progress';
 import { profileStorageKey } from '../domain/persistence/profiles';
 import { readProfiles } from './profiles';
@@ -39,6 +39,8 @@ interface StoreValue {
   setMode: (mode: GameMode) => void;
   /** The player's word on the Grand Exchange sale restrictions of a new account; null — decide from the game. */
   setSellRestrictions: (value: 'lifted' | 'active' | null) => void;
+  /** The training goal of one skill (fastest XP, balanced, most coins); a setting a reset keeps. */
+  setTrainingGoal: (skill: string, goal: TrainingGoal) => void;
   /** Ticks or unticks a step's task that has no game check (key "<stepId>:<taskId>"). */
   setTaskDone: (key: string, done: boolean) => void;
   /** The food of combat training steps from this player's estimate (lib/foodPlan.ts): one trip for readiness, the whole goal for shopping. */
@@ -156,6 +158,9 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const setSellRestrictions = useCallback((value: 'lifted' | 'active' | null) => {
     setProgress((p) => ((p.sellRestrictions ?? null) === value ? p : withSellRestrictions(p, value)));
   }, []);
+  const setTrainingGoal = useCallback((skill: string, goal: TrainingGoal) => {
+    setProgress((p) => ((p.trainingGoals?.[skill] ?? 'balanced') === goal ? p : withTrainingGoal(p, skill, goal)));
+  }, []);
 
   const setTaskDone = useCallback((key: string, done: boolean) => {
     setProgress((p) => ((p.tasksDone?.[key] === true) === done ? p : withTaskDone(p, key, done)));
@@ -189,9 +194,10 @@ export function StoreProvider({ children }: { children: ReactNode }) {
 
   const reset = useCallback(() => {
     const before = current.current;
-    // The game mode and the sale restrictions' answer are settings, not progress: a reset does not touch them.
+    // The game mode, the sale restrictions' answer and the training goals are settings, not progress: a reset does not touch them.
     replace({
       ...emptyProgress(), ...(before.gameMode ? { gameMode: before.gameMode } : {}), ...(before.sellRestrictions ? { sellRestrictions: before.sellRestrictions } : {}),
+      ...(before.trainingGoals ? { trainingGoals: before.trainingGoals } : {}),
     }, 'Progress reset');
   }, [replace]);
 
@@ -218,10 +224,10 @@ export function StoreProvider({ children }: { children: ReactNode }) {
 
   const value = useMemo<StoreValue>(
     () => ({
-      progress, mode, steps, qp, maxQp, setStep, setLevel, setLevels, setNote, setMode, setSellRestrictions, setTaskDone, setFoodPicks, dismissUpgrade, setOwnedManual, markSteps, replace, reset,
+      progress, mode, steps, qp, maxQp, setStep, setLevel, setLevels, setNote, setMode, setSellRestrictions, setTrainingGoal, setTaskDone, setFoodPicks, dismissUpgrade, setOwnedManual, markSteps, replace, reset,
       toast, notify, undo, dismissToast, persistenceWarning,
     }),
-    [progress, mode, steps, qp, maxQp, setStep, setLevel, setLevels, setNote, setMode, setSellRestrictions, setTaskDone, setFoodPicks, dismissUpgrade, setOwnedManual, markSteps, replace, reset,
+    [progress, mode, steps, qp, maxQp, setStep, setLevel, setLevels, setNote, setMode, setSellRestrictions, setTrainingGoal, setTaskDone, setFoodPicks, dismissUpgrade, setOwnedManual, markSteps, replace, reset,
       toast, notify, undo, dismissToast, persistenceWarning],
   );
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>;

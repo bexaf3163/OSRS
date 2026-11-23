@@ -1,7 +1,7 @@
 // Progress: storage, JSON export and import, migration of old saves, pure updates.
 // Shared format constants also protect native backup selection.
 
-import type { GameMode, ManualOwned, Progress, StepStatus } from '../../types/index.ts';
+import type { GameMode, ManualOwned, Progress, StepStatus, TrainingGoal } from '../../types/index.ts';
 import { EXPORT_APP, PROGRESS_VERSION } from '../../../electron/saved-data.mjs';
 import { STORAGE_KEYS } from './storageKeys.ts';
 
@@ -156,6 +156,9 @@ export function normalizeProgress(raw: unknown, known: Known): Normalized | null
     const manual = ownedManualOf(raw.ownedManual);
     if (Object.keys(manual).length) p.ownedManual = manual;
     if (raw.sellRestrictions === 'lifted' || raw.sellRestrictions === 'active') p.sellRestrictions = raw.sellRestrictions;
+    const goals = isObject(raw.trainingGoals)
+      ? Object.fromEntries(Object.entries(raw.trainingGoals).filter(([, g]) => g === 'xp' || g === 'coins')) as Record<string, TrainingGoal> : {};
+    if (Object.keys(goals).length) p.trainingGoals = goals;
     if (isObject(raw.tasksDone)) {
       const ticks: Record<string, true> = {};
       for (const [key, v] of Object.entries(raw.tasksDone)) {
@@ -316,6 +319,14 @@ export function withTaskDone(p: Progress, key: string, done: boolean): Progress 
 }
 
 /** The player's word on the sale restrictions; null goes back to deciding from the game. */
+/** The player's training goal for one skill; balanced is the default and is not stored. */
+export function withTrainingGoal(p: Progress, skill: string, goal: TrainingGoal): Progress {
+  const { [skill]: _drop, ...rest } = p.trainingGoals ?? {};
+  const goals = goal === 'balanced' ? rest : { ...rest, [skill]: goal };
+  const { trainingGoals: _old, ...base } = p;
+  return touch(Object.keys(goals).length ? { ...base, trainingGoals: goals } : base);
+}
+
 export function withSellRestrictions(p: Progress, value: 'lifted' | 'active' | null): Progress {
   const { sellRestrictions: _drop, ...rest } = p;
   return touch(value === null ? rest : { ...rest, sellRestrictions: value });

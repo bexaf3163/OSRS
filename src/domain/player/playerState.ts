@@ -4,7 +4,7 @@
 // The main rule: "unknown" is not "none". Every value has three outcomes: known (from where), unknown.
 // An item is PRESENT (have it), MISSING (surely not: both the bag and the bank are known), UNKNOWN (the bank was not opened and it is not in the bag).
 
-import type { GameMode, PlayerStats, Progress } from '../../types';
+import type { GameMode, PlayerStats, Progress, TrainingGoal } from '../../types';
 import type { GearState } from '../../services/runeliteBridge';
 import type { OwnedState } from '../items/checklist';
 import { nameKey } from '../items/itemKey';
@@ -46,6 +46,8 @@ export interface PlayerState {
   equipmentKnown?: boolean;
   /** The manual "I already have it" marks from shopping (the list row key to the quantity). */
   manual: Record<string, number>;
+  /** The player's training goal per skill from the saved progress (absent: balanced); only the method choice reads it. */
+  goals?: Partial<Record<string, TrainingGoal>>;
   owned: OwnedState | null;
   /** A short fingerprint for memoisation: it changes only when what affects the calculations changed. */
   fingerprint: string;
@@ -54,7 +56,7 @@ export interface PlayerState {
 export interface PlayerStateInput {
   mode: GameMode;
   stats: PlayerStats | null;
-  progress: Pick<Progress, 'levels'> & { ownedManual?: Record<string, { count: number }> };
+  progress: Pick<Progress, 'levels' | 'trainingGoals'> & { ownedManual?: Record<string, { count: number }> };
   owned: OwnedState | null;
   gear: GearState | null;
   questsDone: string[] | null;
@@ -102,6 +104,7 @@ export function buildPlayerState(i: PlayerStateInput): PlayerState {
     manual,
     owned,
     fingerprint: '',
+    ...(i.progress.trainingGoals ? { goals: i.progress.trainingGoals } : {}),
   };
   state.fingerprint = fingerprintOf(state);
   return state;
@@ -133,7 +136,7 @@ function fingerprintOf(s: PlayerState): string {
   const eqCounts = s.equipmentItems?.map(i => `${nameKey(i.name)}:${i.count ?? '?'}`).sort().join(',') ?? '?';
   const man = Object.entries(s.manual).map(([k, v]) => `${k}=${v}`).sort().join(',');
   const pos = s.position.known ? `${s.position.value.x},${s.position.value.y},${s.position.value.plane}` : '?';
-  return [s.mode, s.connected ? 1 : 0, s.bankSeen ? 1 : 0, s.owned?.bankSavedAt ?? '-', JSON.stringify(s.player), s.equipmentKnown ? 1 : 0, pos, lv, c(s.coins.bag), c(s.coins.bank), c(s.bagSlots), c(s.weight), s.bagItems.known ? s.bagItems.value.map((b) => `${b.name}:${b.count}`).sort().join(',') : '?', q, eq, eqCounts, man, items].join('|');
+  return [s.mode, s.connected ? 1 : 0, s.bankSeen ? 1 : 0, s.owned?.bankSavedAt ?? '-', JSON.stringify(s.player), s.equipmentKnown ? 1 : 0, pos, lv, c(s.coins.bag), c(s.coins.bank), c(s.bagSlots), c(s.weight), s.bagItems.known ? s.bagItems.value.map((b) => `${b.name}:${b.count}`).sort().join(',') : '?', q, eq, eqCounts, man, items, JSON.stringify(s.goals ?? {})].join('|');
 }
 
 /** The skill's level; undefined means unknown. */
