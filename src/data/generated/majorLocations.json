@@ -1,6 +1,6 @@
 {
   "source": "OSRS Wiki, the {{Map}} template in the article",
-  "updated": "2026-11-19",
+  "updated": "2026-11-23",
   "locations": {
     "Lumbridge": {
       "x": 3188,
@@ -672,6 +672,18 @@
       "label": "Edgeville Bank",
       "kind": "bank",
       "page": "Edgeville bank"
+    },
+    "Corsair Cove Bank": {
+      "x": 2570,
+      "y": 2865,
+      "plane": 0,
+      "label": "Corsair Cove Bank",
+      "kind": "bank",
+      "aliases": [
+        "Corsair bank"
+      ],
+      "page": "Corsair Cove bank",
+      "quest": "The Corsair Curse"
     },
     "Bob's Brilliant Axes": {
       "x": 3229,

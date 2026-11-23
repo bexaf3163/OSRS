@@ -3,7 +3,10 @@
 
 import { describe, expect, it } from 'vitest';
 import { buildPlayerState, type PlayerState } from '../src/domain/player/playerState';
-import { adviseTraining, trainingMethods, type TrainingMethod } from '../src/domain/training/trainingRouter';
+import { adviseTraining, personalize, trainingMethods, viewMethod, type TrainingMethod } from '../src/domain/training/trainingRouter';
+import { dropValue, guideDropValue } from '../src/domain/market/lootValue';
+import { emptyProgress } from '../src/domain/persistence/progress';
+import { questCatalogue } from '../src/domain/planning/catalogue';
 import { methodRate } from '../src/domain/training/methodRates';
 import { attacksToKill } from '../src/domain/combat/combatEstimate';
 import { TRAINER_SPOTS } from '../src/domain/combat/spots';
@@ -148,6 +151,24 @@ describe('the spot registry and the Skills catalogue', () => {
     // Lesser demons and Moss giants are Skills-page methods for later levels, not route spots yet.
     const later = ['Lesser demon', 'Moss giant'];
     expect(methodFoes.filter((f) => !spots.includes(f) && !later.includes(f))).toEqual([]);
-    expect(spots.filter((f) => !methodFoes.includes(f))).toEqual([]);
+    // A spot may serve only Ranged or Magic (Ogress Warriors from a safespot).
+    const anyFoes = trainingMethods.filter((m) => m.kind === 'method' && !m.members).flatMap((m) => m.npcNames ?? []);
+    expect(spots.filter((f) => !anyFoes.includes(f))).toEqual([]);
+  });
+});
+
+// Ogress Warriors pay with their drop table (rune armour, runes, gems), so the spot counts the wiki money guide's drops per kill,
+// and the method opens only when The Corsair Curse is finished, the bank there (owner, 2026-11-23: follow the player's progress).
+describe('Ogress Warriors follow the quest and the money guide', () => {
+  const corsair = questCatalogue.find((q) => q.id === 'The Corsair Curse')!.id;
+  const archer = (questsDone: string[]) => buildPlayerState({ mode: 'f2p', connected: true, player: 'P', progress: emptyProgress(), questsDone,
+    stats: { attack: 40, strength: 40, defence: 40, hitpoints: 50, ranged: 70 }, owned: { bankSeen: true, items: new Map() },
+    gear: { equipment: [], inventory: [], coins: 0, bankCoins: 3_000_000 } } as never);
+  const ogress = (questsDone: string[]) => viewMethod(personalize(trainingMethods.filter((m) => m.id === 'ra-ogress'), 'ranged', archer(questsDone), prices)[0], archer(questsDone), prices);
+  it('a kill is worth more than its bones, and the method waits for The Corsair Curse', () => {
+    expect(guideDropValue('killing-ogress-warriors', prices, undefined)!).toBeGreaterThan(2 * dropValue('Big bones', prices, undefined)!);
+    expect(ogress([]).status).toBe('LOCKED');
+    expect(ogress([corsair]).status).not.toBe('LOCKED');
+    expect(ogress([corsair]).method.lootPerHour!).toBeGreaterThan(0);
   });
 });

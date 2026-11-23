@@ -55,6 +55,22 @@
       "where": "Brutus in his pen in the north of the cow field east of Lumbridge, open after The Ides of Milk. Step aside when he winds up a charge or a stomp: they hit up to 19. He comes back about 22 seconds after each kill. Bank at Lumbridge Castle.",
       "requires": {"quest": "The Ides of Milk"}, "betweenKills": [21.6,25],
       "betweenWhy": "The wiki's respawn, 36 ticks (21.6 s), and a few seconds to walk back into place.", "specialMaxHit": 19
+    },
+    {
+      "foe": "Flesh Crawler", "name": "Flesh Crawlers", "levels": [28], "bank": "Edgeville Bank", "bankWhy": "There is no bank in the Stronghold of Security, bank in Edgeville first.",
+      "place": {"x": 1936, "y": 5135, "plane": 0, "label": "Floor 2 (Catacomb of Famine): the level 28 Flesh Crawlers"},
+      "waypoints": [{"x": 3081, "y": 3420, "plane": 0, "label": "The Stronghold of Security entrance: climb down"}, {"x": 1936, "y": 5135, "plane": 0, "label": "Floor 2 (Catacomb of Famine): the level 28 Flesh Crawlers"}],
+      "npcNames": ["Flesh Crawler"], "goal": "Stronghold of Security floor 2: the level 28 Flesh Crawlers",
+      "where": "The Stronghold of Security, floor 2 (the Catacomb of Famine): the level 28 Flesh Crawlers. They attack first, so stand among them and they come to you. The entrance is in the Barbarian Village mine. There is no bank in the Stronghold: bank in Edgeville first."
+    },
+    {
+      "foe": "Ogress Warrior", "name": "Ogress Warriors", "levels": [82], "bank": "Corsair Cove Bank",
+      "bankWhy": "The Corsair Cove bank, east of the dungeon entrance, opens once The Corsair Curse is finished.",
+      "sell": "Big bones", "guide": "killing-ogress-warriors", "requires": {"quest": "The Corsair Curse"},
+      "place": {"x": 1989, "y": 8986, "plane": 0, "label": "Corsair Cove Dungeon: an Ogress Warrior safespot"},
+      "waypoints": [{"x": 2523, "y": 2861, "plane": 0, "label": "The Corsair Cove Dungeon entrance, west of Corsair Cove"}, {"x": 1989, "y": 8986, "plane": 0, "label": "Corsair Cove Dungeon: an Ogress Warrior safespot"}],
+      "npcNames": ["Ogress Warrior"], "goal": "Corsair Cove Dungeon: Ogress Warriors from a safespot",
+      "where": "Ogress Warriors in the Corsair Cove Dungeon, west of Corsair Cove. Stand on a safespot the wiki marks next to the first group and attack with Ranged or Magic: they hit up to 8 in melee and cannot reach you there. Bank at the Corsair Cove bank, or alch the rune drops to stay longer."
     }
   ]
 }

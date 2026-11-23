@@ -108,9 +108,10 @@ export function mapPlaces(step: Step): MapLocation[] {
   return withSources(step, points, main, undefined);
 }
 
-export interface Place { x: number; y: number; plane: number; label: string; kind: string }
+export interface Place { x: number; y: number; plane: number; label: string; kind: string; quest?: string }
 const places = Object.values((locationsJson as { locations: Record<string, Place> }).locations);
-const banks = places.filter((p) => p.kind === 'bank');
+// A bank that opens after a quest (Corsair Cove) is named only by the spots that need that quest.
+const banks = places.filter((p) => p.kind === 'bank' && !p.quest);
 /** The bank nearest to the step's place: go there for things, not across half the map. */
 export function nearestBank(step: Step): Place | null {
   return nearestBankTo(step.mapLocation);

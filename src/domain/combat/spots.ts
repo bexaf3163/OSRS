@@ -40,6 +40,8 @@ export interface Spot {
   groupAggro?: boolean;
   /** The always-drop worth picking up to sell, one a kill. */
   sell?: string;
+  /** A money guide of fundingWiki.json whose per-kill outputs are the loot worth picking up (Ogress Warriors' rune drops), in place of `sell` alone. */
+  guide?: string;
 }
 
 /** A spot of data/trainers.json, as the builder writes it. */
@@ -75,7 +77,7 @@ export function spotsOf(members: boolean): Map<string, Spot> {
       ...(t.waypoints?.length ? { waypoints: t.waypoints.map((p) => ({ ...p })) } : {}),
       ...(t.proper ? { proper: true } : {}), ...(t.bank ? { bank: t.bank } : {}), ...(t.requires ? { requires: { ...t.requires } } : {}),
       ...(t.betweenKills ? { betweenKills: [...t.betweenKills] as [number, number] } : {}), ...(t.freeHeal ? { freeHeal: true } : {}),
-      ...(t.specialMaxHit ? { specialMaxHit: t.specialMaxHit } : {}), ...(t.groupAggro ? { groupAggro: true } : {}), ...(t.sell ? { sell: t.sell } : {}),
+      ...(t.specialMaxHit ? { specialMaxHit: t.specialMaxHit } : {}), ...(t.groupAggro ? { groupAggro: true } : {}), ...(t.sell ? { sell: t.sell } : {}), ...(t.guide ? { guide: t.guide } : {}),
     });
   }
   return out;

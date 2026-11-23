@@ -2601,6 +2601,22 @@
       ]
     },
     {
+      "id": "me-crawler", "skill": ["attack", "strength", "defence"], "from": 1, "suggestedFrom": 40, "to": null, "name": "Flesh Crawlers", "members": false,
+      "effort": "low", "cost": "free", "risk": "low", "where": "Stronghold of Security, second level: Flesh Crawlers",
+      "note": "The wiki's free-to-play melee guide lists the level 28 Flesh Crawlers on the second floor of the Stronghold of Security: they attack first, so you fight without walking between kills. Requires Defence 40 in this recommendation, because several of them hit you at once. Bring food and bank in Edgeville.",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_melee_training", "place": "Stronghold of Security",
+      "needs": [{"type": "skill", "skill": "defence", "min": 40}],
+      "npcNames": ["Flesh Crawler"]
+    },
+    {
+      "id": "ra-ogress", "skill": "ranged", "from": 1, "suggestedFrom": 45, "to": null, "name": "Ogress Warriors from a safespot", "members": false,
+      "effort": "medium", "cost": "profit", "risk": "low", "where": "Corsair Cove Dungeon: Ogress Warriors from a safespot",
+      "note": "The wiki's free-to-play money maker for Ranged: rune armour and weapons, law and nature runes and uncut gems drop (Money making guide, about 50 kills an hour at 60 Ranged with iron arrows). Needs The Corsair Curse finished for the Corsair Cove bank. Stand on a safespot so they cannot hit you, pick up the rune drops, and alch them with High Alchemy at 55 Magic to stay longer.",
+      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Killing_ogress_warriors", "place": "Corsair Cove", "kit": "f2p-bow",
+      "needs": [{"type": "quest", "quest": "The Corsair Curse"}, {"type": "item", "name": "Shortbow", "equip": true}, {"type": "item", "name": "Bronze arrow", "count": 100, "equip": true}],
+      "npcNames": ["Ogress Warrior"]
+    },
+    {
       "id": "ra-moss",
       "skill": "ranged",
       "from": 1,

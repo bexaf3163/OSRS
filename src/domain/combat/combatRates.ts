@@ -15,7 +15,7 @@ import { matchStrict } from '../travel/locations';
 
 import { attacksToKill, combatMargin, combatRecovery, counterDamage, estimateCombat, foeVariants, unsafe, xpPerKill, type CombatFoe } from './combatEstimate';
 import { spotsOf, termsFor, TRAINER_LEVELS } from './spots';
-import { coinsPerMinute, dropValue, lootSecondsPerKill } from '../market/lootValue';
+import { coinsPerMinute, dropValue, guideDropValue, lootSecondsPerKill } from '../market/lootValue';
 import { ARROW_BREAK, goalArrows, methodFoe, rangedKitOf, rangedHit, RANGED_GEAR, trainingRangedStyle } from './rangedAmmo';
 import { rangedEquipment, rangedNeeds } from './rangedLoadout';
 import { combatSpellsAt, spellHit, STAFFS, strikeRecipe } from './magicPlan';
@@ -142,13 +142,13 @@ function withLoot(r: (ModelRate & { secondsPerKill: number }) | null, foe: strin
   const { secondsPerKill, ...rate } = r;
   // The method's own catalogue entry decides who may train there (members flag); here only the spot's facts are read.
   const spot = spotsOf(true).get(foe);
-  const each = spot?.sell ? dropValue(spot.sell, market.prices, market.restriction) : null;
+  const each = spot?.guide ? guideDropValue(spot.guide, market.prices, market.restriction) : spot?.sell ? dropValue(spot.sell, market.prices, market.restriction) : null;
   const trip = termsOf(foe).tripMinutes;
   const extra = each !== null && spot?.sell ? lootSecondsPerKill(each, trip ? (trip[0] + trip[1]) / 2 : 4.5, coinsPerMinute(market.prices, mode)) : null;
   if (extra === null || each === null) return rate;
   const slower = secondsPerKill / (secondsPerKill + extra);
   return { ...rate, xph: [rate.xph[0] * slower, rate.xph[1] * slower], costPerHour: rate.costPerHour === null ? null : rate.costPerHour * slower,
-    lootPerHour: (3600 / (secondsPerKill + extra)) * each, loot: spot!.sell };
+    lootPerHour: (3600 / (secondsPerKill + extra)) * each, loot: spot!.guide ? 'Drops' : spot!.sell };
 }
 
 /** The worn items as gear pieces by slot; null when a worn weapon is unknown to the gear data (the model does not guess its hit). */

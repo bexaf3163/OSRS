@@ -1,6 +1,6 @@
 {
   "source": "scripts/data/trainers.defs.json checked against the OSRS Wiki (LocLine spawns, drop tables) and scripts/data/build-trainers.ts",
-  "generatedAt": "2026-11-08",
+  "generatedAt": "2026-11-23",
   "trainers": [
     {
       "foe": "Cow",
@@ -21,7 +21,8 @@
       "always": [
         "Cowhide",
         "Raw beef",
-        "Bones"
+        "Bones",
+        "Cow bone"
       ],
       "members": false,
       "source": "https://oldschool.runescape.wiki/w/Cow"
@@ -59,7 +60,8 @@
       ],
       "where": "The Stronghold of Security, floor 1 (the Vault of War): the level 12 Minotaurs (the level 27 ones are further in). The entrance is in the Barbarian Village mine. There is no bank on the floor: bank in Edgeville first.",
       "always": [
-        "Bones"
+        "Bones",
+        "Minotaur bone"
       ],
       "members": false,
       "source": "https://oldschool.runescape.wiki/w/Minotaur"
@@ -226,7 +228,8 @@
       "specialMaxHit": 19,
       "always": [
         "Bull bones",
-        "Raw t-bone steak"
+        "Raw t-bone steak",
+        "Cow bone"
       ],
       "place": {
         "x": 3263,
@@ -237,6 +240,85 @@
       "members": false,
       "spawns": 1,
       "source": "https://oldschool.runescape.wiki/w/Brutus"
+    },
+    {
+      "foe": "Flesh Crawler",
+      "name": "Flesh Crawlers",
+      "levels": [
+        28
+      ],
+      "bank": "Edgeville Bank",
+      "place": {
+        "x": 1936,
+        "y": 5135,
+        "plane": 0,
+        "label": "Floor 2 (Catacomb of Famine): the level 28 Flesh Crawlers"
+      },
+      "waypoints": [
+        {
+          "x": 3081,
+          "y": 3420,
+          "plane": 0,
+          "label": "The Stronghold of Security entrance: climb down"
+        },
+        {
+          "x": 1936,
+          "y": 5135,
+          "plane": 0,
+          "label": "Floor 2 (Catacomb of Famine): the level 28 Flesh Crawlers"
+        }
+      ],
+      "npcNames": [
+        "Flesh Crawler"
+      ],
+      "goal": "Stronghold of Security floor 2: the level 28 Flesh Crawlers",
+      "where": "The Stronghold of Security, floor 2 (the Catacomb of Famine): the level 28 Flesh Crawlers. They attack first, so stand among them and they come to you. The entrance is in the Barbarian Village mine. There is no bank in the Stronghold: bank in Edgeville first.",
+      "always": [],
+      "members": false,
+      "source": "https://oldschool.runescape.wiki/w/Flesh_Crawler"
+    },
+    {
+      "foe": "Ogress Warrior",
+      "name": "Ogress Warriors",
+      "levels": [
+        82
+      ],
+      "bank": "Corsair Cove Bank",
+      "sell": "Big bones",
+      "guide": "killing-ogress-warriors",
+      "requires": {
+        "quest": "The Corsair Curse"
+      },
+      "place": {
+        "x": 1989,
+        "y": 8986,
+        "plane": 0,
+        "label": "Corsair Cove Dungeon: an Ogress Warrior safespot"
+      },
+      "waypoints": [
+        {
+          "x": 2523,
+          "y": 2861,
+          "plane": 0,
+          "label": "The Corsair Cove Dungeon entrance, west of Corsair Cove"
+        },
+        {
+          "x": 1989,
+          "y": 8986,
+          "plane": 0,
+          "label": "Corsair Cove Dungeon: an Ogress Warrior safespot"
+        }
+      ],
+      "npcNames": [
+        "Ogress Warrior"
+      ],
+      "goal": "Corsair Cove Dungeon: Ogress Warriors from a safespot",
+      "where": "Ogress Warriors in the Corsair Cove Dungeon, west of Corsair Cove. Stand on a safespot the wiki marks next to the first group and attack with Ranged or Magic: they hit up to 8 in melee and cannot reach you there. Bank at the Corsair Cove bank, or alch the rune drops to stay longer.",
+      "always": [
+        "Big bones"
+      ],
+      "members": false,
+      "source": "https://oldschool.runescape.wiki/w/Ogress_Warrior"
     }
   ]
 }

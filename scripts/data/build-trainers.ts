@@ -28,6 +28,8 @@ interface Def {
   bank: string;
   bankWhy?: string;
   sell?: string;
+  /** A fundingWiki.json money guide counted per kill: its outputs are the loot (see spots.ts). */
+  guide?: string;
   label?: string;
   place?: Pt & { label: string };
   waypoints?: Pt[];
@@ -46,7 +48,9 @@ const defs = JSON.parse(readFileSync(`${root}scripts/data/trainers.defs.json`, '
 const banks = (JSON.parse(readFileSync(`${root}src/data/generated/majorLocations.json`, 'utf8')) as { locations: Record<string, { kind: string }> }).locations;
 
 
-const chebyshev = (a: { x: number; y: number }, b: { x: number; y: number }) => Math.max(Math.abs(a.x - b.x), Math.abs(a.y - b.y));
+const wikiGuides: { methods: { id: string; rate?: { unit?: string } }[] } = JSON.parse(readFileSync(`${root}src/data/generated/fundingWiki.json`, 'utf8'));
+const guides = new Map(wikiGuides.methods.map((m) => [m.id, m.rate?.unit]));
+const chebyshev =(a: { x: number; y: number }, b: { x: number; y: number }) => Math.max(Math.abs(a.x - b.x), Math.abs(a.y - b.y));
 
 /** The LocLine whose location matches: its spawns and whether it is members-only. */
 function locLine(text: string, re: RegExp, plane: number): { pts: Pt[]; members: boolean } | null {
@@ -80,6 +84,7 @@ for (const d of defs.spots) {
   if (banks[d.bank]?.kind !== 'bank') { fail(`${d.bank} is not a bank of majorLocations.json`); continue; }
   const text = await wikitext(d.foe);
   const always = alwaysDrops(text);
+  if (d.guide && guides.get(d.guide) !== 'kill') { fail(`${d.guide} is not a per-kill money guide of fundingWiki.json`); continue; }
   if (d.sell && !always.includes(d.sell)) { fail(`${d.sell} is not among its always-drops (${always.join(', ') || 'none'})`); continue; }
   const { location, plane: _p, label, bankWhy: _b, betweenWhy: _w, ...rest } = d;
   let spot: Record<string, unknown> = { ...rest, always };

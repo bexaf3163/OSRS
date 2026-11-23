@@ -97,6 +97,7 @@ const PLACES: [string, Kind, string[], string?][] = [
   ['Draynor Bank', 'bank', ['Draynor Village bank'], 'Draynor bank'],
   ['Al Kharid Bank', 'bank', [], 'Al Kharid bank'],
   ['Edgeville Bank', 'bank', [], 'Edgeville bank'],
+  ['Corsair Cove Bank', 'bank', ['Corsair bank'], 'Corsair Cove bank'],
   // Shops
   ["Bob's Brilliant Axes", 'shop', ["Bob's Brilliant Axes."]],
   ['Lumbridge General Store', 'shop', []],
@@ -174,6 +175,8 @@ interface Entry extends WikiPoint {
   kind: Kind;
   aliases?: string[];
   page: string;
+  /** A bank that opens only after this quest: never a "nearest bank" guess, only named by a spot that needs the quest. */
+  quest?: string;
 }
 
 const fetchFn = (url: string) => fetch(url, { headers: { 'User-Agent': UA }, signal: AbortSignal.timeout(20_000) });
@@ -212,6 +215,8 @@ try {
   // The first run.
 }
 for (const name of failed.map((f) => f.replace(/ \(.*\)$/, ''))) if (previous[name]) out[name] = previous[name];
+// The Corsair Cove bank is usable only after The Corsair Curse (the wiki's Corsair Cove article).
+if (out['Corsair Cove Bank']) out['Corsair Cove Bank'].quest = 'The Corsair Curse';
 // The castle bank is on the top floor (plane 2), which no article map gives; placed in 2.53.0 from the game.
 out['Lumbridge Bank'] = { x: 3208, y: 3220, plane: 2, label: 'Lumbridge Bank (castle top floor)', kind: 'bank', aliases: ['Lumbridge Castle bank'], page: 'Lumbridge' };
 // The Varrock Sewers and the Stronghold of Security articles have no map: their surface entrances (manhole east of the palace, Barbarian Village hole).

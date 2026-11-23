@@ -3,7 +3,7 @@
 // earn coins - killing cows for their hides (funding's cows-cowhide rate at the exchange's price after tax); then the coins count as the minutes that way
 // would take.
 
-import { fundingMethodsJson as fundingJson } from '../../data';
+import { fundingMethodsJson as fundingJson, fundingWikiJson } from '../../data';
 import { netEach } from './ge';
 import { isRestrictedItem, type TradeRestriction } from './tradeRestriction';
 import type { PriceView } from './quotes';
@@ -42,6 +42,16 @@ export function coinTimeShare(netPerHour: number | undefined, rate: number | nul
 }
 
 /** Coins one drop brings after the tax, or null: no price, nothing after the tax, or an item a restricted account cannot sell. */
+type GuideOutput = { item: { name: string }; qty: number; chance?: [number, number] };
+const GUIDE_OUTPUTS = new Map((fundingWikiJson as unknown as { methods: { id: string; outputs?: GuideOutput[] }[] }).methods.map((m) => [m.id, m.outputs ?? []]));
+
+/** One kill of a per-kill money guide, sold: every output at its expected count. An output with no price adds nothing, so the value is a floor. */
+export function guideDropValue(guide: string, prices: PriceView | null | undefined, restriction?: TradeRestriction['state']): number | null {
+  const outputs = GUIDE_OUTPUTS.get(guide);
+  if (!outputs?.length || !prices) return null;
+  return outputs.reduce((sum, o) => sum + (dropValue(o.item.name, prices, restriction) ?? 0) * o.qty * (o.chance ? o.chance[0] / o.chance[1] : 1), 0);
+}
+
 export function dropValue(name: string, prices: PriceView | null | undefined, restriction: TradeRestriction['state'] | undefined): number | null {
   if (restriction === 'RESTRICTED' && isRestrictedItem(name)) return null;
   // Coins (high alchemy) are money already: one each, no exchange and no tax.

@@ -37,6 +37,6 @@ export function F2pNext({ waiting = null }: { waiting?: string | null }) {
             onClick={() => setTracked({ skill: row.skill, mode: 'fast', freeOnly: true, target: row.target })}>Follow</button>
         </li></Fragment>)}
       </ol>
-    </> : <p className="muted">Every F2P quest and skill checkpoint is done. Members content is not planned yet.</p>}
+    </> : <p className="muted">Every F2P quest and skill checkpoint is done. Combat past 40 is optional: the Skills page compares each target's XP and coins for your levels, Ogress Warriors for Ranged among them. Members content is not planned yet.</p>}
   </>;
 }

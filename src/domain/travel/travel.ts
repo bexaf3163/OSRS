@@ -106,11 +106,11 @@ export const NET = netJson as unknown as {
   tablets: Tablet[];
 };
 
-const LOCATIONS = (locationsJson as unknown as { locations: Record<string, { x: number; y: number; plane: number; label: string; kind: string }> }).locations;
+const LOCATIONS = (locationsJson as unknown as { locations: Record<string, { x: number; y: number; plane: number; label: string; kind: string; quest?: string }> }).locations;
 /** Where tablets and runes are bought. */
 export const EXCHANGE: Point & { label: string } = { x: LOCATIONS['Grand Exchange'].x, y: LOCATIONS['Grand Exchange'].y, plane: 0, label: 'Grand Exchange' };
 /** The banks: the nearest one is where a missing item is taken from. One upstairs (Lumbridge Castle's top floor) costs the climb as well. */
-export const BANKS: (Point & { label: string })[] = Object.values(LOCATIONS).filter((l) => l.kind === 'bank').map((l) => ({ x: l.x, y: l.y, plane: l.plane, label: l.label }));
+export const BANKS: (Point & { label: string })[] = Object.values(LOCATIONS).filter((l) => l.kind === 'bank' && !l.quest).map((l) => ({ x: l.x, y: l.y, plane: l.plane, label: l.label }));
 /** The stairs to a bank on an upper floor and back down, as tiles of running per floor: a straight line on the map does not see them. */
 export const STAIRS_TILES_PER_FLOOR = 15;
 /** The walk to a bank as a stop: the straight line, and the stairs between the player's floor and the bank's. */

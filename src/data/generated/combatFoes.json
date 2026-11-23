@@ -1,6 +1,6 @@
 {
   "source": "OSRS Wiki: Infobox Monster of each article, every version (scripts/data/build-combat-foes.ts)",
-  "generatedAt": "2026-11-20",
+  "generatedAt": "2026-11-23",
   "foes": [
     {
       "name": "Count Draynor",
@@ -3712,6 +3712,33 @@
       "aggressive": true,
       "weakness": {
         "element": "fire",
+        "percent": 20
+      }
+    },
+    {
+      "name": "Ogress Warrior",
+      "version": "1",
+      "combat": 82,
+      "members": false,
+      "hitpoints": 82,
+      "attackLevel": 68,
+      "strengthLevel": 70,
+      "defenceLevel": 82,
+      "magicLevel": 60,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 10,
+        "slash": 12,
+        "crush": 12,
+        "magic": 14,
+        "ranged": 16
+      },
+      "attackStyle": "crush",
+      "maxHit": 8,
+      "speedTicks": 4,
+      "aggressive": true,
+      "weakness": {
+        "element": "earth",
         "percent": 20
       }
     },
