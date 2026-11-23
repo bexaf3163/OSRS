@@ -157,9 +157,9 @@ Maps read the Wiki's atlas metadata with a verified **2019-10-31_1 archive fallb
 
 ## Handover — state on 2026-11-14
 
-- **State:** v2.167.0 published, all gates passed; nothing tested in the real game since 2.87.
+- **State:** v2.168.0 published, all gates passed; nothing tested in the real game since 2.87.
 - **Owner decisions (2.93–2.94.5):** version/update on the rail; one preparation behaviour (two steps ahead, quiet, times shown); training is always Balanced (2.135.0); Money asks once about trade limits; the welcome card links Reference; update Cancel stays.
-- **Now (owner, 2026-11-23):** F2P skills to the Crafting standard, never losing coins while a free or earning method exists. Quests paused (branch `quests-2.158-wip`, gate stops at MEP1). `tests/trainingPaths.test.ts` fails slower, untimed, unusable or avoidable-loss legs. Speed debt: early Members decisions take seconds. Open: F2P Stronghold targets, Ogress, arrows, Runecraft, Smithing, maples; Members Slayer, darts, bursting, Chaos altar, libation.
+- **Now (owner, 2026-11-23):** F2P skills to the Crafting standard, never losing coins while a free or earning method exists. Quests paused (branch `quests-2.158-wip`, gate stops at MEP1). `tests/trainingPaths.test.ts` fails slower, untimed, unusable or avoidable-loss legs. Speed debt: early Members decisions take seconds. Open: F2P Stronghold targets, Ogress, alch values, arrows, Runecraft, maples; Members Slayer, darts, bursting, Chaos altar, libation.
 - **Next:** 1) P4. 2) Members (owner): Members unlocks everything; money guides hand-reviewed (106) or held back; once subscribed, quests and training are one path; a reached followed goal hands back (`nextAfterReached`). Next: Members methods for every skill, Members quests in batches of 3 to 5, fight profiles. After the last quest (owner, 2026-11-18): backfill later features into earlier quests, add guide help, then audit the whole run from a fresh F2P account. 3) Quest times measured from the player's own runs.
 - **Owner:** writes Russian, reply in English; short answers, result first, at most one question; push/release once all gates pass; ask before deleting authored documents.
 

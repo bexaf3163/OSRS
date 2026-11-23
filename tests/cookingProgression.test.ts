@@ -30,7 +30,7 @@ describe('Cooking uses the Fishing catch through the shared staged lifecycle', (
     expect(advice.best?.method.id).toBe(family);
     const followed = trackedTraining({ skill: 'cooking', mode: 'f2p', target: level + 1 }, state, 'f2p')!;
     expect(followed.step.itemsRequired?.some(n => n.nameEn === raw || n.anyOf?.includes(raw))).toBe(true);
-    expect(followed.step.inGame?.objectNames).toContain('Fire');
+    expect(followed.step.inGame?.objectNames).toContain('Range');
     expect(followed.step.inGame?.npcNames ?? []).toEqual([]);
     expect(followed.step.inGame?.completionTrigger).toEqual({ type: 'SKILL_LEVEL', levels: [{ skill: 'cooking', level: level + 1 }] });
     const engine = createReadinessEngine({ steps: [followed.step], state, progress: emptyProgress(), qp: 0, mode: 'f2p' });

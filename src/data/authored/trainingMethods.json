@@ -709,7 +709,7 @@
       "effort": "low",
       "cost": "cost",
       "risk": "none",
-      "where": "The permanent fire west of the Barbarian Village fishing spots",
+      "where": "The range or fire nearest a bank that this account can use",
       "note": "Use an owned usable catch or raw meat; current preparation is one executable batch, not the whole goal. The existing fire needs no logs or tinderbox. Burnt food gives no XP; buying refills needs confirmed coins.",
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_Cooking_training",
       "place": "Barbarian Village fishing spots"
@@ -733,7 +733,7 @@
       "effort": "low",
       "cost": "cost",
       "risk": "none",
-      "where": "The permanent fire west of the Barbarian Village fishing spots",
+      "where": "The range or fire nearest a bank that this account can use",
       "note": "Use owned fish your Cooking level allows; current preparation is one executable batch. Recheck supplies after each batch; burnt fish gives no XP. Buying refills needs confirmed coins.",
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_Cooking_training",
       "place": "Barbarian Village fishing spots"
@@ -757,7 +757,7 @@
       "effort": "low",
       "cost": "cost",
       "risk": "none",
-      "where": "The permanent fire west of the Barbarian Village fishing spots; withdraw usable raw fish first",
+      "where": "The range or fire nearest a bank that this account can use; withdraw usable raw fish first",
       "note": "Use owned fish your Cooking level allows; current preparation is one executable batch, not a whole-goal quantity. Burnt fish gives no XP. Buying refills needs confirmed coins.",
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_Cooking_training",
       "place": "Barbarian Village fishing spots"

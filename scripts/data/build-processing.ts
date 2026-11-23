@@ -17,7 +17,9 @@ const OUT = `${root}src/data/generated/processing.json`;
 type Kind = 'furnace' | 'anvil' | 'fire' | 'altar';
 interface StationDef { objectName?: string; kind: Kind; page: string; row?: string; location?: string; near?: string; bank?: string;
   /** A fire the player lights a few tiles from a bank (the Grand Exchange, where its building forbids fires): bankTiles away from it. */
-  lit?: boolean; bankTiles?: number }
+  lit?: boolean; bankTiles?: number;
+  /** A range from the page's list of the ranges closest to a bank ("* 22 spaces - [[Al Kharid]] - Range north of bank"): the tiles come from that line. */
+  listed?: string }
 interface TickEvidence { page: string; evidence: string; ticks: number }
 /** A house-party gilded altar: the guide's sentences for the XP bonus, the hourly pace (bank trips included) and the unnoting fee. */
 interface AltarDef { page: string; bonus: string; percent: number; pace: string; perHour: number; fee: string; coins: number }
@@ -49,7 +51,7 @@ const stations = [];
 const pages = new Map<string, string>();
 const page = async (p: string) => { if (!pages.has(p)) pages.set(p, await wikitext(p)); return pages.get(p)!; };
 for (const s of defs.stations) {
-  const what = `${s.kind} @ ${s.row ?? s.location}`;
+  const what = `${s.kind} @ ${s.row ?? s.location ?? s.listed}`;
   const text = await page(s.page);
   const sceneNames = [...new Set(templates(text, 'Infobox Scenery').flatMap(box => Object.entries(box)
     .filter(([key]) => /^name\d*$/.test(key)).map(([, value]) => plain(value)).filter(Boolean)))];
@@ -61,6 +63,16 @@ for (const s of defs.stations) {
     if (!bank || bank.kind !== 'bank' || !s.bankTiles) { fail(what, 'a lit fire needs a bank of majorLocations.json and its distance in tiles'); continue; }
     const label = `Your own fire by the ${s.bank}`;
     stations.push({ kind: s.kind, objectNames, label, place: { x: bank.x, y: bank.y, plane: bank.plane, label }, bankTiles: s.bankTiles, lit: true, members: false });
+    continue;
+  }
+  if (s.listed) {
+    const line = text.split('\n').map(plain).find((l) => new RegExp(`^\\*\\s*\\d+ spaces - ${s.listed} - `).test(l));
+    const tiles = Number(/(\d+) spaces/.exec(line ?? '')?.[1]);
+    const bank = s.bank ? places[s.bank] : undefined;
+    if (!(tiles > 0)) { fail(what, `no "N spaces - ${s.listed} - ..." line on ${s.page}`); continue; }
+    if (!bank || bank.kind !== 'bank') { fail(what, `${s.bank} is not a bank of majorLocations.json`); continue; }
+    stations.push({ kind: s.kind, objectNames, label: `${s.listed} ${s.page.toLowerCase()}`, place: { x: bank.x, y: bank.y, plane: bank.plane, label: s.bank },
+      bankTiles: tiles, members: false });
     continue;
   }
   if (s.kind === 'altar') {

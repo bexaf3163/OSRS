@@ -63,7 +63,7 @@ describe('one coherent Fishing/Cooking handover', () => {
     const s = scenario({ fishing: 50, cooking: 30 }, { 'Raw tuna': { bank: 26 } });
     expect(s.pick).toBe('ck-tuna');
     expect(s.payload.worldPoint?.label).toContain('Cooking: Tuna');
-    expect(s.payload.worldPoint?.label).toContain('Barbarian Village');
+    expect(s.payload.worldPoint?.label).toContain('Al Kharid range');
     const raw = s.engine.plan(s.step).now.find(i => i.name === 'Raw tuna')!;
     expect(raw.where).toBe('BANK');
     expect(raw.action?.kind).toBe('TAKE');

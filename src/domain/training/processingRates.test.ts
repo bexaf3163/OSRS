@@ -38,7 +38,7 @@ describe('the processing engine against the wiki', () => {
   it('cooking burns less as the level rises (the wiki success chart): more XP an hour on the same food', () => {
     const at = (lv: number) => processRate(method('ck-trout'), 'cooking', stateOf({ cooking: lv }))!.xph[1];
     expect(at(25)).toBeGreaterThan(at(16));
-    expect(processRate(method('ck-trout'), 'cooking', stateOf({ cooking: 25 }))!.spot).toMatchObject({ label: 'Barbarian Village fire', bank: 'Edgeville Bank' });
+    expect(processRate(method('ck-trout'), 'cooking', stateOf({ cooking: 25 }))!.spot).toMatchObject({ label: 'Al Kharid range', how: 'bank', objectNames: ['Range'] });
   });
   it('the best recipe open at the level: gold amulets from 8, gems by their level', () => {
     expect(processRate(method('cr-gold'), 'crafting', stateOf({ crafting: 8 }))!.basis).toBe('Gold amulet (u)');
@@ -379,12 +379,12 @@ describe('Runecraft uses an inventory action and the altar journey', () => {
   it('food bought on the exchange is cooked on your own fire by its bank: a tinderbox and a log a trip, the lighting timed', () => {
     const kit = new Map([['tinderbox', { name: 'Tinderbox', carried: 1, bank: 0, noted: 0 }]]);
     const at40 = buildPlayerState({ mode: 'f2p', connected: true, stats: { cooking: 40, firemaking: 30 }, progress: emptyProgress(), questsDone: [], gear: { equipment: [], inventory: [], coins: 50_000, bankCoins: 0 }, owned: { bankSeen: true, items: kit } } as never);
-    expect(processRate(method('ck-tuna'), 'cooking', stateOf({ cooking: 40, firemaking: 30 }))?.spot?.label, 'no tinderbox: the permanent fire').toBe('Barbarian Village fire');
+    expect(processRate(method('ck-tuna'), 'cooking', stateOf({ cooking: 40, firemaking: 30 }))?.spot?.label, 'no tinderbox: the range nearest a bank').toBe('Al Kharid range');
     const r = processRate(method('ck-tuna'), 'cooking', at40)!;
     expect(r.spot?.label).toBe('Your own fire by the Grand Exchange bank');
     expect(r.needs?.map((n) => (n.type === 'item' ? n.name : ''))).toEqual(expect.arrayContaining(['Tinderbox', 'Logs']));
     const permanent: ProcessingRegistry = { ...PROCESSING, stations: PROCESSING.stations.filter((s) => !s.lit) };
-    expect(processRate(method('ck-tuna'), 'cooking', at40, {}, permanent)?.spot?.label).toBe('Barbarian Village fire');
+    expect(processRate(method('ck-tuna'), 'cooking', at40, {}, permanent)?.spot?.label).toBe('Al Kharid range');
   });
 });
 

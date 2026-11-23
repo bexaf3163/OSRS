@@ -57,6 +57,12 @@
       "lit": true,
       "bank": "Grand Exchange bank",
       "bankTiles": 12
+    },
+    {
+      "kind": "fire",
+      "page": "Range",
+      "listed": "Al Kharid",
+      "bank": "Al Kharid Bank"
     }
   ],
   "recipes": [

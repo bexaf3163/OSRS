@@ -195,6 +195,21 @@
       "bankTiles": 12,
       "lit": true,
       "members": false
+    },
+    {
+      "kind": "fire",
+      "objectNames": [
+        "Range"
+      ],
+      "label": "Al Kharid range",
+      "place": {
+        "x": 3269,
+        "y": 3167,
+        "plane": 0,
+        "label": "Al Kharid Bank"
+      },
+      "bankTiles": 22,
+      "members": false
     }
   ],
   "recipes": [

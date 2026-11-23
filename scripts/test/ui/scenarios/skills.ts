@@ -207,7 +207,7 @@ async function cookingCatchScenarios(browser: Browser) {
     return JSON.stringify(step).includes('Raw swordfish');
   });
   const sent = await page.evaluate(() => (window as any).__posts.filter((p: any) => p.path === '/prep-plan').at(-1)?.body?.step);
-  expect(!sent.npcNames?.length && sent.objectNames?.some((name: string) => /fire/i.test(name)), 'Cooking: shared guide sends the fire target without a stale combat NPC');
+  expect(!sent.npcNames?.length && sent.objectNames?.some((name: string) => /fire|range/i.test(name)), 'Cooking: shared guide sends the fire or range target without a stale combat NPC');
   await page.goto(`${BASE}#/shopping`);
   await page.getByRole('region', { name: 'Checkout', exact: true }).waitFor();
   expect(await page.getByRole('button', { name: /Copy the exchange list/ }).count() === 0, 'Cooking: current partial catch does not trigger another ingredient purchase');
