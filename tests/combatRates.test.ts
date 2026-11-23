@@ -171,4 +171,10 @@ describe('Ogress Warriors follow the quest and the money guide', () => {
     expect(ogress([corsair]).status).not.toBe('LOCKED');
     expect(ogress([corsair]).method.lootPerHour!).toBeGreaterThan(0);
   });
+  it('a drop worth more alched than sold counts alched only when the player can cast High Alchemy', () => {
+    const alching = { ...prices, alchOf: (n: string) => (n === 'Rune battleaxe' ? 1_000_000 : undefined) } as PriceView;
+    const sold = guideDropValue('killing-ogress-warriors', alching, undefined, false)!;
+    expect(guideDropValue('killing-ogress-warriors', alching, undefined, true)!).toBeGreaterThan(sold);
+    expect(guideDropValue('killing-ogress-warriors', prices, undefined, true)).toBe(guideDropValue('killing-ogress-warriors', prices, undefined, false));
+  });
 });

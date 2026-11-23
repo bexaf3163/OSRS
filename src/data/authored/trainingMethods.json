@@ -2601,6 +2601,14 @@
       ]
     },
     {
+      "id": "ck-pizza", "skill": "cooking", "from": 35, "to": null, "name": "Plain pizza", "members": false,
+      "needs": [{"type": "item", "name": "Pizza base", "count": 9}, {"type": "item", "name": "Tomato", "count": 9}, {"type": "item", "name": "Cheese", "count": 9}],
+      "xpa": 143, "act": "pizza|pizzas", "effort": "medium", "cost": "profit", "risk": "none",
+      "where": "The range nearest a bank that this account can use (a pizza cannot be cooked on a fire)",
+      "note": "Buy pizza bases, tomatoes and cheese at the Grand Exchange. Add a tomato and then cheese to each base, then cook the uncooked pizzas on a range: 143 Cooking XP each, and the plain pizzas usually sell for more than the three parts. Pizzas burn less as your level rises (the wiki's range chart); burnt ones give no XP.",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Cooking_training", "place": "Al Kharid"
+    },
+    {
       "id": "me-crawler", "skill": ["attack", "strength", "defence"], "from": 1, "suggestedFrom": 40, "to": null, "name": "Flesh Crawlers", "members": false,
       "effort": "low", "cost": "free", "risk": "low", "where": "Stronghold of Security, second level: Flesh Crawlers",
       "note": "The wiki's free-to-play melee guide lists the level 28 Flesh Crawlers on the second floor of the Stronghold of Security: they attack first, so you fight without walking between kills. Requires Defence 40 in this recommendation, because several of them hit you at once. Bring food and bank in Edgeville.",

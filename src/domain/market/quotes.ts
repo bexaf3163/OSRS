@@ -60,6 +60,8 @@ export interface PriceView {
   idOf(name: string): number | undefined;
   /** The exchange buy limit for four hours; undefined — not known. */
   limitOf(name: string, id?: number): number | undefined;
+  /** The item's High Alchemy value from the exchange reference; undefined when it is not known. */
+  alchOf?(name: string, id?: number): number | undefined;
 }
 
 const minutes = (ms: number) => Math.max(0, Math.round(ms / 60_000));
@@ -201,7 +203,7 @@ export interface BakedPrice { buy: number; sell: number }
 export interface ViewInput {
   board: QuoteBoard | null;
   /** The item reference (id to name) from the exchange; without it names cannot be priced from the board. */
-  mapping: Map<number, { name: string; limit?: number }> | null;
+  mapping: Map<number, { name: string; limit?: number; highalch?: number }> | null;
   /** The project database prices by name key: an estimate from the build date, used only when the board has nothing. */
   baked: ReadonlyMap<string, BakedPrice>;
   now: number;
@@ -255,6 +257,11 @@ export function buildPriceView(i: ViewInput): PriceView {
       const use = id && id > 0 ? id : byName.get(nameKey(name))?.id;
       const l = use === undefined ? undefined : i.mapping?.get(use)?.limit;
       return l && l > 0 ? l : undefined;
+    },
+    alchOf: (name, id) => {
+      const use = id && id > 0 ? id : byName.get(nameKey(name))?.id;
+      const a = use === undefined ? undefined : i.mapping?.get(use)?.highalch;
+      return a && a > 0 ? a : undefined;
     },
   };
 }

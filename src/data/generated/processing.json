@@ -1547,6 +1547,42 @@
       "source": "https://oldschool.runescape.wiki/w/Jug_of_wine"
     },
     {
+      "id": "plain-pizza",
+      "skill": "cooking",
+      "level": 35,
+      "xp": 143,
+      "ticks": 8,
+      "facility": "fire",
+      "tools": [],
+      "range": true,
+      "inputs": [
+        {
+          "name": "Pizza base",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Tomato",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Cheese",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Plain pizza",
+        "qty": 1
+      },
+      "success": {
+        "low": 48,
+        "high": 352
+      },
+      "source": "https://oldschool.runescape.wiki/w/Plain_pizza"
+    },
+    {
       "id": "anchovy-pizza",
       "skill": "cooking",
       "level": 55,
@@ -4358,6 +4394,9 @@
     ],
     "pr-banked-fiendish-ashes": [
       "scatter-fiendish-ashes"
+    ],
+    "ck-pizza": [
+      "plain-pizza"
     ],
     "ck-anchovy-pizza": [
       "anchovy-pizza"

@@ -33,6 +33,9 @@ interface RecipeDef { id: string; page: string; skill: string; facility: Kind | 
   forging?: { item: string; evidence: string };
   /** Batch size is an app preparation choice. Work/wait ticks must match the Wiki recipe's timing note and total. */
   batch?: { size: number; workTicks: number; waitTicks: number; workEvidence: string; waitEvidence: string }; successLabel?: string;
+  /** No-XP steps made first, last step first (Plain pizza: "Uncooked pizza", then "Incomplete pizza"): each page's {{Recipe}} materials
+   * replace its product among the inputs and its Make-X ticks add to the action. */
+  prep?: string[];
 }
 /** Lighting logs: the action length (checked against its evidence line) and the lighting success chart, one for every log. */
 interface LightDef { ticks: { page: string; evidence: string; ticks: number }; chart: { page: string; label: string; line: string } }
@@ -244,7 +247,21 @@ for (const d of defs.recipes) {
     if (d.skill !== 'runecraft' || !carried || !equipped || !every || inputs.length !== 1 || inputs[0].name !== 'Rune essence'
       || !guide.includes('pure essence or rune essence')) { fail(d.id, 'whole-inventory crafting/access/essence evidence incomplete'); continue; }
   }
-  const ticks = d.batch?.workTicks ?? recipeTicks(r);
+  // shortcut: the raw materials ride in the bag (9 pizzas a trip) while players combine at the bank and carry 28 uncooked pizzas,
+  // so the rate is a little slow; replace with bank-side prep timing if that difference ever decides a plan.
+  let prepTicks = 0;
+  for (const p of d.prep ?? []) {
+    const pr = templates(await page(p), 'Recipe').find((x) => (x.skill1 ?? '').toLowerCase() === d.skill);
+    const at = pr ? inputs.findIndex((i) => i.name === plain(pr.output1 ?? '')) : -1;
+    if (!pr || at < 0 || !(recipeTicks(pr) > 0) || num(pr.skill1exp) !== 0) { fail(d.id, `${p} is not a no-XP step making an input of ${d.page}`); prepTicks = NaN; break; }
+    const mats = [];
+    // The wiki may skip a number (Uncooked pizza: mat1 and mat3), so every slot is read.
+    for (let i = 1; i <= 10; i++) if (pr[`mat${i}`]) mats.push({ name: plain(pr[`mat${i}`]), qty: num(pr[`mat${i}quantity`]) || 1, stacks: await stacks(plain(pr[`mat${i}`])) });
+    inputs.splice(at, 1, ...mats);
+    prepTicks += recipeTicks(pr);
+  }
+  if (Number.isNaN(prepTicks)) continue;
+  const ticks = (d.batch?.workTicks ?? recipeTicks(r)) + prepTicks;
   if (d.batch && (!(d.batch.size > 0) || !Number.isInteger(d.batch.size) || !(d.batch.workTicks > 0) || !(d.batch.waitTicks >= 0)
     || num(r.ticks) !== d.batch.workTicks + d.batch.waitTicks || !(r.ticksnote ?? '').includes(d.batch.workEvidence)
     || !(r.ticksnote ?? '').includes(d.batch.waitEvidence))) { fail(d.id, 'batch work/wait evidence does not match the recipe'); continue; }
@@ -259,6 +276,8 @@ for (const d of defs.recipes) {
   recipes.push({
     id: d.id, skill: d.skill, level, xp, ticks, facility: d.facility, tools: d.wholeBatch ? [] : tools,
     ...(d.members ? { members: true } : {}),
+    // Cooked on a range only when the wiki's burn chart has a "Range" line and no fire one (a pizza never goes on a fire).
+    ...(d.facility === 'fire' && chart && /^range$/i.test(chart.label) ? { range: true } : {}),
     inputs: d.wholeBatch ? inputs.map((i) => ({ ...i, anyOf: ['Pure essence'] })) : d.forging ? [...inputs, { name: d.forging.item, qty: 1, stacks: true }] : inputs,
     output: { name: plain(r.output1), qty: num(r.output1quantity) || 1 },
     ...(d.wholeBatch ? { wholeBatch: true, multiplierEvery: Number(every![1]), access: { carried, equipped }, station: plain(r.facilities) } : {}),

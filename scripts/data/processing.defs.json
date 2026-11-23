@@ -396,6 +396,14 @@
       }
     },
     {
+      "id": "plain-pizza",
+      "page": "Plain pizza",
+      "skill": "cooking",
+      "facility": "fire",
+      "successLabel": "Range",
+      "prep": ["Uncooked pizza", "Incomplete pizza"]
+    },
+    {
       "id": "anchovy-pizza",
       "page": "Anchovy pizza",
       "skill": "cooking",
@@ -1407,6 +1415,9 @@
     ],
     "pr-banked-fiendish-ashes": [
       "scatter-fiendish-ashes"
+    ],
+    "ck-pizza": [
+      "plain-pizza"
     ],
     "ck-anchovy-pizza": [
       "anchovy-pizza"

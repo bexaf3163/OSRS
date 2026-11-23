@@ -40,6 +40,8 @@ interface Recipe {
   requires?: { skill: string; level: number }[];
   source?: string;
   wholeBatch?: boolean; multiplierEvery?: number; access?: { carried: string; equipped: string }; station?: string;
+  /** Cooked on a range only, never a fire (Plain pizza). */
+  range?: boolean;
 }
 /** The processing registry: data/processing.json in the app; a test may pass its own (synthetic content never enters the app's data). */
 export interface ProcessingRegistry { stations: Station[]; recipes: Recipe[]; methods: Record<string, string[]> }
@@ -60,7 +62,7 @@ const BANK_VISIT: [number, number] = [3, 15];
 /** Where the recipe is made and the minutes of one bank trip from there: a station of its kind, or (no facility) by the bank itself. */
 function placesFor(r: Recipe, state: PlayerState, reg: ProcessingRegistry): { spot: RateSpot | null; trip: [number, number]; lit?: boolean }[] {
   if (!r.facility) return [{ spot: null, trip: tripMinutes(0, 0, BANK_VISIT) }];
-  return reg.stations.filter((s) => s.kind === r.facility && (!r.station || r.station === s.label) && !(s.members && state.mode !== 'members')
+  return reg.stations.filter((s) => s.kind === r.facility && (!r.station || r.station === s.label) && (!r.range || !!s.objectNames?.includes('Range')) && !(s.members && state.mode !== 'members')
     // An own fire only for a player who holds a tinderbox: the plan never buys one just to skip a walk, and owned food stays first.
     && !(s.lit && !((heldOf(state, 'Tinderbox').total ?? 0) > 0))).flatMap((s) => {
     const walk = s.bankTiles !== undefined ? { minutes: tripMinutes(s.bankTiles, 0, BANK_VISIT), bank: undefined } : s.bank ? bankTrip({ place: s.place, bank: s.bank,

@@ -143,6 +143,12 @@ describe('the price view', () => {
     expect(v.idOf('big BONES')).toBe(532);
     expect(v.sell('Nothing named this')).toBeNull();
   });
+
+  it('gives the reference High Alchemy value, and none for an item it does not know', () => {
+    const v = buildPriceView({ board: board('live', [bigBones]), mapping: new Map([[1373, { name: 'Rune battleaxe', limit: 70, highalch: 24_960 }]]), baked, now: NOW });
+    expect(v.alchOf?.('rune battleaxe')).toBe(24_960);
+    expect(v.alchOf?.('Big bones')).toBeUndefined();
+  });
   it('a known item ID can use its real quote even when the name mapping is unavailable', () => {
     const v = buildPriceView({ board: board('live', [bigBones]), mapping: null, baked, now: NOW });
     expect(v.status).toBe('live');

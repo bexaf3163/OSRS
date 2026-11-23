@@ -45,11 +45,18 @@ export function coinTimeShare(netPerHour: number | undefined, rate: number | nul
 type GuideOutput = { item: { name: string }; qty: number; chance?: [number, number] };
 const GUIDE_OUTPUTS = new Map((fundingWikiJson as unknown as { methods: { id: string; outputs?: GuideOutput[] }[] }).methods.map((m) => [m.id, m.outputs ?? []]));
 
-/** One kill of a per-kill money guide, sold: every output at its expected count. An output with no price adds nothing, so the value is a floor. */
-export function guideDropValue(guide: string, prices: PriceView | null | undefined, restriction?: TradeRestriction['state']): number | null {
+/** One kill of a per-kill money guide: every output at its expected count, sold, or alched when the player can cast High Alchemy
+ * (`alch`) and the alch value less a nature rune pays more. An output with no price adds nothing, so the value is a floor. */
+export function guideDropValue(guide: string, prices: PriceView | null | undefined, restriction?: TradeRestriction['state'], alch = false): number | null {
   const outputs = GUIDE_OUTPUTS.get(guide);
   if (!outputs?.length || !prices) return null;
-  return outputs.reduce((sum, o) => sum + (dropValue(o.item.name, prices, restriction) ?? 0) * o.qty * (o.chance ? o.chance[0] / o.chance[1] : 1), 0);
+  const nature = alch ? prices.buy('Nature rune')?.price ?? null : null;
+  const each = (name: string) => {
+    const sold = dropValue(name, prices, restriction) ?? 0;
+    const value = nature === null ? undefined : prices.alchOf?.(name);
+    return value === undefined ? sold : Math.max(sold, value - nature!);
+  };
+  return outputs.reduce((sum, o) => sum + each(o.item.name) * o.qty * (o.chance ? o.chance[0] / o.chance[1] : 1), 0);
 }
 
 export function dropValue(name: string, prices: PriceView | null | undefined, restriction: TradeRestriction['state'] | undefined): number | null {

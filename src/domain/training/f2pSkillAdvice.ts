@@ -9,13 +9,13 @@ export interface F2pSkillAdvice {
 
 /** Reviewed 2026-11-21 (owner: profitable skills go further in F2P). Authored pre-members checkpoints, not training requirements or XP forecasts. */
 export const F2P_SKILL_ADVICE: Partial<Record<SkillName, F2pSkillAdvice>> = {
-  cooking: { priority: 'good', target: 70, reason: "Tuna, then anchovy pizza from 55, train without losing coins; wine from 35 is the fastest but costs coins. 70 is the Recipe for Disaster level." },
+  cooking: { priority: 'good', target: 70, reason: "Meat, then plain pizzas from 35 and anchovy pizzas from 55, train without losing coins; wine from 35 is the fastest but costs coins. 70 is the Recipe for Disaster level." },
   firemaking: { priority: 'good', target: 50, reason: "Maple logs from 45 are the cheapest Firemaking per XP; 50 opens Wintertodt on members, and maples stay cheap past it for a longer F2P stay." },
   mining: { priority: 'good', target: 60, reason: "Iron is the best F2P Mining from 15; 60 opens the Mining Guild, which free players can use." },
   fishing: { priority: 'good', target: 58, reason: "Fly fishing trout and salmon from 20 is the F2P method, as fast as members methods up to Barbarian Fishing; 35 opens harpoon tuna." },
   woodcutting: { priority: 'optional', target: 36, reason: "36 covers Lost City; willows past it pay little in F2P, yews from 60 a little more." },
   magic: { priority: 'good', target: 70, reason: 'Enchanting amulets and alching gem necklaces pay while they train; 70 is where members Ice Burst becomes far faster.' },
-  smithing: { priority: 'good', target: 50, reason: "The Knight's Sword takes Smithing to 29; smelting steel and mithril bars pays to 50, where members Giants' Foundry starts." },
+  smithing: { priority: 'good', target: 50, reason: "The Knight's Sword takes Smithing to 29; smelting bars pays to 50, where members Giants' Foundry starts." },
   crafting: { priority: 'good', target: 70, reason: 'Gold and gem jewellery at a furnace pays from the start; 70 opens diamond amulets, and 31 also covers Lost City.' },
   attack: { priority: 'optional', target: 40, reason: '40 is a practical starter checkpoint for F2P combat.' },
   strength: { priority: 'optional', target: 40, reason: '40 is a practical starter checkpoint for F2P combat.' },
