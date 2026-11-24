@@ -19,7 +19,7 @@ export function TrainingEarners() {
   return (
     <section className="card money-reco" aria-label="Earn while you train">
       <h3 className="small subhead">Earn while you train</h3>
-      <p className="small muted">Training methods that bring in coins at your levels and today's prices, with the XP they give. Some earn more than the money guides.</p>
+      <p className="small muted">Training methods that bring in coins at your levels and today's prices, with the XP they give, if your coins cover the first batch of materials. Some earn more than the money guides.</p>
       <ul className="money-list">
         {rows.map((r) => (
           <li key={r.method.id}>

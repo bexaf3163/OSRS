@@ -22,7 +22,7 @@ import { planningWindow } from '../domain/planning/window';
 import type { CommittedDecision } from '../domain/planning/contracts';
 import { DecisionCtx, PlanWindowCtx, decisionStep, type DecisionValue } from './decision';
 import type { Step } from '../types';
-import { bestEarnRate, earnAction, gatherTime, levelledEarnRates, type EarnRate, type LevelledRate, type SupplyBase } from '../domain/planning/earn';
+import { bestEarnRate, earnAction, gatherTime, levelledEarnRates, richerEarn, trainingEarnRate, type EarnRate, type LevelledRate, type SupplyBase } from '../domain/planning/earn';
 import { liquidOf } from '../domain/economy/funding/snapshot';
 import { useEvalBaseFactory, useFunding, useSnapshotFactory } from './fundingContext';
 import { levelForXp } from '../domain/player/xp';
@@ -90,7 +90,7 @@ export function DecisionProvider({ children }: { children: ReactNode }) {
       return known.get(key) ?? null;
     };
     let best: EarnRate | null | undefined;
-    const rate = () => { if (best === undefined) { const b = base(); best = b ? bestEarnRate(b, cash) : null; } return best; };
+    const rate = () => { if (best === undefined) { const b = base(); best = richerEarn(b ? bestEarnRate(b, cash) : null, trainingEarnRate(heldState, { prices, restriction: trade.state })); } return best; };
     let unlocks: LevelledRate[] | undefined;
     const levelled = () => (unlocks ??= base() ? levelledEarnRates(base()!, cash) : []);
     return { rate, levelled, gather: gatherOne };

@@ -1,7 +1,7 @@
 // A followed skill is an ordinary training step: selection, preparation and funding use the existing engines.
 import type { GameMode, Step } from '../../types';
 import type { PlayerState } from '../player/playerState';
-import { levelOf } from '../player/playerState';
+import { coinsOf, levelOf } from '../player/playerState';
 import { SKILL_NAMES, type SkillName } from './skillTrack';
 import type { TrackedSkill } from './skillTrack';
 import { freeOnlyOf, trackedTrainingContext } from './skillTrack';
@@ -12,6 +12,8 @@ import { netCoinsPerHour } from './trainingGoal';
 import { withTrainingMethod } from './methodStep';
 import { scopedMemo, scopedRateKeyOf, type Market } from './methodRates';
 import { endlessFoe } from '../combat/combatEstimate';
+import { requirementCost } from '../market/needPrice';
+import { itemRequirement } from '../player/requirements';
 
 export interface TrackedTraining { step: Step; target: number; complete: boolean; advice?: TrainingAdvice | null }
 
@@ -111,6 +113,7 @@ export function membersCheckpoints(observed: PlayerState, needs: ReadonlyMap<str
  */
 export function trainingEarners(observed: PlayerState, market: Market = {}, limit = 8): { skill: SkillName; method: TrainingMethod; net: number }[] {
   const rows = new Map<string, { skill: SkillName; method: TrainingMethod; net: number }>();
+  const cash = coinsOf(observed).total;
   for (const skill of SKILL_NAMES) {
     const level = levelOf(observed, skill);
     if (level === undefined || rows.size > 200) continue;
@@ -118,6 +121,9 @@ export function trainingEarners(observed: PlayerState, market: Market = {}, limi
       const net = m.coinsUnknown ? null : m.marketNetPerHour ?? netCoinsPerHour(m);
       if (rows.has(m.id) || !m.skills.includes(skill) || m.kind !== 'method' || m.from > level || (m.members && observed.mode !== 'members') || net === null || net <= 0) continue;
       if (viewMethod(m, observed, market.prices).status === 'LOCKED') continue;
+      // Known coins must buy the first batch; stock the plugin does not report counts as none.
+      const kit = requirementCost((m.needs ?? []).flatMap((n) => n.type === 'item' ? [itemRequirement(n)] : []), observed, market.prices, true);
+      if (cash !== null && kit !== null && kit > cash) continue;
       rows.set(m.id, { skill, method: m, net });
     }
   }

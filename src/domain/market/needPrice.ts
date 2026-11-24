@@ -6,7 +6,7 @@ import type { PriceView, Confidence } from './quotes';
 import { type Requirement, evaluate } from '../player/requirements';
 
 /** Price a known missing kit with the same quote/dose rules as Funding. Unread stock or unpriced required inputs leave its cost unknown. */
-export function requirementCost(requirements: readonly Requirement[], state: PlayerState, prices?: PriceView | null): number | null {
+export function requirementCost(requirements: readonly Requirement[], state: PlayerState, prices?: PriceView | null, unreportedAsNone = false): number | null {
   let total = 0;
   const allocated = new Set<string>();
   for (const req of requirements) {
@@ -21,8 +21,8 @@ export function requirementCost(requirements: readonly Requirement[], state: Pla
     keys.forEach((key) => allocated.add(key));
     const result = evaluate(req, state);
     if (result.state === 'OK' || result.state === 'BANK') continue;
-    if (result.state === 'UNKNOWN' || !prices) return null;
-    const qty = result.missing;
+    if ((result.state === 'UNKNOWN' && !unreportedAsNone) || !prices) return null;
+    const qty = result.state !== 'UNKNOWN' ? result.missing : result.need === undefined ? undefined : result.need - (result.have ?? 0);
     if (qty === undefined || !Number.isFinite(qty) || qty < 0) return null;
     const costs = names.map((name) => tierOf(needLines({ key: name, name, qty, why: 'Training kit', kind: 'buy' }, req.type === 'item' && Boolean(doseKind(name)), prices)))
       .filter((tier) => tier.unpriced === 0 && Number.isFinite(tier.cost) && tier.cost >= 0).map((tier) => tier.cost);

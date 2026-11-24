@@ -10,8 +10,11 @@ import { rankMethods } from '../economy/funding/rank';
 import { BROWSE_TARGET } from '../economy/funding/browse';
 import type { CandidateAction, PlanningSnapshot } from './contracts';
 import { liquidOf } from '../economy/funding/snapshot';
+import { trainingEarners } from '../training/trackedTraining';
+import type { PlayerState } from '../player/playerState';
+import type { Market } from '../training/methodRates';
 
-export interface EarnRate { methodId: string; title: string; netPerHour: Range3 }
+export interface EarnRate { methodId: string; title: string; netPerHour: Range3; /** Where the figure comes from when not the Money ranking. */ source?: string }
 
 /** A better earning method one skill's levels away, judged as if the level were reached (S61). */
 export interface LevelledRate extends EarnRate { skill: string; level: number }
@@ -56,7 +59,7 @@ function earnNow(snapshot: PlanningSnapshot, step: Step, goalId: string, require
     id: `${goalId}:EARN:${step.id}:${rate.methodId}`, goalId, kind: 'EARN', title: `Earn ${gp} gp: ${rate.title}`, stepId: step.id,
     feasibility: 'READY', prerequisites: [],
     completionEvidence: [{ source: 'Observed liquid GP', snapshotRevision: snapshot.scope.snapshotRevision, predicate }],
-    expectedEffects: [], gpCost: null, sourceIds: [`funding:${rate.methodId}`],
+    expectedEffects: [], gpCost: null, sourceIds: [rate.source ?? `funding:${rate.methodId}`],
     time: { fast: minutes(Math.max(...rates)), typical: minutes(rate.netPerHour.typical), slow: minutes(Math.min(...rates)), source: `${rate.title}: net coins an hour from the Money ranking` },
     reasons: [`Short of ${gp} gp for ${step.title}`, 'Earning time from the best dependable method for this character'],
   };
@@ -67,6 +70,19 @@ export function bestEarnRate(base: Omit<EvalContext, 'cash' | 'mode' | 'target' 
   const best = rankMethods(METHODS.map(m => evaluate(m, { ...base, cash, mode: 'earn', target: BROWSE_TARGET })), {}).best;
   return best?.netPerHour ? { methodId: best.method.id, title: best.method.title, netPerHour: best.netPerHour } : null;
 }
+
+/** The richest training method that pays (the Money page's "Earn while you train") whose first batch the coins cover.
+ * Its coins follow its pace, so the slow and fast ends scale with its XP range. */
+export function trainingEarnRate(observed: PlayerState, market: Market): EarnRate | null {
+  const top = trainingEarners(observed, market, 1)[0];
+  if (!top) return null;
+  const [low, high] = top.method.xph ?? [0, 0], mid = (low + high) / 2;
+  const at = (xp: number) => mid > 0 ? top.net * xp / mid : top.net;
+  return { methodId: top.method.id, title: top.method.name, netPerHour: { fast: at(high), typical: top.net, slow: at(low) }, source: 'trainingRouter' };
+}
+
+/** The earner with more typical net coins an hour. */
+export const richerEarn = (a: EarnRate | null, b: EarnRate | null) => !a || (b && b.netPerHour.typical > a.netPerHour.typical) ? b : a;
 
 // Gathering quest items yourself, timed by the Money engine's supply mode (the same evaluator, walk and combat model as the
 // Money section's "Gather it yourself"). Each item takes the fastest eligible method that yields it; an item no method

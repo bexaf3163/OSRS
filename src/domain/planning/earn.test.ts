@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { bestEarnRate, earnAction, gatherTime, levelledEarnRates } from './earn';
+import { readFileSync } from 'node:fs';
+import { bestEarnRate, earnAction, gatherTime, levelledEarnRates, richerEarn, trainingEarnRate } from './earn';
+import { emptyProgress } from '../persistence/progress';
 import { ctxOf, fakePrices, fakeSnap } from '../../../tests/funding/helpers';
 import { METHODS } from '../economy/funding/methods';
 import { buildPlayerState } from '../player/playerState';
@@ -114,5 +116,22 @@ describe('S06: the money ranking compares every family by net GP/h for this char
     // Woodcutting methods (chop-oak-draynor, chop-yew-edgeville) exist, but a Woodcutting 70 player is not sent there by default.
     expect(picks.filter(p => p.id?.startsWith('chop-'))).toEqual([]);
     expect(picks.every(p => p.net > 0)).toBe(true);
+  });
+});
+
+describe('earning by training', () => {
+  const ge = fakePrices(JSON.parse(readFileSync('tests/fixtures/gePrices.json', 'utf8')).prices);
+  const at = (bankCoins: number) => buildPlayerState({ mode: 'f2p', connected: true, progress: emptyProgress(), questsDone: [],
+    stats: { attack: 40, strength: 40, defence: 40, hitpoints: 40, ranged: 40, magic: 40, prayer: 40, crafting: 40, smithing: 40, cooking: 40, fishing: 40, mining: 40 },
+    gear: { equipment: [], inventory: [], coins: 0, bankCoins }, owned: { bankSeen: true, items: new Map() } });
+
+  it('the richest paying training method is an earn rate only while the coins cover its first batch', () => {
+    const rich = trainingEarnRate(at(5_000_000), { prices: ge })!;
+    expect(rich.source).toBe('trainingRouter');
+    expect(rich.netPerHour.slow).toBeLessThanOrEqual(rich.netPerHour.typical);
+    expect(rich.netPerHour.typical).toBeLessThanOrEqual(rich.netPerHour.fast);
+    expect(trainingEarnRate(at(0), { prices: ge })?.netPerHour.typical ?? 0).toBeLessThan(rich.netPerHour.typical);
+    expect(richerEarn(rate, rich)).toBe(rich);
+    expect(earnAction(snapshot, step, 'g', 1_500, rich)!.sourceIds).toEqual(['trainingRouter']);
   });
 });

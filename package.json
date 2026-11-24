@@ -2,7 +2,7 @@
   "name": "osrs-put",
   "productName": "OSRS Path",
   "private": true,
-  "version": "2.176.0",
+  "version": "2.177.0",
   "description": "A personal progress tracker for Old School RuneScape (free version)",
   "author": "Mark",
   "type": "module",
