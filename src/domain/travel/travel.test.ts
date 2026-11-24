@@ -117,10 +117,10 @@ import { nameKey } from '../items/itemKey';
 import { stepPlaces } from './stepPlaces';
 import { planPayload } from '../prep/prepEnvelope';
 import { recommendedTransport } from './transport';
-import { DETOUR_MAX_EXTRA_TILES, procurementDetour } from './detours';
+import { DETOUR_MAX_EXTRA_TILES, detourInPlan, procurementDetour, type Detour } from './detours';
 import { EXCHANGE, OPPORTUNISTIC_MAX_DETOUR_TILES, OPPORTUNISTIC_MAX_EXCHANGE_TILES, OPPORTUNISTIC_MIN_SAVING_TILES, reachTiles } from './travel';
 import { setDetourLog, type DetourDecision } from './decisionLog';
-import type { PrepPlan } from '../prep/prepPlan';
+import type { PrepLine, PrepPlan } from '../prep/prepPlan';
 
 describe('fetch it first: every verdict has a reason, and the thresholds do not starve the routes', () => {
   const falador = at(2970, 3380);
@@ -495,5 +495,14 @@ describe('River Lum canoes and the ferries', () => {
     const t = recommendedTransport(o)!;
     expect(t).toMatchObject({ type: 'ferry', interactionName: 'Captain Tock' });
     expect(t.tile).toMatchObject({ x: 2910, y: 3226 });
+  });
+});
+
+describe('a detour left over from another plan', () => {
+  it('is dropped once its items are no longer in the plan', () => {
+    const detour = { text: 'Detour: Buy Vile ashes', stop: { x: 0, y: 0, plane: 0, label: 'Grand Exchange' }, items: ['Vile ashes'], extraTiles: 10 } as Detour;
+    const line = (name: string) => ({ name }) as PrepLine;
+    expect(detourInPlan(detour, { now: [line('Vile ashes')], soon: [] })).toBe(detour);
+    expect(detourInPlan(detour, { now: [line('Gold bar')], soon: [line('Diamond')] })).toBeNull();
   });
 });

@@ -23,6 +23,7 @@ import { combatLevel } from '../player/xp';
 import { supplyPrice } from '../market/itemPrice';
 import { marketView } from '../market/quotes';
 import { PROCESSING, type ProcessingRegistry } from './processingRates';
+import { toolTierAt } from './stages';
 import { TILES_PER_SECOND, type Point } from '../travel/travel';
 
 interface Tier { item: string; level: number; wield: number; ticks?: number }
@@ -86,7 +87,9 @@ function toolFor(r: Resource, level: number, state: PlayerState, reg: SkillingRe
   }, { i: -1, name: '' });
   if (proxy.i > best) return { tier: usable[proxy.i], name: proxy.name, owned: true, wielded: heldExact(state, proxy.name).equipped > 0 };
   if (best < 0 && seen.includes('UNKNOWN')) return null;
-  const tier = usable[Math.max(0, best)];
+  // Nothing held: rate and buy the tier the plan buys at this level (toolTierAt, as the stages show), not the lowest usable one.
+  const planned = best < 0 ? toolTierAt(toolUse(usable[0].item)?.skill ?? '', level, state.mode) : null;
+  const tier = best >= 0 ? usable[best] : usable.find((t) => t.item === planned) ?? usable[0];
   return { tier, name: tier.item, owned: best >= 0, wielded: heldExact(state, tier.item).equipped > 0 };
 }
 

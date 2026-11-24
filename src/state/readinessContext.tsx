@@ -15,6 +15,7 @@ import { usePriceView } from './hooks/usePriceView';
 import { setTracked, useTracked } from './hooks/useTracked';
 import { f2pCheckpoints, nextAfterReached, trackedTraining, type TrackedTraining } from '../domain/training/trackedTraining';
 import { useTradeRestriction } from './hooks/useTradeRestriction';
+import { useExactXp } from './hooks/useExactXp';
 import { resolveActiveActivity } from '../domain/quests/activeActivity';
 import { f2pQuestsDone, questCatalogue, questEvidence } from '../domain/planning/catalogue';
 import { decisionStep, followedSteps, useDecision, usePlanWindow } from './decision';
@@ -33,16 +34,19 @@ export function ReadinessProvider({ children }: { children: ReactNode }) {
   const tracked = useTracked();
   const planWindow = usePlanWindow();
   const trade = useTradeRestriction();
-  const training = useMemo(() => trackedTraining(tracked, state, mode, { prices, restriction: trade.state }),
-    [tracked, state, mode, prices, trade.state]);
+  // The followed skill counts from the game's exact XP, so its goal shrinks with every action, not only at a level-up.
+  const xp = useExactXp();
+  const trackedXp = tracked ? xp[tracked.skill] : undefined;
+  const training = useMemo(() => trackedTraining(tracked, state, mode, { prices, restriction: trade.state }, tracked && trackedXp !== undefined ? { [tracked.skill]: trackedXp } : undefined),
+    [tracked, state, mode, prices, trade.state, trackedXp]);
   // A reached goal does not leave the game card on a finished skill: the next checkpoint or the route takes over.
   const reached = Boolean(tracked && training?.complete);
   useEffect(() => {
     if (!reached || !tracked) return;
     const evidence = questEvidence(questCatalogue, bridge.questStates ?? null, state.quests.known ? state.quests.value : null, null);
     const questsLeft = !f2pQuestsDone(steps, progress, evidence).done;
-    setTracked(nextAfterReached(tracked, f2pCheckpoints(state, { prices, restriction: trade.state }), questsLeft));
-  }, [reached, tracked, state, prices, trade.state, steps, progress, bridge.questStates]);
+    setTracked(nextAfterReached(tracked, f2pCheckpoints(state, { prices, restriction: trade.state }, xp), questsLeft));
+  }, [reached, tracked, state, prices, trade.state, steps, progress, bridge.questStates, xp]);
   const engineSteps = useMemo(() => {
     const all = training ? [...steps, training.step] : steps;
     const current = planWindow[0];

@@ -274,7 +274,8 @@ for (const e of entries) {
   const requirements: Requirement[] = [];
   // The guide's own Skill field without its optional lines ("Sailing 87 (optional)" for steel cannonballs); a recommended
   // combat level still gates the card, as before.
-  const skillField = (f.skill ?? '').split(/\n|<br\s*\/?>/i).filter((l) => !/optional/i.test(l))
+  // One line can mix required and "(optional)" skills ("Mining 85+, Attack 40 (optional)" for runite): drop only the marked ones there.
+  const skillField = (f.skill ?? '').split(/\n|<br\s*\/?>/i).map((l) => l.replace(/\{\{SCP\|[^}]*\}\}\s*\(optional\)/gi, '')).filter((l) => !/optional/i.test(l))
     .flatMap((l) => [...l.matchAll(/\{\{SCP\|([^|}]+)\|(\d+)/gi)].map((m) => ({ skill: m[1].trim().toLowerCase().replace(/^combat level$/, 'combat'), level: Number(m[2]) })));
   // The guide's own field first: the list's skill column (and levels kept from it) also names recommended skills.
   for (const r of f.skill ? skillField : kept.get(id)?.flatMap((q) => (q.kind === 'level' ? [{ skill: q.skill, level: q.level }] : [])) ?? parseSkillsHtml(e.skillsHtml)) {

@@ -16,6 +16,7 @@ import { usePlayerState } from '../../state/playerStateContext';
 import { usePriceView } from '../../state/hooks/usePriceView';
 import { useTradeRestriction } from '../../state/hooks/useTradeRestriction';
 import { membersCheckpoints } from '../../domain/training/trackedTraining';
+import { useExactXp } from '../../state/hooks/useExactXp';
 import { CheckpointList } from './CheckpointList';
 import { questLevelNeeds, questNeedLabel, SKILL_TAB_ORDER } from '../../domain/planning/questLevelNeeds';
 
@@ -72,7 +73,8 @@ function MembersQuestSkills({ needs }: { needs: ReadonlyMap<string, number> }) {
   const { state } = usePlayerState();
   const prices = usePriceView(true);
   const trade = useTradeRestriction();
-  const rows = useMemo(() => membersCheckpoints(state, needs, { prices, restriction: trade.state }), [state, needs, prices, trade.state]);
+  const xp = useExactXp();
+  const rows = useMemo(() => membersCheckpoints(state, needs, { prices, restriction: trade.state }, xp), [state, needs, prices, trade.state, xp]);
   if (!rows.length) return null;
   return (
     <section className="section" aria-label="Quest skill levels">

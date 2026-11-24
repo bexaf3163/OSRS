@@ -17,15 +17,15 @@ function snapshot(level: number | null = 1, carried = 1, bank = 0): PlanningSnap
     xp: {}, quests: {}, manual: {}, questPoints: { known: true, value: 0, source: 'game' },
     player: buildPlayerState({ mode: 'f2p', connected: true, player: 'Fixture', questsDone: [], progress: { levels: {} },
       stats: { ...(level === null ? {} : { mining: level }), attack: 1, strength: 1, defence: 1, hitpoints: 10 },
-      gear: { equipment: [], inventory: carried ? [{ id: 1265, name: 'Bronze pickaxe', count: carried }] : [], coins: 1000, bankCoins: 0 },
+      gear: { equipment: [], inventory: carried ? [{ id: 1267, name: 'Iron pickaxe', count: carried }] : [], coins: 1000, bankCoins: 0 },
       owned: { bankSeen: true, items: new Map(PICKAXES.map(name => [name.toLowerCase(), { name,
-        carried: name === 'Bronze pickaxe' ? carried : 0, noted: 0, bank: name === 'Bronze pickaxe' ? bank : 0 }])) } }) };
+        carried: name === 'Iron pickaxe' ? carried : 0, noted: 0, bank: name === 'Iron pickaxe' ? bank : 0 }])) } }) };
 }
 const adapters = (): TrainingModelAdapters => ({ prepare: () => ({ action: null, minutes: noTime(), resources: null }), travel: () => null });
 
 describe('explicit skill objective through the shared planner', () => {
   it('prepares the same real training step and advances only its current phase until a new level is observed', () => {
-    const observed = snapshot(), progress = emptyProgress(), prices = fakePrices({ 'Bronze pickaxe': { buy: 10 } });
+    const observed = snapshot(), progress = emptyProgress(), prices = fakePrices({ 'Iron pickaxe': { buy: 10 } });
     const tactical = createTacticalResolver({ snapshot: observed, progress, prices, window: [], ironman: false, earn: () => null });
     const shared = adapters();
     shared.prepare = candidate => ({ action: tactical.resolve(candidate.step!, candidate.action.goalId).action, minutes: null, resources: null });
@@ -50,7 +50,7 @@ describe('explicit skill objective through the shared planner', () => {
   });
 
   it('keeps acquisition ahead of training until the same tool is actually observed', () => {
-    const observed = snapshot(1, 0), progress = emptyProgress(), prices = fakePrices({ 'Bronze pickaxe': { buy: 10 } });
+    const observed = snapshot(1, 0), progress = emptyProgress(), prices = fakePrices({ 'Iron pickaxe': { buy: 10 } });
     const selected = { skill: 'mining' as const, mode: 'fast' as const, target: 10 };
     const current = () => {
       const tactical = createTacticalResolver({ snapshot: observed, progress, prices, window: [], ironman: false, earn: () => null });
@@ -59,8 +59,8 @@ describe('explicit skill objective through the shared planner', () => {
       }) }, { prices });
     };
     // The unlocated free spawn cannot displace a usable shop; training still waits for observed acquisition.
-    expect(decide(observed, current())?.activeAction).toMatchObject({ kind: 'BUY', title: 'Get Bronze pickaxe' });
-    expect(observed.player.owned?.items.get('bronze pickaxe')?.carried).toBe(0);
+    expect(decide(observed, current())?.activeAction).toMatchObject({ kind: 'BUY', title: 'Get Iron pickaxe' });
+    expect(observed.player.owned?.items.get('iron pickaxe')?.carried).toBe(0);
     observed.player = snapshot(1, 0, 1).player;
     expect(decide(observed, current())?.activeAction.kind).toBe('WITHDRAW');
     observed.player = snapshot().player;
@@ -95,7 +95,7 @@ describe('explicit skill objective through the shared planner', () => {
   });
 
   it('leaves a goal without consumables metadata consuming UNKNOWN, never zero', () => {
-    const observed = snapshot(), shared = adapters(), tactical = createTacticalResolver({ snapshot: observed, progress: emptyProgress(), prices: fakePrices({ 'Bronze pickaxe': { buy: 10 } }), window: [], ironman: false, earn: () => null });
+    const observed = snapshot(), shared = adapters(), tactical = createTacticalResolver({ snapshot: observed, progress: emptyProgress(), prices: fakePrices({ 'Iron pickaxe': { buy: 10 } }), window: [], ironman: false, earn: () => null });
     shared.prepare = candidate => ({ action: tactical.resolve(candidate.step!, candidate.action.goalId).action, minutes: null, resources: [] });
     const model = createTrainingModel(observed, { skill: 'mining', mode: 'fast', target: 10 }, shared);
     expect(model.evaluate(model.objectiveIds[0], observedProjection(observed))!.effects)

@@ -79,6 +79,15 @@ export type DetourTravel = Omit<Parameters<typeof reachTiles>[0], 'from'>;
  * The best stop on the way, or null. from/to: where the player is and where the step goes; coins: what the bag holds (null: unknown).
  * stepId: an item of the current step is a blocker; a step by the exchange gives it priority (GE_PRIORITY_TILES). travel: the bag, for the teleports.
  */
+/**
+ * The detour is found by an async walk check that restarts on every move; until it reruns, one whose items left the plan (another
+ * followed skill: "Buy Vile ashes" after Prayer was swapped back for Crafting) is not shown.
+ */
+export function detourInPlan(detour: Detour | null, plan: Pick<PrepPlan, 'now' | 'soon'>): Detour | null {
+  const planned = new Set([...plan.now, ...plan.soon].map((l) => l.name));
+  return detour && detour.items.every((name) => planned.has(name)) ? detour : null;
+}
+
 export function procurementDetour(i: {
   plan: Pick<PrepPlan, 'now' | 'soon'>; stepId: string; from: Point; to: Point; coins: number | null; travel?: DetourTravel; onDecision?: (d: DetourDecision) => void;
 }): Detour | null {

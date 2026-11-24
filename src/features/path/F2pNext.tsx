@@ -5,6 +5,7 @@ import { useMemo } from 'react';
 import { usePlayerState } from '../../state/playerStateContext';
 import { usePriceView } from '../../state/hooks/usePriceView';
 import { useTradeRestriction } from '../../state/hooks/useTradeRestriction';
+import { useExactXp } from '../../state/hooks/useExactXp';
 import { f2pCheckpoints } from '../../domain/training/trackedTraining';
 import { Eyebrow } from '../../ledger';
 import { CheckpointList } from '../skills/CheckpointList';
@@ -13,8 +14,9 @@ export function F2pNext({ waiting = null }: { waiting?: string | null }) {
   const { state } = usePlayerState();
   const prices = usePriceView(true);
   const trade = useTradeRestriction();
-  const rows = useMemo(() => f2pCheckpoints(state, { prices, restriction: trade.state }),
-    [state, prices, trade.state]);
+  const xp = useExactXp();
+  const rows = useMemo(() => f2pCheckpoints(state, { prices, restriction: trade.state }, xp),
+    [state, prices, trade.state, xp]);
   return <>
     <Eyebrow>{waiting ? `F2P QUESTS COMPLETE · ${waiting.toUpperCase()} OPTIONAL` : 'F2P QUESTS COMPLETE'}</Eyebrow>
     <h1 className="la-t">Next in F2P</h1>

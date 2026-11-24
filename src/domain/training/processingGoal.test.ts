@@ -6,6 +6,7 @@ import { emptyProgress } from '../persistence/progress';
 import { buildPlayerState } from '../player/playerState';
 import { methodToolNames, withTrainingMethod } from './methodStep';
 import { pickTraining } from './methodPick';
+import { trackedTraining } from './trackedTraining';
 import { aggregateShopping } from '../prep/shopping';
 import { contextOf } from '../readiness/readiness';
 import { createReadinessEngine } from '../readiness/readinessEngine';
@@ -105,5 +106,15 @@ describe('conditional full-goal processing supplies through the shared path', ()
     const changed = { ...base, followsMethod: 'cooking', inGame: { ...base.inGame!, completionTrigger: { type: 'SKILL_LEVEL' as const, levels: [{ skill: 'cooking', level: 35 }, { skill: 'fishing', level: 35 }] } } };
     const step = withTrainingMethod(changed, pickTraining(changed, st, 'f2p', { prices }).pick);
     expect(step.goalItemsRequired).toBeUndefined();
+  });
+});
+
+describe('the followed skill counts from the exact XP', () => {
+  it('shrinks the goal items within a level, not only at a level-up', () => {
+    const st = buildPlayerState({ mode: 'f2p', connected: true, stats: { crafting: 57, hitpoints: 31 }, progress: emptyProgress(), questsDone: [],
+      gear: { equipment: [], inventory: [], coins: 10000, bankCoins: 0 }, owned: { bankSeen: true, items: new Map() } });
+    const goal = (xp?: Record<string, number>) => trackedTraining({ skill: 'crafting', mode: 'fast', freeOnly: true, target: 70 }, st, 'f2p', { prices }, xp)!
+      .step.goalItemsRequired!.reduce((sum, item) => sum + Number(item.amount), 0);
+    expect(goal({ crafting: xpForLevel(57) + 5_000 })).toBeLessThan(goal());
   });
 });

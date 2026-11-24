@@ -15,7 +15,7 @@ import { planPayload } from '../../domain/prep/prepEnvelope';
 import { checkStatus, supportsSnapshot } from '../../services/runeliteBridge';
 import { useUpgradeRecommendation } from '../../features/path/combat/UpgradePrompt';
 import type { Step } from '../../types';
-import { procurementDetour, type Detour } from '../../domain/travel/detours';
+import { detourInPlan, procurementDetour, type Detour } from '../../domain/travel/detours';
 import { fairyRingsUnlocked, oneTimeUsedOf, transportKey, travelInputOf } from '../../domain/travel/travelInput';
 import { decideTransport, publishTransport, transportSources, transportTarget } from '../../domain/readiness/liveTransport';
 import type { RecommendedTransport } from '../../domain/travel/transport';
@@ -128,7 +128,7 @@ function StepPlan({ step }: { step: Step }) {
   useEffect(() => () => publishTransport(null), [step.id]);
   // The verdict of this step as the app shows it: the plugin puts it on the bank card and under the Advice tab.
   const { verdict } = useReadinessVerdict(step);
-  const payload = planPayload(plan, { detour, transport, readiness: { status: verdict.level, headline: verdict.headline } });
+  const payload = planPayload(plan, { detour: detourInPlan(detour, plan), transport, readiness: { status: verdict.level, headline: verdict.headline } });
   const key = JSON.stringify(payload);
   useEffect(() => {
     setPrepPart('plan', payload);

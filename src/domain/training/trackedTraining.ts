@@ -81,11 +81,11 @@ export function cashFlow(rows: readonly SkillCheckpoint[], start: number): numbe
  * What to train once the F2P quests are done: the unfinished F2P checkpoints in the owner's phase order (F2P_PHASES),
  * one skill at a time, each with the training engine's own forecast for this character. A list to choose from, not a forced grind (S105).
  */
-export function f2pCheckpoints(observed: PlayerState, market: Market = {}): SkillCheckpoint[] {
+export function f2pCheckpoints(observed: PlayerState, market: Market = {}, xp: Readonly<Record<string, number>> = {}): SkillCheckpoint[] {
   return F2P_ORDER.flatMap((skill): SkillCheckpoint[] => {
     const advice = f2pAdviceFor(skill), level = levelOf(observed, skill);
     if (!advice?.target || (advice.priority !== 'good' && advice.priority !== 'optional') || level === undefined || level >= advice.target) return [];
-    const plan = adviseTraining({ skill, target: advice.target, state: observed, mode: 'f2p', ...market });
+    const plan = adviseTraining({ skill, target: advice.target, state: observed, mode: 'f2p', ...market, xp: xp[skill] });
     return [{ skill, level, target: advice.target, priority: advice.priority, phase: f2pPhaseOf(skill), method: plan.best?.method.name ?? null, time: plan.time, coins: plan.coins ?? null }];
   });
 }
@@ -96,11 +96,11 @@ export function f2pCheckpoints(observed: PlayerState, market: Market = {}): Skil
  * Members (owner, 2026-11-23: earn, then spend): the skill levels the open quests still need, each with the training engine's own
  * forecast, the plans that earn coins first so the ones that spend are paid from them; a plan with unknown coins counts as spending.
  */
-export function membersCheckpoints(observed: PlayerState, needs: ReadonlyMap<string, number>, market: Market = {}): SkillCheckpoint[] {
+export function membersCheckpoints(observed: PlayerState, needs: ReadonlyMap<string, number>, market: Market = {}, xp: Readonly<Record<string, number>> = {}): SkillCheckpoint[] {
   const rows = [...needs].flatMap(([skill, target]): SkillCheckpoint[] => {
     const level = levelOf(observed, skill);
     if (level === undefined || level >= target || !methodsFor(skill).length) return [];
-    const plan = adviseTraining({ skill, target, state: observed, mode: 'members', ...market });
+    const plan = adviseTraining({ skill, target, state: observed, mode: 'members', ...market, xp: xp[skill] });
     return [{ skill: skill as SkillName, level, target, priority: 'good', phase: 0, method: plan.best?.method.name ?? null, time: plan.time, coins: plan.coins ?? null }];
   });
   const earns = (r: SkillCheckpoint) => (r.coins?.[0] ?? -1) >= 0;

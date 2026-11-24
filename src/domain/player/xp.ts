@@ -29,6 +29,11 @@ export function coherentSkillXp(xp: unknown, level?: number): xp is number {
       && xp >= xpForLevel(level) && (level === MAX_LEVEL || xp < xpForLevel(level + 1))));
 }
 
+/** The game's exact XP per skill where it fits the reported level: plans count from it, not from the level's first XP. */
+export function exactXpOf(xp: Readonly<Record<string, number>> | null | undefined, levelOf: (skill: string) => number | undefined): Record<string, number> {
+  return Object.fromEntries(Object.entries(xp ?? {}).filter(([skill, value]) => levelOf(skill) !== undefined && coherentSkillXp(value, levelOf(skill))));
+}
+
 /** How much XP from the start of level `from` to the start of level `to`. */
 export function xpBetween(from: number, to: number): number {
   return Math.max(0, xpForLevel(to) - xpForLevel(from));

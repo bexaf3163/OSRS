@@ -6352,6 +6352,17 @@
    "about": "Mining runite ore, a high-level ore that frequently sells for a high price ( coins), is an achievement in itself. The runite rocks are highly competed over and are often depleted of their resources, so miners need to switch worlds in order to find fresh ones. There is only one place in Free-to-play where players can mine it: the Lava Maze runite mine, which contains two rocks. It is located north-west of the Lava Maze in level 46 Wilderness.",
    "requirements": [
     {
+     "kind": "level",
+     "skill": "mining",
+     "level": 85
+    },
+    {
+     "kind": "item",
+     "role": "tool",
+     "any": [],
+     "family": "pickaxe"
+    },
+    {
      "kind": "check",
      "text": "Bring: Rune pickaxe, Rune armour (optional), Runes for teleportation spells, Bladed weapon for cutting maze webs"
     },
