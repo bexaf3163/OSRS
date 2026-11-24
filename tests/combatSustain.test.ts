@@ -109,6 +109,18 @@ describe('Slayer', () => {
     expect(weak.xph[1]).toBeLessThan(strong.xph[1]);
     expect(slayerRate(method('sl-nieve'), 'slayer', { ...at(99, 85), mode: 'f2p' })).toBeNull();
   });
+
+  it('a Slayer plan wears the melee kit it buys all the way to 99, as a melee plan does', async () => {
+    const { adviseTraining } = await import('../src/domain/training/trainingRouter');
+    const { questCatalogue } = await import('../src/domain/planning/catalogue');
+    const { fakePrices } = await import('./funding/helpers');
+    const { readFileSync } = await import('node:fs');
+    const prices = fakePrices(JSON.parse(readFileSync('tests/fixtures/gePrices.json', 'utf8')).prices);
+    const hours = (bankCoins: number) => adviseTraining({ skill: 'slayer', target: 99, mode: 'members', prices, state: buildPlayerState({ mode: 'members', connected: true,
+      stats: { attack: 60, strength: 60, defence: 60, hitpoints: 60, ranged: 60, magic: 60, prayer: 60, slayer: 1 }, progress: emptyProgress(), questsDone: questCatalogue.map((q) => q.id),
+      gear: { equipment: [], inventory: [], coins: 0, bankCoins }, owned: { bankSeen: true, items: new Map() } }) } as never).time!.maxHours;
+    expect(hours(50_000_000)).toBeLessThan(hours(0) * 0.8);
+  });
 });
 
 describe('a prayer that blocks all a foe does at range', () => {

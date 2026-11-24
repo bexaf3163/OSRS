@@ -53,9 +53,9 @@ export function withHourlyCoins(m: TrainingMethod, prices: PriceView | null | un
 /** A known loss of coins against a known break-even or gain, both weighed against the coin rate; without prices nothing is judged. */
 export const losesTo = (loser: TrainingMethod, other: TrainingMethod, coinRate: number | null): boolean => {
   // A free method without a rate (Camdozaal) is no plan to swap a paid one for (owner: a method must make sense).
-  if (loser.coinsUnknown || other.coinsUnknown || practicalRate(other) === null) return false;
+  if (loser.coinsUnknown || other.coinsUnknown) return false;
   const a = loser.marketNetPerHour ?? netCoinsPerHour(loser), b = other.marketNetPerHour ?? netCoinsPerHour(other);
-  return a !== null && b !== null && losing(a, coinRate) && !losing(b, coinRate);
+  return a !== null && b !== null && losing(a, coinRate) && !losing(b, coinRate) && practicalRate(other) !== null;
 };
 
 /**
