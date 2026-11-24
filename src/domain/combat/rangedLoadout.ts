@@ -34,6 +34,11 @@ export function arrowsFor(bowName: string): string[] {
   return canonical ? ammo.filter(o => !ammoFits(o, canonical, STYLE_GEAR.ranged.weapon)).flatMap(o => o.names) : [];
 }
 
+/** The kit with other arrows in the ammunition slot: a method that fires cheaper ones to stay at plus or zero (ModelRate.ammo). */
+export function withArrow(kit: readonly MethodNeed[], arrow?: string): readonly MethodNeed[] {
+  return arrow ? kit.map((n) => (n.type === 'item' && ammo.some((o) => o.names.includes(n.name)) ? { ...n, name: arrow } : n)) : kit;
+}
+
 /** Project exactly the equipped kit requested by preparation, rather than forecasting in the old melee armour. */
 export function rangedEquipment(worn: Readonly<Record<string, string>>, needs: readonly MethodNeed[]): Record<string, string> {
   const equipment = { ...worn };

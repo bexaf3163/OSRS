@@ -1,8 +1,11 @@
 // How a plan weighs one method against another: its practical speed, its coins, the plus-or-zero rule and the player's training goal.
 // The router's comparison reads these; the rate engines stay goal-free (owner, 2026-11-23: engines, not condition trees).
-import type { TrainingGoal } from '../../types';
+import type { GameMode, TrainingGoal } from '../../types';
 import type { PlayerState } from '../player/playerState';
-import { coinTimeShare } from '../market/lootValue';
+import { dropValue, losing } from '../market/lootValue';
+import { supplyPrice } from '../market/itemPrice';
+import type { PriceView } from '../market/quotes';
+import type { TradeRestriction } from '../market/tradeRestriction';
 import type { Effort, MethodCost, Risk, TrainingMethod } from './trainingRouter';
 
 /** For ordering we take the lower speed bound: the wiki's upper one often needs special tricks (ticks, inventory). */
@@ -27,15 +30,31 @@ export function netCoinsPerHour(m: TrainingMethod): number | null {
 }
 
 /**
- * "Plus or zero" (owner, 2026-11-23, both modes): a loss smaller than this share of what the training time is worth in money-making (the coin
- * rate) is break-even, so a couple of thousand coins of arrows an hour do not send a plan to a far slower earner.
+ * An activity no rate model covers (a minigame, a rooftop course) with the coins of what the Wiki says it uses and makes in an hour
+ * (`perHour`), at exchange prices; unchanged when it has no such data or a price is unknown, so its coins stay uncounted.
  */
-export const ZERO_SHARE = 0.05;
+export function withHourlyCoins(m: TrainingMethod, prices: PriceView | null | undefined, mode: GameMode, restriction?: TradeRestriction['state']): TrainingMethod {
+  if (!m.perHour) return m;
+  const fixed = m.perHour.coins ?? 0;
+  let cost = Math.max(0, -fixed), loot = Math.max(0, fixed);
+  for (const u of m.perHour.uses ?? []) {
+    const each = supplyPrice(u.name, prices, mode);
+    if (each === null) return m;
+    cost += each * u.qty;
+  }
+  for (const x of m.perHour.makes ?? []) {
+    const each = dropValue(x.name, prices, restriction);
+    if (each === null) return m;
+    loot += each * x.qty;
+  }
+  return { ...m, costPerHour: Math.round(cost), lootPerHour: Math.round(loot), marketNetPerHour: Math.round(loot - cost) };
+}
+
 /** A known loss of coins against a known break-even or gain, both weighed against the coin rate; without prices nothing is judged. */
 export const losesTo = (loser: TrainingMethod, other: TrainingMethod, coinRate: number | null): boolean => {
-  if (!coinRate || loser.coinsUnknown || other.coinsUnknown) return false;
+  if (loser.coinsUnknown || other.coinsUnknown) return false;
   const a = loser.marketNetPerHour ?? netCoinsPerHour(loser), b = other.marketNetPerHour ?? netCoinsPerHour(other);
-  return a !== null && b !== null && coinTimeShare(a, coinRate) < -ZERO_SHARE && coinTimeShare(b, coinRate) >= -ZERO_SHARE;
+  return a !== null && b !== null && losing(a, coinRate) && !losing(b, coinRate);
 };
 
 /**

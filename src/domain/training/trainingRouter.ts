@@ -20,7 +20,7 @@ import { evaluate, itemRequirement, type ReqState, type Requirement } from '../p
 import { coinsOf, heldExact, heldOf, levelOf, questOf, type PlayerState } from '../player/playerState';
 import { isClosed } from '../quests/next-step';
 import { xpForLevel } from '../player/xp';
-import { rangedEquipment, rangedNeeds, RANGED_WATCH } from '../combat/rangedLoadout';
+import { rangedEquipment, rangedNeeds, RANGED_WATCH, withArrow } from '../combat/rangedLoadout';
 import { SPELLS, STAFFS, isCombatSpell, strikeRecipe, superheatNeeds } from '../combat/magicPlan';
 import { STYLE_GEAR } from '../combat/styleGear';
 import { PROCESSING } from './processingRates';
@@ -41,7 +41,7 @@ import { mergeGoalNeeds } from '../items/consumption';
 import { isReusable } from '../items/reusable';
 import { heldFood } from '../player/foodStock';
 import { FOODS } from '../../data/threats';
-import { GOALS, goalOf, losesTo, netCoinsPerHour, practicalRate, rateLow, stays } from './trainingGoal';
+import { GOALS, goalOf, losesTo, netCoinsPerHour, practicalRate, rateLow, stays, withHourlyCoins } from './trainingGoal';
 export type Effort = 'afk' | 'low' | 'medium' | 'high';
 export type MethodCost = 'free' | 'profit' | 'cost';
 export type Risk = 'none' | 'low' | 'high';
@@ -79,6 +79,10 @@ export interface TrainingMethod {
   /** Physical tool/recipe/loadout used by the rate, for useful progression milestones. */
   rateBasis?: string;
   selectedTool?: string;
+  /** The arrows the model fires here when the kit's would lose coins (ModelRate.ammo); the kit's needs carry them instead. */
+  ammo?: string;
+  /** What an activity no rate model covers uses and makes in an hour at its Wiki rate, priced at the exchange (trainingGoal withHourlyCoins). */
+  perHour?: { coins?: number; makes?: { name: string; qty: number }[]; uses?: { name: string; qty: number }[] };
   /** Initial processing batch; subsequent replenishment is not guaranteed. */
   batchActions?: number;
   consumables?: ModelRate['consumables'];
@@ -126,7 +130,7 @@ interface Raw {
   id: string; skill: string | string[]; from: number; suggestedFrom?: number; introductory?: boolean; to: number | null; name: string; members: boolean;
   needs?: MethodNeed[]; kit?: TrainingMethod['kit']; manualSetup?: string; xph?: [number, number]; xpa?: number; act?: string; effort: Effort; cost: MethodCost; risk: Risk;
   where: string; place?: string; objectNames?: string[]; npcNames?: string[]; note?: string; url: string; kind?: 'method' | 'quest'; xpTotal?: number; questGuide?: TrainingMethod['questGuide'];
-  drop?: boolean;
+  drop?: boolean; perHour?: TrainingMethod['perHour'];
 }
 
 export const trainingMethods: TrainingMethod[] = (methodsJson as unknown as { methods: Raw[] }).methods.map((m) => ({
@@ -140,6 +144,7 @@ export const trainingMethods: TrainingMethod[] = (methodsJson as unknown as { me
   ...(m.objectNames ? { objectNames: m.objectNames } : {}),
   ...(m.npcNames ? { npcNames: m.npcNames } : {}),
   ...(m.introductory ? { introductory: true } : {}),
+  ...(m.perHour ? { perHour: m.perHour } : {}),
   ...(m.suggestedFrom !== undefined ? { suggestedFrom: m.suggestedFrom } : {}),
   ...(m.kit ? { kit: m.kit } : {}),
   ...(m.manualSetup ? { manualSetup: m.manualSetup } : {}),
@@ -247,7 +252,7 @@ export function methodNeeds(m: TrainingMethod, state: PlayerState, prices?: Pric
   if (m.kit === 'superheat-iron') return superheatNeeds(state);
   // Stage 6 is F2P-only. Do not demand a weaker F2P bow from Members using an unmodelled weapon.
   if (m.kit === 'f2p-bow' && state.mode !== 'f2p') return m.needs.filter(n => n.type !== 'item' || !RANGED_WATCH.includes(n.name));
-  if (m.kit === 'f2p-bow' && m.kind === 'method') return [...m.needs.filter(n => n.type !== 'item' || !RANGED_WATCH.includes(n.name)), ...rangedNeeds(state, prices)];
+  if (m.kit === 'f2p-bow' && m.kind === 'method') return [...m.needs.filter(n => n.type !== 'item' || !RANGED_WATCH.includes(n.name)), ...withArrow(rangedNeeds(state, prices), m.ammo)];
   return m.kind === 'method' && m.skills.some(skill => MELEE_SKILLS.includes(skill)) ? meleeNeeds(m, state, prices) : m.needs;
 }
 
@@ -652,6 +657,7 @@ export function personalize(methods: readonly TrainingMethod[], skill: string, s
       ...m, xph: [Math.round(r.xph[0]), Math.round(r.xph[1])], rateSource: 'model', rateBasis: r.basis, ...(r.batchActions !== undefined ? { batchActions: r.batchActions } : {}), ...(r.consumables ? { consumables: r.consumables } : {}), costPerHour: r.costPerHour,
       ...(r.methodName ? { name: r.methodName } : {}),
       ...(r.selectedTool ? { selectedTool: r.selectedTool } : {}),
+      ...(r.ammo ? { ammo: r.ammo } : {}),
       ...(r.xpPerAction !== undefined ? { xpa: r.xpPerAction } : {}),
       ...(r.needs ? { needs: [...m.needs.filter((n) => n.type === 'skill' || n.type === 'quest'), ...r.needs.map((n) => {
         if (n.type !== 'item' || r.exactNeeds) return n;
@@ -668,7 +674,7 @@ export function personalize(methods: readonly TrainingMethod[], skill: string, s
       ...(r.warning ? { rateWarning: r.warning } : {}),
       ...(r.upgrades?.length ? { upgrades: r.upgrades } : {}),
       ...(r.spot ? { spot: r.spot, where: r.spot.how === 'bank' && r.spot.bank ? `${r.spot.label} (bank at ${r.spot.bank})` : r.spot.label } : {}),
-    } : m;
+    } : withHourlyCoins(m, prices, state.mode, restriction);
     if (cache.size > 50) cache.clear();
     cache.set(key, out);
     return out;

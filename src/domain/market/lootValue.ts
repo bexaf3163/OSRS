@@ -41,6 +41,14 @@ export function coinTimeShare(netPerHour: number | undefined, rate: number | nul
   return share > 0 ? Math.min(COIN_SHARE_CAP, share) : share;
 }
 
+/**
+ * "Plus or zero" (owner, 2026-11-23, both modes): a loss smaller than this share of what the training time is worth in money-making (the coin
+ * rate) is break-even, so a couple of thousand coins of arrows an hour do not send a plan to a far slower earner.
+ */
+export const ZERO_SHARE = 0.05;
+/** Coins an hour that lose more than the break-even share of the coin rate; without a coin rate nothing is judged. */
+export const losing = (net: number, coinRate: number | null): boolean => !!coinRate && coinTimeShare(net, coinRate) < -ZERO_SHARE;
+
 /** Coins one drop brings after the tax, or null: no price, nothing after the tax, or an item a restricted account cannot sell. */
 type GuideOutput = { item: { name: string }; qty: number; chance?: [number, number] };
 const GUIDE_OUTPUTS = new Map((fundingWikiJson as unknown as { methods: { id: string; outputs?: GuideOutput[] }[] }).methods.map((m) => [m.id, m.outputs ?? []]));

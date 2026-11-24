@@ -49,6 +49,8 @@ export interface ModelRate {
   basis: string;
   /** The exact usable tool selected by the gathering model, not text parsed from its display basis. */
   selectedTool?: string;
+  /** Cheaper arrows than the kit's, when the kit's would lose coins here (the plus-or-zero rule, combatRates keepCoins). */
+  ammo?: string;
   /** Coins an hour from what is banked and sold, when it pays for its time; then xph already has its pickups and bank trips in it. */
   lootPerHour?: number;
   /** Coins an hour at market prices, without the planning margin: what methods are ranked by (processRates). */

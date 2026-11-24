@@ -583,6 +583,7 @@
     },
     {
       "id": "ag-seers",
+      "perHour": { "makes": [{ "name": "Amylase crystal", "qty": 124 }] },
       "skill": "agility",
       "from": 60,
       "to": 70,
@@ -609,6 +610,7 @@
     },
     {
       "id": "ag-pollnivneach",
+      "perHour": { "makes": [{ "name": "Amylase crystal", "qty": 135 }] },
       "skill": "agility",
       "from": 70,
       "to": 80,
@@ -661,6 +663,7 @@
     },
     {
       "id": "ag-ardougne",
+      "perHour": { "makes": [{ "name": "Amylase crystal", "qty": 171 }] },
       "skill": "agility",
       "from": 90,
       "to": null,
@@ -1677,6 +1680,7 @@
     },
     {
       "id": "rc-lava",
+      "perHour": { "uses": [{ "name": "Pure essence", "qty": 4040 }, { "name": "Earth rune", "qty": 4040 }, { "name": "Earth talisman", "qty": 155 }, { "name": "Binding necklace", "qty": 10 }], "makes": [{ "name": "Lava rune", "qty": 4040 }] },
       "skill": "runecraft",
       "from": 23,
       "to": 99,
@@ -2207,6 +2211,7 @@
     },
     {
       "id": "sm-foundry",
+      "perHour": { "coins": 195840, "uses": [{ "name": "Bronze bar", "qty": 144 }, { "name": "Iron bar", "qty": 304 }] },
       "skill": "smithing",
       "from": 15,
       "to": 30,
@@ -2241,6 +2246,7 @@
     },
     {
       "id": "sm-foundry-30",
+      "perHour": { "coins": 267840, "uses": [{ "name": "Iron bar", "qty": 224 }, { "name": "Steel bar", "qty": 224 }] },
       "skill": "smithing",
       "from": 30,
       "to": 50,
@@ -2275,6 +2281,7 @@
     },
     {
       "id": "sm-foundry-50",
+      "perHour": { "coins": 329280, "uses": [{ "name": "Steel bar", "qty": 196 }, { "name": "Mithril bar", "qty": 196 }] },
       "skill": "smithing",
       "from": 50,
       "to": 70,
@@ -2947,6 +2954,7 @@
     },
     {
       "id": "th-bakery",
+      "perHour": {},
       "skill": "thieving",
       "from": 5,
       "to": 25,
@@ -2967,6 +2975,7 @@
     },
     {
       "id": "th-fruit",
+      "perHour": {},
       "skill": "thieving",
       "from": 25,
       "to": 50,
@@ -2995,6 +3004,7 @@
     },
     {
       "id": "th-blackjack",
+      "perHour": { "coins": 43000 },
       "skill": "thieving",
       "from": 45,
       "to": 65,
@@ -3595,6 +3605,7 @@
     },
     {
       "id": "hu-falconry",
+      "perHour": { "coins": -500 },
       "skill": "hunter",
       "from": 43,
       "to": 49,
@@ -3614,6 +3625,7 @@
     },
     {
       "id": "hu-razor",
+      "perHour": { "uses": [{ "name": "Ring of pursuit", "qty": 33 }], "makes": [{ "name": "Long kebbit spike", "qty": 330 }] },
       "skill": "hunter",
       "from": 49,
       "to": null,
@@ -3640,6 +3652,7 @@
     },
     {
       "id": "co-mh-beginner",
+      "perHour": { "uses": [{ "name": "Plank", "qty": 375 }, { "name": "Steel bar", "qty": 18 }] },
       "skill": "construction",
       "from": 1,
       "to": 20,
@@ -3669,6 +3682,7 @@
     },
     {
       "id": "co-mh-novice",
+      "perHour": { "uses": [{ "name": "Oak plank", "qty": 400 }, { "name": "Steel bar", "qty": 22 }] },
       "skill": "construction",
       "from": 20,
       "to": 50,
@@ -3698,6 +3712,7 @@
     },
     {
       "id": "co-mh-adept",
+      "perHour": { "uses": [{ "name": "Teak plank", "qty": 500 }, { "name": "Steel bar", "qty": 36 }] },
       "skill": "construction",
       "from": 50,
       "to": 70,
@@ -3727,6 +3742,7 @@
     },
     {
       "id": "co-mh-expert",
+      "perHour": { "uses": [{ "name": "Mahogany plank", "qty": 463 }, { "name": "Steel bar", "qty": 32 }] },
       "skill": "construction",
       "from": 70,
       "to": null,

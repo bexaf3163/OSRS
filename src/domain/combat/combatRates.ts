@@ -15,9 +15,9 @@ import { matchStrict } from '../travel/locations';
 
 import { attacksToKill, combatMargin, combatRecovery, counterDamage, estimateCombat, foeVariants, unsafe, xpPerKill, type CombatFoe } from './combatEstimate';
 import { spotsOf, termsFor, TRAINER_LEVELS } from './spots';
-import { coinsPerMinute, dropValue, guideDropValue, lootSecondsPerKill } from '../market/lootValue';
+import { coinsPerMinute, dropValue, guideDropValue, losing, lootSecondsPerKill } from '../market/lootValue';
 import { ARROW_BREAK, goalArrows, methodFoe, rangedKitOf, rangedHit, RANGED_GEAR, trainingRangedStyle } from './rangedAmmo';
-import { rangedEquipment, rangedNeeds } from './rangedLoadout';
+import { arrowsFor, rangedEquipment, rangedNeeds } from './rangedLoadout';
 import { combatSpellsAt, spellHit, STAFFS, strikeRecipe } from './magicPlan';
 import { FOODS } from '../../data/threats';
 import { mergeGoalNeeds } from '../items/consumption';
@@ -119,21 +119,34 @@ export function combatRate(m: TrainingMethod, skill: string, state: PlayerState,
       .filter(rate => rate !== null).sort((a, b) => b.xph[1] - a.xph[1])[0];
     return best ? withLoot({ ...best, xph: [best.xph[0] / 4, best.xph[1] / 4] }, foe, market, state) : null;
   }
-  if (skill === 'ranged' && m.kit === 'f2p-bow') return withLoot(rangedRate(m, state, market.prices), methodFoe(m)?.name ?? m.npcNames[0], market, state);
+  const coinRate = coinsPerMinute(market.prices, state.mode);
+  if (skill === 'ranged' && m.kit === 'f2p-bow') {
+    const foe = methodFoe(m)?.name ?? m.npcNames[0];
+    const shoot = (arrow?: string) => withLoot(rangedRate(m, state, market.prices, arrow), foe, market, state);
+    const [bow, arrow] = rangedNeeds(state, market.prices).filter((n) => n.type === 'item').map((n) => n.name);
+    const fired = bow ? arrowsFor(bow) : [], at = arrow ? fired.indexOf(arrow) : -1;
+    return keepCoins(shoot(), at < 0 ? [] : fired.slice(at + 1).map((a) => () => shoot(a)), coinRate);
+  }
   if (skill === 'magic' && m.kit === 'strike-spell') {
     const foe = methodFoe(m)?.name ?? m.npcNames[0];
     const cast = (spell?: string) => withLoot(magicRate(m, state, market.prices, spell), foe, market, state);
-    const loses = (r: ModelRate | null) => r !== null && r.costPerHour !== null && (r.lootPerHour ?? 0) < r.costPerHour;
-    const planned = cast();
-    // F2P never trains at a loss (owner, 2026-11-23): when the planned spell's runes cost more than its drops pay, the strongest spell that does not.
-    if (state.mode !== 'f2p' || !loses(planned)) return planned;
-    for (const s of combatSpellsAt(state).reverse()) {
-      const r = cast(s.name);
-      if (r !== null && r.costPerHour !== null && !loses(r)) return r;
-    }
-    return planned;
+    return keepCoins(cast(), combatSpellsAt(state).reverse().map((s) => () => cast(s.name)), coinRate);
   }
   return null;
+}
+
+/**
+ * Plus or zero (owner, 2026-11-23, both modes): when the planned spell's runes or the kit's arrows lose more than the break-even share of the
+ * coin rate after the drops, the strongest cheaper choice that does not (alternatives come strongest first); the planned rate when none does.
+ */
+function keepCoins(planned: ModelRate | null, alternatives: readonly (() => ModelRate | null)[], coinRate: number | null): ModelRate | null {
+  const loses = (r: ModelRate) => r.costPerHour !== null && losing(r.marketNetPerHour ?? (r.lootPerHour ?? 0) - r.costPerHour, coinRate);
+  if (planned === null || !loses(planned)) return planned;
+  for (const alt of alternatives) {
+    const r = alt();
+    if (r !== null && r.costPerHour !== null && !loses(r)) return r;
+  }
+  return planned;
 }
 
 /** A rate with the spot's drop banked, when that pays for its pickups and bank trips (lootValue.ts); the rate as it was otherwise. */
@@ -303,12 +316,12 @@ export function rangedGoalNeeds(legs: readonly { method: TrainingMethod; fromLev
   return end === target ? mergeGoalNeeds(materials, kit, buffers) : null;
 }
 
-function rangedRate(m: TrainingMethod, state: PlayerState, prices?: PriceView | null): KillRate | null {
+function rangedRate(m: TrainingMethod, state: PlayerState, prices?: PriceView | null, ammo?: string): KillRate | null {
   const level = levelOf(state, 'ranged');
   const foe = methodFoe(m);
   if (level === undefined || !foe || level >= 99) return null;
   const kit = rangedNeeds(state, prices).filter((n) => n.type === 'item');
-  const [bow, arrow] = [kit[0]?.name, kit[1]?.name];
+  const [bow, arrow] = [kit[0]?.name, ammo ?? kit[1]?.name];
   if (!bow || !arrow) return null;
   const equipment = rangedEquipment(state.equipment, kit);
   const armour = Object.entries(equipment).filter(([slot]) => slot !== 'weapon' && slot !== 'ammo').map(([, name]) => name);
@@ -326,7 +339,7 @@ function rangedRate(m: TrainingMethod, state: PlayerState, prices?: PriceView | 
     xph: [(kills * perKill * 60) / recovery.totalMinutes.high, (kills * perKill * 60) / recovery.totalMinutes.low],
     costPerHour: ammoCost === null || foodCost === null ? null : (ammoCost + foodCost) / hours,
     costName: recovery.food.mid > 0 ? `arrows and ${sustained.food.toLowerCase()}` : 'arrows',
-    basis: `${bow}, ${arrow}`,
+    basis: `${bow}, ${arrow}`, ...(ammo ? { ammo } : {}),
     exactNeeds: true,
     needs: [...m.needs.filter((n) => n.type === 'item' && !FOODS.some((f) => f.name === n.name)), ...modelFood(recovery, sustained.food)],
     secondsPerKill: (recovery.totalMinutes.mid * 60) / kills, foodPerKill: recovery.food.mid / kills, food: sustained.food,

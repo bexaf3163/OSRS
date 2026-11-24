@@ -1,8 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { adviseTraining, trainingMethods, type PathLeg } from '../src/domain/training/trainingRouter';
-import { ZERO_SHARE } from '../src/domain/training/trainingGoal';
-import { coinsPerMinute, coinTimeShare } from '../src/domain/market/lootValue';
+import { coinsPerMinute, coinTimeShare, ZERO_SHARE } from '../src/domain/market/lootValue';
 import { buildPlayerState } from '../src/domain/player/playerState';
 import { emptyProgress } from '../src/domain/persistence/progress';
 import { fakePrices } from './funding/helpers';
@@ -81,6 +80,19 @@ describe('the training goal picks the fastest or the best-earning method, never 
   it.each([['xp', 'goal-fast'], ['coins', 'goal-rich']] as const)('%s', (goal, id) => {
     expect(pick(goal).id).toBe(id);
     expect(losing(pick(goal), 'f2p')).toBe(false);
+  });
+});
+
+// The plus-or-zero rule also picks the arrows: a method whose kit arrows would lose coins fires the strongest cheaper ones that do not.
+describe('a Ranged method fires cheaper arrows when the kit arrows would lose coins', () => {
+  it('Members Ranged 50 on Brutus', () => {
+    const stats = Object.fromEntries((SKILL_NAMES as readonly string[]).map((s) => [s, 50]));
+    const state = buildPlayerState({ mode: 'members', connected: true, player: 'P', stats, progress: emptyProgress(), questsDone: questCatalogue.map((q) => q.id),
+      owned: { bankSeen: true, items: new Map() }, gear: { equipment: [], inventory: [], coins: 0, bankCoins: 50_000_000 } } as never);
+    const best = adviseTraining({ skill: 'ranged', target: 55, state, mode: 'members', prices } as never).best!.method;
+    expect(best.id).toBe('ra-brutus');
+    expect(best.ammo).toBeDefined();
+    expect(losing(best, 'members')).toBe(false);
   });
 });
 
