@@ -25,8 +25,14 @@ interface TickEvidence { page: string; evidence: string; ticks: number }
 interface AltarDef { page: string; bonus: string; percent: number; pace: string; perHour: number; fee: string; coins: number;
   /** The guide's sentence for the share of offerings not consumed (the Chaos altar): each used bone then gives its XP 1 / (1 - share) times. */
   saved?: { evidence: string; percent: number } }
+/**
+ * The libation bowl: a blessed bone breaks into `shards` blessed bone shards (the shards page's table), each offered for `xpEach` with blessed
+ * sunfire wine; one jug serves `perJug` shards and takes `splinters` sunfire splinters. The guide gives the pace and the unnoting fee.
+ */
+interface LibationDef { page: string; level: number; shards: number; shardsEvidence: string; xpEach: number; xpEvidence: string; perJug: number; jugEvidence: string;
+  splinters: number; splintersEvidence: string; guide: string; pace: string; perHour: number; fee: string; coins: number }
 interface RecipeDef { id: string; page: string; skill: string; facility: Kind | null; members?: boolean; /** Lit with a tinderbox (Firemaking): read from the log's {{Firemaking info}}. */ light?: boolean;
-  consume?: { level: number; xp: number; xpEvidence: string; action: TickEvidence; samePace?: { page: string; evidence: string }; altar?: AltarDef };
+  consume?: { level: number; xp: number; xpEvidence: string; action: TickEvidence; samePace?: { page: string; evidence: string }; altar?: AltarDef; libation?: LibationDef };
   spell?: { page: string; materialPage: string; successEvidence: string; batchSize: number };
   /** The item (the page) alched with this spell for coins. */
   alch?: { spell: string };
@@ -205,12 +211,20 @@ for (const d of defs.recipes) {
         .every(([line, value]) => guide.includes(line) && line.includes(value));
       // Offerings not consumed: the hourly pace counts offerings, the recipe counts the bones used.
       const used = 1 - (c.altar?.saved?.percent ?? 0) / 100;
+      const lib = c.libation;
+      const says = (line: string, value: number) => line.includes(value.toLocaleString('en-US')) || line.includes(['zero', 'one', 'two', 'three', 'four'][value] ?? '-');
+      const shardText = lib ? await wikitext(lib.page) : '', libGuide = lib ? plain(await page(lib.guide)) : '';
+      const libOk = !lib || ([[lib.shardsEvidence, lib.shards], [lib.xpEvidence, lib.xpEach], [lib.jugEvidence, lib.perJug]] as const).every(([line, value]) => shardText.includes(line) && says(line, value))
+        && ([[lib.splintersEvidence, lib.splinters], [lib.pace, lib.perHour], [lib.fee, lib.coins]] as const).every(([line, value]) => libGuide.includes(line) && says(line, value));
     if (!item || !text.includes(c.xpEvidence) || !xpMatch || Number(xpMatch[1]) !== c.xp || d.skill !== 'prayer'
-      || !action || !paced || !altarOk || !action.includes(`${c.action.ticks} ticks per bone`) || !(c.level > 0) || !(c.xp > 0) || !(c.action.ticks > 0)) {
+      || !action || !paced || !altarOk || !libOk || !action.includes(`${c.action.ticks} ticks per bone`) || !(c.level > 0) || !(c.xp > 0) || !(c.action.ticks > 0)) {
       fail(d.id, 'consumption XP/action evidence does not match the source'); continue;
     }
-    recipes.push({ id: d.id, skill: d.skill, level: c.level, xp: c.xp * (c.altar?.percent ?? 100) / 100 / used, ticks: c.action.ticks, ...(c.altar ? { perHour: c.altar.perHour * used, fee: c.altar.coins } : {}), facility: null, tools: [],
-      inputs: [{ name: plain(d.page), qty: 1, stacks: await stacks(d.page) }], output: null, members: !!c.altar || /^yes$/i.test(item.members ?? ''),
+    recipes.push({ id: d.id, skill: d.skill, level: lib?.level ?? c.level, xp: lib ? lib.shards * lib.xpEach : c.xp * (c.altar?.percent ?? 100) / 100 / used, ticks: c.action.ticks,
+      ...(c.altar ? { perHour: c.altar.perHour * used, fee: c.altar.coins } : lib ? { perHour: lib.perHour, fee: lib.coins } : {}), facility: null, tools: [],
+      inputs: [{ name: plain(d.page), qty: 1, stacks: await stacks(d.page) },
+        ...(lib ? [{ name: 'Sunfire splinters', qty: lib.shards * lib.splinters / lib.perJug, stacks: true }, { name: 'Jug of wine', qty: lib.shards / lib.perJug, stacks: false }] : [])],
+      output: null, members: !!c.altar || !!lib || /^yes$/i.test(item.members ?? ''),
       source: `https://oldschool.runescape.wiki/w/${encodeURIComponent(d.page.replace(/ /g, '_'))}` });
     continue;
   }

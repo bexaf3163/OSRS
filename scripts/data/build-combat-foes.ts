@@ -35,7 +35,7 @@ function fields(text: string): Map<string, string> {
 }
 
 const num = (v: string | undefined): number | null => {
-  const m = /^[+-]?\d+/.exec((v ?? '').replace(/,/g, '').trim());
+  const m = /^[+-]?\d+(?:\.\d+)?/.exec((v ?? '').replace(/,/g, '').trim());
   return m ? Number(m[0]) : null;
 };
 const plain = (v: string | undefined) => (v ?? '').replace(/\[\[(?:[^\]|]*\|)?([^\]]*)\]\]/g, '$1').replace(/<[^>]*>/g, '').trim();
@@ -61,6 +61,8 @@ export interface CombatFoe {
   aggressive: boolean;
   /** The infobox's experience bonus in percent (Brutus: +100, each point of damage gives twice the combat XP); absent when there is none. */
   xpBonus?: number;
+  /** Never dies ("∞" hitpoints): its fights are rated by damage dealt (combatRates endlessRate). */
+  endless?: true;
   /** Elemental weakness (OSRS Wiki Elemental weakness): a strike, bolt or blast of this element gets this many percent more magic accuracy and
    * this share of its base max hit added. Absent when the infobox has none. */
   weakness?: { element: string; percent: number };
@@ -78,8 +80,10 @@ for (const page of PAGES) {
     if (version && /unused|beta/i.test(version)) continue;
     // A ranged attacker rolls with its Ranged level and ranged bonus, not its melee ones.
     const shoots = plain(at('attack style', i)).toLowerCase().startsWith('ranged');
+    // "∞" hitpoints (the Gemstone Crab): it never dies, so its fights are rated by damage dealt, not kills.
+    const endless = plain(at('hitpoints', i)) === '∞';
     const row = {
-      combat: num(at('combat', i)), hitpoints: num(at('hitpoints', i)), attackLevel: num(at(shoots ? 'range' : 'att', i)), strengthLevel: num(at('str', i)),
+      combat: num(at('combat', i)), hitpoints: endless ? 0 : num(at('hitpoints', i)), attackLevel: num(at(shoots ? 'range' : 'att', i)), strengthLevel: num(at('str', i)),
       defenceLevel: num(at('def', i)), magicLevel: num(at('mage', i)), attackBonus: num(at(shoots ? 'rngbns' : 'attbns', i)),
       stab: num(at('dstab', i)), slash: num(at('dslash', i)), crush: num(at('dcrush', i)), magic: num(at('dmagic', i)),
       maxHit: num(at('max hit', i)), speedTicks: num(at('attack speed', i)),
@@ -97,7 +101,7 @@ for (const page of PAGES) {
       defence: { stab: row.stab!, slash: row.slash!, crush: row.crush!, magic: row.magic!, ...(ranged !== null ? { ranged } : {}) },
       // The Icefiend's infobox says "Magical" for a magic attack.
       attackStyle: plain(at('attack style', i)).toLowerCase().split(/[,\s]+/)[0].replace(/^magical$/, 'magic'), maxHit: row.maxHit!, speedTicks: row.speedTicks!,
-      aggressive: /yes/i.test(at('aggressive', i) ?? ''),
+      aggressive: /yes/i.test(at('aggressive', i) ?? ''), ...(endless ? { endless: true as const } : {}),
       ...(xpBonus ? { xpBonus } : {}),
       ...(element && percent ? { weakness: { element, percent } } : {}),
     };

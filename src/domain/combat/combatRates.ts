@@ -13,7 +13,7 @@ import { matchStrict } from '../travel/locations';
 // guesses: an unknown level,
 // unread worn items, a weapon or bow the data does not know, an opponent without data, or a fight that is not safe - no rate, and the wiki's stays.
 
-import { attacksToKill, combatMargin, combatRecovery, counterDamage, estimateCombat, foeVariants, unsafe, xpPerKill, type CombatFoe } from './combatEstimate';
+import { attacksToKill, combatMargin, combatRecovery, counterDamage, endlessFoe, estimateCombat, foeVariants, swingDamage, TRAIN_STYLE, unsafe, xpPerKill, type CombatFoe } from './combatEstimate';
 import { spotsOf, termsFor, TRAINER_LEVELS } from './spots';
 import { coinsPerMinute, dropValue, guideDropValue, losing, lootSecondsPerKill } from '../market/lootValue';
 import { ARROW_BREAK, goalArrows, methodFoe, rangedKitOf, rangedHit, RANGED_GEAR, trainingRangedStyle } from './rangedAmmo';
@@ -23,7 +23,7 @@ import { FOODS } from '../../data/threats';
 import { mergeGoalNeeds } from '../items/consumption';
 import { heldOf, levelOf, questOf, wornItemsOf, type PlayerState } from '../player/playerState';
 import { STYLE_GEAR, usableStyleOption } from './styleGear';
-import { gearPieceByName, shootsOnly, trainingWeapons, type Levels } from './gearAdvisor';
+import { gearPieceByName, meleeAs, shootsOnly, trainingWeapons, type Levels } from './gearAdvisor';
 import { nameKey } from '../items/itemKey';
 import { supplyPrice } from '../market/itemPrice';
 import { xpForLevel } from '../player/xp';
@@ -111,6 +111,8 @@ export function combatUpgrades(m: TrainingMethod, skill: string, state: PlayerSt
 /** The rate of one combat method for this player in this skill, or null when the model has nothing honest to say (methodRates.ts dispatches here). */
 export function combatRate(m: TrainingMethod, skill: string, state: PlayerState, market: Market = {}): ModelRate | null {
   if (m.kind !== 'method' || !m.skills.includes(skill) || (m.members && state.mode !== 'members') || !m.npcNames?.length || state.equipmentKnown !== true) return null;
+  const endless = endlessFoe(m.npcNames[0]);
+  if (endless) return endlessRate(m, skill, state, market.prices, endless);
   if (MELEE.has(skill) && m.skills.includes(skill)) return withLoot(meleeRate(m.npcNames[0], skill as 'attack' | 'strength' | 'defence', state, market.prices), m.npcNames[0], market, state);
   // Slayer XP is the HP of each monster killed on task: a quarter of the melee XP of the same kills, in the best style.
   if (skill === 'slayer') {
@@ -133,6 +135,33 @@ export function combatRate(m: TrainingMethod, skill: string, state: PlayerState,
     return keepCoins(cast(), combatSpellsAt(state).reverse().map((s) => () => cast(s.name)), coinRate);
   }
   return null;
+}
+
+/**
+ * A foe that never dies (the Gemstone Crab): XP is the damage dealt, 4 a point plus the foe's XP modifier, at this player's own damage per
+ * second with the worn melee kit or the Ranged kit; no kills, food or bank trips. Broken arrows are the cost.
+ */
+function endlessRate(m: TrainingMethod, skill: string, state: PlayerState, prices: PriceView | null | undefined, foe: CombatFoe): ModelRate | null {
+  const perHour = (dps: number) => dps * 3600 * 4 * (1 + (foe.xpBonus ?? 0) / 100);
+  if (MELEE.has(skill)) {
+    const lv = { attack: levelOf(state, 'attack'), strength: levelOf(state, 'strength'), defence: levelOf(state, 'defence') };
+    const gear = worn(state);
+    if (lv.attack === undefined || lv.strength === undefined || lv.defence === undefined || !gear) return null;
+    const hit = meleeAs(lv as Levels, gear.weapon, gear.neck, TRAIN_STYLE[skill as 'attack' | 'strength' | 'defence'], foe);
+    const xph = perHour(hit.dps);
+    return { xph: [xph * 0.9, xph], costPerHour: 0, basis: gear.weapon?.name ?? 'unarmed' };
+  }
+  const level = levelOf(state, 'ranged');
+  if (skill !== 'ranged' || m.kit !== 'f2p-bow' || level === undefined) return null;
+  const kit = rangedNeeds(state, prices).filter((n) => n.type === 'item');
+  const [bow, arrow] = [kit[0]?.name, kit[1]?.name];
+  if (!bow || !arrow) return null;
+  const armour = Object.entries(rangedEquipment(state.equipment, kit)).filter(([slot]) => slot !== 'weapon' && slot !== 'ammo').map(([, name]) => name);
+  const hit = rangedHit(level, bow, arrow, armour, foe, trainingRangedStyle(level));
+  if (!hit) return null;
+  const shots = 3600 / (hit.speedTicks * TICK), price = supplyPrice(arrow, prices, state.mode);
+  const xph = perHour(swingDamage(hit.chance, hit.maxHit).mean * shots / 3600);
+  return { xph: [xph * 0.9, xph], costPerHour: price === null ? null : shots * ARROW_BREAK * price, costName: 'arrows', basis: `${bow}, ${arrow}` };
 }
 
 /**

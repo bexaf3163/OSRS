@@ -1937,6 +1937,192 @@
       "source": "https://oldschool.runescape.wiki/w/Dagannoth_bones"
     },
     {
+      "id": "libation-bones",
+      "skill": "prayer",
+      "level": 30,
+      "xp": 24,
+      "ticks": 3,
+      "perHour": 1700,
+      "fee": 10,
+      "facility": null,
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Bones",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Sunfire splinters",
+          "qty": 0.02,
+          "stacks": true
+        },
+        {
+          "name": "Jug of wine",
+          "qty": 0.01,
+          "stacks": false
+        }
+      ],
+      "output": null,
+      "members": true,
+      "source": "https://oldschool.runescape.wiki/w/Bones"
+    },
+    {
+      "id": "libation-big-bones",
+      "skill": "prayer",
+      "level": 30,
+      "xp": 72,
+      "ticks": 3,
+      "perHour": 1700,
+      "fee": 10,
+      "facility": null,
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Big bones",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Sunfire splinters",
+          "qty": 0.06,
+          "stacks": true
+        },
+        {
+          "name": "Jug of wine",
+          "qty": 0.03,
+          "stacks": false
+        }
+      ],
+      "output": null,
+      "members": true,
+      "source": "https://oldschool.runescape.wiki/w/Big_bones"
+    },
+    {
+      "id": "libation-babydragon-bones",
+      "skill": "prayer",
+      "level": 30,
+      "xp": 144,
+      "ticks": 3,
+      "perHour": 1700,
+      "fee": 10,
+      "facility": null,
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Babydragon bones",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Sunfire splinters",
+          "qty": 0.12,
+          "stacks": true
+        },
+        {
+          "name": "Jug of wine",
+          "qty": 0.06,
+          "stacks": false
+        }
+      ],
+      "output": null,
+      "members": true,
+      "source": "https://oldschool.runescape.wiki/w/Babydragon_bones"
+    },
+    {
+      "id": "libation-dragon-bones",
+      "skill": "prayer",
+      "level": 30,
+      "xp": 348,
+      "ticks": 3,
+      "perHour": 1700,
+      "fee": 10,
+      "facility": null,
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Dragon bones",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Sunfire splinters",
+          "qty": 0.29,
+          "stacks": true
+        },
+        {
+          "name": "Jug of wine",
+          "qty": 0.145,
+          "stacks": false
+        }
+      ],
+      "output": null,
+      "members": true,
+      "source": "https://oldschool.runescape.wiki/w/Dragon_bones"
+    },
+    {
+      "id": "libation-wyvern-bones",
+      "skill": "prayer",
+      "level": 30,
+      "xp": 348,
+      "ticks": 3,
+      "perHour": 1700,
+      "fee": 10,
+      "facility": null,
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Wyvern bones",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Sunfire splinters",
+          "qty": 0.29,
+          "stacks": true
+        },
+        {
+          "name": "Jug of wine",
+          "qty": 0.145,
+          "stacks": false
+        }
+      ],
+      "output": null,
+      "members": true,
+      "source": "https://oldschool.runescape.wiki/w/Wyvern_bones"
+    },
+    {
+      "id": "libation-dagannoth-bones",
+      "skill": "prayer",
+      "level": 30,
+      "xp": 600,
+      "ticks": 3,
+      "perHour": 1700,
+      "fee": 10,
+      "facility": null,
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Dagannoth bones",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Sunfire splinters",
+          "qty": 0.5,
+          "stacks": true
+        },
+        {
+          "name": "Jug of wine",
+          "qty": 0.25,
+          "stacks": false
+        }
+      ],
+      "output": null,
+      "members": true,
+      "source": "https://oldschool.runescape.wiki/w/Dagannoth_bones"
+    },
+    {
       "id": "enchant-sapphire-amulet",
       "skill": "magic",
       "level": 7,
@@ -4598,6 +4784,14 @@
       "chaos-dragon-bones",
       "chaos-wyvern-bones",
       "chaos-dagannoth-bones"
+    ],
+    "pr-libation": [
+      "libation-bones",
+      "libation-big-bones",
+      "libation-babydragon-bones",
+      "libation-dragon-bones",
+      "libation-wyvern-bones",
+      "libation-dagannoth-bones"
     ]
   }
 }

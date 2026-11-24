@@ -48,6 +48,8 @@ export interface CombatFoe {
   /** The wiki's experience bonus in percent: Brutus +100 (twice the XP for each point of damage). */
   xpBonus?: number;
   weakness?: { element: string; percent: number }; // OSRS Wiki elemental weakness: that % more accuracy and base max hit for its element's spells
+  /** Never dies ("∞" hitpoints, the Gemstone Crab): its fights are rated by damage dealt, not kills (combatRates endlessRate). */
+  endless?: true;
 }
 
 /** Combat XP of one kill in the trained skill: 4 per point of damage, with the opponent's own bonus. */
@@ -75,6 +77,9 @@ export const COMBAT_FOES = (combatFoesJson as { foes: CombatFoe[] }).foes;
 export const DEFAULT_FOOD_SLOTS = 26;
 
 /** The versions of an opponent the training can be done on, members-only ones left out (the route is free to play). */
+/** A foe that never dies (the Gemstone Crab): no kills, food or bank trips to model, so its fights need no combat preparation check. */
+export const endlessFoe = (name: string): CombatFoe | undefined => COMBAT_FOES.find((f) => f.name === name && f.endless);
+
 export function foeVariants(name: string): CombatFoe[] {
   return COMBAT_FOES.filter((f) => f.name === name && !f.members);
 }

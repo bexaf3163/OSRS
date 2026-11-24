@@ -2929,8 +2929,14 @@
       "where": "Tlati Rainforest",
       "place": "Tlati Rainforest",
       "note": "No food is needed: the crab has \"endless\" health. The Wiki keeps it as the low-intensity method all the way to 99.",
+      "npcNames": ["Gemstone Crab"],
       "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Melee_training"
     },
+    { "id": "ra-gc", "skill": "ranged", "from": 1, "to": null, "name": "Gemstone Crab with a bow (Tlati Rainforest)", "members": true, "kit": "f2p-bow",
+      "needs": [{ "type": "quest", "quest": "Children of the Sun" }], "npcNames": ["Gemstone Crab"],
+      "effort": "afk", "cost": "cost", "risk": "none", "where": "Tlati Rainforest",
+      "note": "The Wiki's idle Ranged method: the crab has endless health and no defence and burrows every 10 minutes. XP follows your own damage; darts are similar, and a yew or magic shortbow with rune arrows matches adamant darts.",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Ranged_training" },
     { "id": "me-nagua", "skill": ["attack", "strength", "defence"], "from": 55, "to": 75, "name": "Sulphur Naguas (Neypotzli)", "members": true,
       "needs": [{ "type": "quest", "quest": "Perilous Moons" }, { "type": "skill", "skill": "slayer", "min": 48 }, { "type": "skill", "skill": "prayer", "min": 43 }, { "type": "item", "name": "Sulphur blades", "equip": true }],
       "xph": [75000, 130000], "effort": "medium", "cost": "free", "risk": "low", "where": "Neypotzli, under Cam Torum",
@@ -3487,6 +3493,10 @@
       "note": "Buy noted bones, unnote them at Phials in the Rimmington General Store for 5 coins each, enter a house party host's house and use each bone on the gilded altar by hand. The altar gives 350% of the burying XP, and the wiki guide's pace is 2,550 bones an hour with banking, about 643,000 XP an hour with dragon bones.",
       "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Prayer_training"
     },
+    { "id": "pr-libation", "skill": "prayer", "from": 30, "to": 99, "name": "Libation bowl at the Teomat", "members": true, "needs": [], "act": "bone|bones",
+      "effort": "high", "cost": "cost", "risk": "none", "where": "The Teomat in Varlamore: the exposed altar, Virilis and the libation bowl",
+      "note": "Un-note bones at Virilis (10 coins each), bless them at the exposed altar, break them into blessed bone shards with a chisel and offer the shards at the libation bowl filled with blessed sunfire wine (6 XP a shard). One jug serves 400 shards and takes 2 sunfire splinters. The Wiki's pace is 1,700 bones an hour; recharge Prayer at the Shrine of Ralos.",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Prayer_training" },
     {
       "id": "pr-chaos",
       "skill": "prayer",

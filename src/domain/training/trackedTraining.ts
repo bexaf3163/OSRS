@@ -11,6 +11,7 @@ import { pickTraining } from './methodPick';
 import type { TimeEstimate, TrainingAdvice } from './trainingRouter';
 import { withTrainingMethod } from './methodStep';
 import { scopedMemo, scopedRateKeyOf, type Market } from './methodRates';
+import { endlessFoe } from '../combat/combatEstimate';
 
 export interface TrackedTraining { step: Step; target: number; complete: boolean; advice?: TrainingAdvice | null }
 
@@ -47,7 +48,7 @@ function trackedTrainingFresh(tracked: TrackedSkill, observed: PlayerState, mode
   const step = withTrainingMethod(base, pick);
   if (typeof pick === 'object' && step.inGame) step.inGame = { ...step.inGame, goal: `${pick.name ?? name}: train ${skill} to ${pick.untilLevel ?? target}` };
   const method = typeof pick === 'object' ? methodsFor(skill).find(method => method.id === pick.methodId) : null;
-  const combat = method?.npcNames?.length && (['attack', 'strength', 'defence'].includes(skill) || method.kit === 'f2p-bow' || method.kit === 'strike-spell');
+  const combat = method?.npcNames?.length && !endlessFoe(method.npcNames[0]) && (['attack', 'strength', 'defence'].includes(skill) || method.kit === 'f2p-bow' || method.kit === 'strike-spell');
   if (combat && typeof pick === 'object' && !pick.modelled) {
     const warning = 'Combat preparation is not checked for this setup. Read your stats and equipment in RuneLite; unsupported gear or mechanics need manual review.';
     step.stockItems = undefined;

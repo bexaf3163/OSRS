@@ -1,6 +1,6 @@
 {
   "source": "OSRS Wiki: Infobox Monster of each article, every version (scripts/data/build-combat-foes.ts)",
-  "generatedAt": "2026-11-23",
+  "generatedAt": "2026-11-24",
   "foes": [
     {
       "name": "Count Draynor",
@@ -23,7 +23,7 @@
       "maxHit": 3,
       "speedTicks": 4,
       "aggressive": true,
-      "xpBonus": -97
+      "xpBonus": -97.5
     },
     {
       "name": "Gardener",
@@ -164,7 +164,7 @@
       "maxHit": 6,
       "speedTicks": 5,
       "aggressive": true,
-      "xpBonus": -97
+      "xpBonus": -97.5
     },
     {
       "name": "Brutus",
@@ -952,7 +952,7 @@
       "maxHit": 32,
       "speedTicks": 6,
       "aggressive": true,
-      "xpBonus": 7,
+      "xpBonus": 7.5,
       "weakness": {
         "element": "fire",
         "percent": 25
@@ -1483,7 +1483,7 @@
       "maxHit": 27,
       "speedTicks": 8,
       "aggressive": false,
-      "xpBonus": -97,
+      "xpBonus": -97.5,
       "weakness": {
         "element": "earth",
         "percent": 40
@@ -1511,7 +1511,7 @@
       "maxHit": 38,
       "speedTicks": 4,
       "aggressive": true,
-      "xpBonus": 7,
+      "xpBonus": 7.5,
       "weakness": {
         "element": "earth",
         "percent": 20
@@ -1539,7 +1539,7 @@
       "maxHit": 38,
       "speedTicks": 4,
       "aggressive": true,
-      "xpBonus": 7,
+      "xpBonus": 7.5,
       "weakness": {
         "element": "earth",
         "percent": 20
@@ -1920,7 +1920,7 @@
       "maxHit": 3,
       "speedTicks": 4,
       "aggressive": false,
-      "xpBonus": -97
+      "xpBonus": -97.5
     },
     {
       "name": "King Roald",
@@ -2039,7 +2039,7 @@
       "maxHit": 7,
       "speedTicks": 4,
       "aggressive": true,
-      "xpBonus": 2,
+      "xpBonus": 2.5,
       "weakness": {
         "element": "air",
         "percent": 50
@@ -2561,7 +2561,7 @@
       "maxHit": 38,
       "speedTicks": 4,
       "aggressive": true,
-      "xpBonus": 7,
+      "xpBonus": 7.5,
       "weakness": {
         "element": "earth",
         "percent": 50
@@ -2794,7 +2794,7 @@
       "maxHit": 14,
       "speedTicks": 6,
       "aggressive": true,
-      "xpBonus": -97
+      "xpBonus": -97.5
     },
     {
       "name": "Sir Leye",
@@ -2989,7 +2989,7 @@
       "maxHit": 10,
       "speedTicks": 6,
       "aggressive": true,
-      "xpBonus": 2,
+      "xpBonus": 2.5,
       "weakness": {
         "element": "earth",
         "percent": 20
@@ -3105,7 +3105,7 @@
       "maxHit": 18,
       "speedTicks": 4,
       "aggressive": true,
-      "xpBonus": -97,
+      "xpBonus": -97.5,
       "weakness": {
         "element": "water",
         "percent": 25
@@ -3917,6 +3917,30 @@
         "element": "earth",
         "percent": 25
       }
+    },
+    {
+      "name": "Gemstone Crab",
+      "combat": 160,
+      "members": true,
+      "hitpoints": 0,
+      "attackLevel": 1,
+      "strengthLevel": 1,
+      "defenceLevel": 1,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "crush",
+      "maxHit": 1,
+      "speedTicks": 7,
+      "aggressive": true,
+      "endless": true,
+      "xpBonus": -12.5
     },
     {
       "name": "Dark wizard",
