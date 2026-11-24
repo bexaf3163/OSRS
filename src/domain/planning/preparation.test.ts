@@ -162,4 +162,13 @@ describe('one shared tactical preparation resolver', () => {
     expect(resolvePreparation(input)).toMatchObject({ kind: 'VERIFY', feasibility: 'UNKNOWN', gpCost: null, expectedEffects: [] });
     expect(earn).not.toHaveBeenCalled();
   });
+  it('earns once for every purchase still ahead, not one piece at a time', () => {
+    const input = fixture({ bank: 0, cash: 0 });
+    const line = { ...input.plan.lines[0], action: { kind: 'BUY' as const, label: 'Buy arrows', price: 2, purchase: { source: 'ge' as const } } };
+    input.plan = { ...input.plan, lines: [line, { ...line, key: 'second', name: 'Bronze arrow', count: 50 }] };
+    const earn = vi.fn(() => null);
+    input.earn = earn;
+    resolvePreparation(input);
+    expect(earn).toHaveBeenCalledWith(300);
+  });
 });

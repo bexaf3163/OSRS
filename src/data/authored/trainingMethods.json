@@ -157,7 +157,8 @@
       "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Woodcutting_training",
       "objectNames": [
         "Teak tree"
-      ]
+      ],
+      "place": "Isle of Souls"
     },
     {
       "id": "fi-shrimp",
@@ -1464,7 +1465,8 @@
       "where": "The Air Altar south of Falador",
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_Runecraft_training",
       "act": "essence|essence",
-      "note": "Take unnoted rune essence or pure essence. Use the talisman on the mysterious ruins, or wear the corresponding tiara to enter. Craft at the altar, leave through the portal, then bank and refill. The walking estimate excludes teleports and essence pouches."
+      "note": "Take unnoted rune essence or pure essence. Use the talisman on the mysterious ruins, or wear the corresponding tiara to enter. Craft at the altar, leave through the portal, then bank and refill. The walking estimate excludes teleports and essence pouches.",
+      "place": "Air Altar"
     },
     {
       "id": "rc-earth",
@@ -1496,7 +1498,8 @@
       "where": "The Earth Altar north-east of Varrock",
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_Runecraft_training",
       "act": "essence|essence",
-      "note": "Take unnoted rune essence or pure essence. Use the talisman on the mysterious ruins, or wear the corresponding tiara to enter. Craft at the altar, leave through the portal, then bank and refill. The walking estimate excludes teleports and essence pouches."
+      "note": "Take unnoted rune essence or pure essence. Use the talisman on the mysterious ruins, or wear the corresponding tiara to enter. Craft at the altar, leave through the portal, then bank and refill. The walking estimate excludes teleports and essence pouches.",
+      "place": "Earth Altar"
     },
     {
       "id": "rc-fire",
@@ -1528,7 +1531,8 @@
       "where": "The Fire Altar west of Emir's Arena",
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_Runecraft_training",
       "act": "essence|essence",
-      "note": "Take unnoted rune essence or pure essence. Use the talisman on the mysterious ruins, or wear the corresponding tiara to enter. Craft at the altar, leave through the portal, then bank and refill. The walking estimate excludes teleports and essence pouches."
+      "note": "Take unnoted rune essence or pure essence. Use the talisman on the mysterious ruins, or wear the corresponding tiara to enter. Craft at the altar, leave through the portal, then bank and refill. The walking estimate excludes teleports and essence pouches.",
+      "place": "Fire Altar"
     },
     {
       "id": "rc-body",
@@ -1560,7 +1564,8 @@
       "where": "The Body Altar",
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_Runecraft_training",
       "act": "essence|essence",
-      "note": "Take unnoted rune essence or pure essence. Use the talisman on the mysterious ruins, or wear the corresponding tiara to enter. Craft at the altar, leave through the portal, then bank and refill. The walking estimate excludes teleports and essence pouches."
+      "note": "Take unnoted rune essence or pure essence. Use the talisman on the mysterious ruins, or wear the corresponding tiara to enter. Craft at the altar, leave through the portal, then bank and refill. The walking estimate excludes teleports and essence pouches.",
+      "place": "Body Altar"
     },
     {
       "id": "rc-gotr",
@@ -1723,7 +1728,8 @@
       "where": "The Fire Altar west of Emir's Arena",
       "act": "essence|essence",
       "note": "Use an earth talisman on the Fire Altar with pure essence and at least as many earth runes; a binding necklace makes every rune a lava rune. XP per hour is the wiki guide's level-23 rate without essence pouches or the Raiments of the Eye; pouches raise it later (55,700 at 50, 64,800 at 75). It costs about 1 gp per XP or breaks even.",
-      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Runecraft_training"
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Runecraft_training",
+      "place": "Fire Altar"
     },
     {
       "id": "fi-barb",
@@ -1763,7 +1769,8 @@
       "risk": "none",
       "where": "The pond by Otto's Grotto, south of the Barbarian Outpost; drop the fish",
       "note": "Otto's Barbarian Training must be started for leaping fish, and he gives the barbarian rod. XP per hour is the wiki guide's rate at level 48 without tick manipulation, and the catches also give a little Agility and Strength XP.",
-      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Fishing_training"
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Fishing_training",
+      "place": "Otto's Grotto"
     },
     {
       "id": "fi-barb-58",
@@ -1803,7 +1810,8 @@
       "risk": "none",
       "where": "The pond by Otto's Grotto, south of the Barbarian Outpost; drop the fish",
       "note": "Otto's Barbarian Training must be started for leaping fish, and he gives the barbarian rod. XP per hour is the wiki guide's rate at level 58 without tick manipulation, and the catches also give a little Agility and Strength XP.",
-      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Fishing_training"
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Fishing_training",
+      "place": "Otto's Grotto"
     },
     {
       "id": "fi-barb-70",
@@ -1843,7 +1851,8 @@
       "risk": "none",
       "where": "The pond by Otto's Grotto, south of the Barbarian Outpost; drop the fish",
       "note": "Otto's Barbarian Training must be started for leaping fish, and he gives the barbarian rod. XP per hour is the wiki guide's rate at level 70 without tick manipulation, and the catches also give a little Agility and Strength XP.",
-      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Fishing_training"
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Fishing_training",
+      "place": "Otto's Grotto"
     },
     {
       "id": "fi-barb-80",
@@ -1883,7 +1892,8 @@
       "risk": "none",
       "where": "The pond by Otto's Grotto, south of the Barbarian Outpost; drop the fish",
       "note": "Otto's Barbarian Training must be started for leaping fish, and he gives the barbarian rod. XP per hour is the wiki guide's rate at level 80 without tick manipulation, and the catches also give a little Agility and Strength XP.",
-      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Fishing_training"
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Fishing_training",
+      "place": "Otto's Grotto"
     },
     {
       "id": "fi-barb-90",
@@ -1923,7 +1933,8 @@
       "risk": "none",
       "where": "The pond by Otto's Grotto, south of the Barbarian Outpost; drop the fish",
       "note": "Otto's Barbarian Training must be started for leaping fish, and he gives the barbarian rod. XP per hour is the wiki guide's rate at level 90 without tick manipulation, and the catches also give a little Agility and Strength XP.",
-      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Fishing_training"
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Fishing_training",
+      "place": "Otto's Grotto"
     },
     {
       "id": "fi-tempoross",
@@ -2079,7 +2090,8 @@
       "risk": "low",
       "where": "The Wintertodt camp in the far north of Great Kourend",
       "note": "Chop bruma roots and burn them in a brazier; fix it with the hammer and relight it with the tinderbox. The cold hurts, so bring food and warm clothing. XP per hour is the wiki guide's rate at level 50 on a fast world without fletching the roots; the reward crates give loot and the Pyromancer outfit, and chopping gives some Woodcutting XP.",
-      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Firemaking_training"
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Firemaking_training",
+      "place": "Wintertodt Camp"
     },
     {
       "id": "fm-wintertodt-60",
@@ -2111,7 +2123,8 @@
       "risk": "low",
       "where": "The Wintertodt camp in the far north of Great Kourend",
       "note": "Chop bruma roots and burn them in a brazier; fix it with the hammer and relight it with the tinderbox. The cold hurts, so bring food and warm clothing. XP per hour is the wiki guide's rate at level 60 on a fast world without fletching the roots; the reward crates give loot and the Pyromancer outfit, and chopping gives some Woodcutting XP.",
-      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Firemaking_training"
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Firemaking_training",
+      "place": "Wintertodt Camp"
     },
     {
       "id": "fm-wintertodt-70",
@@ -2143,7 +2156,8 @@
       "risk": "low",
       "where": "The Wintertodt camp in the far north of Great Kourend",
       "note": "Chop bruma roots and burn them in a brazier; fix it with the hammer and relight it with the tinderbox. The cold hurts, so bring food and warm clothing. XP per hour is the wiki guide's rate at level 70 on a fast world without fletching the roots; the reward crates give loot and the Pyromancer outfit, and chopping gives some Woodcutting XP.",
-      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Firemaking_training"
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Firemaking_training",
+      "place": "Wintertodt Camp"
     },
     {
       "id": "fm-wintertodt-80",
@@ -2175,7 +2189,8 @@
       "risk": "low",
       "where": "The Wintertodt camp in the far north of Great Kourend",
       "note": "Chop bruma roots and burn them in a brazier; fix it with the hammer and relight it with the tinderbox. The cold hurts, so bring food and warm clothing. XP per hour is the wiki guide's rate at level 80 on a fast world without fletching the roots; the reward crates give loot and the Pyromancer outfit, and chopping gives some Woodcutting XP.",
-      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Firemaking_training"
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Firemaking_training",
+      "place": "Wintertodt Camp"
     },
     {
       "id": "fm-wintertodt-90",
@@ -2207,7 +2222,8 @@
       "risk": "low",
       "where": "The Wintertodt camp in the far north of Great Kourend",
       "note": "Chop bruma roots and burn them in a brazier; fix it with the hammer and relight it with the tinderbox. The cold hurts, so bring food and warm clothing. XP per hour is the wiki guide's rate at level 90 on a fast world without fletching the roots; the reward crates give loot and the Pyromancer outfit, and chopping gives some Woodcutting XP.",
-      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Firemaking_training"
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Firemaking_training",
+      "place": "Wintertodt Camp"
     },
     {
       "id": "sm-foundry",
@@ -2242,7 +2258,8 @@
       "risk": "none",
       "where": "The Giants' Foundry",
       "note": "Take Kovac's commission, set the moulds, melt bronze and iron bars 1:1 in the crucible and work the sword at the right heat. XP per hour is the wiki guide's rate with the best moulds, which assumes level 81; with fewer moulds it is lower. It makes about 141,000 coins an hour with bought bars.",
-      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Smithing_training"
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Smithing_training",
+      "place": "Giants' Foundry"
     },
     {
       "id": "sm-foundry-30",
@@ -2277,7 +2294,8 @@
       "risk": "none",
       "where": "The Giants' Foundry",
       "note": "Take Kovac's commission, set the moulds, melt iron and steel bars 1:1 in the crucible and work the sword at the right heat. XP per hour is the wiki guide's rate with the best moulds, which assumes level 81; with fewer moulds it is lower. It makes about 134,000 coins an hour with bought bars.",
-      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Smithing_training"
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Smithing_training",
+      "place": "Giants' Foundry"
     },
     {
       "id": "sm-foundry-50",
@@ -2312,7 +2330,8 @@
       "risk": "none",
       "where": "The Giants' Foundry",
       "note": "Take Kovac's commission, set the moulds, melt steel and mithril bars 1:1 in the crucible and work the sword at the right heat. XP per hour is the wiki guide's rate with the best moulds, which assumes level 81; with fewer moulds it is lower. It makes about 80,000 coins an hour with bought bars.",
-      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Smithing_training"
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Smithing_training",
+      "place": "Giants' Foundry"
     },
     {
       "id": "sm-foundry-70",
@@ -2346,7 +2365,8 @@
       "risk": "none",
       "where": "The Giants' Foundry",
       "note": "Take Kovac's commission, set the moulds, melt mithril and adamantite bars 1:1 in the crucible and work the sword at the right heat. XP per hour is the wiki guide's rate with the best moulds, which assumes level 81; with fewer moulds it is lower. It costs about 37,000 coins an hour with bought bars.",
-      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Smithing_training"
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Smithing_training",
+      "place": "Giants' Foundry"
     },
     {
       "id": "ma-bolts",
@@ -3378,7 +3398,8 @@
       "risk": "none",
       "where": "Tithe Farm (Hosidius)",
       "note": "The wiki's figures are for level 74+; at 34 it is noticeably slower.",
-      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Farming_training"
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Farming_training",
+      "place": "Tithe Farm"
     },
     {
       "id": "pr-banked-bones",

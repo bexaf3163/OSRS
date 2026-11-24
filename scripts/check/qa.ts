@@ -193,6 +193,8 @@ export function qa(input: QaInput): QaIssue[] {
       }
       if (!/^https:\/\/oldschool\.runescape\.wiki\/w\//.test(m.url)) add('training-url', m.id, `the link is not to the wiki: ${m.url}`);
       if (input.places && m.place && !(m.place in input.places.locations)) add('training-place', m.id, `the place "${m.place}" is not in the place dictionary`);
+      // A method the router can pick is a route step, and a step without a place stops the route.
+      if (m.kind === 'method' && !m.manualSetup && !m.place) add('training-place', m.id, 'a method the router can pick needs a place');
       for (const names of [m.objectNames, m.npcNames]) if (names !== undefined && (!Array.isArray(names) || names.length > 8 || names.some(n => typeof n !== 'string' || !n.trim() || n.length > 200))) add('training-scene', m.id, 'invalid method scene names');
       const c = firstChar(m.name);
       if (!c || c !== c.toUpperCase() || !m.where.trim()) add('text', m.id, `the method name or place: "${m.name.slice(0, 40)}"`);

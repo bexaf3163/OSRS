@@ -7,6 +7,8 @@ import { emptyProgress } from '../src/domain/persistence/progress';
 import { fakePrices } from './funding/helpers';
 import { questCatalogue } from '../src/domain/planning/catalogue';
 import { SKILL_NAMES } from '../src/domain/training/skillTrack';
+import { methodPoint } from '../src/domain/training/methodStep';
+import { levelForXp, xpForLevel } from '../src/domain/player/xp';
 
 const prices = fakePrices(JSON.parse(readFileSync('tests/fixtures/gePrices.json', 'utf8')).prices);
 const net = (m: PathLeg['method']) => m.marketNetPerHour
@@ -104,5 +106,38 @@ describe('F2P melee plans buy the weapon the gear advisor recommends', () => {
       owned: { bankSeen: true, items: new Map() }, gear: { equipment: [], inventory: [], coins: 0, bankCoins: 5_000_000 } } as never);
     const advice = adviseTraining({ skill, target: 99, state, mode: 'f2p', prices } as never);
     expect(advice.path.filter((l) => l.method.rateBasis === 'unarmed').map((l) => `${l.fromLevel}-${l.toLevel}`)).toEqual([]);
+  });
+});
+
+// The audit sweep (owner, 2026-11-24): from any start level, on a fresh or a trained account, in both modes, the plan
+// reaches 99 through methods the player can use, each with a place the route can send them to, a time and no avoidable loss.
+describe('every start level gets a whole plan the route can walk', () => {
+  const profiles = [['f2p', 1, 0], ['f2p', 40, 5_000_000], ['members', 1, 0], ['members', 50, 50_000_000]] as const;
+  const cases = profiles.flatMap(([mode, base, coins]) => (SKILL_NAMES as readonly string[])
+    .filter((s) => trainingMethods.some((m) => m.kind === 'method' && m.skills.includes(s) && (mode === 'members' || !m.members)))
+    .map((skill) => [mode, base, coins, skill] as const));
+  it.each(cases)('%s, other skills %i, %i coins: %s', (mode, base, coins, skill) => {
+    const at = (level: number) => {
+      // Melee and Ranged XP brings a third as much Hitpoints XP, so a fresh account at Ranged 60 is no longer at 10 Hitpoints.
+      const hp = Math.max(10, base, ['attack', 'strength', 'defence', 'ranged'].includes(skill) ? levelForXp(xpForLevel(10) + xpForLevel(level) / 3) : 0);
+      const stats = Object.fromEntries(SKILL_NAMES.map((s) => [s, s === skill ? level : s === 'hitpoints' ? hp : base]));
+      const state = buildPlayerState({ mode, connected: true, player: 'P', stats, progress: emptyProgress(), questsDone: base > 1 ? questCatalogue.map((q) => q.id) : [],
+        owned: { bankSeen: true, items: new Map() }, gear: { equipment: [], inventory: [], coins: 0, bankCoins: coins } } as never);
+      return adviseTraining({ skill, target: 99, state, mode, prices } as never);
+    };
+    const bad: string[] = [];
+    for (let level = 1; level < 99; level += 7) {
+      const advice = at(level), legs = advice.path;
+      if (!advice.best) { if (!/opens at level/.test(advice.reason)) bad.push(`${level}: ${advice.reason}`); continue; }
+      if (advice.time === null) bad.push(`${level}: untimed`);
+      if (legs[0]?.method.id !== advice.best.method.id) bad.push(`${level}: Train ${advice.best.method.id}, plan ${legs[0]?.method.id}`);
+      if (legs[0]?.fromLevel !== level || legs.at(-1)?.toLevel !== 99 || legs.some((l, i) => i > 0 && legs[i - 1].toLevel !== l.fromLevel)) bad.push(`${level}: gap`);
+      bad.push(...slowerLegs(legs), ...unusableLegs(legs, mode));
+      for (const l of legs) {
+        if (!l.method.spot && !methodPoint(l.method.id)) bad.push(`${l.fromLevel}-${l.toLevel} ${l.method.id}: no place`);
+        if (losing(l.method, mode) && !losing(at(l.fromLevel).best!.method, mode)) bad.push(`${l.fromLevel}-${l.toLevel} ${l.method.id}: avoidable loss`);
+      }
+    }
+    expect(bad).toEqual([]);
   });
 });

@@ -1,7 +1,7 @@
 // How a plan weighs one method against another: its practical speed, its coins, the plus-or-zero rule and the player's training goal.
 // The router's comparison reads these; the rate engines stay goal-free (owner, 2026-11-23: engines, not condition trees).
 import type { GameMode, TrainingGoal } from '../../types';
-import type { PlayerState } from '../player/playerState';
+import { questOf, type PlayerState } from '../player/playerState';
 import { dropValue, losing } from '../market/lootValue';
 import { supplyPrice } from '../market/itemPrice';
 import type { PriceView } from '../market/quotes';
@@ -52,7 +52,8 @@ export function withHourlyCoins(m: TrainingMethod, prices: PriceView | null | un
 
 /** A known loss of coins against a known break-even or gain, both weighed against the coin rate; without prices nothing is judged. */
 export const losesTo = (loser: TrainingMethod, other: TrainingMethod, coinRate: number | null): boolean => {
-  if (loser.coinsUnknown || other.coinsUnknown) return false;
+  // A free method without a rate (Camdozaal) is no plan to swap a paid one for (owner: a method must make sense).
+  if (loser.coinsUnknown || other.coinsUnknown || practicalRate(other) === null) return false;
   const a = loser.marketNetPerHour ?? netCoinsPerHour(loser), b = other.marketNetPerHour ?? netCoinsPerHour(other);
   return a !== null && b !== null && losing(a, coinRate) && !losing(b, coinRate);
 };
@@ -80,3 +81,11 @@ export const stays = (goal: TrainingGoal, held: TrainingMethod, next: TrainingMe
   const now = GOALS[goal].measure(held), then = GOALS[goal].measure(next);
   return now !== null && then !== null && then - now < Math.abs(now) * (gain - 1);
 };
+
+/** Why nothing trains a skill yet: the first method of this mode above the level or behind a quest not done, with those quests. */
+export function opensLater(methods: readonly TrainingMethod[], level: number, mode: GameMode, state: PlayerState): string | null {
+  const missing = (m: TrainingMethod) => m.needs?.flatMap((n) => n.type === 'quest' && questOf(state, n.quest) !== 'DONE' ? [n.quest] : []) ?? [];
+  const next = methods.filter((m) => m.kind === 'method' && (m.from > level || missing(m).length) && (mode === 'members' || !m.members)).sort((a, b) => a.from - b.from)[0];
+  const quests = next ? missing(next) : [];
+  return next ? `${next.name} opens at level ${next.from}${quests.length ? ` and needs ${quests.join(' and ')}` : ''}.` : null;
+}

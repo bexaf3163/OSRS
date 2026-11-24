@@ -46,6 +46,14 @@ export const madeTime = (make: { seconds: number; yield: number }, count: number
   return { fast: typical, typical, slow: typical, source: 'Recipe time per make' };
 };
 
+/** Coins to buy what a line still misses, fee included; null when the price is unknown. */
+function buyCost(line: PrepLine, count: number, held: number): number | null {
+  const missing = Math.max(0, count - held);
+  // Missing doses are bought as whole potions of the named size.
+  const pieces = line.unit === 'dose' ? Math.ceil(missing / (doseKind(line.name)?.per ?? 1)) : missing;
+  return purchaseCost({ price: line.action?.price ?? line.marketPrice?.unit, fee: line.action?.purchase?.fee }, pieces);
+}
+
 export function resolvePreparation(input: PreparationInput): CandidateAction | null {
   const { snapshot, goalId, step, plan } = input;
   function action(kind: CandidateAction['kind'], key: string, title: string, predicate: string, line?: PrepLine): CandidateAction {
@@ -99,17 +107,17 @@ export function resolvePreparation(input: PreparationInput): CandidateAction | n
       return action('VERIFY', `trade:${line.key}`, input.ironman === true ? `Choose a self-supply source for ${line.name}` : 'Check whether this account can trade',
         input.ironman === true ? 'Accessible non-exchange acquisition method verified' : 'Observed account trading mode', line);
     }
-    const missing = Math.max(0, count - bag - equipped);
-    // Missing doses are bought as whole potions of the named size.
-    const pieces = line.unit === 'dose' ? Math.ceil(missing / (doseKind(line.name)?.per ?? 1)) : missing;
-    const price = purchaseCost({ price: line.action.price ?? line.marketPrice?.unit, fee: line.action.purchase?.fee }, pieces);
+    const price = buyCost(line, count, bag + equipped);
     const cash = input.budget.spendable;
     const fee = line.action.purchase?.fee;
     const reservedFee = fee ? Math.min(fee.coins, input.budget.reserve,
       purchaseFees((input.reservedPurchases ?? []).filter(purchase => purchase.fee?.key === fee.key))) : 0;
     if (price !== null && cash !== null && cash + reservedFee < price) {
       if (!input.budget.liquid.complete) return action('VERIFY', 'bank-coins', 'Check your bank balance before earning more', 'Spendable liquid GP verified');
-      return input.earn(price + input.budget.reserve - reservedFee) ?? action('VERIFY', 'funding', 'Check a feasible funding method', 'Funding method and working capital verified');
+      // One earning trip pays for every purchase still ahead in this preparation, not one piece at a time.
+      const ahead = required.slice(required.indexOf(line) + 1).reduce((sum, l) => (l.action?.kind === 'BUY' || l.action?.kind === 'EARN') && l.where !== 'BANK' && l.have.bag !== null
+        ? sum + (buyCost(l, input.minimum?.get(l.key) ?? l.count, l.have.bag + l.have.equipped) ?? 0) : sum, 0);
+      return input.earn(price + ahead + input.budget.reserve - reservedFee) ?? action('VERIFY', 'funding', 'Check a feasible funding method', 'Funding method and working capital verified');
     }
     if (price === null || cash === null) {
       const check = action('VERIFY', `offer:${line.key}`, `Check the offer and coins for ${line.name}`, 'Acquisition price and sufficient available liquid GP verified', line);

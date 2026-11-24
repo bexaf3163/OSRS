@@ -1,4 +1,11 @@
 import { describe, expect, it } from 'vitest';
+import { readFileSync } from 'node:fs';
+import { evaluate } from '../../src/domain/economy/funding/evaluate';
+import { BROWSE_TARGET } from '../../src/domain/economy/funding/browse';
+import { questCatalogue } from '../../src/domain/planning/catalogue';
+import { SKILL_NAMES } from '../../src/domain/training/skillTrack';
+import { combatLevel } from '../../src/domain/player/xp';
+import { ctxOf, fakePrices, fakeSnap } from './helpers';
 import { allQuests, itemById, fundingCoverageJson as coverageJson, fundingWikiJson } from '../../src/data';
 import { COMBAT_FOES } from '../../src/domain/combat/combatEstimate';
 import { CATALOGUE, chanceOf, DEPENDABLE_CHANCE, expectedQty, isDependable, METHODS, methodById, validateCatalogue } from '../../src/domain/economy/funding/methods';
@@ -128,5 +135,22 @@ describe('the coverage ledger', () => {
     const extra = coverageJson.extras;
     expect(extra.map((e) => e.family).sort()).toEqual(['combat', 'one-time', 'self-supply', 'surplus-sale']);
     expect(extra.find((e) => e.family === 'one-time')?.status).toBe('unsupported');
+  });
+});
+
+// The audit sweep (owner, 2026-11-24): fresh, trained and maxed accounts in both modes. A method the evaluator lets the
+// player do earns coins over an ordered range; one that loses at today's prices is blocked, never offered.
+describe('every method on every account', () => {
+  const prices = fakePrices(JSON.parse(readFileSync('tests/fixtures/gePrices.json', 'utf8')).prices);
+  it.each([['f2p', 1, 0], ['f2p', 40, 100_000], ['f2p', 99, 50_000_000], ['members', 1, 0], ['members', 50, 1_000_000], ['members', 99, 500_000_000]] as const)('%s at %i with %i coins', (mode, lv, cash) => {
+    const levels = Object.fromEntries(SKILL_NAMES.map((s) => [s, s === 'hitpoints' ? Math.max(10, lv) : lv]));
+    const snap = fakeSnap({ levels: { ...levels, combat: combatLevel(levels) ?? 3 }, members: mode === 'members', bankCoins: cash,
+      quests: lv > 1 ? Object.fromEntries(questCatalogue.map((q) => [q.id, 'DONE'])) : {} });
+    const ctx = { ...ctxOf({ prices, snap }), cash, mode: 'earn' as const, target: BROWSE_TARGET };
+    const bad = METHODS.map((m) => evaluate(m, ctx)).filter((e) => e.eligible).flatMap((e) => {
+      const n = e.netPerHour;
+      return n && n.typical > 0 && n.slow <= n.typical && n.typical <= n.fast && Number.isFinite(n.fast) ? [] : [`${e.method.id} ${JSON.stringify(n)}`];
+    });
+    expect(bad).toEqual([]);
   });
 });

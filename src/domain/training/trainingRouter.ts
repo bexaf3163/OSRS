@@ -17,7 +17,7 @@ import { hoursText, purchaseTripHours, toolUpgrade, upgradeXp, type ToolUpgrade 
 import { toolFamilyOf, toolUse } from '../items/toolTiers';
 import { SKILLING } from './skillingRates';
 import { evaluate, itemRequirement, type ReqState, type Requirement } from '../player/requirements';
-import { coinsOf, heldExact, heldOf, levelOf, questOf, type PlayerState } from '../player/playerState';
+import { coinsOf, heldExact, heldOf, levelOf, questOf, trainedLevels, type PlayerState } from '../player/playerState';
 import { isClosed } from '../quests/next-step';
 import { xpForLevel } from '../player/xp';
 import { rangedEquipment, rangedNeeds, RANGED_WATCH, withArrow } from '../combat/rangedLoadout';
@@ -41,7 +41,7 @@ import { mergeGoalNeeds } from '../items/consumption';
 import { isReusable } from '../items/reusable';
 import { heldFood } from '../player/foodStock';
 import { FOODS } from '../../data/threats';
-import { GOALS, goalOf, losesTo, netCoinsPerHour, practicalRate, rateLow, stays, withHourlyCoins } from './trainingGoal';
+import { GOALS, goalOf, losesTo, netCoinsPerHour, opensLater, practicalRate, rateLow, stays, withHourlyCoins } from './trainingGoal';
 export type Effort = 'afk' | 'low' | 'medium' | 'high';
 export type MethodCost = 'free' | 'profit' | 'cost';
 export type Risk = 'none' | 'low' | 'high';
@@ -874,7 +874,7 @@ export function atLevel(state: PlayerState, skill: string, value: number): Playe
   if (!kept) levelCopies.set(state, kept = new Map());
   const key = `${skill}|${value}`;
   let out = kept.get(key);
-  if (!out) kept.set(key, out = { ...state, levels: { ...state.levels, [skill]: { ...(state.levels[skill] ?? { source: 'profile' }), known: true, value } } } as PlayerState);
+  if (!out) kept.set(key, out = { ...state, levels: trainedLevels(state, skill, value) } as PlayerState);
   return out;
 }
 
@@ -965,7 +965,7 @@ export function adviseTraining(input0: AdviceInput): TrainingAdvice {
     ...(cash !== null && cash < found.price ? { short: Math.round(cash) }
       : afterKit !== null && afterKit < found.price ? { afterKit: Math.floor(afterKit) } : {}),
   } : null;
-  const reason = best ? reasonFor(best, level, upgrade) + switched : 'The training engine has no method for this skill at this level and mode yet.';
+  const reason = best ? reasonFor(best, level, upgrade) + switched : opensLater(methodsFor(skill, methods), level, mode, state) ?? 'The training engine has no method for this skill at this level and mode yet.';
   return {
     ...empty, target, ...(input.untilChange ? { next: forecast.handover ?? null } : {}), best: best ? { ...best, reason } : null, others, quests, path, xpLeft, actionsLeft, actionTarget, time, coins: forecast.coins, upgrade, reason,
     goalNeeds: (processingGoalNeeds(path, level, target, xpNow) ?? (skill === 'ranged' ? rangedGoalNeeds(path, state, xpNow, target, input.prices) : null)) ?? undefined,

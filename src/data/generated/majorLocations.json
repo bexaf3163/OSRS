@@ -654,6 +654,78 @@
       "kind": "landmark",
       "page": "Mount Karuulm"
     },
+    "Air Altar": {
+      "x": 2843,
+      "y": 4833,
+      "plane": 0,
+      "label": "Air Altar",
+      "kind": "landmark",
+      "page": "Air Altar"
+    },
+    "Earth Altar": {
+      "x": 2657,
+      "y": 4840,
+      "plane": 0,
+      "label": "Earth Altar",
+      "kind": "landmark",
+      "page": "Earth Altar"
+    },
+    "Fire Altar": {
+      "x": 2584,
+      "y": 4837,
+      "plane": 0,
+      "label": "Fire Altar",
+      "kind": "landmark",
+      "page": "Fire Altar"
+    },
+    "Body Altar": {
+      "x": 2522,
+      "y": 4839,
+      "plane": 0,
+      "label": "Body Altar",
+      "kind": "landmark",
+      "page": "Body Altar"
+    },
+    "Otto's Grotto": {
+      "x": 2502,
+      "y": 3489,
+      "plane": 0,
+      "label": "Otto's Grotto",
+      "kind": "landmark",
+      "page": "Otto's Grotto"
+    },
+    "Wintertodt Camp": {
+      "x": 1630,
+      "y": 3938,
+      "plane": 0,
+      "label": "Wintertodt Camp",
+      "kind": "landmark",
+      "page": "Wintertodt Camp"
+    },
+    "Giants' Foundry": {
+      "x": 3360,
+      "y": 3151,
+      "plane": 0,
+      "label": "Giants' Foundry",
+      "kind": "landmark",
+      "page": "Giants' Foundry"
+    },
+    "Tithe Farm": {
+      "x": 1823,
+      "y": 3497,
+      "plane": 0,
+      "label": "Tithe Farm",
+      "kind": "landmark",
+      "page": "Tithe Farm"
+    },
+    "Isle of Souls": {
+      "x": 2210,
+      "y": 2900,
+      "plane": 0,
+      "label": "Isle of Souls",
+      "kind": "landmark",
+      "page": "Isle of Souls"
+    },
     "Asgarnian Ice Dungeon": {
       "x": 3008,
       "y": 3150,
