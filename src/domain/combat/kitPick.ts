@@ -41,10 +41,11 @@ export function pickKit(input: KitInput): { slot: string; name: string; buy: boo
     const owned = s.names.filter(input.owned).sort((a, b) => (above(input.rank(b), input.rank(a)) ? 1 : -1))[0];
     const buys = s.wearOnly || input.budget === null ? [] : s.names
       .filter(name => !input.owned(name) && (!owned || above(input.rank(name), input.rank(owned))))
-      .filter(name => input.price(name) !== null && input.price(name)! <= Math.max(input.budget!, EARN_CAP))
-      .sort((a, b) => (above(input.rank(b), input.rank(a)) ? 1 : above(input.rank(a), input.rank(b)) ? -1 : input.price(a)! - input.price(b)!));
+      // Price and rank once per piece: the price reads the player's holdings, which the sort would otherwise repeat per comparison.
+      .flatMap(name => { const price = input.price(name); return price !== null && price <= Math.max(input.budget!, EARN_CAP) ? [{ name, price, rank: input.rank(name) }] : []; })
+      .sort((a, b) => (above(b.rank, a.rank) ? 1 : above(a.rank, b.rank) ? -1 : a.price - b.price));
     if (buys.length) {
-      out.push({ slot: s.slot, name: buys[0], buy: true });
+      out.push({ slot: s.slot, name: buys[0].name, buy: true });
     } else if (owned) out.push({ slot: s.slot, name: owned, buy: false });
     else if (s.starter) out.push({ slot: s.slot, name: s.starter, buy: false });
   }

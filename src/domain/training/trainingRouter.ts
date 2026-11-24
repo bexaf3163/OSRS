@@ -26,7 +26,7 @@ import { STYLE_GEAR } from '../combat/styleGear';
 import { PROCESSING } from './processingRates';
 import { canWear, gearData, gearPieceByName, levelsOf, type Levels } from '../combat/gearAdvisor';
 import { meleeUnlocks, plannedMeleeKit } from './meleeKit';
-import { pickKit } from '../combat/kitPick';
+import { EARN_CAP, pickKit } from '../combat/kitPick';
 import { methodRate, rateKeyOf, type ItemScope, type RateSpot, type ModelRate } from './methodRates';
 import { combatUpgrades, meleeUnsafe, rangedGoalNeeds } from '../combat/combatRates';
 import type { PriceView } from '../market/quotes';
@@ -345,25 +345,34 @@ function wearable(state: PlayerState, lv: Levels, quests: Set<string> | undefine
  * strength, then attack, then total defence. Weapons are only worn here; buying one is the shared upgrade evaluator's job.
  * Unknown levels or worn gear leave the authored needs.
  */
+const meleeKits = new WeakMap<object, WeakMap<PlayerState, Map<number | null, ReturnType<typeof pickKit>>>>();
 function meleeNeeds(m: TrainingMethod, state: PlayerState, prices?: PriceView | null): MethodNeed[] {
   if (!m.npcNames?.length || !state.equipmentItems || !MELEE_SKILLS.every(skill => levelOf(state, skill) !== undefined)) return m.needs;
-  const lv = levelsOf(Object.fromEntries(Object.entries(state.levels).flatMap(([skill, value]) => value.known ? [[skill, value.value]] : [])));
-  const quests = state.quests.known ? new Set(state.quests.value) : undefined;
   // The method's own supplies at full price come first, as the bow's arrows and food do: unknown stock never frees coins.
   const supplies = m.needs.reduce<number | null>((sum, n) => { if (sum === null || n.type !== 'item' || n.equip) return sum; const p = prices?.buy(n.name)?.price; return p == null ? null : sum + p * (n.count ?? 1); }, 0);
   const cash = coinsOf(state).total;
-  const twoHanded = gearPieceByName(state.equipment.weapon ?? '')?.twoHanded;
-  const slots = (['weapon', 'neck', 'head', 'body', 'legs', 'shield'] as const).filter(slot => slot !== 'shield' || !twoHanded);
-  const usable = wearable(state, lv, quests);
-  const kit = pickKit({
-    slots: slots.map(slot => ({ slot, names: usable.get(slot) ?? [], wearOnly: slot === 'weapon' })),
-    rank: name => { const p = gearPieceByName(name)!; return [p.strength, Math.max(p.attack.stab, p.attack.slash, p.attack.crush), p.defence.stab + p.defence.slash + p.defence.crush]; },
-    // A worn piece is owned: total counts the bag and bank only, and is 0 rather than unknown once the bank was read.
-    owned: name => { const h = heldExact(state, name); return (h.total ?? 0) + h.equipped > 0; },
-    // Once the bank was opened, a piece it did not report is not owned, as the Gear advisor reads it.
-    price: name => (state.owned?.bankSeen && heldOf(state, name).presence !== 'PRESENT' ? prices?.buy(name)?.price ?? null : null),
-    budget: cash === null || supplies === null || !prices ? null : Math.max(0, cash - supplies),
-  });
+  // pickKit reads the budget only up to EARN_CAP, so the melee methods of one state share a kit: building it per method was a fifth of an F2P gate turn.
+  const budget = cash === null || supplies === null || !prices ? null : Math.max(EARN_CAP, cash - supplies);
+  const byState = meleeKits.get(prices ?? meleeKits) ?? new WeakMap<PlayerState, Map<number | null, ReturnType<typeof pickKit>>>();
+  meleeKits.set(prices ?? meleeKits, byState);
+  const kits = byState.get(state) ?? new Map<number | null, ReturnType<typeof pickKit>>();
+  byState.set(state, kits);
+  if (!kits.has(budget)) {
+    const lv = levelsOf(Object.fromEntries(Object.entries(state.levels).flatMap(([skill, value]) => value.known ? [[skill, value.value]] : [])));
+    const twoHanded = gearPieceByName(state.equipment.weapon ?? '')?.twoHanded;
+    const usable = wearable(state, lv, state.quests.known ? new Set(state.quests.value) : undefined);
+    kits.set(budget, pickKit({
+      slots: (['weapon', 'neck', 'head', 'body', 'legs', 'shield'] as const).filter(slot => slot !== 'shield' || !twoHanded)
+        .map(slot => ({ slot, names: usable.get(slot) ?? [], wearOnly: slot === 'weapon' })),
+      rank: name => { const p = gearPieceByName(name)!; return [p.strength, Math.max(p.attack.stab, p.attack.slash, p.attack.crush), p.defence.stab + p.defence.slash + p.defence.crush]; },
+      // A worn piece is owned: total counts the bag and bank only, and is 0 rather than unknown once the bank was read.
+      owned: name => { const h = heldExact(state, name); return (h.total ?? 0) + h.equipped > 0; },
+      // Once the bank was opened, a piece it did not report is not owned, as the Gear advisor reads it.
+      price: name => (state.owned?.bankSeen && heldOf(state, name).presence !== 'PRESENT' ? prices?.buy(name)?.price ?? null : null),
+      budget,
+    }));
+  }
+  const kit = kits.get(budget)!;
   return [
     ...m.needs.filter(n => n.type !== 'item' || !n.equip || !gearPieceByName(n.name)),
     ...kit.map(k => ({ type: 'item' as const, name: k.name, count: 1, equip: true })),
