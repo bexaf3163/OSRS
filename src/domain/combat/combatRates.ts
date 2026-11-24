@@ -13,7 +13,7 @@ import { matchStrict } from '../travel/locations';
 // guesses: an unknown level,
 // unread worn items, a weapon or bow the data does not know, an opponent without data, or a fight that is not safe - no rate, and the wiki's stays.
 
-import { attacksToKill, combatMargin, combatRecovery, counterDamage, endlessFoe, estimateCombat, foeVariants, swingDamage, TRAIN_STYLE, unsafe, xpPerKill, type CombatFoe } from './combatEstimate';
+import { attacksToKill, combatMargin, combatRecovery, COMBAT_FOES, counterDamage, endlessFoe, estimateCombat, foeVariants, swingDamage, TRAIN_STYLE, unsafe, xpPerKill, type CombatFoe } from './combatEstimate';
 import { spotsOf, termsFor, TRAINER_LEVELS } from './spots';
 import { coinsPerMinute, dropValue, guideDropValue, losing, lootSecondsPerKill } from '../market/lootValue';
 import { ARROW_BREAK, goalArrows, methodFoe, rangedKitOf, rangedHit, RANGED_GEAR, trainingRangedStyle } from './rangedAmmo';
@@ -137,6 +137,21 @@ export function combatRate(m: TrainingMethod, skill: string, state: PlayerState,
   return null;
 }
 
+/** This player's melee hit on a foe in the style that trains a skill, with the worn weapon and amulet; null when a level or the weapon is unknown. */
+function wornMelee(state: PlayerState, skill: 'attack' | 'strength' | 'defence', foe: CombatFoe) {
+  const lv = { attack: levelOf(state, 'attack'), strength: levelOf(state, 'strength'), defence: levelOf(state, 'defence') };
+  const gear = worn(state);
+  if (lv.attack === undefined || lv.strength === undefined || lv.defence === undefined || !gear) return null;
+  return { hit: meleeAs(lv as Levels, gear.weapon, gear.neck, TRAIN_STYLE[skill], foe), basis: gear.weapon?.name ?? 'unarmed' };
+}
+
+/** The damage this player's melee deals an hour on a foe without defence (an endless one): no Slayer task gives more Slayer XP, which is damage dealt. */
+export function meleeDamagePerHour(state: PlayerState): number | null {
+  const foe = COMBAT_FOES.find((f) => f.endless);
+  const melee = foe && wornMelee(state, 'strength', foe);
+  return melee ? melee.hit.dps * 3600 : null;
+}
+
 /**
  * A foe that never dies (the Gemstone Crab): XP is the damage dealt, 4 a point plus the foe's XP modifier, at this player's own damage per
  * second with the worn melee kit or the Ranged kit; no kills, food or bank trips. Broken arrows are the cost.
@@ -144,12 +159,10 @@ export function combatRate(m: TrainingMethod, skill: string, state: PlayerState,
 function endlessRate(m: TrainingMethod, skill: string, state: PlayerState, prices: PriceView | null | undefined, foe: CombatFoe): ModelRate | null {
   const perHour = (dps: number) => dps * 3600 * 4 * (1 + (foe.xpBonus ?? 0) / 100);
   if (MELEE.has(skill)) {
-    const lv = { attack: levelOf(state, 'attack'), strength: levelOf(state, 'strength'), defence: levelOf(state, 'defence') };
-    const gear = worn(state);
-    if (lv.attack === undefined || lv.strength === undefined || lv.defence === undefined || !gear) return null;
-    const hit = meleeAs(lv as Levels, gear.weapon, gear.neck, TRAIN_STYLE[skill as 'attack' | 'strength' | 'defence'], foe);
-    const xph = perHour(hit.dps);
-    return { xph: [xph * 0.9, xph], costPerHour: 0, basis: gear.weapon?.name ?? 'unarmed' };
+    const melee = wornMelee(state, skill as 'attack' | 'strength' | 'defence', foe);
+    if (!melee) return null;
+    const xph = perHour(melee.hit.dps);
+    return { xph: [xph * 0.9, xph], costPerHour: 0, basis: melee.basis };
   }
   const level = levelOf(state, 'ranged');
   if (skill !== 'ranged' || m.kit !== 'f2p-bow' || level === undefined) return null;

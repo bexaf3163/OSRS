@@ -10,6 +10,7 @@ import type { TrainingMethod, MethodNeed } from './trainingRouter';
 import type { Point } from '../travel/travel';
 import type { Consumption } from '../items/consumption';
 import { combatRate } from '../combat/combatRates';
+import { slayerRate } from '../combat/slayerRates';
 import { gatherRate } from './skillingRates';
 import { processRate } from './processingRates';
 
@@ -72,7 +73,7 @@ export interface Market { prices?: PriceView | null; restriction?: TradeRestrict
 
 /** The rate of one method for this player in this skill, or null when no engine has anything honest to say. */
 export function methodRate(m: TrainingMethod, skill: string, state: PlayerState, market: Market = {}): ModelRate | null {
-  return combatRate(m, skill, state, market) ?? gatherRate(m, skill, state, market) ?? processRate(m, skill, state, market);
+  return combatRate(m, skill, state, market) ?? slayerRate(m, skill, state) ?? gatherRate(m, skill, state, market) ?? processRate(m, skill, state, market);
 }
 
 // Planning copies a state per level (atLevel) but shares its items, gear and quests, so each part's text is kept per object, and the

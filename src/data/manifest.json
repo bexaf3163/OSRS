@@ -13,6 +13,7 @@
     "questFacts.json": "npm run build-quest-facts",
     "rangedGear.json": "npm run build-ranged-gear",
     "skilling.json": "npm run build-skilling",
+    "slayer.json": "npm run build-slayer",
     "styleGear.json": "npm run build-style-gear",
     "threats.json": "npm run build-threats",
     "trainers.json": "npm run build-trainers",

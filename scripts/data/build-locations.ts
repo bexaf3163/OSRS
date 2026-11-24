@@ -88,6 +88,12 @@ const PLACES: [string, Kind, string[], string?][] = [
   ['Edgeville Dungeon', 'dungeon', []],
   ['Karamja Volcano', 'dungeon', []],
   ['Tlati Rainforest', 'landmark', []],
+  ['Neypotzli', 'dungeon', []],
+  ["Kruk's Dungeon", 'dungeon', []],
+  ['Teomat', 'landmark', []],
+  ['Wilderness Chaos Temple', 'landmark', [], 'Chaos Temple (Wilderness)'],
+  ['Zanaris', 'city', []],
+  ['Mount Karuulm', 'landmark', []],
   ['Asgarnian Ice Dungeon', 'dungeon', []],
   // Banks
   ['Varrock West Bank', 'bank', []],

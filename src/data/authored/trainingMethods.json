@@ -2936,27 +2936,27 @@
       "needs": [{ "type": "quest", "quest": "Children of the Sun" }], "npcNames": ["Gemstone Crab"],
       "effort": "afk", "cost": "cost", "risk": "none", "where": "Tlati Rainforest",
       "note": "The Wiki's idle Ranged method: the crab has endless health and no defence and burrows every 10 minutes. XP follows your own damage; darts are similar, and a yew or magic shortbow with rune arrows matches adamant darts.",
-      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Ranged_training" },
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Ranged_training", "place": "Tlati Rainforest" },
     { "id": "me-nagua", "skill": ["attack", "strength", "defence"], "from": 55, "to": 75, "name": "Sulphur Naguas (Neypotzli)", "members": true,
       "needs": [{ "type": "quest", "quest": "Perilous Moons" }, { "type": "skill", "skill": "slayer", "min": 48 }, { "type": "skill", "skill": "prayer", "min": 43 }, { "type": "item", "name": "Sulphur blades", "equip": true }],
-      "xph": [75000, 130000], "effort": "medium", "cost": "free", "risk": "low", "where": "Neypotzli, under Cam Torum",
+      "xph": [75000, 130000], "effort": "medium", "cost": "free", "risk": "low", "where": "Neypotzli, under Cam Torum", "place": "Neypotzli",
       "note": "Perilous Moons (with 48 Slayer) opens Neypotzli. A double-hitting weapon beats their negative armour: about 75,000 XP an hour at 60 Strength and up to 130,000 at 75 with the Blood Moon set and Piety. Moonlight potions are made inside; the noted ore and rune drops are a bonus not counted here.",
       "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Melee_training" },
     { "id": "me-monkey", "skill": ["attack", "strength", "defence"], "from": 75, "to": null, "name": "Maniacal monkeys with Hallowfell", "members": true,
       "needs": [{ "type": "quest", "quest": "Monkey Madness II" }, { "type": "skill", "skill": "prayer", "min": 43 }, { "type": "item", "name": "Hallowfell", "equip": true }],
-      "xph": [200000, 300000], "effort": "low", "cost": "free", "risk": "low", "where": "Kruk's Dungeon on Ape Atoll",
+      "xph": [200000, 300000], "effort": "low", "cost": "free", "risk": "low", "where": "Kruk's Dungeon on Ape Atoll", "place": "Kruk's Dungeon",
       "note": "Monkey Madness II opens Kruk's Dungeon. Use Protect from Melee and stack the monkeys; their prayer potion drops keep the prayers up. The Wiki expects 200,000 XP an hour or more, and 300,000 with top Strength gear.",
       "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Melee_training" },
     { "id": "ra-chin", "skill": "ranged", "from": 45, "to": null, "name": "Chinning maniacal monkeys", "members": true,
       "needs": [{ "type": "quest", "quest": "Monkey Madness II" }, { "type": "skill", "skill": "prayer", "min": 43 }, { "type": "item", "name": "Chinchompa", "count": 1866, "equip": true }],
       "perHour": { "uses": [{ "name": "Chinchompa", "qty": 1866 }] },
-      "xph": [290000, 470000], "effort": "high", "cost": "cost", "risk": "low", "where": "Kruk's Dungeon on Ape Atoll",
+      "xph": [290000, 470000], "effort": "high", "cost": "cost", "risk": "low", "where": "Kruk's Dungeon on Ape Atoll", "place": "Kruk's Dungeon",
       "note": "Throw grey chinchompas at stacked maniacal monkeys, about 1,866 an hour. The Wiki's ideal rate is 290,000 XP an hour at 45 and 470,000 at 65, 10-15% less without perfect stacking. It is the fastest Ranged XP and costs far more than it earns.",
       "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Ranged_training" },
     { "id": "ma-burst", "skill": "magic", "from": 70, "to": null, "name": "Ice Burst on maniacal monkeys", "members": true,
       "needs": [{ "type": "quest", "quest": "Desert Treasure I" }, { "type": "quest", "quest": "Monkey Madness II" }, { "type": "skill", "skill": "prayer", "min": 43 }],
       "perHour": { "uses": [{ "name": "Chaos rune", "qty": 4340 }, { "name": "Death rune", "qty": 2170 }] },
-      "xph": [250000, 310000], "effort": "low", "cost": "cost", "risk": "low", "where": "Kruk's Dungeon on Ape Atoll",
+      "xph": [250000, 310000], "effort": "low", "cost": "cost", "risk": "low", "where": "Kruk's Dungeon on Ape Atoll", "place": "Kruk's Dungeon",
       "note": "Ancient Magicks come from Desert Treasure I. Autocast Ice Burst on stacked monkeys with a water staff: about 1,085 casts an hour, each 4 chaos and 2 death runes. The Wiki expects 250,000 XP an hour idle and 310,000 active.",
       "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Magic_training" },
     {
@@ -3494,7 +3494,7 @@
       "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Prayer_training"
     },
     { "id": "pr-libation", "skill": "prayer", "from": 30, "to": 99, "name": "Libation bowl at the Teomat", "members": true, "needs": [], "act": "bone|bones",
-      "effort": "high", "cost": "cost", "risk": "none", "where": "The Teomat in Varlamore: the exposed altar, Virilis and the libation bowl",
+      "effort": "high", "cost": "cost", "risk": "none", "where": "The Teomat in Varlamore: the exposed altar, Virilis and the libation bowl", "place": "Teomat",
       "note": "Un-note bones at Virilis (10 coins each), bless them at the exposed altar, break them into blessed bone shards with a chisel and offer the shards at the libation bowl filled with blessed sunfire wine (6 XP a shard). One jug serves 400 shards and takes 2 sunfire splinters. The Wiki's pace is 1,700 bones an hour; recharge Prayer at the Shrine of Ralos.",
       "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Prayer_training" },
     {
@@ -3509,7 +3509,7 @@
       "effort": "high",
       "cost": "cost",
       "risk": "high",
-      "where": "The Chaos Temple in level 38 Wilderness, a multi-combat area player killers visit: bring only what you can lose",
+      "where": "The Chaos Temple in level 38 Wilderness, a multi-combat area player killers visit: bring only what you can lose", "place": "Wilderness Chaos Temple",
       "note": "Offer bones at the Chaos altar by hand. It gives 350% of the burying XP like a gilded altar, and half the offerings are not used up, so each bone gives twice the XP of a gilded altar. The Elder Chaos druid outside the temple unnotes bones for 50 coins each. The wiki guide's pace is 2,000 offerings an hour using 1,000 bones. Player killers are the cost not counted here.",
       "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Prayer_training"
     },
@@ -3548,6 +3548,38 @@
       "npcNames": [
         "Cow"
       ]
+    },
+    {
+      "id": "sl-chaeldar", "skill": ["slayer"], "from": 1, "to": null, "name": "Chaeldar's Slayer tasks", "members": true,
+      "needs": [{ "type": "skill", "skill": "combat", "min": 70 }, { "type": "quest", "quest": "Lost City" }],
+      "effort": "medium", "cost": "free", "risk": "low",
+      "where": "Chaeldar in Zanaris gives the task; kill the assigned monsters in melee",
+      "note": "The rate is the Wiki's melee XP an hour for each task this master can give you, weighted by how often she gives it, and never above the damage your own melee deals an hour. Travel, food and potions are not counted.",
+      "url": "https://oldschool.runescape.wiki/w/Chaeldar", "place": "Zanaris"
+    },
+    {
+      "id": "sl-konar", "skill": ["slayer"], "from": 1, "to": null, "name": "Konar's Slayer tasks", "members": true,
+      "needs": [{ "type": "skill", "skill": "combat", "min": 75 }],
+      "effort": "medium", "cost": "free", "risk": "low",
+      "where": "Konar quo Maten on Mount Karuulm gives the task and the area to kill it in; kill the assigned monsters in melee",
+      "note": "The rate is the Wiki's melee XP an hour for each task this master can give you, weighted by how often she gives it, and never above the damage your own melee deals an hour. Travel, food and potions are not counted.",
+      "url": "https://oldschool.runescape.wiki/w/Konar_quo_Maten", "place": "Mount Karuulm"
+    },
+    {
+      "id": "sl-nieve", "skill": ["slayer"], "from": 1, "to": null, "name": "Nieve's Slayer tasks", "members": true,
+      "needs": [{ "type": "skill", "skill": "combat", "min": 85 }],
+      "effort": "medium", "cost": "free", "risk": "low",
+      "where": "Nieve in the Tree Gnome Stronghold gives the task; kill the assigned monsters in melee",
+      "note": "The rate is the Wiki's melee XP an hour for each task this master can give you, weighted by how often she gives it, and never above the damage your own melee deals an hour. Travel, food and potions are not counted.",
+      "url": "https://oldschool.runescape.wiki/w/Nieve/Slayer_assignments", "place": "Tree Gnome Stronghold"
+    },
+    {
+      "id": "sl-duradel", "skill": ["slayer"], "from": 1, "to": null, "name": "Duradel's Slayer tasks", "members": true,
+      "needs": [{ "type": "skill", "skill": "combat", "min": 100 }, { "type": "skill", "skill": "slayer", "min": 50 }, { "type": "quest", "quest": "Shilo Village" }],
+      "effort": "medium", "cost": "free", "risk": "low",
+      "where": "Duradel in Shilo Village gives the task; kill the assigned monsters in melee",
+      "note": "The rate is the Wiki's melee XP an hour for each task this master can give you, weighted by how often he gives it, and never above the damage your own melee deals an hour. Travel, food and potions are not counted.",
+      "url": "https://oldschool.runescape.wiki/w/Duradel/Slayer_assignments", "place": "Shilo Village"
     },
     {
       "id": "hu-quiz",

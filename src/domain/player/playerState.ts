@@ -10,6 +10,7 @@ import type { OwnedState } from '../items/checklist';
 import { nameKey } from '../items/itemKey';
 import { toolFamilyOf, toolUse, usableAt } from '../items/toolTiers';
 import { countWorn, type WornItem } from '../items/equipmentCount';
+import { combatLevel } from './xp';
 
 export type StateSource = 'game' | 'profile' | 'manual';
 
@@ -139,8 +140,9 @@ function fingerprintOf(s: PlayerState): string {
   return [s.mode, s.connected ? 1 : 0, s.bankSeen ? 1 : 0, s.owned?.bankSavedAt ?? '-', JSON.stringify(s.player), s.equipmentKnown ? 1 : 0, pos, lv, c(s.coins.bag), c(s.coins.bank), c(s.bagSlots), c(s.weight), s.bagItems.known ? s.bagItems.value.map((b) => `${b.name}:${b.count}`).sort().join(',') : '?', q, eq, eqCounts, man, items, JSON.stringify(s.goals ?? {})].join('|');
 }
 
-/** The skill's level; undefined means unknown. */
+/** The skill's level; undefined means unknown. "combat" is the game's combat level from the known combat skills (a Slayer master's requirement). */
 export function levelOf(s: PlayerState, skill: string): number | undefined {
+  if (skill === 'combat') return combatLevel(Object.fromEntries(Object.entries(s.levels).flatMap(([k, v]) => (v?.known ? [[k, v.value]] : [])))) ?? undefined;
   const l = s.levels[skill];
   return l?.known ? l.value : undefined;
 }

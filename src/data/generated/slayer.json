@@ -1,0 +1,1495 @@
+{
+  "source": "OSRS Wiki Slayer master assignment tables and Slayer training task summary (melee XP an hour), scripts/data/build-slayer.ts",
+  "generatedAt": "2026-11-24",
+  "masters": {
+    "sl-chaeldar": {
+      "name": "Chaeldar",
+      "tasks": [
+        {
+          "monster": "Aberrant spectres",
+          "weight": 8,
+          "skills": {
+            "slayer": 60,
+            "combat": 65
+          },
+          "quests": [
+            "Priest in Peril"
+          ]
+        },
+        {
+          "monster": "Abyssal demons",
+          "weight": 12,
+          "skills": {
+            "slayer": 85,
+            "combat": 85
+          },
+          "quests": [
+            "Priest in Peril",
+            "Fairytale II - Cure a Queen"
+          ],
+          "anyQuest": true
+        },
+        {
+          "monster": "Basilisks",
+          "weight": 7,
+          "skills": {
+            "slayer": 40,
+            "combat": 40,
+            "defence": 20
+          },
+          "quests": []
+        },
+        {
+          "monster": "Black demons",
+          "weight": 10,
+          "skills": {
+            "combat": 80
+          },
+          "quests": []
+        },
+        {
+          "monster": "Bloodveld",
+          "weight": 8,
+          "skills": {
+            "slayer": 50,
+            "combat": 50
+          },
+          "quests": [
+            "Priest in Peril"
+          ]
+        },
+        {
+          "monster": "Blue dragons",
+          "weight": 8,
+          "skills": {
+            "combat": 65
+          },
+          "quests": [
+            "Dragon Slayer I"
+          ]
+        },
+        {
+          "monster": "Brine rats",
+          "weight": 7,
+          "skills": {
+            "slayer": 47,
+            "combat": 45
+          },
+          "quests": [
+            "Olaf's Quest"
+          ]
+        },
+        {
+          "monster": "Cave horrors",
+          "weight": 10,
+          "skills": {
+            "slayer": 58,
+            "combat": 85
+          },
+          "quests": [
+            "Cabin Fever"
+          ]
+        },
+        {
+          "monster": "Cave kraken",
+          "weight": 12,
+          "skills": {
+            "slayer": 87,
+            "combat": 80,
+            "magic": 50
+          },
+          "quests": []
+        },
+        {
+          "monster": "Crabs",
+          "weight": 8,
+          "skills": {
+            "slayer": 1
+          },
+          "quests": []
+        },
+        {
+          "monster": "Custodian stalker",
+          "weight": 11,
+          "skills": {
+            "slayer": 54
+          },
+          "quests": [
+            "Shadows of Custodia"
+          ]
+        },
+        {
+          "monster": "Dagannoth",
+          "weight": 11,
+          "skills": {
+            "combat": 75
+          },
+          "quests": [
+            "Horror from the Deep"
+          ]
+        },
+        {
+          "monster": "Dust devils",
+          "weight": 9,
+          "skills": {
+            "slayer": 65,
+            "combat": 70
+          },
+          "quests": [
+            "Desert Treasure I"
+          ]
+        },
+        {
+          "monster": "Elves",
+          "weight": 8,
+          "skills": {
+            "combat": 70
+          },
+          "quests": [
+            "Regicide"
+          ]
+        },
+        {
+          "monster": "Fever spiders",
+          "weight": 7,
+          "skills": {
+            "slayer": 42,
+            "combat": 40
+          },
+          "quests": [
+            "Rum Deal"
+          ]
+        },
+        {
+          "monster": "Fire giants",
+          "weight": 12,
+          "skills": {
+            "combat": 65
+          },
+          "quests": []
+        },
+        {
+          "monster": "Fossil Island Wyverns",
+          "weight": 7,
+          "skills": {
+            "slayer": 66,
+            "combat": 60
+          },
+          "quests": [
+            "Bone Voyage",
+            "Elemental Workshop I"
+          ]
+        },
+        {
+          "monster": "Gargoyles",
+          "weight": 11,
+          "skills": {
+            "slayer": 75,
+            "combat": 80
+          },
+          "quests": [
+            "Priest in Peril"
+          ]
+        },
+        {
+          "monster": "Greater demons",
+          "weight": 9,
+          "skills": {
+            "combat": 70
+          },
+          "quests": []
+        },
+        {
+          "monster": "Gryphons",
+          "weight": 10,
+          "skills": {
+            "slayer": 51,
+            "sailing": 45
+          },
+          "quests": [
+            "Troubled Tortugans"
+          ]
+        },
+        {
+          "monster": "Hellhounds",
+          "weight": 9,
+          "skills": {
+            "combat": 75
+          },
+          "quests": []
+        },
+        {
+          "monster": "Jellies",
+          "weight": 10,
+          "skills": {
+            "slayer": 52,
+            "combat": 57
+          },
+          "quests": []
+        },
+        {
+          "monster": "Jungle horrors",
+          "weight": 10,
+          "skills": {
+            "combat": 65
+          },
+          "quests": [
+            "Cabin Fever"
+          ]
+        },
+        {
+          "monster": "Kalphite",
+          "weight": 11,
+          "skills": {
+            "combat": 15
+          },
+          "quests": []
+        },
+        {
+          "monster": "Kurask",
+          "weight": 12,
+          "skills": {
+            "slayer": 70,
+            "combat": 65
+          },
+          "quests": []
+        },
+        {
+          "monster": "Lesser demons",
+          "weight": 9,
+          "skills": {
+            "combat": 60
+          },
+          "quests": []
+        },
+        {
+          "monster": "Lesser Nagua",
+          "weight": 4,
+          "skills": {
+            "slayer": 48
+          },
+          "quests": [
+            "Perilous Moons"
+          ]
+        },
+        {
+          "monster": "Mutated zygomites",
+          "weight": 7,
+          "skills": {
+            "slayer": 57,
+            "combat": 60
+          },
+          "quests": [
+            "Lost City"
+          ]
+        },
+        {
+          "monster": "Nechryael",
+          "weight": 12,
+          "skills": {
+            "slayer": 80,
+            "combat": 85
+          },
+          "quests": [
+            "Priest in Peril"
+          ]
+        },
+        {
+          "monster": "Shadow warriors",
+          "weight": 8,
+          "skills": {
+            "combat": 60
+          },
+          "quests": [
+            "Legends' Quest"
+          ]
+        },
+        {
+          "monster": "Skeletal Wyverns",
+          "weight": 7,
+          "skills": {
+            "slayer": 72,
+            "combat": 70
+          },
+          "quests": [
+            "Elemental Workshop I"
+          ]
+        },
+        {
+          "monster": "Spiritual creatures",
+          "weight": 12,
+          "skills": {
+            "slayer": 63,
+            "combat": 60
+          },
+          "quests": [
+            "Death Plateau"
+          ]
+        },
+        {
+          "monster": "Trolls",
+          "weight": 11,
+          "skills": {
+            "combat": 60
+          },
+          "quests": []
+        },
+        {
+          "monster": "Turoth",
+          "weight": 10,
+          "skills": {
+            "slayer": 55,
+            "combat": 60
+          },
+          "quests": []
+        },
+        {
+          "monster": "Wyrms",
+          "weight": 6,
+          "skills": {
+            "slayer": 62
+          },
+          "quests": []
+        }
+      ]
+    },
+    "sl-konar": {
+      "name": "Konar quo Maten",
+      "tasks": [
+        {
+          "monster": "Aberrant spectres",
+          "weight": 6,
+          "skills": {
+            "slayer": 60,
+            "combat": 65
+          },
+          "quests": []
+        },
+        {
+          "monster": "Abyssal demons",
+          "weight": 9,
+          "skills": {
+            "slayer": 85,
+            "combat": 85
+          },
+          "quests": [
+            "Priest in Peril",
+            "Fairytale II - Cure a Queen"
+          ],
+          "anyQuest": true
+        },
+        {
+          "monster": "Ankou",
+          "weight": 5,
+          "skills": {
+            "combat": 40
+          },
+          "quests": []
+        },
+        {
+          "monster": "Black demons",
+          "weight": 9,
+          "skills": {
+            "combat": 80
+          },
+          "quests": []
+        },
+        {
+          "monster": "Black dragons",
+          "weight": 6,
+          "skills": {
+            "combat": 80
+          },
+          "quests": [
+            "Dragon Slayer I"
+          ]
+        },
+        {
+          "monster": "Bloodveld",
+          "weight": 9,
+          "skills": {
+            "slayer": 50,
+            "combat": 50
+          },
+          "quests": []
+        },
+        {
+          "monster": "Blue dragons",
+          "weight": 4,
+          "skills": {
+            "combat": 65
+          },
+          "quests": [
+            "Dragon Slayer I",
+            "Watchtower"
+          ]
+        },
+        {
+          "monster": "Brine rats",
+          "weight": 2,
+          "skills": {
+            "slayer": 47,
+            "combat": 45
+          },
+          "quests": [
+            "Olaf's Quest"
+          ]
+        },
+        {
+          "monster": "Cave kraken",
+          "weight": 9,
+          "skills": {
+            "slayer": 87,
+            "combat": 80,
+            "magic": 50
+          },
+          "quests": []
+        },
+        {
+          "monster": "Dagannoth",
+          "weight": 8,
+          "skills": {
+            "combat": 75
+          },
+          "quests": [
+            "Horror from the Deep"
+          ]
+        },
+        {
+          "monster": "Dark beasts",
+          "weight": 5,
+          "skills": {
+            "slayer": 90,
+            "combat": 90
+          },
+          "quests": [
+            "Mourning's End Part II"
+          ]
+        },
+        {
+          "monster": "Drakes",
+          "weight": 10,
+          "skills": {
+            "slayer": 84
+          },
+          "quests": []
+        },
+        {
+          "monster": "Dust devils",
+          "weight": 6,
+          "skills": {
+            "slayer": 65,
+            "combat": 70
+          },
+          "quests": [
+            "Desert Treasure I"
+          ]
+        },
+        {
+          "monster": "Fire giants",
+          "weight": 9,
+          "skills": {
+            "combat": 65
+          },
+          "quests": []
+        },
+        {
+          "monster": "Fossil Island Wyverns",
+          "weight": 5,
+          "skills": {
+            "slayer": 66,
+            "combat": 60
+          },
+          "quests": [
+            "Bone Voyage",
+            "Elemental Workshop I"
+          ]
+        },
+        {
+          "monster": "Gargoyles",
+          "weight": 6,
+          "skills": {
+            "slayer": 75,
+            "combat": 80
+          },
+          "quests": [
+            "Priest in Peril"
+          ]
+        },
+        {
+          "monster": "Greater demons",
+          "weight": 7,
+          "skills": {
+            "combat": 75
+          },
+          "quests": []
+        },
+        {
+          "monster": "Hellhounds",
+          "weight": 8,
+          "skills": {
+            "combat": 75
+          },
+          "quests": []
+        },
+        {
+          "monster": "Hydras",
+          "weight": 10,
+          "skills": {
+            "slayer": 95
+          },
+          "quests": []
+        },
+        {
+          "monster": "Jellies",
+          "weight": 6,
+          "skills": {
+            "slayer": 52,
+            "combat": 57
+          },
+          "quests": []
+        },
+        {
+          "monster": "Kalphite",
+          "weight": 9,
+          "skills": {
+            "combat": 15
+          },
+          "quests": []
+        },
+        {
+          "monster": "Kurask",
+          "weight": 3,
+          "skills": {
+            "slayer": 70,
+            "combat": 65
+          },
+          "quests": [
+            "Song of the Elves"
+          ]
+        },
+        {
+          "monster": "Lesser Nagua",
+          "weight": 2,
+          "skills": {
+            "slayer": 48
+          },
+          "quests": [
+            "Perilous Moons"
+          ]
+        },
+        {
+          "monster": "Metal dragons",
+          "weight": 15,
+          "skills": {
+            "combat": 85
+          },
+          "quests": [
+            "Dragon Slayer I"
+          ]
+        },
+        {
+          "monster": "Mutated Zygomites",
+          "weight": 2,
+          "skills": {
+            "slayer": 57,
+            "combat": 60
+          },
+          "quests": [
+            "Lost City"
+          ]
+        },
+        {
+          "monster": "Nechryael",
+          "weight": 7,
+          "skills": {
+            "slayer": 80,
+            "combat": 85
+          },
+          "quests": []
+        },
+        {
+          "monster": "Skeletal Wyverns",
+          "weight": 5,
+          "skills": {
+            "slayer": 72,
+            "combat": 70
+          },
+          "quests": [
+            "Elemental Workshop I"
+          ]
+        },
+        {
+          "monster": "Smoke devils",
+          "weight": 7,
+          "skills": {
+            "slayer": 93,
+            "combat": 85
+          },
+          "quests": []
+        },
+        {
+          "monster": "Trolls",
+          "weight": 6,
+          "skills": {
+            "combat": 60
+          },
+          "quests": []
+        },
+        {
+          "monster": "Turoth",
+          "weight": 3,
+          "skills": {
+            "slayer": 55,
+            "combat": 60
+          },
+          "quests": []
+        },
+        {
+          "monster": "Waterfiends",
+          "weight": 2,
+          "skills": {
+            "combat": 75
+          },
+          "quests": []
+        },
+        {
+          "monster": "Wyrms",
+          "weight": 10,
+          "skills": {
+            "slayer": 62
+          },
+          "quests": []
+        }
+      ]
+    },
+    "sl-nieve": {
+      "name": "Nieve",
+      "tasks": [
+        {
+          "monster": "Aberrant spectres",
+          "weight": 6,
+          "skills": {
+            "slayer": 60,
+            "combat": 65
+          },
+          "quests": [
+            "Priest in Peril"
+          ]
+        },
+        {
+          "monster": "Abyssal demons",
+          "weight": 9,
+          "skills": {
+            "slayer": 85,
+            "combat": 85
+          },
+          "quests": [
+            "Priest in Peril",
+            "Fairytale II - Cure a Queen"
+          ],
+          "anyQuest": true
+        },
+        {
+          "monster": "Ankou",
+          "weight": 5,
+          "skills": {
+            "combat": 40
+          },
+          "quests": []
+        },
+        {
+          "monster": "Araxytes",
+          "weight": 8,
+          "skills": {
+            "slayer": 92
+          },
+          "quests": []
+        },
+        {
+          "monster": "Black demons",
+          "weight": 9,
+          "skills": {
+            "combat": 80
+          },
+          "quests": []
+        },
+        {
+          "monster": "Black dragons",
+          "weight": 6,
+          "skills": {
+            "combat": 80
+          },
+          "quests": [
+            "Dragon Slayer I"
+          ]
+        },
+        {
+          "monster": "Bloodveld",
+          "weight": 9,
+          "skills": {
+            "slayer": 50,
+            "combat": 50
+          },
+          "quests": [
+            "Priest in Peril"
+          ]
+        },
+        {
+          "monster": "Blue dragons",
+          "weight": 4,
+          "skills": {
+            "combat": 65
+          },
+          "quests": [
+            "Dragon Slayer I"
+          ]
+        },
+        {
+          "monster": "Brine rats",
+          "weight": 3,
+          "skills": {
+            "slayer": 47,
+            "combat": 45
+          },
+          "quests": [
+            "Olaf's Quest"
+          ]
+        },
+        {
+          "monster": "Cave horrors",
+          "weight": 5,
+          "skills": {
+            "slayer": 58,
+            "combat": 85
+          },
+          "quests": [
+            "Cabin Fever"
+          ]
+        },
+        {
+          "monster": "Cave kraken",
+          "weight": 6,
+          "skills": {
+            "slayer": 87,
+            "combat": 80,
+            "magic": 50
+          },
+          "quests": []
+        },
+        {
+          "monster": "Custodian stalker",
+          "weight": 8,
+          "skills": {
+            "slayer": 54
+          },
+          "quests": [
+            "Shadows of Custodia"
+          ]
+        },
+        {
+          "monster": "Dagannoth",
+          "weight": 8,
+          "skills": {
+            "combat": 75
+          },
+          "quests": [
+            "Horror from the Deep"
+          ]
+        },
+        {
+          "monster": "Dark beasts",
+          "weight": 5,
+          "skills": {
+            "slayer": 90,
+            "combat": 90
+          },
+          "quests": [
+            "Mourning's End Part II"
+          ]
+        },
+        {
+          "monster": "Drakes",
+          "weight": 7,
+          "skills": {
+            "slayer": 84
+          },
+          "quests": []
+        },
+        {
+          "monster": "Dust devils",
+          "weight": 6,
+          "skills": {
+            "slayer": 65,
+            "combat": 70
+          },
+          "quests": [
+            "Desert Treasure I"
+          ]
+        },
+        {
+          "monster": "Elves",
+          "weight": 4,
+          "skills": {
+            "combat": 70
+          },
+          "quests": [
+            "Regicide"
+          ]
+        },
+        {
+          "monster": "Fire giants",
+          "weight": 9,
+          "skills": {
+            "combat": 65
+          },
+          "quests": []
+        },
+        {
+          "monster": "Fossil Island Wyverns",
+          "weight": 5,
+          "skills": {
+            "slayer": 66,
+            "combat": 60
+          },
+          "quests": [
+            "Bone Voyage",
+            "Elemental Workshop I"
+          ]
+        },
+        {
+          "monster": "Frost dragons",
+          "weight": 5,
+          "skills": {
+            "sailing": 87,
+            "combat": 85
+          },
+          "quests": [
+            "Dragon Slayer I"
+          ]
+        },
+        {
+          "monster": "Gargoyles",
+          "weight": 6,
+          "skills": {
+            "slayer": 75,
+            "combat": 80
+          },
+          "quests": [
+            "Priest in Peril"
+          ]
+        },
+        {
+          "monster": "Greater demons",
+          "weight": 7,
+          "skills": {
+            "combat": 75
+          },
+          "quests": []
+        },
+        {
+          "monster": "Hellhounds",
+          "weight": 8,
+          "skills": {
+            "combat": 75
+          },
+          "quests": []
+        },
+        {
+          "monster": "Kalphite",
+          "weight": 9,
+          "skills": {
+            "combat": 15
+          },
+          "quests": []
+        },
+        {
+          "monster": "Kurask",
+          "weight": 3,
+          "skills": {
+            "slayer": 70,
+            "combat": 65
+          },
+          "quests": []
+        },
+        {
+          "monster": "Metal dragons",
+          "weight": 12,
+          "skills": {
+            "combat": 85
+          },
+          "quests": [
+            "Dragon Slayer I"
+          ]
+        },
+        {
+          "monster": "Mutated Zygomites",
+          "weight": 2,
+          "skills": {
+            "slayer": 57,
+            "combat": 60
+          },
+          "quests": [
+            "Lost City"
+          ]
+        },
+        {
+          "monster": "Nechryael",
+          "weight": 7,
+          "skills": {
+            "slayer": 80,
+            "combat": 85
+          },
+          "quests": [
+            "Priest in Peril"
+          ]
+        },
+        {
+          "monster": "Scabarites",
+          "weight": 4,
+          "skills": {
+            "combat": 85
+          },
+          "quests": [
+            "Contact!"
+          ]
+        },
+        {
+          "monster": "Skeletal Wyverns",
+          "weight": 5,
+          "skills": {
+            "slayer": 72,
+            "combat": 70
+          },
+          "quests": [
+            "Elemental Workshop I"
+          ]
+        },
+        {
+          "monster": "Smoke devils",
+          "weight": 7,
+          "skills": {
+            "slayer": 93,
+            "combat": 85
+          },
+          "quests": []
+        },
+        {
+          "monster": "Spiritual creatures",
+          "weight": 6,
+          "skills": {
+            "slayer": 63,
+            "combat": 60
+          },
+          "quests": [
+            "Death Plateau"
+          ]
+        },
+        {
+          "monster": "Suqahs",
+          "weight": 8,
+          "skills": {
+            "combat": 85
+          },
+          "quests": [
+            "Lunar Diplomacy"
+          ]
+        },
+        {
+          "monster": "Trolls",
+          "weight": 6,
+          "skills": {
+            "combat": 60
+          },
+          "quests": []
+        },
+        {
+          "monster": "Turoth",
+          "weight": 3,
+          "skills": {
+            "slayer": 55,
+            "combat": 60
+          },
+          "quests": []
+        },
+        {
+          "monster": "Wyrms",
+          "weight": 7,
+          "skills": {
+            "slayer": 62
+          },
+          "quests": []
+        }
+      ]
+    },
+    "sl-duradel": {
+      "name": "Duradel",
+      "tasks": [
+        {
+          "monster": "Aberrant Spectres",
+          "weight": 7,
+          "skills": {
+            "slayer": 60,
+            "combat": 65
+          },
+          "quests": [
+            "Priest in Peril"
+          ]
+        },
+        {
+          "monster": "Abyssal Demons",
+          "weight": 12,
+          "skills": {
+            "slayer": 85,
+            "combat": 85
+          },
+          "quests": [
+            "Priest in Peril",
+            "Fairytale II - Cure a Queen"
+          ],
+          "anyQuest": true
+        },
+        {
+          "monster": "Ankou",
+          "weight": 5,
+          "skills": {
+            "combat": 40
+          },
+          "quests": []
+        },
+        {
+          "monster": "Araxytes",
+          "weight": 10,
+          "skills": {
+            "slayer": 92
+          },
+          "quests": []
+        },
+        {
+          "monster": "Black Demons",
+          "weight": 8,
+          "skills": {
+            "combat": 80
+          },
+          "quests": []
+        },
+        {
+          "monster": "Black Dragons",
+          "weight": 9,
+          "skills": {
+            "combat": 80
+          },
+          "quests": [
+            "Dragon Slayer I"
+          ]
+        },
+        {
+          "monster": "Bloodveld",
+          "weight": 8,
+          "skills": {
+            "slayer": 50,
+            "combat": 50
+          },
+          "quests": [
+            "Priest in Peril"
+          ]
+        },
+        {
+          "monster": "Blue Dragons",
+          "weight": 4,
+          "skills": {
+            "combat": 65
+          },
+          "quests": [
+            "Dragon Slayer I"
+          ]
+        },
+        {
+          "monster": "Cave Horrors",
+          "weight": 4,
+          "skills": {
+            "slayer": 58,
+            "combat": 85
+          },
+          "quests": [
+            "Cabin Fever"
+          ]
+        },
+        {
+          "monster": "Cave Kraken",
+          "weight": 9,
+          "skills": {
+            "slayer": 87,
+            "combat": 80,
+            "magic": 50
+          },
+          "quests": []
+        },
+        {
+          "monster": "Dagannoth",
+          "weight": 9,
+          "skills": {
+            "combat": 75
+          },
+          "quests": [
+            "Horror from the Deep"
+          ]
+        },
+        {
+          "monster": "Dark Beasts",
+          "weight": 11,
+          "skills": {
+            "slayer": 90,
+            "combat": 90
+          },
+          "quests": [
+            "Mourning's End Part II"
+          ]
+        },
+        {
+          "monster": "Drakes",
+          "weight": 8,
+          "skills": {
+            "slayer": 84
+          },
+          "quests": []
+        },
+        {
+          "monster": "Dust Devils",
+          "weight": 5,
+          "skills": {
+            "slayer": 65,
+            "combat": 70
+          },
+          "quests": [
+            "Desert Treasure I"
+          ]
+        },
+        {
+          "monster": "Elves",
+          "weight": 4,
+          "skills": {
+            "combat": 70
+          },
+          "quests": [
+            "Regicide"
+          ]
+        },
+        {
+          "monster": "Fire Giants",
+          "weight": 7,
+          "skills": {
+            "combat": 65
+          },
+          "quests": []
+        },
+        {
+          "monster": "Fossil Island Wyverns",
+          "weight": 7,
+          "skills": {
+            "slayer": 66,
+            "combat": 60
+          },
+          "quests": [
+            "Bone Voyage",
+            "Elemental Workshop I"
+          ]
+        },
+        {
+          "monster": "Frost dragons",
+          "weight": 5,
+          "skills": {
+            "sailing": 87,
+            "combat": 85
+          },
+          "quests": [
+            "Dragon Slayer I"
+          ]
+        },
+        {
+          "monster": "Gargoyles",
+          "weight": 8,
+          "skills": {
+            "slayer": 75,
+            "combat": 80
+          },
+          "quests": [
+            "Priest in Peril"
+          ]
+        },
+        {
+          "monster": "Greater Demons",
+          "weight": 9,
+          "skills": {
+            "combat": 75
+          },
+          "quests": []
+        },
+        {
+          "monster": "Hellhounds",
+          "weight": 10,
+          "skills": {
+            "combat": 75
+          },
+          "quests": []
+        },
+        {
+          "monster": "Kalphite",
+          "weight": 9,
+          "skills": {
+            "combat": 15
+          },
+          "quests": []
+        },
+        {
+          "monster": "Kurask",
+          "weight": 4,
+          "skills": {
+            "slayer": 70,
+            "combat": 65
+          },
+          "quests": []
+        },
+        {
+          "monster": "Metal Dragons",
+          "weight": 14,
+          "skills": {
+            "combat": 85
+          },
+          "quests": [
+            "Dragon Slayer I"
+          ]
+        },
+        {
+          "monster": "Mutated Zygomites",
+          "weight": 2,
+          "skills": {
+            "slayer": 57,
+            "combat": 60
+          },
+          "quests": [
+            "Lost City"
+          ]
+        },
+        {
+          "monster": "Nechryael",
+          "weight": 9,
+          "skills": {
+            "slayer": 80,
+            "combat": 85
+          },
+          "quests": [
+            "Priest in Peril"
+          ]
+        },
+        {
+          "monster": "Skeletal Wyverns",
+          "weight": 7,
+          "skills": {
+            "slayer": 72,
+            "combat": 70
+          },
+          "quests": [
+            "Elemental Workshop I"
+          ]
+        },
+        {
+          "monster": "Smoke Devils",
+          "weight": 9,
+          "skills": {
+            "slayer": 93,
+            "combat": 85
+          },
+          "quests": []
+        },
+        {
+          "monster": "Spiritual Creatures",
+          "weight": 7,
+          "skills": {
+            "slayer": 63,
+            "combat": 60
+          },
+          "quests": [
+            "Death Plateau"
+          ]
+        },
+        {
+          "monster": "Suqahs",
+          "weight": 8,
+          "skills": {
+            "combat": 85
+          },
+          "quests": [
+            "Lunar Diplomacy"
+          ]
+        },
+        {
+          "monster": "Trolls",
+          "weight": 6,
+          "skills": {
+            "combat": 60
+          },
+          "quests": []
+        },
+        {
+          "monster": "Waterfiends",
+          "weight": 2,
+          "skills": {
+            "combat": 75
+          },
+          "quests": []
+        },
+        {
+          "monster": "Wyrms",
+          "weight": 8,
+          "skills": {
+            "slayer": 62
+          },
+          "quests": []
+        }
+      ]
+    }
+  },
+  "rates": {
+    "aberrant spectres": [
+      35000,
+      35000
+    ],
+    "abyssal demons": [
+      40000,
+      40000
+    ],
+    "aviansie": [
+      10000,
+      10000
+    ],
+    "basilisks": [
+      15000,
+      15000
+    ],
+    "black demons": [
+      45000,
+      45000
+    ],
+    "black dragons": [
+      30000,
+      30000
+    ],
+    "blue dragons": [
+      25000,
+      25000
+    ],
+    "cave horrors": [
+      25000,
+      25000
+    ],
+    "cave kraken": [
+      15000,
+      15000
+    ],
+    "dagannoth": [
+      85000,
+      85000
+    ],
+    "dark beasts": [
+      42000,
+      42000
+    ],
+    "drakes": [
+      35000,
+      35000
+    ],
+    "dust devils": [
+      35000,
+      35000
+    ],
+    "elves": [
+      25000,
+      25000
+    ],
+    "fire giants": [
+      40000,
+      40000
+    ],
+    "fossil island wyverns": [
+      15000,
+      15000
+    ],
+    "frost dragons": [
+      30000,
+      30000
+    ],
+    "gargoyles": [
+      30000,
+      30000
+    ],
+    "greater demons": [
+      38000,
+      38000
+    ],
+    "gryphons": [
+      50000,
+      50000
+    ],
+    "hellhounds": [
+      40000,
+      40000
+    ],
+    "kalphites": [
+      75000,
+      75000
+    ],
+    "kurask": [
+      20000,
+      20000
+    ],
+    "lizardmen": [
+      50000,
+      50000
+    ],
+    "metal dragons": [
+      30000,
+      30000
+    ],
+    "mutated zygomites": [
+      10000,
+      10000
+    ],
+    "nechryael": [
+      40000,
+      40000
+    ],
+    "red dragons": [
+      30000,
+      30000
+    ],
+    "skeletal wyverns": [
+      15000,
+      15000
+    ],
+    "smoke devils": [
+      55000,
+      55000
+    ],
+    "spiritual creatures": [
+      25000,
+      25000
+    ],
+    "suqah": [
+      55000,
+      55000
+    ],
+    "trolls": [
+      50000,
+      50000
+    ],
+    "vyrewatch": [
+      15000,
+      15000
+    ],
+    "waterfiends": [
+      15000,
+      15000
+    ]
+  }
+}

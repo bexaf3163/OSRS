@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { attackCounts, attacksToKill, combatRecovery, foeVariants } from '../src/domain/combat/combatEstimate';
-import { combatRate } from '../src/domain/combat/combatRates';
+import { combatRate, meleeDamagePerHour } from '../src/domain/combat/combatRates';
+import { slayerRate } from '../src/domain/combat/slayerRates';
 import { rangedNeeds } from '../src/domain/combat/rangedLoadout';
 import { goalArrows } from '../src/domain/combat/rangedAmmo';
 import { xpForLevel } from '../src/domain/player/xp';
@@ -97,6 +98,16 @@ describe('Slayer', () => {
     const slayer = combatRate(method('sl-turael'), 'slayer', s, { prices: market })!;
     const melee = (['attack', 'strength', 'defence'] as const).map(skill => combatRate(method('me-cow'), skill, s, { prices: market })!.xph[1]);
     expect(slayer.xph[1]).toBeCloseTo(Math.max(...melee) / 4, 0);
+  });
+
+  it("a master's rate weighs the Wiki melee rates of the tasks the player can get, none above the player's own damage", () => {
+    const at = (level: number, slayer: number) => buildPlayerState({ mode: 'members', stats: { attack: level, strength: level, defence: level, hitpoints: level, prayer: 43, ranged: 1, magic: 1, slayer }, progress: emptyProgress(), questsDone: ['Priest in Peril'], connected: true,
+      gear: { inventory: [], coins: 100, bankCoins: 0, equipment: [{ id: 1333, name: 'Rune scimitar', slot: 'weapon' }] }, owned: null });
+    const rate = (level: number, slayer: number) => slayerRate(method('sl-nieve'), 'slayer', at(level, slayer))!;
+    const strong = rate(99, 85), weak = rate(70, 85);
+    expect(strong.xph[1]).toBeLessThanOrEqual(meleeDamagePerHour(at(99, 85))! + 1);
+    expect(weak.xph[1]).toBeLessThan(strong.xph[1]);
+    expect(slayerRate(method('sl-nieve'), 'slayer', { ...at(99, 85), mode: 'f2p' })).toBeNull();
   });
 });
 

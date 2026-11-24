@@ -2,7 +2,7 @@
   "name": "osrs-put",
   "productName": "OSRS Path",
   "private": true,
-  "version": "2.175.0",
+  "version": "2.176.0",
   "description": "A personal progress tracker for Old School RuneScape (free version)",
   "author": "Mark",
   "type": "module",
@@ -53,6 +53,7 @@
     "build-trainers": "node scripts/data/build-trainers.ts",
     "build-skilling": "node scripts/data/build-skilling.ts",
     "build-processing": "node scripts/data/build-processing.ts",
+    "build-slayer": "node scripts/data/build-slayer.ts",
     "build-item-facts": "node scripts/data/build-item-facts.ts"
   },
   "devDependencies": {

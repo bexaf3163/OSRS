@@ -109,6 +109,7 @@ export { default as questMachinesJson } from './generated/questMachines.json';
 export { default as rangedGearJson } from './generated/rangedGear.json';
 export { default as recipesJson } from './authored/recipes.json';
 export { default as skillingJson } from './generated/skilling.json';
+export { default as slayerJson } from './generated/slayer.json';
 export { default as spellsJson } from './authored/spells.json';
 export { default as styleGearJson } from './generated/styleGear.json';
 export { default as toolProgressionJson } from './authored/toolProgression.json';

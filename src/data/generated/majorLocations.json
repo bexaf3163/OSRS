@@ -1,6 +1,6 @@
 {
   "source": "OSRS Wiki, the {{Map}} template in the article",
-  "updated": "2026-11-23",
+  "updated": "2026-11-24",
   "locations": {
     "Lumbridge": {
       "x": 3188,
@@ -605,6 +605,54 @@
       "label": "Tlati Rainforest",
       "kind": "landmark",
       "page": "Tlati Rainforest"
+    },
+    "Neypotzli": {
+      "x": 1440,
+      "y": 9632,
+      "plane": 0,
+      "label": "Neypotzli",
+      "kind": "dungeon",
+      "page": "Neypotzli"
+    },
+    "Kruk's Dungeon": {
+      "x": 2715,
+      "y": 2789,
+      "plane": 0,
+      "label": "Kruk's Dungeon",
+      "kind": "dungeon",
+      "page": "Kruk's Dungeon"
+    },
+    "Teomat": {
+      "x": 1449,
+      "y": 3185,
+      "plane": 0,
+      "label": "Teomat",
+      "kind": "landmark",
+      "page": "The Teomat"
+    },
+    "Wilderness Chaos Temple": {
+      "x": 3240,
+      "y": 3608,
+      "plane": 0,
+      "label": "Wilderness Chaos Temple",
+      "kind": "landmark",
+      "page": "Chaos Temple (Wilderness)"
+    },
+    "Zanaris": {
+      "x": 2430,
+      "y": 4428,
+      "plane": 0,
+      "label": "Zanaris",
+      "kind": "city",
+      "page": "Zanaris"
+    },
+    "Mount Karuulm": {
+      "x": 1311,
+      "y": 3807,
+      "plane": 0,
+      "label": "Mount Karuulm",
+      "kind": "landmark",
+      "page": "Mount Karuulm"
     },
     "Asgarnian Ice Dungeon": {
       "x": 3008,
