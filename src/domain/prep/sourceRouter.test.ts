@@ -54,3 +54,10 @@ describe('usable acquisition sources before unlocated references', () => {
     expect(plan.primary).toMatchObject({ kind: 'make', price: 0, make: { seconds: 60, yield: 5 } });
   });
 });
+
+describe('untradeable items taken from an object', () => {
+  it('sends the player to search the bed in Otto\'s Grotto for a Barbarian rod, for free', () => {
+    const plan = planSources({ name: 'Barbarian rod', need: 1, shortage: true }, player());
+    expect(plan.primary).toMatchObject({ kind: 'free', price: 0, point: { x: matchStrict("Otto's Grotto")!.x } });
+  });
+});

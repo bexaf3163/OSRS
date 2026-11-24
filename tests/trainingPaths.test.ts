@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
-import { adviseTraining, trainingMethods, type PathLeg } from '../src/domain/training/trainingRouter';
+import { adviseTraining, preparationNeeds, trainingMethods, type PathLeg } from '../src/domain/training/trainingRouter';
+import { supplyPrice } from '../src/domain/market/itemPrice';
+import { planSources } from '../src/domain/prep/sourceRouter';
 import { coinsPerMinute, coinTimeShare, ZERO_SHARE } from '../src/domain/market/lootValue';
 import { buildPlayerState } from '../src/domain/player/playerState';
 import { emptyProgress } from '../src/domain/persistence/progress';
@@ -117,14 +119,15 @@ describe('every start level gets a whole plan the route can walk', () => {
     .filter((s) => trainingMethods.some((m) => m.kind === 'method' && m.skills.includes(s) && (mode === 'members' || !m.members)))
     .map((skill) => [mode, base, coins, skill] as const));
   it.each(cases)('%s, other skills %i, %i coins: %s', (mode, base, coins, skill) => {
-    const at = (level: number) => {
+    const stateAt = (level: number) => {
       // Melee and Ranged XP brings a third as much Hitpoints XP, so a fresh account at Ranged 60 is no longer at 10 Hitpoints.
       const hp = Math.max(10, base, ['attack', 'strength', 'defence', 'ranged'].includes(skill) ? levelForXp(xpForLevel(10) + xpForLevel(level) / 3) : 0);
       const stats = Object.fromEntries(SKILL_NAMES.map((s) => [s, s === skill ? level : s === 'hitpoints' ? hp : base]));
       const state = buildPlayerState({ mode, connected: true, player: 'P', stats, progress: emptyProgress(), questsDone: base > 1 ? questCatalogue.map((q) => q.id) : [],
         owned: { bankSeen: true, items: new Map() }, gear: { equipment: [], inventory: [], coins: 0, bankCoins: coins } } as never);
-      return adviseTraining({ skill, target: 99, state, mode, prices } as never);
+      return state;
     };
+    const at = (level: number) => adviseTraining({ skill, target: 99, state: stateAt(level), mode, prices } as never);
     const bad: string[] = [];
     for (let level = 1; level < 99; level += 7) {
       const advice = at(level), legs = advice.path;
@@ -135,6 +138,8 @@ describe('every start level gets a whole plan the route can walk', () => {
       if (legs[0]?.method.id !== advice.best.method.id) bad.push(`${level}: Train ${advice.best.method.id}, plan ${legs[0]?.method.id}`);
       if (legs[0]?.fromLevel !== level || legs.at(-1)?.toLevel !== 99 || legs.some((l, i) => i > 0 && legs[i - 1].toLevel !== l.fromLevel)) bad.push(`${level}: gap`);
       bad.push(...slowerLegs(legs), ...unusableLegs(legs, mode));
+      // Every item the first method needs can be bought, or taken for free somewhere the route knows.
+      for (const n of preparationNeeds(advice, stateAt(level), prices)) if (n.type === 'item' && ![n.name, ...(n.anyOf ?? [])].some((x) => supplyPrice(x, prices, mode) !== null || planSources({ name: x, need: 1, shortage: true }, stateAt(level)).primary?.kind === 'free')) bad.push(`${level}: no source for ${n.name}`);
       for (const l of legs) {
         if (!l.method.spot && !methodPoint(l.method.id)) bad.push(`${l.fromLevel}-${l.toLevel} ${l.method.id}: no place`);
         if (losing(l.method, mode) && !losing(at(l.fromLevel).best!.method, mode)) bad.push(`${l.fromLevel}-${l.toLevel} ${l.method.id}: avoidable loss`);

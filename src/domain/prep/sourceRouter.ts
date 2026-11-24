@@ -91,6 +91,12 @@ export const FREE_GIVERS: Record<string, { npc: string; note: string; questAcces
   'anti-dragon shield': { npc: 'Duke Horacio', note: 'during or after Dragon Slayer I; Home Teleport takes you to Lumbridge', questAccess: { quest: 'Dragon Slayer I', state: 'started' } },
 };
 
+/** Untradeable items taken for free from an object at a place (OSRS Wiki). Otto Godblessed lets you take a Barbarian rod
+ * from under the bed in his cabin once you ask about barbarian fishing, and the bed gives another if it is lost. */
+const FREE_SEARCHES: Record<string, { place: string; note: string }> = {
+  'barbarian rod': { place: "Otto's Grotto", note: "ask Otto Godblessed about barbarian fishing, then search the bed in his cabin" },
+};
+
 /** The route step that visits an NPC: the first whose own NPC it is. */
 export const giverStepOf = (npc: string) =>
   (stepsJson as { id: string; npc?: { nameEn?: string }; mapLocation?: WorldPoint & { label: string } }[]).find((x) => x.npc?.nameEn === npc && x.mapLocation);
@@ -148,6 +154,8 @@ export function planSources(input: SourceInput, s: PlayerState): SourcePlan {
   }
   const giver = freeGiver(input.name, here);
   if (giver) out.push(giver);
+  const search = FREE_SEARCHES[nameKey(input.name)], sp = search ? matchStrict(search.place) : null;
+  if (search && sp) out.push({ kind: 'free', label: `Free: ${search.note}`, price: 0, point: { x: sp.x, y: sp.y, plane: sp.plane, label: sp.label }, ...(here ? { distance: dist(sp, here) } : {}) });
   const shops: SourceOption[] = [];
   for (const b of d?.buyLocations ?? []) {
     if (b.members && s.mode === 'f2p') continue;
