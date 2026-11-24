@@ -89,3 +89,13 @@ export function opensLater(methods: readonly TrainingMethod[], level: number, mo
   const quests = next ? missing(next) : [];
   return next ? `${next.name} opens at level ${next.from}${quests.length ? ` and needs ${quests.join(' and ')}` : ''}.` : null;
 }
+
+/** Most coins still trains the skill (owner, 2026-11-24): it chooses among methods at least a third as fast as the fastest
+ * open one that does not lose coins (the fastest open one when all lose). Other goals choose among all. */
+export function withinGoalPace<V extends { method: TrainingMethod; status: string }>(goal: TrainingGoal, views: V[], coinRate: number | null): V[] {
+  if (goal !== 'coins') return views;
+  const open = views.filter((v) => v.status !== 'LOCKED');
+  const fair = open.filter((v) => { const n = v.method.marketNetPerHour ?? netCoinsPerHour(v.method); return n !== null && !losing(n, coinRate); });
+  const fastest = Math.max(0, ...(fair.length ? fair : open).map((v) => practicalRate(v.method) ?? 0));
+  return views.filter((v) => (practicalRate(v.method) ?? fastest) >= fastest / 3);
+}

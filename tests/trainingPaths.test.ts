@@ -77,6 +77,8 @@ describe('the training goal picks the fastest or the best-earning method, never 
     { ...base, id: 'goal-fast', xph: [20000, 20000] as [number, number], cost: 'cost' as const, costPerHour: 500, lootPerHour: 0 },
     { ...base, id: 'goal-rich', xph: [10000, 10000] as [number, number], cost: 'profit' as const, costPerHour: 0, lootPerHour: 50000 },
     { ...base, id: 'goal-loss', xph: [40000, 40000] as [number, number], cost: 'cost' as const, costPerHour: 30000, lootPerHour: 0 },
+    // The richest, but under a third of the fastest method that does not lose coins: Most coins still trains (owner, 2026-11-24).
+    { ...base, id: 'goal-crawl', xph: [3000, 3000] as [number, number], cost: 'profit' as const, costPerHour: 0, lootPerHour: 200000 },
   ];
   const pick = (goal: 'xp' | 'coins') => adviseTraining({ skill: 'crafting', target: 50, mode: 'f2p', prices, methods, state: buildPlayerState({ mode: 'f2p', connected: true, player: 'P',
     stats: { crafting: 1 }, progress: { ...emptyProgress(), trainingGoals: { crafting: goal } }, questsDone: null,

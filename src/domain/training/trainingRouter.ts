@@ -41,7 +41,7 @@ import { mergeGoalNeeds } from '../items/consumption';
 import { isReusable } from '../items/reusable';
 import { heldFood } from '../player/foodStock';
 import { FOODS } from '../../data/threats';
-import { GOALS, goalOf, losesTo, netCoinsPerHour, opensLater, practicalRate, rateLow, stays, withHourlyCoins } from './trainingGoal';
+import { GOALS, goalOf, losesTo, netCoinsPerHour, opensLater, practicalRate, rateLow, stays, withHourlyCoins, withinGoalPace } from './trainingGoal';
 export type Effort = 'afk' | 'low' | 'medium' | 'high';
 export type MethodCost = 'free' | 'profit' | 'cost';
 export type Risk = 'none' | 'low' | 'high';
@@ -792,7 +792,7 @@ function pathFresh(skill: string, level: number, target: number, input: AdviceIn
       if (meleeKit.length) projectedState = projected = forecastEquipment(projected, meleeKit, input.prices!);
       const methods = lv === level && projected === base ? input.methods ?? trainingMethods : personalize(raw, skill, atLevel(projected, skill, lv), input.prices, input.restriction);
       // Advance only this skill in a copy; other skill/quest entry proofs must still be satisfied.
-      views = methodsFor(skill, methods).filter((m) => !m.manualSetup && recommendedAt(m, lv, input.mode)).map((m) => viewMethod(m, projected, input.prices)).filter((v) => v.status !== 'LOCKED');
+      views = withinGoalPace(goalOf(input.state, skill), methodsFor(skill, methods).filter((m) => !m.manualSetup && recommendedAt(m, lv, input.mode)).map((m) => viewMethod(m, projected, input.prices)).filter((v) => v.status !== 'LOCKED'), coinsPerMinute(input.prices, input.mode));
       needsFor.id = undefined;
     }
     const cands = [...views];
@@ -916,7 +916,7 @@ export function adviseTraining(input0: AdviceInput): TrainingAdvice {
   const coinRate = coinsPerMinute(input.prices, input.mode);
   const goal = goalOf(state, skill);
   const cmp = compare(Math.max(0, xpForLevel(target) - xpNow0), level, coinRate, goal);
-  const views = methodsFor(skill, methods).filter((m) => recommendedAt(m, level, mode) || (m.id === input0.followed && availableAt(m, level, mode))).map((m) => viewMethod(m, state, input.prices)).sort(cmp);
+  const views = withinGoalPace(goal, methodsFor(skill, methods).filter((m) => recommendedAt(m, level, mode) || (m.id === input0.followed && availableAt(m, level, mode))).map((m) => viewMethod(m, state, input.prices)), coinRate).sort(cmp);
   const top = views.find((v) => !v.method.manualSetup && v.status !== 'LOCKED') ?? null;
   // S04: the method the game already follows stays the pick while it is ready and the new top is not materially faster
   // (the planner's switch threshold), so a level-up never flips the plan for a marginal gain.
