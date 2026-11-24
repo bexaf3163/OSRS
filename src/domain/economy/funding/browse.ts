@@ -181,11 +181,18 @@ export function moneyList(
   opts: { methods?: readonly FundingMethod[]; activeId?: string | null } = {},
 ): MoneyList {
   const short = a && a.state === 'SHORT' && a.gap !== null && a.gap > 0 ? a : null;
-  const target = short ? Math.max(1, short.gap! - short.budget.surplus.net) : BROWSE_TARGET;
+  let target = short ? Math.max(1, short.gap! - short.budget.surplus.net) : BROWSE_TARGET;
   const cash = a ? a.budget.spendable : base.snap.liquid.amount;
   // Free-to-play shows only free-to-play content: Members methods are left out, not listed as locked.
-  const evals = (opts.methods ?? METHODS).filter((m) => m.access !== 'members' || base.snap.members)
-    .map((m) => evaluate(m, { ...base, cash, mode: 'earn', target }));
+  const methods = (opts.methods ?? METHODS).filter((m) => m.access !== 'members' || base.snap.members);
+  const judge = (coins: number) => methods.map((m) => evaluate(m, { ...base, cash, mode: 'earn', target: coins }));
+  let evals = judge(target);
+  // Browsing ranks for an hour of the best steady method, not 10,000 coins: at 10,000 the walk decides, and beginner methods
+  // nearby won over ones paying several times more an hour (garlic and air talismans at Crafting 57, Combat 51).
+  if (!short) {
+    const hour = Math.max(0, ...rankMethods(evals, { activeId: opts.activeId ?? null }).list.map((e) => e.netPerHour?.typical ?? 0));
+    if (hour > target) evals = judge(target = Number(hour.toPrecision(2)));
+  }
   return {
     evals, ranking: rankMethods(evals, { activeId: opts.activeId ?? null }),
     rankedFor: { coins: target, stepId: short ? short.stepId : null }, shortfall: short ? { stepId: short.stepId, coins: short.gap! } : null,

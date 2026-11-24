@@ -23,11 +23,11 @@ import { xpForLevel } from '../player/xp';
 import { rangedEquipment, rangedNeeds, RANGED_WATCH, withArrow } from '../combat/rangedLoadout';
 import { SPELLS, STAFFS, isCombatSpell, strikeRecipe, superheatNeeds } from '../combat/magicPlan';
 import { STYLE_GEAR } from '../combat/styleGear';
-import { PROCESSING } from './processingRates';
+import { heldProducts, PROCESSING } from './processingRates';
 import { canWear, gearData, gearPieceByName, levelsOf, type Levels } from '../combat/gearAdvisor';
 import { meleeUnlocks, plannedMeleeKit } from './meleeKit';
 import { EARN_CAP, pickKit } from '../combat/kitPick';
-import { methodRate, rateKeyOf, type ItemScope, type RateSpot, type ModelRate } from './methodRates';
+import { methodRate, rateKeyOf, type ItemScope, type RateSpot, type ModelRate, type Market } from './methodRates';
 import { combatUpgrades, meleeUnsafe, rangedGoalNeeds } from '../combat/combatRates';
 import type { PriceView } from '../market/quotes';
 import { coinsPerMinute, coinTimeShare } from '../market/lootValue';
@@ -207,19 +207,19 @@ export interface MethodView {
 
 // The path re-views the same methods for every level copy of one state; the view reads only what rateKeyOf keys, plus the connection.
 const viewCache = new WeakMap<TrainingMethod, Map<string, MethodView>>();
-export function viewMethod(m: TrainingMethod, state: PlayerState, prices?: PriceView | null): MethodView {
+export function viewMethod(m: TrainingMethod, state: PlayerState, prices?: PriceView | null, restriction?: Market['restriction']): MethodView {
   const cache = viewCache.get(m) ?? new Map<string, MethodView>();
   if (!viewCache.has(m)) viewCache.set(m, cache);
-  const key = `${rateKeyOf(state)}|${state.connected ? 1 : 0}|${priceKeyOf(prices)}`;
+  const key = `${rateKeyOf(state)}|${state.connected ? 1 : 0}|${priceKeyOf(prices)}|${restriction ?? '-'}`;
   let out = cache.get(key);
   if (!out) {
     if (cache.size > 50) cache.clear();
-    cache.set(key, out = viewFresh(m, state, prices));
+    cache.set(key, out = viewFresh(m, state, prices, restriction));
   }
   return out;
 }
 
-function viewFresh(m: TrainingMethod, state: PlayerState, prices?: PriceView | null): MethodView {
+function viewFresh(m: TrainingMethod, state: PlayerState, prices?: PriceView | null, restriction?: Market['restriction']): MethodView {
   if (m.kit === 'strike-spell' && m.npcNames?.length) m = { ...m, name: `${strikeRecipe(state).spell.name} on ${m.npcNames.join(' / ')}` };
   const declared = methodNeeds(m, state, prices);
   const materials = allocateMaterialStock(state, declared.flatMap((n, index) => n.type === 'item'
@@ -236,7 +236,9 @@ function viewFresh(m: TrainingMethod, state: PlayerState, prices?: PriceView | n
   const locked = needs.filter((n) => (n.kind === 'quest' || n.kind === 'skill') && n.state === 'MISSING');
   const prep = needs.filter((n) => (n.kind === 'item' || n.kind === 'tool') && (n.state === 'MISSING' || n.state === 'PARTIAL' || n.state === 'BANK'));
   const unchecked = needs.filter((n) => n.state === 'UNKNOWN');
-  const cash = coinsOf(state).total;
+  // A processing loop is funded by selling what it made: its own products held count as coins for its next batch.
+  const coins = coinsOf(state).total;
+  const cash = coins === null ? null : coins + heldProducts(m.id, state, prices, restriction).reduce((sum, p) => sum + p.value, 0);
   // Reuse the allocated readiness result; unpriced forecasts do not need a second ownership pass.
   const covered = needs.every(n => (n.kind !== 'item' && n.kind !== 'tool') || n.state === 'OK' || n.state === 'BANK');
   const kit = covered ? 0 : cash !== null && prices ? requirementCost(declared.map(n => methodRequirement(n, state)), state, prices) : null;
@@ -801,7 +803,7 @@ function pathFresh(skill: string, level: number, target: number, input: AdviceIn
       if (meleeKit.length) projectedState = projected = forecastEquipment(projected, meleeKit, input.prices!);
       const methods = lv === level && projected === base ? input.methods ?? trainingMethods : personalize(raw, skill, atLevel(projected, skill, lv), input.prices, input.restriction);
       // Advance only this skill in a copy; other skill/quest entry proofs must still be satisfied.
-      views = withinGoalPace(goalOf(input.state, skill), methodsFor(skill, methods).filter((m) => !m.manualSetup && recommendedAt(m, lv, input.mode)).map((m) => viewMethod(m, projected, input.prices)).filter((v) => v.status !== 'LOCKED'), coinsPerMinute(input.prices, input.mode));
+      views = withinGoalPace(goalOf(input.state, skill), methodsFor(skill, methods).filter((m) => !m.manualSetup && recommendedAt(m, lv, input.mode)).map((m) => viewMethod(m, projected, input.prices, input.restriction)).filter((v) => v.status !== 'LOCKED'), coinsPerMinute(input.prices, input.mode));
       needsFor.id = undefined;
     }
     const cands = [...views];
@@ -925,7 +927,7 @@ export function adviseTraining(input0: AdviceInput): TrainingAdvice {
   const coinRate = coinsPerMinute(input.prices, input.mode);
   const goal = goalOf(state, skill);
   const cmp = compare(Math.max(0, xpForLevel(target) - xpNow0), level, coinRate, goal);
-  const views = withinGoalPace(goal, methodsFor(skill, methods).filter((m) => recommendedAt(m, level, mode) || (m.id === input0.followed && availableAt(m, level, mode))).map((m) => viewMethod(m, state, input.prices)), coinRate).sort(cmp);
+  const views = withinGoalPace(goal, methodsFor(skill, methods).filter((m) => recommendedAt(m, level, mode) || (m.id === input0.followed && availableAt(m, level, mode))).map((m) => viewMethod(m, state, input.prices, input.restriction)), coinRate).sort(cmp);
   const top = views.find((v) => !v.method.manualSetup && v.status !== 'LOCKED') ?? null;
   // S04: the method the game already follows stays the pick while it is ready and the new top is not materially faster
   // (the planner's switch threshold), so a level-up never flips the plan for a marginal gain.

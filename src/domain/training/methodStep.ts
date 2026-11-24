@@ -33,6 +33,11 @@ export type TrainingPick = string | {
 
 /** The method a pick names, whatever its form. */
 export const pickedMethodId = (pick: TrainingPick): string => (typeof pick === 'string' ? pick : pick.methodId);
+/** The training method a skill step follows, from its phase key; null for any other step. */
+export function trainingMethodIdOf(step: Pick<Step, 'trainingPhase'>): string | null {
+  const id = step.trainingPhase ? (JSON.parse(step.trainingPhase) as unknown[])[0] : null;
+  return typeof id === 'string' ? id : null;
+}
 
 interface RawMethod { id: string; skills: string[]; name: string; members?: boolean; from: number; to: number | null; needs?: MethodNeed[]; place?: string; objectNames?: string[]; npcNames?: string[]; where: string; note?: string }
 

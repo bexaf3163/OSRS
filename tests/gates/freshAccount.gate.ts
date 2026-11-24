@@ -16,7 +16,7 @@ import { emptyProgress } from '../../src/domain/persistence/progress';
 import { questCatalogue } from '../../src/domain/planning/catalogue';
 import type { CommittedDecision, PlanningSnapshot } from '../../src/domain/planning/contracts';
 import { runtimeDecision, type RuntimePlanInput } from '../../src/domain/planning/runtime';
-import { bestEarnRate, earnAction, richerEarn, trainingEarnRate, type EarnRate } from '../../src/domain/planning/earn';
+import { bestEarnRate, earnAction, productSaleRate, richerEarn, trainingEarnRate, type EarnRate } from '../../src/domain/planning/earn';
 import { gearData, gearPieceByName } from '../../src/domain/combat/gearAdvisor';
 import { nameKey } from '../../src/domain/items/itemKey';
 import { combatLevel, levelForXp, xpForLevel } from '../../src/domain/player/xp';
@@ -121,7 +121,7 @@ function play(mode: GameMode) {
       bankRead: { kind: 'current' }, xp: Object.fromEntries(SKILLS.map(s => [s, { known: true, value: xp[s], source: 'game' }])),
       manual: { 'Shield of Arrav:partner': true, "Heroes' Quest:partner": true }, questPoints: { known: true, value: qp, source: 'game' },
       quests: Object.fromEntries(Object.entries(quests).map(([id, q]) => [id, { ...q, source: 'game' }])) } as unknown as PlanningSnapshot;
-    const earn: RuntimePlanInput['earn'] = (step, gp, _budget, goalId) => earnAction(snapshot, step, goalId, gp, mode === 'members' ? ranked(stats, done, coins, player) : rate);
+    const earn: RuntimePlanInput['earn'] = (step, gp, _budget, goalId) => earnAction(snapshot, step, goalId, gp, richerEarn(mode === 'members' ? ranked(stats, done, coins, player) : rate, productSaleRate(player, step, gp, { prices })));
     const started = performance.now();
     const d = runtimeDecision({ snapshot, intent: { kind: 'auto' }, previous, progress: emptyProgress(), prices, steps,
       detail: id => itemById.get(id), ironman: false, earn, walk });

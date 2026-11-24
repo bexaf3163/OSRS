@@ -29,11 +29,14 @@ describe('the Money list is the coin card\'s judgement, not a second one', () =>
     expect(list.evals.some((e) => e.method.access === 'members')).toBe(false);
   });
 
-  it('nothing short: ranked for 10,000 more coins out of the coins in hand, no shortfall offered', () => {
+  it('nothing short: ranked for an hour of the best steady method out of the coins in hand, no shortfall offered', () => {
     const s = scenario(market(), { bagCoins: 5000, bankCoins: 20000 });
     expect(s.assessment.state).toBe('COVERED');
     const list = moneyList(s.base, s.assessment);
-    expect(list.rankedFor).toEqual({ coins: BROWSE_TARGET, stepId: null });
+    // At 10,000 coins the walk decided, and nearby beginner methods beat ones paying several times more an hour.
+    const hour = Math.max(...list.ranking.list.map((e) => e.netPerHour?.typical ?? 0));
+    expect(list.rankedFor).toEqual({ coins: Math.max(BROWSE_TARGET, Number(hour.toPrecision(2))), stepId: null });
+    expect(list.rankedFor.coins).toBeGreaterThan(BROWSE_TARGET);
     expect(list.shortfall).toBeNull();
     expect(list.ranking.best).not.toBeNull();
   });

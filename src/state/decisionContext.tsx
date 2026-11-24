@@ -22,7 +22,7 @@ import { planningWindow } from '../domain/planning/window';
 import type { CommittedDecision } from '../domain/planning/contracts';
 import { DecisionCtx, PlanWindowCtx, decisionStep, type DecisionValue } from './decision';
 import type { Step } from '../types';
-import { bestEarnRate, earnAction, gatherTime, levelledEarnRates, richerEarn, trainingEarnRate, type EarnRate, type LevelledRate, type SupplyBase } from '../domain/planning/earn';
+import { bestEarnRate, earnAction, gatherTime, productSaleRate, levelledEarnRates, richerEarn, trainingEarnRate, type EarnRate, type LevelledRate, type SupplyBase } from '../domain/planning/earn';
 import { liquidOf } from '../domain/economy/funding/snapshot';
 import { useEvalBaseFactory, useFunding, useSnapshotFactory } from './fundingContext';
 import { levelForXp } from '../domain/player/xp';
@@ -110,7 +110,8 @@ export function DecisionProvider({ children }: { children: ReactNode }) {
       snapshot, intent: readOnly ? null : intent, previous: previous.current, progress, prices, steps,
       detail: id => itemById.get(id), ironman: bridge.accountType === 'ironman', restriction: trade.state, walk, teleports, gather,
       earn: (step, gp, budget, goalId, train) => budget.liquid.amount === null || !budget.liquid.complete ? null
-        : earnAction(snapshot, step, goalId, Math.max(0, gp - budget.liquid.amount), rate(), train ? { levelled: levelled(), train } : undefined),
+        : earnAction(snapshot, step, goalId, Math.max(0, gp - budget.liquid.amount),
+          richerEarn(rate(), productSaleRate(snapshot.player, step, Math.max(0, gp - budget.liquid.amount), { prices, restriction: trade.state })), train ? { levelled: levelled(), train } : undefined),
     });
     const current = decisionStep(decision, steps);
     return {

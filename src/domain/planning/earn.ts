@@ -13,6 +13,8 @@ import { liquidOf } from '../economy/funding/snapshot';
 import { trainingEarners } from '../training/trackedTraining';
 import type { PlayerState } from '../player/playerState';
 import type { Market } from '../training/methodRates';
+import { heldProducts } from '../training/processingRates';
+import { trainingMethodIdOf } from '../training/methodStep';
 
 export interface EarnRate { methodId: string; title: string; netPerHour: Range3; /** Where the figure comes from when not the Money ranking. */ source?: string }
 
@@ -114,4 +116,20 @@ export function levelledEarnRates(base: SupplyBase, cash: number | null): Levell
     const raised = evaluate(m, { ...ctx, snap: { ...base.snap, level: (s: string) => (s === skill ? level : base.snap.level(s)) } });
     return raised.eligible && raised.netPerHour && raised.netPerHour.slow > 0 ? [{ methodId: m.id, title: m.title, netPerHour: raised.netPerHour, skill, level }] : [];
   });
+}
+
+/** Minutes for a sale at the exchange. shortcut: fixed, replace with the walk to the Grand Exchange once the earn step has a place. */
+const SALE_MINUTES = 5;
+
+/**
+ * A training step short of coins first sells what its own processing loop made (the 220 diamond necklaces in the bank) when
+ * that covers the shortfall: a trip to the exchange, not hours of another method.
+ */
+export function productSaleRate(player: PlayerState, step: Step, requiredGp: number, market: Market): EarnRate | null {
+  const methodId = trainingMethodIdOf(step);
+  const held = methodId ? heldProducts(methodId, player, market.prices, market.restriction) : [];
+  const value = held.reduce((sum, p) => sum + p.value, 0);
+  if (!held.length || value < requiredGp) return null;
+  const perHour = value * 60 / SALE_MINUTES;
+  return { methodId: `sell:${methodId}`, title: `Sell ${held.map((p) => `${p.count} ${p.name}`).join(', ')}`, netPerHour: { fast: perHour, typical: perHour, slow: perHour }, source: 'heldProducts' };
 }

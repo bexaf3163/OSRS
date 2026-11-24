@@ -301,3 +301,19 @@ export function processPace(product: string, near: Point, state: PlayerState, re
   const slow = fast * (1 + MARGIN);
   return { seconds: { fast, typical: (fast + slow) / 2, slow }, recipe: r.output!.name, station: station?.label ?? null };
 }
+
+/**
+ * A processing loop sells what it made to fund its next batch: its own products held (bag and bank) at their sale value after tax.
+ * A product the same skill's recipes use (bronze bars for smithing) is the next material, not something to sell.
+ */
+export function heldProducts(methodId: string, state: PlayerState, prices: PriceView | null | undefined, restriction?: Market['restriction']): { name: string; count: number; value: number }[] {
+  const recipes = (PROCESSING.methods[methodId] ?? []).flatMap((id) => PROCESSING.recipes.find((r) => r.id === id) ?? []);
+  const skills = new Set(recipes.map((r) => r.skill));
+  const materials = new Set(PROCESSING.recipes.filter((r) => skills.has(r.skill)).flatMap((r) => r.inputs.map((i) => i.name)));
+  const names = new Set(recipes.flatMap((r) => r.output && !materials.has(r.output.name) ? [r.output.name] : []));
+  return [...names].flatMap((name) => {
+    const count = heldOf(state, name).total ?? 0;
+    const each = count > 0 ? dropValue(name, prices, restriction) : null;
+    return each ? [{ name, count, value: each * count }] : [];
+  });
+}
