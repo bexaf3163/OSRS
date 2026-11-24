@@ -14,7 +14,7 @@ import { AXES, PICKAXES } from '../items/toolTiers';
 import type { MethodNeed } from './trainingRouter';
 import { RANGED_WATCH } from '../combat/rangedLoadout';
 import { STRIKE_WATCH, SUPERHEAT_WATCH } from '../combat/magicPlan';
-import { healsOf } from '../combat/combatEstimate';
+import { endlessFoe, healsOf } from '../combat/combatEstimate';
 
 /** The stored pick when the skill's goal is already reached: no tool of that skill is asked for. */
 export const GOAL_REACHED = 'goal-reached';
@@ -181,7 +181,8 @@ export function withTrainingMethod(step: Step, pick: TrainingPick | undefined): 
     ...(typeof pick !== 'string' && pick.warning ? { warning: [step.warning, pick.warning].filter(Boolean).join(' ') } : {}),
     // The static climb contains future places. Once a method is selected, map and plugin use only its point.
     mapLocation: at ?? undefined, resourceSpots: at ? [at] : [],
-    ...(['attack', 'strength', 'defence'].includes(goal.skill) && m.npcNames?.length ? { foes: m.npcNames } : {}),
+    // A foe that never dies (the Gemstone Crab) is no fight to prepare: no kills, food or trips.
+    ...(['attack', 'strength', 'defence'].includes(goal.skill) && m.npcNames?.length && !endlessFoe(m.npcNames[0]) ? { foes: m.npcNames } : {}),
     ...(step.inGame ? { inGame: {
       ...step.inGame,
       worldPoint: at ?? undefined, groundTiles: at ? [at] : [], pathWaypoints: chosen?.waypoints?.length ? chosen.waypoints.map((p) => ({ x: p.x, y: p.y, plane: p.plane })) : undefined,

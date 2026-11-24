@@ -6,9 +6,9 @@ import { SKILL_NAMES, type SkillName } from './skillTrack';
 import type { TrackedSkill } from './skillTrack';
 import { freeOnlyOf, trackedTrainingContext } from './skillTrack';
 import { f2pAdviceFor, f2pPhaseOf, F2P_ORDER } from './f2pSkillAdvice';
-import { adviseTraining, methodsFor, priceKeyOf, trainingItemScope } from './trainingRouter';
+import { adviseTraining, methodsFor, personalize, priceKeyOf, trainingItemScope, trainingMethods, viewMethod, type TimeEstimate, type TrainingAdvice, type TrainingMethod } from './trainingRouter';
 import { pickTraining } from './methodPick';
-import type { TimeEstimate, TrainingAdvice } from './trainingRouter';
+import { netCoinsPerHour } from './trainingGoal';
 import { withTrainingMethod } from './methodStep';
 import { scopedMemo, scopedRateKeyOf, type Market } from './methodRates';
 import { endlessFoe } from '../combat/combatEstimate';
@@ -103,6 +103,25 @@ export function membersCheckpoints(observed: PlayerState, needs: ReadonlyMap<str
   });
   const earns = (r: SkillCheckpoint) => (r.coins?.[0] ?? -1) >= 0;
   return [...rows.filter(earns), ...rows.filter((r) => !earns(r))];
+}
+
+/**
+ * Training methods that earn coins for this character now, most coins an hour first (owner, 2026-11-24: the Money page lists them beside the
+ * money guides, because crafting or enchanting can out-earn the guides at the same levels). One row per method, under its first open skill.
+ */
+export function trainingEarners(observed: PlayerState, market: Market = {}, limit = 8): { skill: SkillName; method: TrainingMethod; net: number }[] {
+  const rows = new Map<string, { skill: SkillName; method: TrainingMethod; net: number }>();
+  for (const skill of SKILL_NAMES) {
+    const level = levelOf(observed, skill);
+    if (level === undefined || rows.size > 200) continue;
+    for (const m of personalize(trainingMethods, skill, observed, market.prices, market.restriction)) {
+      const net = m.coinsUnknown ? null : m.marketNetPerHour ?? netCoinsPerHour(m);
+      if (rows.has(m.id) || !m.skills.includes(skill) || m.kind !== 'method' || m.from > level || (m.members && observed.mode !== 'members') || net === null || net <= 0) continue;
+      if (viewMethod(m, observed, market.prices).status === 'LOCKED') continue;
+      rows.set(m.id, { skill, method: m, net });
+    }
+  }
+  return [...rows.values()].sort((a, b) => b.net - a.net).slice(0, limit);
 }
 
 export function nextAfterReached(tracked: TrackedSkill, rows: readonly SkillCheckpoint[], routeOpen: boolean): TrackedSkill | null {

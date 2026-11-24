@@ -25,6 +25,7 @@ import { Eyebrow, Page } from '../../ledger';
 import { hrefTo } from '../../domain/pages/pages';
 import { STORAGE_KEYS } from '../../domain/persistence/storageKeys';
 import { useDropAdvice } from '../../state/hooks/useDropAdvice';
+import { TrainingEarners } from './TrainingEarners';
 
 const gp = (n: number) => `${formatGp(Math.round(n))} gp`;
 
@@ -286,7 +287,7 @@ function MoneyBody({ step }: { step: Step }) {
           </p>
         </div>
       )}
-
+      <TrainingEarners />
     </div>
     </Page>
     <Page side="r" className="money-browse" label="Earning methods">

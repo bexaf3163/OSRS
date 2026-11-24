@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { cashFlow, f2pCheckpoints, membersCheckpoints, nextAfterReached, trackedTraining, type SkillCheckpoint } from './trackedTraining';
+import { cashFlow, f2pCheckpoints, membersCheckpoints, nextAfterReached, trackedTraining, trainingEarners, type SkillCheckpoint } from './trackedTraining';
 import { fakePrices } from '../../../tests/funding/helpers';
 import { readFileSync } from 'node:fs';
 import { F2P_SKILL_ADVICE } from './f2pSkillAdvice';
@@ -151,6 +151,19 @@ describe('the coin ledger and the Members earn-then-spend order', () => {
     expect(rows.map((r) => r.skill)).toEqual(['mining', 'prayer']);
     expect(rows[0].coins![0]).toBeGreaterThanOrEqual(0);
     expect(rows[1].coins![0]).toBeLessThan(0);
+  });
+});
+
+describe('training methods that earn coins, for the Money page', () => {
+  it('lists only methods open in the mode that earn, most coins an hour first', () => {
+    const prices = fakePrices(JSON.parse(readFileSync('tests/fixtures/gePrices.json', 'utf8')).prices);
+    const stats = { attack: 40, strength: 40, defence: 40, hitpoints: 40, ranged: 40, magic: 40, prayer: 40, crafting: 40, smithing: 40, cooking: 40, fishing: 40, mining: 40 };
+    const st = buildPlayerState({ mode: 'f2p', connected: true, stats, progress: emptyProgress(), questsDone: [],
+      gear: { equipment: [], inventory: [], coins: 0, bankCoins: 5_000_000 }, owned: { bankSeen: true, items: new Map() } });
+    const rows = trainingEarners(st, { prices });
+    expect(rows.length).toBeGreaterThan(2);
+    expect(rows.every((r) => r.net > 0 && !r.method.members)).toBe(true);
+    expect(rows.map((r) => r.net)).toEqual(rows.map((r) => r.net).sort((a, b) => b - a));
   });
 });
 
