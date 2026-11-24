@@ -1,7 +1,6 @@
 import type { GearPiece, PlayerStats, Step } from '../../../types';
 import type { GearState } from '../../../services/runeliteBridge';
 import { adviseGear, type GearAction } from '../../combat/gearAdvisor';
-import { EARN_CAP } from '../../combat/kitPick';
 import { gearMarketPrices } from '../../combat/gearAdvice';
 import { estimateStepFights, stepFightCount, stepFightNames, stepFightFoes } from '../../combat/fightEstimate';
 import type { FightEstimate } from '../../combat/fightEstimate';
@@ -112,15 +111,13 @@ export function encounterSetups(step: Step, snapshot: PlanningSnapshot, prices: 
     const source = a.alternatives.find(s => s.kind === 'shop');
     return source?.kind === 'shop' ? { ...a, source, cost: source.price + (source.toll ?? 0) } : null;
   };
-  const priced = (rows: GearAction[]) => free(rows).flatMap(a => { const c = eligible(a); return c && (c.how === 'wear' || c.cost !== null) ? [c] : []; });
-  const choices = priced(picked.choices);
+  const choices = free(picked.choices).flatMap(a => { const c = eligible(a); return c && (c.how === 'wear' || c.cost !== null) ? [c] : []; });
   // At most cheap/best/owned per slot, plus combined affordable and full kits. Preserve different safety/cost tradeoffs.
   const kits: GearAction[][] = [[]];
-  const slots = ['weapon', 'neck', 'body', 'legs', 'head', 'shield'];
-  const gain = (a: GearAction) => a.gain.kind === 'dps' ? a.gain.after.dps : a.gain.after;
-  for (const slot of slots) {
+  for (const slot of ['weapon', 'neck', 'body', 'legs', 'head', 'shield']) {
     const rows = choices.filter(a => a.slot === slot);
     if (!rows.length) continue;
+    const gain = (a: GearAction) => a.gain.kind === 'dps' ? a.gain.after.dps : a.gain.after;
     const best = [...rows].sort((a, b) => gain(b) - gain(a) || (a.cost ?? Infinity) - (b.cost ?? Infinity))[0];
     const cheap = [...rows].sort((a, b) => (a.cost ?? Infinity) - (b.cost ?? Infinity) || gain(b) - gain(a))[0];
     const owned = rows.filter(a => a.how === 'wear').sort((a, b) => gain(b) - gain(a))[0];
@@ -128,10 +125,6 @@ export function encounterSetups(step: Step, snapshot: PlanningSnapshot, prices: 
   }
   const allowed = (rows: GearAction[]) => free(rows).flatMap(a => { const c = eligible(a); return c ? [c] : []; });
   const fullKit = (a: typeof picked) => allowed([...a.actions, ...a.armour, ...a.goals].filter((row, i, all) => !all.slice(i + 1).some(b => b.slot === row.slot)));
-  // Price ladder for the training search below: the best piece per slot within 1M, 10M and 100M coins, from the cap the
-  // plan earns freely for (kitPick).
-  const caps = [1, 10, 100].map(k => k * EARN_CAP);
-  const within = (rows: GearAction[], cap: number) => slots.flatMap((slot) => rows.filter((a) => a.slot === slot && (a.cost ?? 0) <= cap).sort((a, b) => gain(b) - gain(a)).slice(0, 1));
   kits.push(allowed([...picked.actions, ...picked.armour]), fullKit(picked));
   const xp = Object.fromEntries(Object.entries(snapshot.xp).flatMap(([id, x]) => x.known ? [[id, x.value]] : []));
   const names = (kit: readonly GearAction[]) => kit.map(a => a.item.name).join(' + ');
@@ -176,27 +169,16 @@ export function encounterSetups(step: Step, snapshot: PlanningSnapshot, prices: 
         `Train ${targets.map(t => t.skill).join(', ')} to ${level}${kit.length ? `, then ${names(kit)}` : ''}`, targets, protection) : null;
     };
     const plain = safeTrainingLevel(step, stats, base, melee, xp);
-    // Price steps often give the same kit at a level (all of F2P from 100k up): forecast each level and kit once.
-    const tried = new Map<string, EncounterSetup | null>();
-    const unlocked = (level: number, cap: number) => {
-      const levelAdvice = advice(evenlyTrainedStats(stats, melee, level, xp));
-      const kit = cap === Infinity ? fullKit(levelAdvice) : within(priced(levelAdvice.choices), cap);
-      const key = `${level}|${kit.map(a => a.item.id).join(',')}`;
-      if (!tried.has(key)) tried.set(key, kit.length && !kit.some(a => a.source.kind === 'ge' && ironman !== false) ? even(level, wearing(base, kit.map(a => a.item)), kit) : null);
-      return tried.get(key)!;
+    const unlocked = (level: number) => {
+      const kit = fullKit(advice(evenlyTrainedStats(stats, melee, level, xp)));
+      return kit.length && !kit.some(a => a.source.kind === 'ge' && ironman !== false) ? even(level, wearing(base, kit.map(a => a.item)), kit) : null;
     };
-    // The lowest such level for every step of the price ladder: the time comparison weighs earning a dear kit against more training.
-    // A step runs only where the full kit holds a dearer piece, so free-to-play (all under 1M) searches the full kit alone.
-    const found: EncounterSetup[] = [], top = fullKit(advice(evenlyTrainedStats(stats, melee, plain ?? 99, xp)));
-    for (const cap of [...caps.filter(cap => top.some(a => (a.cost ?? 0) > cap)), Infinity]) {
-      let low = Math.min(...melee.map(skill => stats[skill])) + 1, high = plain ?? 99, row = unlocked(high, cap);
-      while (row && low < high) {
-        const mid = Math.floor((low + high) / 2), next = unlocked(mid, cap);
-        if (next) { high = mid; row = next; } else low = mid + 1;
-      }
-      if (row && !found.some(r => r.label === row!.label)) found.push(row);
+    let low = Math.min(...melee.map(skill => stats[skill])) + 1, high = plain ?? 99, found = unlocked(high);
+    while (found && low < high) {
+      const mid = Math.floor((low + high) / 2), row = unlocked(mid);
+      if (row) { high = mid; found = row; } else low = mid + 1;
     }
-    for (const row of [plain ? even(plain, base, []) : null, ...found]) if (row) result.push(row);
+    for (const row of [plain ? even(plain, base, []) : null, found]) if (row) result.push(row);
   }
   // Relevant wearable unlocks: train only the skill the existing advisor says is missing, then re-evaluate that kit.
   for (const lock of picked.locked) {

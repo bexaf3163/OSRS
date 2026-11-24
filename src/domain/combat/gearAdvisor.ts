@@ -19,6 +19,7 @@ import type { GearState, NavTargetPayload } from '../../services/runeliteBridge'
 import { gearData, gearById, gearByName, shootsOnly } from '../items/gearRegistry';
 import { canWear, missingRequirements, REQ_SKILLS } from '../items/gearRequirements';
 import type { MissingRequirement } from '../items/gearRequirements';
+import { EARN_CAP } from './kitPick';
 export { gearData, gearById, gearPieceByName, shootsOnly } from '../items/gearRegistry';
 export { canWear, missingRequirements } from '../items/gearRequirements';
 export type { MissingRequirement } from '../items/gearRequirements';
@@ -609,7 +610,10 @@ export function adviseGear(input: AdvisorInput): GearAdvice {
   // A purchase must be noticeably better than what can be worn for free.
   for (const slot of order) {
     const worn = wearBest.get(slot);
-    const buys = doable.filter((c) => c.slot === slot && c.how === 'buy' && (!worn || better(c, worn)));
+    // A two-handed weapon, bought now or saved for, takes the shield slot.
+    if (slot === 'shield' && [...actions, ...goals].some((a) => a.slot === 'weapon' && a.item.twoHanded)) continue;
+    // Saved up for only up to EARN_CAP, as plans earn (kitPick): a dearer piece waits until the coins cover it.
+    const buys = doable.filter((c) => c.slot === slot && c.how === 'buy' && (!worn || better(c, worn)) && (c.cost ?? 0) <= Math.max(EARN_CAP, total === null ? 0 : left));
     if (!buys.length) continue;
     const top = choose(buys);
     // "Missing" — from the money to the purchase in this slot: a cheap sword now does not make the goal more expensive.
