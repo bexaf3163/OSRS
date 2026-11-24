@@ -34,7 +34,7 @@ export type TrainingPick = string | {
 /** The method a pick names, whatever its form. */
 export const pickedMethodId = (pick: TrainingPick): string => (typeof pick === 'string' ? pick : pick.methodId);
 
-interface RawMethod { id: string; skills: string[]; name: string; from: number; to: number | null; needs?: MethodNeed[]; place?: string; objectNames?: string[]; npcNames?: string[]; where: string; note?: string }
+interface RawMethod { id: string; skills: string[]; name: string; members?: boolean; from: number; to: number | null; needs?: MethodNeed[]; place?: string; objectNames?: string[]; npcNames?: string[]; where: string; note?: string }
 
 const RAW: RawMethod[] = (methodsJson as unknown as { methods: (Omit<RawMethod, 'skills'> & { skill: string | string[] })[] }).methods
   .map((m) => ({ ...m, skills: Array.isArray(m.skill) ? m.skill : [m.skill] }));
@@ -76,7 +76,7 @@ export function methodToolNames(step: Pick<Step, 'followsMethod' | 'inGame' | 'b
   if (skills.includes('ranged')) for (const name of RANGED_WATCH) names.add(name);
   if (skills.includes('magic')) for (const name of SUPERHEAT_WATCH) names.add(name);
   if (skills.includes('magic')) for (const name of STRIKE_WATCH) names.add(name);
-  for (const m of RAW) if (m.skills.some(skill => skills.includes(skill))) {
+  for (const m of RAW) if (m.skills.some(skill => skills.includes(skill)) && !(step.bondBranch && m.members)) {
     for (const need of m.needs ?? []) for (const name of needNames(need)) names.add(name);
     // Model-selected recipes can declare supplies absent from the broad catalogue row.
     for (const id of PROCESSING.methods[m.id] ?? []) {

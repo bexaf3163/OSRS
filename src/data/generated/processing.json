@@ -1811,6 +1811,132 @@
       "source": "https://oldschool.runescape.wiki/w/Dagannoth_bones"
     },
     {
+      "id": "chaos-bones",
+      "skill": "prayer",
+      "level": 1,
+      "xp": 31.5,
+      "ticks": 3,
+      "perHour": 1000,
+      "fee": 50,
+      "facility": null,
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Bones",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": null,
+      "members": true,
+      "source": "https://oldschool.runescape.wiki/w/Bones"
+    },
+    {
+      "id": "chaos-big-bones",
+      "skill": "prayer",
+      "level": 1,
+      "xp": 105,
+      "ticks": 3,
+      "perHour": 1000,
+      "fee": 50,
+      "facility": null,
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Big bones",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": null,
+      "members": true,
+      "source": "https://oldschool.runescape.wiki/w/Big_bones"
+    },
+    {
+      "id": "chaos-babydragon-bones",
+      "skill": "prayer",
+      "level": 1,
+      "xp": 210,
+      "ticks": 3,
+      "perHour": 1000,
+      "fee": 50,
+      "facility": null,
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Babydragon bones",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": null,
+      "members": true,
+      "source": "https://oldschool.runescape.wiki/w/Babydragon_bones"
+    },
+    {
+      "id": "chaos-dragon-bones",
+      "skill": "prayer",
+      "level": 1,
+      "xp": 504,
+      "ticks": 3,
+      "perHour": 1000,
+      "fee": 50,
+      "facility": null,
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Dragon bones",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": null,
+      "members": true,
+      "source": "https://oldschool.runescape.wiki/w/Dragon_bones"
+    },
+    {
+      "id": "chaos-wyvern-bones",
+      "skill": "prayer",
+      "level": 1,
+      "xp": 504,
+      "ticks": 3,
+      "perHour": 1000,
+      "fee": 50,
+      "facility": null,
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Wyvern bones",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": null,
+      "members": true,
+      "source": "https://oldschool.runescape.wiki/w/Wyvern_bones"
+    },
+    {
+      "id": "chaos-dagannoth-bones",
+      "skill": "prayer",
+      "level": 1,
+      "xp": 875,
+      "ticks": 3,
+      "perHour": 1000,
+      "fee": 50,
+      "facility": null,
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Dagannoth bones",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": null,
+      "members": true,
+      "source": "https://oldschool.runescape.wiki/w/Dagannoth_bones"
+    },
+    {
       "id": "enchant-sapphire-amulet",
       "skill": "magic",
       "level": 7,
@@ -4464,6 +4590,14 @@
       "offer-dragon-bones",
       "offer-wyvern-bones",
       "offer-dagannoth-bones"
+    ],
+    "pr-chaos": [
+      "chaos-bones",
+      "chaos-big-bones",
+      "chaos-babydragon-bones",
+      "chaos-dragon-bones",
+      "chaos-wyvern-bones",
+      "chaos-dagannoth-bones"
     ]
   }
 }

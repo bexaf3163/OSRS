@@ -22,7 +22,9 @@ interface StationDef { objectName?: string; kind: Kind; page: string; row?: stri
   listed?: string }
 interface TickEvidence { page: string; evidence: string; ticks: number }
 /** A house-party gilded altar: the guide's sentences for the XP bonus, the hourly pace (bank trips included) and the unnoting fee. */
-interface AltarDef { page: string; bonus: string; percent: number; pace: string; perHour: number; fee: string; coins: number }
+interface AltarDef { page: string; bonus: string; percent: number; pace: string; perHour: number; fee: string; coins: number;
+  /** The guide's sentence for the share of offerings not consumed (the Chaos altar): each used bone then gives its XP 1 / (1 - share) times. */
+  saved?: { evidence: string; percent: number } }
 interface RecipeDef { id: string; page: string; skill: string; facility: Kind | null; members?: boolean; /** Lit with a tinderbox (Firemaking): read from the log's {{Firemaking info}}. */ light?: boolean;
   consume?: { level: number; xp: number; xpEvidence: string; action: TickEvidence; samePace?: { page: string; evidence: string }; altar?: AltarDef };
   spell?: { page: string; materialPage: string; successEvidence: string; batchSize: number };
@@ -198,13 +200,16 @@ for (const d of defs.recipes) {
     // Ashes: the Wiki times scattering only alongside burying (the same pace), so the burying line carries the ticks.
     const paced = !c.samePace || (await wikitext(c.samePace.page)).includes(c.samePace.evidence);
       const guide = c.altar ? plain(await page(c.altar.page)) : '';
-      const altarOk = !c.altar || [[c.altar.bonus, `${c.altar.percent}%`], [c.altar.pace, c.altar.perHour.toLocaleString('en-US')], [c.altar.fee, `${c.altar.coins} coins`]]
+      const altarOk = !c.altar || [[c.altar.bonus, `${c.altar.percent}%`], [c.altar.pace, c.altar.perHour.toLocaleString('en-US')], [c.altar.fee, `${c.altar.coins} coins`],
+        ...(c.altar.saved ? [[c.altar.saved.evidence, `${c.altar.saved.percent}%`]] : [])]
         .every(([line, value]) => guide.includes(line) && line.includes(value));
+      // Offerings not consumed: the hourly pace counts offerings, the recipe counts the bones used.
+      const used = 1 - (c.altar?.saved?.percent ?? 0) / 100;
     if (!item || !text.includes(c.xpEvidence) || !xpMatch || Number(xpMatch[1]) !== c.xp || d.skill !== 'prayer'
       || !action || !paced || !altarOk || !action.includes(`${c.action.ticks} ticks per bone`) || !(c.level > 0) || !(c.xp > 0) || !(c.action.ticks > 0)) {
       fail(d.id, 'consumption XP/action evidence does not match the source'); continue;
     }
-    recipes.push({ id: d.id, skill: d.skill, level: c.level, xp: c.xp * (c.altar?.percent ?? 100) / 100, ticks: c.action.ticks, ...(c.altar ? { perHour: c.altar.perHour, fee: c.altar.coins } : {}), facility: null, tools: [],
+    recipes.push({ id: d.id, skill: d.skill, level: c.level, xp: c.xp * (c.altar?.percent ?? 100) / 100 / used, ticks: c.action.ticks, ...(c.altar ? { perHour: c.altar.perHour * used, fee: c.altar.coins } : {}), facility: null, tools: [],
       inputs: [{ name: plain(d.page), qty: 1, stacks: await stacks(d.page) }], output: null, members: !!c.altar || /^yes$/i.test(item.members ?? ''),
       source: `https://oldschool.runescape.wiki/w/${encodeURIComponent(d.page.replace(/ /g, '_'))}` });
     continue;

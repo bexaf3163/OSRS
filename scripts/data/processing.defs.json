@@ -637,6 +637,12 @@
         }
       }
     },
+    { "id": "chaos-bones", "page": "Bones", "skill": "prayer", "facility": null, "members": true, "consume": { "level": 1, "xp": 4.5, "xpEvidence": "Bones give 4.5 [[Prayer]] experience when buried.", "action": { "page": "Game tick/Action lengths", "evidence": "[[Player-owned house]] [[Altar space|altar]] offerings:", "ticks": 3 }, "altar": { "page": "Pay-to-play Prayer training", "bonus": "The altar grants the same 350% experience per bone as the gilded altar", "percent": 350, "pace": "2,000 bones/hour offered at the Chaos altar", "perHour": 2000, "fee": "outside of the Southern wall of the temple for 50 coins per note", "coins": 50, "saved": { "evidence": "has an additional 50% chance for each offering to not be consumed", "percent": 50 } } } },
+    { "id": "chaos-big-bones", "page": "Big bones", "skill": "prayer", "facility": null, "members": true, "consume": { "level": 1, "xp": 15, "xpEvidence": "Big bones give 15 [[Prayer]] experience when buried.", "action": { "page": "Game tick/Action lengths", "evidence": "[[Player-owned house]] [[Altar space|altar]] offerings:", "ticks": 3 }, "altar": { "page": "Pay-to-play Prayer training", "bonus": "The altar grants the same 350% experience per bone as the gilded altar", "percent": 350, "pace": "2,000 bones/hour offered at the Chaos altar", "perHour": 2000, "fee": "outside of the Southern wall of the temple for 50 coins per note", "coins": 50, "saved": { "evidence": "has an additional 50% chance for each offering to not be consumed", "percent": 50 } } } },
+    { "id": "chaos-babydragon-bones", "page": "Babydragon bones", "skill": "prayer", "facility": null, "members": true, "consume": { "level": 1, "xp": 30, "xpEvidence": "Babydragon bones give 30 [[Prayer]] experience when buried", "action": { "page": "Game tick/Action lengths", "evidence": "[[Player-owned house]] [[Altar space|altar]] offerings:", "ticks": 3 }, "altar": { "page": "Pay-to-play Prayer training", "bonus": "The altar grants the same 350% experience per bone as the gilded altar", "percent": 350, "pace": "2,000 bones/hour offered at the Chaos altar", "perHour": 2000, "fee": "outside of the Southern wall of the temple for 50 coins per note", "coins": 50, "saved": { "evidence": "has an additional 50% chance for each offering to not be consumed", "percent": 50 } } } },
+    { "id": "chaos-dragon-bones", "page": "Dragon bones", "skill": "prayer", "facility": null, "members": true, "consume": { "level": 1, "xp": 72, "xpEvidence": "which give 72 [[Prayer]] experience when buried", "action": { "page": "Game tick/Action lengths", "evidence": "[[Player-owned house]] [[Altar space|altar]] offerings:", "ticks": 3 }, "altar": { "page": "Pay-to-play Prayer training", "bonus": "The altar grants the same 350% experience per bone as the gilded altar", "percent": 350, "pace": "2,000 bones/hour offered at the Chaos altar", "perHour": 2000, "fee": "outside of the Southern wall of the temple for 50 coins per note", "coins": 50, "saved": { "evidence": "has an additional 50% chance for each offering to not be consumed", "percent": 50 } } } },
+    { "id": "chaos-wyvern-bones", "page": "Wyvern bones", "skill": "prayer", "facility": null, "members": true, "consume": { "level": 1, "xp": 72, "xpEvidence": "and give 72 [[Prayer]] experience when buried", "action": { "page": "Game tick/Action lengths", "evidence": "[[Player-owned house]] [[Altar space|altar]] offerings:", "ticks": 3 }, "altar": { "page": "Pay-to-play Prayer training", "bonus": "The altar grants the same 350% experience per bone as the gilded altar", "percent": 350, "pace": "2,000 bones/hour offered at the Chaos altar", "perHour": 2000, "fee": "outside of the Southern wall of the temple for 50 coins per note", "coins": 50, "saved": { "evidence": "has an additional 50% chance for each offering to not be consumed", "percent": 50 } } } },
+    { "id": "chaos-dagannoth-bones", "page": "Dagannoth bones", "skill": "prayer", "facility": null, "members": true, "consume": { "level": 1, "xp": 125, "xpEvidence": "Dagannoth bones give 125 [[Prayer]] experience when buried", "action": { "page": "Game tick/Action lengths", "evidence": "[[Player-owned house]] [[Altar space|altar]] offerings:", "ticks": 3 }, "altar": { "page": "Pay-to-play Prayer training", "bonus": "The altar grants the same 350% experience per bone as the gilded altar", "percent": 350, "pace": "2,000 bones/hour offered at the Chaos altar", "perHour": 2000, "fee": "outside of the Southern wall of the temple for 50 coins per note", "coins": 50, "saved": { "evidence": "has an additional 50% chance for each offering to not be consumed", "percent": 50 } } } },
     {
       "id": "enchant-sapphire-amulet",
       "page": "Amulet of magic",
@@ -1485,6 +1491,14 @@
       "offer-dragon-bones",
       "offer-wyvern-bones",
       "offer-dagannoth-bones"
+    ],
+    "pr-chaos": [
+      "chaos-bones",
+      "chaos-big-bones",
+      "chaos-babydragon-bones",
+      "chaos-dragon-bones",
+      "chaos-wyvern-bones",
+      "chaos-dagannoth-bones"
     ]
   },
   "light": {
