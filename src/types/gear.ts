@@ -43,7 +43,7 @@ export interface GearPiece {
   slot: GearSlot;
   /** Kind: scimitar, sword, platebody, amulet... */
   kind: string;
-  metal?: 'bronze' | 'iron' | 'steel' | 'black' | 'mithril' | 'adamant' | 'rune';
+  metal?: 'bronze' | 'iron' | 'steel' | 'black' | 'mithril' | 'adamant' | 'rune' | 'dragon';
   twoHanded?: boolean;
   /** What you need to wear it: { attack: 5 }, for hammers { strength: 5 }, for the Coif { ranged: 20 }, quests. Absent means no requirements (if reqFrom is set). */
   req?: GearRequirements;

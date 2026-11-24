@@ -19,10 +19,11 @@ const OUT = `${root}src/data/generated/gear.json`;
 const styles = JSON.parse(readFileSync(`${root}src/data/generated/styleGear.json`, 'utf8')) as Record<'magic' | 'ranged', { weapon: { names: string[]; reqs: { skill: string; level: number }[]; quests: string[] }[] }>;
 const UA = 'osrs-route-money-builder';
 
-const METALS = ['bronze', 'iron', 'steel', 'black', 'mithril', 'adamant', 'rune'] as const;
+// Dragon is the Members tier after rune: its pieces carry their own quest requirements (Lost City, Monkey Madness I...).
+const METALS = ['bronze', 'iron', 'steel', 'black', 'mithril', 'adamant', 'rune', 'dragon'] as const;
 type Metal = typeof METALS[number];
 /** The metal requirement per the wiki ("Players require 5 Attack to wield steel weapons"): a cross-check of what the article says. */
-const METAL_LEVEL: Record<Metal, number> = { bronze: 1, iron: 1, steel: 5, black: 10, mithril: 20, adamant: 30, rune: 40 };
+const METAL_LEVEL: Record<Metal, number> = { bronze: 1, iron: 1, steel: 5, black: 10, mithril: 20, adamant: 30, rune: 40, dragon: 60 };
 
 /** The item kind: the suffix in the name, the slot and the name itself. */
 const KINDS: { kind: string; en: string; slot: GearSlot }[] = [
@@ -121,7 +122,7 @@ const wanted: { name: string; kind: string; metal?: Metal; slot?: GearSlot; set?
   ...METALS.flatMap((metal) => KINDS.map((k) => ({
     name: `${metal[0].toUpperCase()}${metal.slice(1)} ${k.en}`,
     kind: k.kind, metal, slot: k.slot, set: `${metal[0].toUpperCase()}${metal.slice(1)} equipment`,
-  }))),
+  }))).filter((w) => w.name !== 'Dragon shortsword'), // the game has a Dragon sword, no Dragon shortsword
   ...EXTRA,
 ];
 

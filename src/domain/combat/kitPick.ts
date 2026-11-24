@@ -29,13 +29,19 @@ const above = (a: readonly number[], b: readonly number[]): boolean => {
 };
 
 /** The piece chosen for each slot, in slot order; a slot with nothing to wear is left out. */
+/**
+ * The plan earns the shortfall only for a piece up to this price; a dearer one (a 58M dragon kiteshield) is bought only from coins in
+ * hand. shortcut: a fixed cap, replace with earn time against the training time the piece saves once a kit's rate gain is modelled.
+ */
+export const EARN_CAP = 1_000_000;
+
 export function pickKit(input: KitInput): { slot: string; name: string; buy: boolean }[] {
   const out: { slot: string; name: string; buy: boolean }[] = [];
   for (const s of input.slots) {
     const owned = s.names.filter(input.owned).sort((a, b) => (above(input.rank(b), input.rank(a)) ? 1 : -1))[0];
     const buys = s.wearOnly || input.budget === null ? [] : s.names
       .filter(name => !input.owned(name) && (!owned || above(input.rank(name), input.rank(owned))))
-      .filter(name => input.price(name) !== null)
+      .filter(name => input.price(name) !== null && input.price(name)! <= Math.max(input.budget!, EARN_CAP))
       .sort((a, b) => (above(input.rank(b), input.rank(a)) ? 1 : above(input.rank(a), input.rank(b)) ? -1 : input.price(a)! - input.price(b)!));
     if (buys.length) {
       out.push({ slot: s.slot, name: buys[0], buy: true });

@@ -1,6 +1,6 @@
 {
   "source": "OSRS Wiki: item and bonus infoboxes (Bucket infobox_item, infobox_bonuses), shops (storeline, infobox_shop), requirements from the articles",
-  "updated": "2026-11-18",
+  "updated": "2026-11-24",
   "items": [
     {
       "id": 1205,
@@ -4488,6 +4488,531 @@
       },
       "strength": 0,
       "iconUrl": "https://oldschool.runescape.wiki/images/Rune_sq_shield.png"
+    },
+    {
+      "id": 1215,
+      "name": "Dragon dagger",
+      "slot": "weapon",
+      "kind": "dagger",
+      "metal": "dragon",
+      "req": {
+        "attack": 60,
+        "quests": [
+          "Lost City"
+        ]
+      },
+      "reqFrom": "Dragon dagger",
+      "members": true,
+      "tradeable": true,
+      "attack": {
+        "stab": 40,
+        "slash": 25,
+        "crush": -4,
+        "magic": 1,
+        "ranged": 0
+      },
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 1,
+        "ranged": 0
+      },
+      "strength": 40,
+      "speed": 4,
+      "iconUrl": "https://oldschool.runescape.wiki/images/Dragon_dagger.png"
+    },
+    {
+      "id": 4587,
+      "name": "Dragon scimitar",
+      "slot": "weapon",
+      "kind": "scimitar",
+      "metal": "dragon",
+      "req": {
+        "attack": 60,
+        "quests": [
+          "Monkey Madness I"
+        ]
+      },
+      "reqFrom": "Dragon scimitar",
+      "members": true,
+      "tradeable": true,
+      "attack": {
+        "stab": 8,
+        "slash": 67,
+        "crush": -2,
+        "magic": 0,
+        "ranged": 0
+      },
+      "defence": {
+        "stab": 0,
+        "slash": 1,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "strength": 66,
+      "speed": 4,
+      "iconUrl": "https://oldschool.runescape.wiki/images/Dragon_scimitar.png"
+    },
+    {
+      "id": 1305,
+      "name": "Dragon longsword",
+      "slot": "weapon",
+      "kind": "longsword",
+      "metal": "dragon",
+      "req": {
+        "attack": 60,
+        "quests": [
+          "Lost City"
+        ]
+      },
+      "reqFrom": "Dragon longsword",
+      "members": true,
+      "tradeable": true,
+      "attack": {
+        "stab": 58,
+        "slash": 69,
+        "crush": -2,
+        "magic": 0,
+        "ranged": 0
+      },
+      "defence": {
+        "stab": 0,
+        "slash": 3,
+        "crush": 2,
+        "magic": 0,
+        "ranged": 0
+      },
+      "strength": 71,
+      "speed": 5,
+      "iconUrl": "https://oldschool.runescape.wiki/images/Dragon_longsword.png"
+    },
+    {
+      "id": 1434,
+      "name": "Dragon mace",
+      "slot": "weapon",
+      "kind": "mace",
+      "metal": "dragon",
+      "req": {
+        "attack": 60,
+        "quests": [
+          "Heroes' Quest"
+        ]
+      },
+      "reqFrom": "Dragon mace",
+      "members": true,
+      "tradeable": true,
+      "attack": {
+        "stab": 40,
+        "slash": -2,
+        "crush": 60,
+        "magic": 0,
+        "ranged": 0
+      },
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "strength": 55,
+      "prayer": 5,
+      "speed": 4,
+      "iconUrl": "https://oldschool.runescape.wiki/images/Dragon_mace.png"
+    },
+    {
+      "id": 13576,
+      "name": "Dragon warhammer",
+      "slot": "weapon",
+      "kind": "warhammer",
+      "metal": "dragon",
+      "req": {
+        "strength": 60
+      },
+      "reqFrom": "Dragon warhammer",
+      "members": true,
+      "tradeable": true,
+      "attack": {
+        "stab": -4,
+        "slash": -4,
+        "crush": 95,
+        "magic": -4,
+        "ranged": 0
+      },
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "strength": 85,
+      "speed": 6,
+      "iconUrl": "https://oldschool.runescape.wiki/images/Dragon_warhammer.png"
+    },
+    {
+      "id": 1377,
+      "name": "Dragon battleaxe",
+      "slot": "weapon",
+      "kind": "battleaxe",
+      "metal": "dragon",
+      "req": {
+        "attack": 60,
+        "quests": [
+          "Heroes' Quest"
+        ]
+      },
+      "reqFrom": "Dragon battleaxe",
+      "members": true,
+      "tradeable": true,
+      "attack": {
+        "stab": -2,
+        "slash": 70,
+        "crush": 65,
+        "magic": 0,
+        "ranged": 0
+      },
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": -1
+      },
+      "strength": 85,
+      "speed": 6,
+      "iconUrl": "https://oldschool.runescape.wiki/images/Dragon_battleaxe.png"
+    },
+    {
+      "id": 7158,
+      "name": "Dragon 2h sword",
+      "slot": "weapon",
+      "kind": "2h sword",
+      "metal": "dragon",
+      "twoHanded": true,
+      "req": {
+        "attack": 60
+      },
+      "reqFrom": "Dragon 2h sword",
+      "members": true,
+      "tradeable": true,
+      "attack": {
+        "stab": -4,
+        "slash": 92,
+        "crush": 80,
+        "magic": -4,
+        "ranged": 0
+      },
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": -1
+      },
+      "strength": 93,
+      "speed": 7,
+      "iconUrl": "https://oldschool.runescape.wiki/images/Dragon_2h_sword.png"
+    },
+    {
+      "id": 6739,
+      "name": "Dragon axe",
+      "slot": "weapon",
+      "kind": "axe",
+      "metal": "dragon",
+      "req": {
+        "attack": 60
+      },
+      "reqFrom": "Dragon axe",
+      "members": true,
+      "tradeable": true,
+      "attack": {
+        "stab": -2,
+        "slash": 38,
+        "crush": 32,
+        "magic": 0,
+        "ranged": 0
+      },
+      "defence": {
+        "stab": 0,
+        "slash": 1,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "strength": 42,
+      "speed": 5,
+      "iconUrl": "https://oldschool.runescape.wiki/images/Dragon_axe.png"
+    },
+    {
+      "id": 11920,
+      "name": "Dragon pickaxe",
+      "slot": "weapon",
+      "kind": "pickaxe",
+      "metal": "dragon",
+      "req": {
+        "attack": 60
+      },
+      "reqFrom": "Dragon pickaxe",
+      "members": true,
+      "tradeable": true,
+      "attack": {
+        "stab": 38,
+        "slash": -2,
+        "crush": 32,
+        "magic": 0,
+        "ranged": 0
+      },
+      "defence": {
+        "stab": 0,
+        "slash": 1,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "strength": 42,
+      "speed": 5,
+      "iconUrl": "https://oldschool.runescape.wiki/images/Dragon_pickaxe.png"
+    },
+    {
+      "id": 11335,
+      "name": "Dragon full helm",
+      "slot": "head",
+      "kind": "full helm",
+      "metal": "dragon",
+      "req": {
+        "defence": 60
+      },
+      "reqFrom": "Dragon full helm",
+      "members": true,
+      "tradeable": true,
+      "attack": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": -6,
+        "ranged": -3
+      },
+      "defence": {
+        "stab": 45,
+        "slash": 48,
+        "crush": 41,
+        "magic": -1,
+        "ranged": 46
+      },
+      "strength": 0,
+      "iconUrl": "https://oldschool.runescape.wiki/images/Dragon_full_helm.png"
+    },
+    {
+      "id": 1149,
+      "name": "Dragon med helm",
+      "slot": "head",
+      "kind": "med helm",
+      "metal": "dragon",
+      "req": {
+        "defence": 60
+      },
+      "reqFrom": "Dragon med helm",
+      "members": true,
+      "tradeable": true,
+      "attack": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": -3,
+        "ranged": 0
+      },
+      "defence": {
+        "stab": 33,
+        "slash": 35,
+        "crush": 32,
+        "magic": -1,
+        "ranged": 34
+      },
+      "strength": 0,
+      "iconUrl": "https://oldschool.runescape.wiki/images/Dragon_med_helm.png"
+    },
+    {
+      "id": 21892,
+      "name": "Dragon platebody",
+      "slot": "body",
+      "kind": "platebody",
+      "metal": "dragon",
+      "req": {
+        "defence": 60,
+        "quests": [
+          "Dragon Slayer I"
+        ]
+      },
+      "reqFrom": "Dragon platebody",
+      "members": true,
+      "tradeable": true,
+      "attack": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": -30,
+        "ranged": -15
+      },
+      "defence": {
+        "stab": 109,
+        "slash": 107,
+        "crush": 97,
+        "magic": -6,
+        "ranged": 106
+      },
+      "strength": 0,
+      "iconUrl": "https://oldschool.runescape.wiki/images/Dragon_platebody.png"
+    },
+    {
+      "id": 3140,
+      "name": "Dragon chainbody",
+      "slot": "body",
+      "kind": "chainbody",
+      "metal": "dragon",
+      "req": {
+        "defence": 60
+      },
+      "reqFrom": "Dragon chainbody",
+      "members": true,
+      "tradeable": true,
+      "attack": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": -15,
+        "ranged": 0
+      },
+      "defence": {
+        "stab": 81,
+        "slash": 93,
+        "crush": 98,
+        "magic": -3,
+        "ranged": 82
+      },
+      "strength": 0,
+      "iconUrl": "https://oldschool.runescape.wiki/images/Dragon_chainbody.png"
+    },
+    {
+      "id": 4087,
+      "name": "Dragon platelegs",
+      "slot": "legs",
+      "kind": "platelegs",
+      "metal": "dragon",
+      "req": {
+        "defence": 60
+      },
+      "reqFrom": "Dragon platelegs",
+      "members": true,
+      "tradeable": true,
+      "attack": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": -21,
+        "ranged": -11
+      },
+      "defence": {
+        "stab": 68,
+        "slash": 66,
+        "crush": 63,
+        "magic": -4,
+        "ranged": 65
+      },
+      "strength": 0,
+      "iconUrl": "https://oldschool.runescape.wiki/images/Dragon_platelegs.png"
+    },
+    {
+      "id": 4585,
+      "name": "Dragon plateskirt",
+      "slot": "legs",
+      "kind": "plateskirt",
+      "metal": "dragon",
+      "req": {
+        "defence": 60
+      },
+      "reqFrom": "Dragon plateskirt",
+      "members": true,
+      "tradeable": true,
+      "attack": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": -21,
+        "ranged": -11
+      },
+      "defence": {
+        "stab": 68,
+        "slash": 66,
+        "crush": 63,
+        "magic": -4,
+        "ranged": 65
+      },
+      "strength": 0,
+      "iconUrl": "https://oldschool.runescape.wiki/images/Dragon_plateskirt.png"
+    },
+    {
+      "id": 21895,
+      "name": "Dragon kiteshield",
+      "slot": "shield",
+      "kind": "kiteshield",
+      "metal": "dragon",
+      "req": {
+        "defence": 60
+      },
+      "reqFrom": "Dragon kiteshield",
+      "members": true,
+      "tradeable": true,
+      "attack": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": -8,
+        "ranged": -3
+      },
+      "defence": {
+        "stab": 56,
+        "slash": 60,
+        "crush": 58,
+        "magic": -1,
+        "ranged": 58
+      },
+      "strength": 0,
+      "iconUrl": "https://oldschool.runescape.wiki/images/Dragon_kiteshield.png"
+    },
+    {
+      "id": 1187,
+      "name": "Dragon sq shield",
+      "slot": "shield",
+      "kind": "sq shield",
+      "metal": "dragon",
+      "req": {
+        "defence": 60,
+        "quests": [
+          "Legends' Quest"
+        ]
+      },
+      "reqFrom": "Dragon sq shield",
+      "members": true,
+      "tradeable": true,
+      "attack": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": -6,
+        "ranged": 0
+      },
+      "defence": {
+        "stab": 50,
+        "slash": 52,
+        "crush": 48,
+        "magic": 0,
+        "ranged": 50
+      },
+      "strength": 0,
+      "iconUrl": "https://oldschool.runescape.wiki/images/Dragon_sq_shield.png"
     },
     {
       "id": 1478,

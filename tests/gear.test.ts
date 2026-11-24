@@ -381,7 +381,8 @@ describe('gear.json data', () => {
     for (const i of gearData.items) {
       if (i.slot === 'weapon') expect(i.speed, i.name).toBeGreaterThan(0);
       // Members quest kit (Magic secateurs) and Hunter tools are only a fight's weapon, never advised.
-      if (i.kind !== 'quest' && i.kind !== 'tool') expect(i.members, i.name).toBe(false);
+      // Dragon is the Members tier (2.182.0): advised on Members only, never on a free account.
+      if (i.kind !== 'quest' && i.kind !== 'tool') expect(i.members, i.name).toBe(i.metal === 'dragon');
     }
     expect(gearData.items.length).toBeGreaterThanOrEqual(130);
   });

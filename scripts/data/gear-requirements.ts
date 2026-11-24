@@ -21,7 +21,7 @@ export function proseSentences(text: string): string[] {
 
 /** A sentence about wearing: a wearing verb or "requires" next to a combat skill. */
 function aboutWearing(s: string): boolean {
-  return EQUIP.test(s) || (/requir/i.test(s) && new RegExp(`\\d+\\s*${SKILL}|${SKILL}\\s+level\\s+of\\s+\\d`, 'i').test(s));
+  return EQUIP.test(s) || (/requir/i.test(s) && new RegExp(`\\d+\\s*${SKILL}|${SKILL}\\s+level\\s+of\\s+(?:at\\s+least\\s+)?\\d`, 'i').test(s));
 }
 
 /** The skills and levels of one sentence. "20 [[Ranged]] and [[Defence]]" — 20 for both. */
@@ -33,7 +33,7 @@ function skillsIn(s: string): [ReqSkill, number][] {
     add(m[2], m[1]);
     if (m[3]) add(m[3], m[1]);
   }
-  for (const m of s.matchAll(new RegExp(`${SKILL}\\s+level\\s+of\\s+(\\d+)`, 'gi'))) add(m[1], m[2]);
+  for (const m of s.matchAll(new RegExp(`${SKILL}\\s+level\\s+of\\s+(?:at\\s+least\\s+)?(\\d+)`, 'gi'))) add(m[1], m[2]);
   for (const m of s.matchAll(new RegExp(`level\\s+(\\d+)\\s+in\\s+${SKILL}`, 'gi'))) add(m[2], m[1]);
   return out;
 }
@@ -60,6 +60,8 @@ function fromSentences(sentences: string[]): GearRequirements | 'none' | null {
     const quests = questsIn(s);
     if (quests.length) { found = true; req.quests = [...new Set([...(req.quests ?? []), ...quests])]; }
     if (NONE.test(s)) none = true;
+    // The article states what wearing needs in its first such sentence; later ones talk about boosts and specials.
+    if (found) break;
   }
   if (found) return req;
   return none ? 'none' : null;

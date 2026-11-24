@@ -157,9 +157,9 @@ Maps read the Wiki's atlas metadata with a verified **2019-10-31_1 archive fallb
 
 ## Handover — state on 2026-11-14
 
-- **State:** v2.181.0 published, all gates passed; nothing tested in the real game since 2.87.
+- **State:** v2.182.0 published, all gates passed; nothing tested in the real game since 2.87.
 - **Owner decisions (2.93–2.94.5):** version/update on the rail; one preparation behaviour (two steps ahead, quiet, times shown); Money asks once about trade limits; the welcome card links Reference; update Cancel stays. Per-skill goal (2.171.0): xp, balanced or coins (≥ a third of top pace), only in method choice (`trainingGoal.ts`).
-- **Now (owner, 2026-11-23):** plus-or-zero in both modes (`losesTo`), earn-then-spend (`cashFlow`, `membersCheckpoints`), game checks later. Quests paused (branch `quests-2.158-wip`, gate stops at MEP1). Slayer: Wiki rates capped by own damage (`slayerRates.ts`). Sweeps fail slow, untimed, unusable, unplaced, unsourced or loss legs (`trainingPaths.test.ts`; money: `funding/catalogue.test.ts`). Plans keep today's Hitpoints. Shortfalls also earn by training (`trainingEarnRate`).
+- **Now (owner, 2026-11-23):** plus-or-zero in both modes (`losesTo`), earn-then-spend (`cashFlow`, `membersCheckpoints`), game checks later. Quests paused (branch `quests-2.158-wip`, gate stops at MEP1). Slayer: Wiki rates capped by own damage (`slayerRates.ts`). Sweeps fail slow, untimed, unusable, unplaced, unsourced, losing legs (`trainingPaths.test.ts`, `funding/catalogue.test.ts`). Plans keep today's Hitpoints. Shortfalls also earn by training (`trainingEarnRate`). Kits earn ≤1M/piece (`EARN_CAP`).
 - **Next:** 1) P4. 2) Members (owner): Members unlocks everything; money guides hand-reviewed (106) or held back; once subscribed, quests and training are one path; a reached followed goal hands back (`nextAfterReached`). Next: Members methods for every skill, Members quests in batches of 3 to 5, fight profiles. After the last quest (owner, 2026-11-18): backfill later features into earlier quests, add guide help, then audit the whole run from a fresh F2P account. 3) Quest times measured from the player's own runs.
 - **Owner:** writes Russian, reply in English; short answers, result first, at most one question; push/release once all gates pass; ask before deleting authored documents.
 
@@ -232,7 +232,7 @@ Kept: `planning/encounter/{setups,strategy}.ts` compares bounded preparations; `
 
 Gear has bows/ranged armour; a worn bow (fitting arrows) fights via `rangedHit`, trains Ranged/Defence or takes the unlocked bow/strongest arrows; shots set arrows needed. Drops weigh cooking burns. Earning guides read the Wiki Details (`detailsOf`); Ledger icons replace colour emoji. F2P skill groups focus a checkpoint still ahead.
 
-Limits: armour by melee defence; Wiki bands for quest work, minus the prepared fight. `gate:f2p`: 23/23 quests, no checks; time unknown on 0/211 turns. Later fights are proven by `encounterSetups`, a current one with pending kit by its setup, priced with the cheapest training to it; protection goes on after training; QP/prerequisites are planner order; spawns lead one piece.
+Limits: armour by melee defence; Wiki bands for quest work, minus the prepared fight. `gate:f2p`: 23/23 quests, no checks, all turns timed. Later fights are proven by `encounterSetups`, a current one with pending kit by its setup, priced with the cheapest training to it; protection goes on after training; QP/prerequisites are planner order; spawns lead one piece.
 
 <!-- DELIVERY_START -->
 ## Delivery receipt
