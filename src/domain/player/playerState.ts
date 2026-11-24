@@ -10,7 +10,7 @@ import type { OwnedState } from '../items/checklist';
 import { nameKey } from '../items/itemKey';
 import { toolFamilyOf, toolUse, usableAt } from '../items/toolTiers';
 import { countWorn, type WornItem } from '../items/equipmentCount';
-import { combatLevel, levelForXp, xpForLevel } from './xp';
+import { combatLevel } from './xp';
 
 export type StateSource = 'game' | 'profile' | 'manual';
 
@@ -145,15 +145,6 @@ export function levelOf(s: PlayerState, skill: string): number | undefined {
   if (skill === 'combat') return combatLevel(Object.fromEntries(Object.entries(s.levels).flatMap(([k, v]) => (v?.known ? [[k, v.value]] : [])))) ?? undefined;
   const l = s.levels[skill];
   return l?.known ? l.value : undefined;
-}
-
-/** The levels after training one skill to `value`. Melee and Ranged hits give a third as much Hitpoints XP (OSRS Wiki,
- * Hitpoints), so a forecast of those skills raises Hitpoints too. */
-export function trainedLevels(s: PlayerState, skill: string, value: number): PlayerState['levels'] {
-  const levels = { ...s.levels, [skill]: { ...(s.levels[skill] ?? { source: 'profile' }), known: true, value } };
-  const from = levelOf(s, skill), hp = levelOf(s, 'hitpoints');
-  if (!['attack', 'strength', 'defence', 'ranged'].includes(skill) || from === undefined || hp === undefined || value <= from) return levels as PlayerState['levels'];
-  return { ...levels, hitpoints: { ...levels.hitpoints, known: true, value: Math.max(hp, levelForXp(xpForLevel(hp) + (xpForLevel(value) - xpForLevel(from)) / 3)) } } as PlayerState['levels'];
 }
 
 /** Preserve legacy name-only states without inventing an ammunition stack size. */

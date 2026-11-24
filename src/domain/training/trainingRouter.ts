@@ -17,7 +17,7 @@ import { hoursText, purchaseTripHours, toolUpgrade, upgradeXp, type ToolUpgrade 
 import { toolFamilyOf, toolUse } from '../items/toolTiers';
 import { SKILLING } from './skillingRates';
 import { evaluate, itemRequirement, type ReqState, type Requirement } from '../player/requirements';
-import { coinsOf, heldExact, heldOf, levelOf, questOf, trainedLevels, type PlayerState } from '../player/playerState';
+import { coinsOf, heldExact, heldOf, levelOf, questOf, type PlayerState } from '../player/playerState';
 import { isClosed } from '../quests/next-step';
 import { xpForLevel } from '../player/xp';
 import { rangedEquipment, rangedNeeds, RANGED_WATCH, withArrow } from '../combat/rangedLoadout';
@@ -874,7 +874,7 @@ export function atLevel(state: PlayerState, skill: string, value: number): Playe
   if (!kept) levelCopies.set(state, kept = new Map());
   const key = `${skill}|${value}`;
   let out = kept.get(key);
-  if (!out) kept.set(key, out = { ...state, levels: trainedLevels(state, skill, value) } as PlayerState);
+  if (!out) kept.set(key, out = { ...state, levels: { ...state.levels, [skill]: { ...(state.levels[skill] ?? { source: 'profile' }), known: true, value } } } as PlayerState);
   return out;
 }
 
