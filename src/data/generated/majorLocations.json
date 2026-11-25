@@ -614,6 +614,52 @@
       "kind": "landmark",
       "page": "Locus Oasis"
     },
+    "Volcanic Mine": {
+      "x": 3814,
+      "y": 3807,
+      "plane": 0,
+      "label": "Volcanic Mine",
+      "kind": "landmark",
+      "page": "Volcanic Mine"
+    },
+    "Dense essence mine": {
+      "x": 1764,
+      "y": 3853,
+      "plane": 0,
+      "label": "Dense essence mine",
+      "kind": "mine",
+      "aliases": [
+        "Arceuus essence mine"
+      ],
+      "page": "Dense essence mine"
+    },
+    "Port Piscarilius": {
+      "x": 1803,
+      "y": 3752,
+      "plane": 0,
+      "label": "Port Piscarilius",
+      "kind": "city",
+      "page": "Port Piscarilius"
+    },
+    "Aldarin": {
+      "x": 1391,
+      "y": 2935,
+      "plane": 0,
+      "label": "Aldarin",
+      "kind": "city",
+      "page": "Aldarin"
+    },
+    "Civitas illa Fortis": {
+      "x": 1725,
+      "y": 3128,
+      "plane": 0,
+      "label": "Civitas illa Fortis",
+      "kind": "city",
+      "aliases": [
+        "Civitas"
+      ],
+      "page": "Civitas illa Fortis"
+    },
     "Neypotzli": {
       "x": 1440,
       "y": 9632,

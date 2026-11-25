@@ -3752,6 +3752,136 @@
       "place": "Piscatoris Hunter area"
     },
     {
+      "id": "mi-volcanic",
+      "skill": "mining",
+      "from": 70,
+      "to": null,
+      "name": "Volcanic Mine",
+      "members": true,
+      "needs": [
+        { "type": "skill", "skill": "mining", "min": 70 },
+        { "type": "quest", "quest": "Bone Voyage" },
+        { "type": "tool", "skill": "mining" }
+      ],
+      "xph": [64200, 79300],
+      "effort": "low",
+      "cost": "cost",
+      "risk": "low",
+      "where": "Volcanic Mine on Fossil Island, with a team of 3 to 5 players",
+      "note": "A rune pickaxe in a steady team gives about 64,200 XP an hour at 70 and 79,300 at 99. Entry costs 30 numulites (or 3,000 once), good food is needed against heavy damage, and the minigame pays almost nothing (OSRS Wiki, checked 2026-11-25).",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Mining_training",
+      "place": "Volcanic Mine"
+    },
+    {
+      "id": "rc-blood",
+      "perHour": { "makes": [{ "name": "Blood rune", "qty": 1474 }] },
+      "skill": "runecraft",
+      "from": 77,
+      "to": null,
+      "name": "Blood runes at Arceuus",
+      "members": true,
+      "needs": [
+        { "type": "skill", "skill": "runecraft", "min": 77 },
+        { "type": "skill", "skill": "mining", "min": 38 },
+        { "type": "skill", "skill": "crafting", "min": 38 },
+        { "type": "item", "name": "Chisel" },
+        { "type": "tool", "skill": "mining" }
+      ],
+      "xph": [36000, 36000],
+      "effort": "low",
+      "cost": "profit",
+      "risk": "none",
+      "where": "Dense essence mine and the Blood Altar in Arceuus",
+      "note": "Mine dense essence, venerate it at the Dark Altar, chisel it and craft about 1,474 blood runes an hour for 36,000 Runecraft XP, with some Mining and Crafting XP. No outfit or diary is assumed; the Raiments of the Eye add 60% more runes (OSRS Wiki, checked 2026-11-25).",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Runecraft_training",
+      "place": "Dense essence mine"
+    },
+    {
+      "id": "rc-soul",
+      "perHour": { "makes": [{ "name": "Soul rune", "qty": 1451 }] },
+      "skill": "runecraft",
+      "from": 90,
+      "to": null,
+      "name": "Soul runes at Arceuus",
+      "members": true,
+      "needs": [
+        { "type": "skill", "skill": "runecraft", "min": 90 },
+        { "type": "skill", "skill": "mining", "min": 38 },
+        { "type": "skill", "skill": "crafting", "min": 38 },
+        { "type": "item", "name": "Chisel" },
+        { "type": "tool", "skill": "mining" }
+      ],
+      "xph": [44000, 44000],
+      "effort": "low",
+      "cost": "profit",
+      "risk": "none",
+      "where": "Dense essence mine and the Soul Altar in Arceuus",
+      "note": "The same loop as blood runes at the Soul Altar: about 1,451 soul runes an hour for 44,000 Runecraft XP without an outfit or diary (OSRS Wiki, checked 2026-11-25).",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Runecraft_training",
+      "place": "Dense essence mine"
+    },
+    {
+      "id": "th-villa",
+      "skill": "thieving",
+      "from": 36,
+      "to": 45,
+      "name": "Chests in the Aldarin villas",
+      "members": true,
+      "needs": [
+        { "type": "skill", "skill": "thieving", "min": 36 },
+        { "type": "quest", "quest": "Children of the Sun" },
+        { "type": "item", "name": "Lockpick" }
+      ],
+      "xph": [40000, 50000],
+      "effort": "medium",
+      "cost": "free",
+      "risk": "low",
+      "where": "The villas in Aldarin, Varlamore",
+      "note": "200 XP a chest gives 40,000 to 50,000 XP an hour from 36 to 45 with a lockpick, and up to 60,000 with stamina potions. A failed unlock teleports you outside. The loot (uncut gems, herb seeds, clue scrolls) is not counted (OSRS Wiki, checked 2026-11-25).",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Thieving_training",
+      "place": "Aldarin"
+    },
+    {
+      "id": "th-artefacts",
+      "skill": "thieving",
+      "from": 49,
+      "to": null,
+      "name": "Stealing artefacts",
+      "members": true,
+      "needs": [
+        { "type": "skill", "skill": "thieving", "min": 49 },
+        { "type": "item", "name": "Lockpick" }
+      ],
+      "xph": [150000, 261000],
+      "effort": "high",
+      "cost": "free",
+      "risk": "none",
+      "where": "Port Piscarilius, for Captain Khaled",
+      "note": "With practice, stamina potions and guard lures: about 150,000 XP an hour at 49, 186,000 at 65 and 261,000 at 99. Each heist also pays 500 to 1,000 coins; neither the coins nor the stamina potions are counted (OSRS Wiki, checked 2026-11-25).",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Thieving_training",
+      "place": "Port Piscarilius"
+    },
+    {
+      "id": "th-valuables",
+      "skill": "thieving",
+      "from": 50,
+      "to": null,
+      "name": "Stealing valuables in Varlamore",
+      "members": true,
+      "needs": [
+        { "type": "skill", "skill": "thieving", "min": 50 },
+        { "type": "quest", "quest": "Children of the Sun" }
+      ],
+      "xph": [65000, 95000],
+      "effort": "low",
+      "cost": "free",
+      "risk": "low",
+      "where": "Wealthy citizens and houses in Civitas illa Fortis",
+      "note": "Pickpocket wealthy citizens for house keys, then burgle the houses: about 65,000 XP an hour with minimal effort, up to 95,000 hopping worlds. The valuables are not counted (OSRS Wiki, checked 2026-11-25).",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Thieving_training",
+      "place": "Civitas illa Fortis"
+    },
+    {
       "id": "hu-jerboa",
       "skill": "hunter",
       "from": 39,
