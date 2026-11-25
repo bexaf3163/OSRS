@@ -41,7 +41,7 @@ import { mergeGoalNeeds } from '../items/consumption';
 import { isReusable } from '../items/reusable';
 import { heldFood } from '../player/foodStock';
 import { FOODS } from '../../data/threats';
-import { GOALS, goalOf, losesTo, netCoinsPerHour, opensLater, practicalRate, rateLow, stays, withHourlyCoins, withinGoalPace } from './trainingGoal';
+import { fasterBehindQuests, GOALS, goalOf, losesTo, netCoinsPerHour, opensLater, practicalRate, rateLow, stays, withHourlyCoins, withinGoalPace } from './trainingGoal';
 export type Effort = 'afk' | 'low' | 'medium' | 'high';
 export type MethodCost = 'free' | 'profit' | 'cost';
 export type Risk = 'none' | 'low' | 'high';
@@ -588,6 +588,8 @@ export interface TrainingAdvice {
   level: number | null;
   target: number;
   best: MethodView | null;
+  /** A clearly faster method of this level that only undone quests keep locked, and those quests. */
+  unlock?: { method: TrainingMethod; quests: string[] } | null;
   /** The whole plan from level 1 to the goal (the guide), when the player is past level 1; the path is the part still ahead. */
   ladder?: PathLeg[];
   /** Up to three other methods of this level. */
@@ -978,7 +980,7 @@ export function adviseTraining(input0: AdviceInput): TrainingAdvice {
   } : null;
   const reason = best ? reasonFor(best, level, upgrade) + switched : opensLater(methodsFor(skill, methods), level, mode, state) ?? 'The training engine has no method for this skill at this level and mode yet.';
   return {
-    ...empty, target, ...(input.untilChange ? { next: forecast.handover ?? null } : {}), best: best ? { ...best, reason } : null, others, quests, path, xpLeft, actionsLeft, actionTarget, time, coins: forecast.coins, upgrade, reason,
+    ...empty, target, ...(input.untilChange ? { next: forecast.handover ?? null } : {}), best: best ? { ...best, reason } : null, unlock: fasterBehindQuests(views, best), others, quests, path, xpLeft, actionsLeft, actionTarget, time, coins: forecast.coins, upgrade, reason,
     goalNeeds: (processingGoalNeeds(path, level, target, xpNow) ?? (skill === 'ranged' ? rangedGoalNeeds(path, state, xpNow, target, input.prices) : null)) ?? undefined,
     stockNeeds: trainingStockNeeds(path, skill, state, xpNow, input.prices),
     followed: followedV ? said(followedV) : null,

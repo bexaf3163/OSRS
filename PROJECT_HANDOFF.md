@@ -157,11 +157,11 @@ Maps read the Wiki's atlas metadata with a verified **2019-10-31_1 archive fallb
 
 ## Handover — state on 2026-11-14
 
-- **State:** v2.185.0 published, all gates passed; nothing tested in the real game since 2.87.
+- **State:** v2.186.0 published, all gates passed; nothing tested in the real game since 2.87.
 - **Owner decisions (2.93–2.94.5):** version/update on the rail; one preparation behaviour (two steps ahead, quiet, times shown); Money asks once about trade limits; the welcome card links Reference; update Cancel stays. Per-skill goal (2.171.0): xp, balanced or coins (≥ a third of top pace), only in method choice (`trainingGoal.ts`).
 - **Now (owner, 2026-11-23):** plus-or-zero in both modes (`losesTo`), earn-then-spend (`cashFlow`, `membersCheckpoints`), game checks later. Quests paused (branch `quests-2.158-wip`, gate stops at MEP1). Slayer: Wiki rates capped by own damage (`slayerRates.ts`). Sweeps fail slow, untimed, unusable, unplaced, unsourced, losing legs (`trainingPaths.test.ts`, `funding/catalogue.test.ts`). Plans keep today's Hitpoints. Shortfalls earn by training (`trainingEarnRate`). `EARN_CAP` ≤1M/piece; exact XP (`useExactXp`).
-- **Next:** 1) P4. 2) Members (owner): Members unlocks everything; money guides hand-reviewed (106) or held back; once subscribed, quests and training are one path; a reached followed goal hands back (`nextAfterReached`). Next: Members methods for every skill, Members quests in batches of 3 to 5, fight profiles. After the last quest (owner, 2026-11-18): backfill later features into earlier quests, add guide help, then audit the whole run from a fresh F2P account. 3) Quest times measured from the player's own runs.
-- **Owner:** writes Russian, reply in English; short answers, result first, at most one question; push/release once all gates pass; ask before deleting authored documents.
+- **Next:** 1) P4. 2) Members (owner): Members unlocks everything; money guides hand-reviewed (106) or held back; once subscribed, quests and training are one path; a reached followed goal hands back (`nextAfterReached`). Next: Members methods for every skill (open: Sailing, Blast Furnace, Volcanic Mine), quests in batches of 3-5, fight profiles. After the last quest (owner, 2026-11-18): backfill later features into earlier quests, add guide help, then audit the whole run from a fresh F2P account. 3) Quest times measured from the player's own runs.
+- **Owner:** English only; short answers, result first, at most one question; push/release once all gates pass; ask before deleting authored documents.
 
 ## Remaining work in priority order
 

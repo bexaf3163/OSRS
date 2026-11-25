@@ -88,6 +88,7 @@ const PLACES: [string, Kind, string[], string?][] = [
   ['Edgeville Dungeon', 'dungeon', []],
   ['Karamja Volcano', 'dungeon', []],
   ['Tlati Rainforest', 'landmark', []],
+  ['Locus Oasis', 'landmark', []],
   ['Neypotzli', 'dungeon', []],
   ["Kruk's Dungeon", 'dungeon', []],
   ['Teomat', 'landmark', []],

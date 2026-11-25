@@ -3752,6 +3752,74 @@
       "place": "Piscatoris Hunter area"
     },
     {
+      "id": "hu-jerboa",
+      "skill": "hunter",
+      "from": 39,
+      "to": 43,
+      "name": "Embertailed jerboas",
+      "members": true,
+      "needs": [
+        { "type": "skill", "skill": "hunter", "min": 39 },
+        { "type": "quest", "quest": "Eagles' Peak" },
+        { "type": "quest", "quest": "Children of the Sun" },
+        { "type": "item", "name": "Box trap", "count": 3 }
+      ],
+      "xph": [50000, 50000],
+      "effort": "high",
+      "cost": "free",
+      "risk": "none",
+      "where": "Locus Oasis in the Avium Savannah (fairy ring AJP)",
+      "note": "Three box traps at the oasis give about 50,000 XP an hour from 39 to 43. Box traps need part of Eagles' Peak and Varlamore needs Children of the Sun (OSRS Wiki, checked 2026-11-25).",
+      "url": "https://oldschool.runescape.wiki/w/Hunter_training",
+      "place": "Locus Oasis"
+    },
+    {
+      "id": "hu-chin-63",
+      "perHour": { "makes": [{ "name": "Red chinchompa", "qty": 230 }] },
+      "skill": "hunter",
+      "from": 63,
+      "to": 80,
+      "name": "Carnivorous chinchompas (4 traps)",
+      "members": true,
+      "needs": [
+        { "type": "skill", "skill": "hunter", "min": 63 },
+        { "type": "quest", "quest": "Eagles' Peak" },
+        { "type": "quest", "quest": "Children of the Sun" },
+        { "type": "item", "name": "Box trap", "count": 4 }
+      ],
+      "xph": [61000, 72000],
+      "effort": "high",
+      "cost": "profit",
+      "risk": "none",
+      "where": "Tlati Rainforest, north-east of Tal Teklan",
+      "note": "Four box traps without tick manipulation give about 61,000 XP an hour at 63 and 72,000 at 70, at 265 XP per red chinchompa, which you sell. Box traps need part of Eagles' Peak and Varlamore needs Children of the Sun (OSRS Wiki, checked 2026-11-25).",
+      "url": "https://oldschool.runescape.wiki/w/Hunter_training",
+      "place": "Tlati Rainforest"
+    },
+    {
+      "id": "hu-chin-80",
+      "perHour": { "makes": [{ "name": "Red chinchompa", "qty": 434 }] },
+      "skill": "hunter",
+      "from": 80,
+      "to": null,
+      "name": "Carnivorous chinchompas (5 traps)",
+      "members": true,
+      "needs": [
+        { "type": "skill", "skill": "hunter", "min": 80 },
+        { "type": "quest", "quest": "Eagles' Peak" },
+        { "type": "quest", "quest": "Children of the Sun" },
+        { "type": "item", "name": "Box trap", "count": 5 }
+      ],
+      "xph": [115000, 155000],
+      "effort": "high",
+      "cost": "profit",
+      "risk": "none",
+      "where": "Tlati Rainforest, north-east of Tal Teklan",
+      "note": "The fifth trap at 80 lifts the rate to about 115,000 XP an hour, 136,000 at 90 and 155,000 at 99 without tick manipulation, at 265 XP per red chinchompa, which you sell (OSRS Wiki, checked 2026-11-25).",
+      "url": "https://oldschool.runescape.wiki/w/Hunter_training",
+      "place": "Tlati Rainforest"
+    },
+    {
       "id": "co-mh-beginner",
       "perHour": { "uses": [{ "name": "Plank", "qty": 375 }, { "name": "Steel bar", "qty": 18 }] },
       "skill": "construction",

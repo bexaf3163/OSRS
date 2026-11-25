@@ -235,6 +235,9 @@ export function TrainingCard({ skill, target, followed = null, view = 'full', ad
       {advice.quests.length > 0 && (
         <p className="small muted">Some levels are covered by quests: {advice.quests.map((q) => q.name).join('; ')}.</p>
       )}
+      {advice.unlock && (
+        <p className="small muted">Faster after a quest: {advice.unlock.method.name}{advice.unlock.method.xph ? ` (${rateText(advice.unlock.method)})` : ''} opens with {advice.unlock.quests.join(' and ')}.</p>
+      )}
       </DetailSection>}
       {state.mode === 'f2p' && <MembersFromHere skill={skill} />}
       {showOthers && (

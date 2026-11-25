@@ -47,7 +47,9 @@ export function withHourlyCoins(m: TrainingMethod, prices: PriceView | null | un
     if (each === null) return m;
     loot += each * x.qty;
   }
-  return { ...m, costPerHour: Math.round(cost), lootPerHour: Math.round(loot), marketNetPerHour: Math.round(loot - cost) };
+  // Named after what it uses (planks, a falcon's fee), so the card never falls back to "arrows".
+  const costName = [...(m.perHour.uses ?? []).map((u) => u.name.toLowerCase()), ...(fixed < 0 ? ['fees'] : [])].join(', ');
+  return { ...m, costPerHour: Math.round(cost), lootPerHour: Math.round(loot), marketNetPerHour: Math.round(loot - cost), ...(costName ? { costName } : {}) };
 }
 
 /** A known loss of coins against a known break-even or gain, both weighed against the coin rate; without prices nothing is judged. */
@@ -88,6 +90,20 @@ export function opensLater(methods: readonly TrainingMethod[], level: number, mo
   const next = methods.filter((m) => m.kind === 'method' && (m.from > level || missing(m).length) && (mode === 'members' || !m.members)).sort((a, b) => a.from - b.from)[0];
   const quests = next ? missing(next) : [];
   return next ? `${next.name} opens at level ${next.from}${quests.length ? ` and needs ${quests.join(' and ')}` : ''}.` : null;
+}
+
+/**
+ * The fastest method of this level that only undone quests keep locked, when it is at least a quarter faster than the pick (Gemstone
+ * Crab behind Children of the Sun, against Brutus at Attack 40): the plan names the quests that open it. Skill gaps are not offered.
+ */
+export function fasterBehindQuests<V extends { method: TrainingMethod; status: string; missing: { kind: string; label: string; state: string }[] }>(
+  views: readonly V[], best: V | null,
+): { method: TrainingMethod; quests: string[] } | null {
+  const lockedBy = (v: V) => v.missing.filter((n) => (n.kind === 'quest' || n.kind === 'skill') && n.state === 'MISSING');
+  const behind = views.filter((v) => v.status === 'LOCKED' && lockedBy(v).length > 0 && lockedBy(v).every((n) => n.kind === 'quest'))
+    .sort((a, b) => (practicalRate(b.method) ?? 0) - (practicalRate(a.method) ?? 0))[0];
+  const pace = best ? practicalRate(best.method) ?? 0 : 0;
+  return behind && (practicalRate(behind.method) ?? 0) >= pace * 1.25 ? { method: behind.method, quests: lockedBy(behind).map((n) => n.label) } : null;
 }
 
 /** Most coins still trains the skill (owner, 2026-11-24): it chooses among methods at least a third as fast as the fastest
