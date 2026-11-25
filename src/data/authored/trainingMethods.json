@@ -3843,6 +3843,7 @@
     },
     {
       "id": "th-artefacts",
+      "perHour": { "coins": 36000 },
       "skill": "thieving",
       "from": 49,
       "to": null,
@@ -3852,12 +3853,12 @@
         { "type": "skill", "skill": "thieving", "min": 49 },
         { "type": "item", "name": "Lockpick" }
       ],
-      "xph": [150000, 261000],
+      "xph": [130000, 226000],
       "effort": "high",
-      "cost": "free",
+      "cost": "profit",
       "risk": "none",
       "where": "Port Piscarilius, for Captain Khaled",
-      "note": "With practice, stamina potions and guard lures: about 150,000 XP an hour at 49, 186,000 at 65 and 261,000 at 99. Each heist also pays 500 to 1,000 coins; neither the coins nor the stamina potions are counted (OSRS Wiki, checked 2026-11-25).",
+      "note": "About 48 heists an hour, each 750 XP plus 40 times your Thieving level and 500 to 1,000 coins: about 130,000 XP and 36,000 coins an hour at 49, 226,000 XP at 99. The Book of the Dead teleport (The Queen of Thieves) raises it to about 55 heists. Stamina potions are not counted (OSRS Wiki, checked 2026-11-25).",
       "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Thieving_training",
       "place": "Port Piscarilius"
     },
@@ -3948,6 +3949,27 @@
       "note": "The fifth trap at 80 lifts the rate to about 115,000 XP an hour, 136,000 at 90 and 155,000 at 99 without tick manipulation, at 265 XP per red chinchompa, which you sell (OSRS Wiki, checked 2026-11-25).",
       "url": "https://oldschool.runescape.wiki/w/Hunter_training",
       "place": "Tlati Rainforest"
+    },
+    {
+      "id": "hu-herbiboar",
+      "skill": "hunter",
+      "from": 80,
+      "to": null,
+      "name": "Herbiboar",
+      "members": true,
+      "needs": [
+        { "type": "skill", "skill": "hunter", "min": 80 },
+        { "type": "skill", "skill": "herblore", "min": 31 },
+        { "type": "quest", "quest": "Bone Voyage" }
+      ],
+      "xph": [137000, 171000],
+      "effort": "low",
+      "cost": "free",
+      "risk": "none",
+      "where": "Mushroom Forest on Fossil Island",
+      "note": "About 66 herbiboars an hour give 137,000 XP at 80, 157,000 at 90 and 171,000 at 99, with stamina potions and high Agility. Harvesting adds herbs and Herblore XP, which are not counted (OSRS Wiki, checked 2026-11-25).",
+      "url": "https://oldschool.runescape.wiki/w/Hunter_training",
+      "place": "Mushroom Forest"
     },
     {
       "id": "co-mh-beginner",

@@ -660,6 +660,14 @@
       ],
       "page": "Civitas illa Fortis"
     },
+    "Mushroom Forest": {
+      "x": 3688,
+      "y": 3857,
+      "plane": 0,
+      "label": "Mushroom Forest",
+      "kind": "landmark",
+      "page": "Mushroom Forest"
+    },
     "Neypotzli": {
       "x": 1440,
       "y": 9632,

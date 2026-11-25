@@ -94,6 +94,7 @@ const PLACES: [string, Kind, string[], string?][] = [
   ['Port Piscarilius', 'city', []],
   ['Aldarin', 'city', []],
   ['Civitas illa Fortis', 'city', ['Civitas']],
+  ['Mushroom Forest', 'landmark', []],
   ['Neypotzli', 'dungeon', []],
   ["Kruk's Dungeon", 'dungeon', []],
   ['Teomat', 'landmark', []],
