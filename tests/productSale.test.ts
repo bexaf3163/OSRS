@@ -4,6 +4,7 @@ import { emptyProgress } from '../src/domain/persistence/progress';
 import { heldProducts } from '../src/domain/training/processingRates';
 import { productSaleRate } from '../src/domain/planning/earn';
 import { trainingMethods, viewMethod } from '../src/domain/training/trainingRouter';
+import { processRate } from '../src/domain/training/processingRates';
 import type { PriceView } from '../src/domain/market/quotes';
 import type { Step } from '../src/types';
 
@@ -36,5 +37,14 @@ describe('a processing loop sells what it made to fund the next batch', () => {
     expect(productSaleRate(state(220), step, 30_000, { prices })?.title).toBe('Sell 220 Diamond necklace');
     expect(productSaleRate(state(10), step, 30_000, { prices })).toBeNull();
     expect(productSaleRate(state(220), { } as Step, 30_000, { prices })).toBeNull();
+  });
+
+  it('picks the recipe its products can fund, not the one the coins alone cover', () => {
+    const method = trainingMethods.find((m) => m.id === 'cr-gold')!;
+    const withMould = (n: number) => { const st = state(n); st.owned!.items.set('necklace mould', { name: 'Necklace mould', carried: 1, noted: 0, bank: 0 }); return st; };
+    // Diamond necklaces pay best here, but 13 cost about 35,000 coins and the bag holds 1,185.
+    const rich = { ...prices, sell: (name: string) => quote(name === 'Diamond necklace' ? 3_500 : 1) } as unknown as PriceView;
+    expect(processRate(method, 'crafting', withMould(0), { prices: rich })?.basis).not.toBe('Diamond necklace');
+    expect(processRate(method, 'crafting', withMould(260), { prices: rich })?.basis).toBe('Diamond necklace');
   });
 });

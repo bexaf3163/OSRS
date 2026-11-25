@@ -175,7 +175,8 @@ export type StartResult =
 
 export function startDetour(state: PrepState, frame: DetourFrame): StartResult {
   if (state.stack.some((f) => f.detourId === frame.detourId && f.sourceStepId === frame.sourceStepId)) return { ok: false, state, reason: 'CYCLE' };
-  if (state.done.includes(doneKey(frame.sourceStepId, frame.detourId))) return { ok: false, state, reason: 'DONE_BEFORE' };
+  // A bank trip is a loop's restock (every batch of a training step), so it may come again; other trips are offered once.
+  if (frame.detourId !== 'bank' && state.done.includes(doneKey(frame.sourceStepId, frame.detourId))) return { ok: false, state, reason: 'DONE_BEFORE' };
   if (state.stack.length >= MAX_DETOUR_DEPTH) return { ok: false, state, reason: 'DEPTH' };
   return { ok: true, state: { ...state, stack: [...state.stack, frame] } };
 }

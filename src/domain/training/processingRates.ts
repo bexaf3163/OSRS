@@ -77,10 +77,10 @@ function placesFor(r: Recipe, state: PlayerState, reg: ProcessingRegistry): { sp
 interface Option { rate: ModelRate; score: number; fundingRank: 0 | 1 | 2 }
 
 /** Known coins can prove a purchase is affordable without pretending an unread balance is zero. */
-function batchFunding(needs: readonly MethodNeed[], state: PlayerState, prices?: Market['prices']): Option['fundingRank'] {
+function batchFunding(needs: readonly MethodNeed[], state: PlayerState, prices?: Market['prices'], products = 0): Option['fundingRank'] {
   const cost = requirementCost(needs.flatMap(n => n.type === 'item' ? [itemRequirement(n)] : []), state, prices);
   const cash = coinsOf(state);
-  const minimum = (cash.bag ?? 0) + (cash.bank ?? 0);
+  const minimum = (cash.bag ?? 0) + (cash.bank ?? 0) + products;
   if (cost !== null && cost <= minimum) return 0;
   return cost !== null && cash.total !== null ? 2 : 1;
 }
@@ -216,7 +216,8 @@ function option(r: Recipe, at: { spot: RateSpot | null; trip: [number, number]; 
   };
   // Time per XP less what the coins are worth in time (lootValue): a loss counts in full, a gain at most half; unknown coins are left out.
   const saved = atMarket.costPerHour === null ? 0 : coinTimeShare(atMarket.lootPerHour - atMarket.costPerHour, coinRate);
-  const fundingRank = batchFunding(needs, state, market.prices);
+  // What the method made and still holds sells for its next batch (heldProducts), so 260 diamond necklaces fund diamonds.
+  const fundingRank = batchFunding(needs, state, market.prices, heldProducts(method.id, state, market.prices, market.restriction).reduce((sum, p) => sum + p.value, 0));
   return { rate, score: (1 - saved) / ((xph[0] + xph[1]) / 2), fundingRank };
 }
 

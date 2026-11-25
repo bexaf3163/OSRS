@@ -244,4 +244,17 @@ public class NavigationTest
 		notes.add(2357, ActiveTarget.nameKey("Gold bar"), 250);
 		assertTrue("250 noted gold bars from the exchange end the purchase", PluginNavigation.obtained(t, bag, notes));
 	}
+
+	@Test
+	public void aBankTripIsHeadedTakeNotBuy()
+	{
+		NavTarget bank = new NavTarget();
+		bank.setLabel("Edgeville Bank: take Gold bar");
+		bank.setItemName("Gold bar");
+		assertEquals("Take Gold bar from Edgeville Bank", PluginNavigation.heading(bank));
+		NavTarget shop = new NavTarget();
+		shop.setLabel("Grand Exchange: buy Gold bar");
+		shop.setItemName("Gold bar");
+		assertEquals("Buy Gold bar", PluginNavigation.heading(shop));
+	}
 }

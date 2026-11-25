@@ -114,6 +114,17 @@ final class PluginNavigation
 		return obtained(plugin.navTarget, plugin.carried, plugin.noted);
 	}
 
+	/** A temporary target's heading: a bank trip the app names ("Edgeville Bank: take Gold bar") says take, an item to get says buy, a place says go to. */
+	static String heading(NavTarget t)
+	{
+		String label = t.getLabel();
+		int take = label == null ? -1 : label.indexOf(": take ");
+		if (take > 0) return "Take " + label.substring(take + 7) + " from " + label.substring(0, take);
+		List<String> sellers = t.getNpcNames();
+		if (t.isPurchase()) return "Buy " + (t.getItemName() != null ? t.getItemName() : label) + (sellers != null && !sellers.isEmpty() ? " from " + sellers.get(0) : "");
+		return FundingHint.isArrow(label) ? FundingHint.arrowText(label) : "Go to: " + label;
+	}
+
 	/** A purchase is in hand once the bag holds the item or its banknotes, which is how the Grand Exchange hands it out. */
 	static boolean obtained(NavTarget t, ItemCounts carried, ItemCounts noted)
 	{
@@ -452,11 +463,7 @@ final class PluginNavigation
 		if (plugin.navTarget != null)
 		{
 			// A temporary target over the step: it goes first, the step is a line below so it does not get lost.
-			List<String> sellers = plugin.navTarget.getNpcNames();
-			title = plugin.navTarget.isPurchase()
-				? "Buy " + (plugin.navTarget.getItemName() != null ? plugin.navTarget.getItemName() : plugin.navTarget.getLabel())
-					+ (sellers != null && !sellers.isEmpty() ? " from " + sellers.get(0) : "")
-				: FundingHint.isArrow(plugin.navTarget.getLabel()) ? FundingHint.arrowText(plugin.navTarget.getLabel()) : "Go to: " + plugin.navTarget.getLabel();
+			title = heading(plugin.navTarget);
 			goal = stepTitle == null ? null : "Then: step " + stepTitle;
 		}
 		else if (plugin.target != null)
@@ -561,10 +568,7 @@ final class PluginNavigation
 		String detour = null;
 		if (n != null && !FundingHint.isArrow(n.getLabel()) && (v == null || v.getTitle() == null || v.getDetour() != null))
 		{
-			List<String> sellers = n.getNpcNames();
-			detour = n.isPurchase()
-				? "Buy " + (n.getItemName() != null ? n.getItemName() : n.getLabel()) + (sellers != null && !sellers.isEmpty() ? " from " + sellers.get(0) : "")
-				: "Go to " + n.getLabel();
+			detour = n.isPurchase() ? heading(n) : "Go to " + n.getLabel();
 		}
 		FundingHint f = plugin.snapshot.funding;
 		Player me = plugin.client.getLocalPlayer();

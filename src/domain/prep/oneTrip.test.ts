@@ -164,8 +164,9 @@ describe('the preparation route and detours', () => {
     const r2 = reconcile(s, open([]));
     expect(r2.state.stack).toEqual([]);
     expect(r2.returnTo).toBe('S4-05');
-    // What is done is not offered a second time.
-    expect(startDetour(r2.state, frame('S4-05', 'bank'))).toMatchObject({ ok: false, reason: 'DONE_BEFORE' });
+    // What is done is not offered a second time, except a bank trip, which a loop repeats every batch.
+    expect(startDetour(r2.state, frame('S4-05', 'buy'))).toMatchObject({ ok: false, reason: 'DONE_BEFORE' });
+    expect(startDetour(r2.state, frame('S4-05', 'bank')).ok).toBe(true);
     // The readiness of the step is unknown — the detour stays.
     expect(reconcile(s, () => null).state.stack).toHaveLength(3);
   });
