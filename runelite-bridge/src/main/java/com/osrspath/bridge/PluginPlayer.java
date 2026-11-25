@@ -16,6 +16,7 @@ import net.runelite.api.ChatMessageType;
 import net.runelite.api.GameState;
 import net.runelite.api.GrandExchangeOffer;
 import net.runelite.api.GrandExchangeOfferState;
+import net.runelite.api.gameval.ItemID;
 import net.runelite.api.Item;
 import net.runelite.api.ItemComposition;
 import net.runelite.api.ItemContainer;
@@ -65,6 +66,7 @@ final class PluginPlayer
 	private final int[] offerItems = new int[8];
 
 	private final ShoppingPlan.Offer[] offerSlots = new ShoppingPlan.Offer[8];
+	private final ExchangeSlot[] exchangeSlots = new ExchangeSlot[8];
 
 	/** The total level is not a skill; RuneLite marks it deprecated, so we compare by name. */
 	static boolean isOverall(Skill skill)
@@ -457,7 +459,51 @@ final class PluginPlayer
 		{
 			offerSlots[slot] = null;
 		}
+		boolean buy = s == GrandExchangeOfferState.BUYING || s == GrandExchangeOfferState.BOUGHT || s == GrandExchangeOfferState.CANCELLED_BUY;
+		boolean sell = s == GrandExchangeOfferState.SELLING || s == GrandExchangeOfferState.SOLD || s == GrandExchangeOfferState.CANCELLED_SELL;
+		exchangeSlots[slot] = buy || sell ? new ExchangeSlot(buy, o.getItemId(), itemName(o.getItemId()), o.getQuantitySold(), o.getTotalQuantity(), o.getPrice(), o.getSpent()) : null;
+		plugin.exchange = exchangeHoldings(exchangeSlots);
+		plugin.ownedDirty = true;
+		plugin.gearDirty = true;
 		recomputeShopping();
+	}
+
+	/** One Grand Exchange offer as the game reports it: done is the quantity bought or sold, spent the coins paid or received. */
+	static final class ExchangeSlot
+	{
+		final boolean buy;
+		final int itemId;
+		final String name;
+		final int done;
+		final int total;
+		final int price;
+		final int spent;
+
+		ExchangeSlot(boolean buy, int itemId, String name, int done, int total, int price, int spent)
+		{
+			this.buy = buy;
+			this.itemId = itemId;
+			this.name = name;
+			this.done = done;
+			this.total = total;
+			this.price = price;
+			this.spent = spent;
+		}
+	}
+
+	/** What the offers hold for the player: a sale keeps its unsold items and the coins it made, a purchase its bought items and the coins still reserved. */
+	static ItemCounts exchangeHoldings(ExchangeSlot[] slots)
+	{
+		ItemCounts out = new ItemCounts();
+		String coins = ActiveTarget.nameKey("Coins");
+		for (ExchangeSlot s : slots)
+		{
+			if (s == null)
+				continue;
+			out.add(s.itemId, s.name, s.buy ? s.done : s.total - s.done);
+			out.add(ItemID.COINS, coins, (int) Math.min(Integer.MAX_VALUE, s.buy ? (long) s.total * s.price - s.spent : s.spent));
+		}
+		return out;
 	}
 
 	/** For auto-tick: how much of the item the player has: bag, worn, notes and the bank if it was opened. */
@@ -531,7 +577,7 @@ final class PluginPlayer
 		{
 			return;
 		}
-		out.put(key, ItemCounts.report(name, id, plugin.carried, plugin.noted, plugin.bank));
+		out.put(key, ItemCounts.report(name, id, plugin.carried, plugin.noted, plugin.bank == null ? null : ItemCounts.sum(plugin.bank, plugin.exchange)));
 	}
 
 	public void onChatMessage(ChatMessage e)

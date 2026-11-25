@@ -157,6 +157,16 @@ export interface PlanExtras {
   readiness?: { status: NonNullable<PrepPlanPayload['readiness']>['status']; headline: string } | null;
 }
 
+/** What the coins you have buy of the step's purchases now, kept in the step's own proportions (13 gold bars to 13 diamonds), so nobody counts at the exchange. */
+export function coinsCover(plan: Pick<PrepPlan, 'lines' | 'coins'>): string | undefined {
+  const buys = plan.lines.filter((l) => l.timing === 'NOW' && l.action?.kind === 'BUY' && (l.action.price ?? 0) > 0 && l.count > 0);
+  const setCost = buys.reduce((sum, l) => sum + l.count * l.action!.price!, 0);
+  const have = plan.coins.have ?? 0;
+  if (!buys.length || have < setCost) return undefined;
+  const pieces = buys.map((l) => `${Math.floor((have / setCost) * l.count).toLocaleString('en-US')} ${l.name}`);
+  return `your ${have.toLocaleString('en-US')} coins buy ${pieces.join(' + ')}`;
+}
+
 /** The main-card line is at most two lines of the game card; the rest is in the hint. */
 const MAX_SUMMARY = 160;
 
@@ -169,6 +179,7 @@ export function planPayload(plan: PrepPlan, extras: PlanExtras = {}): PrepPlanPa
     if (withdrawals.length >= MAX_WITHDRAWALS || withdrawals.some((x) => nameKey(x.itemName) === nameKey(w.name))) continue;
     withdrawals.push({ itemId: itemIdOf(w.name), itemName: clipText(w.name, 60), quantity: Math.max(1, Math.min(w.quantity, 10_000_000)) });
   }
+  const cover = coinsCover(plan);
   const lines = plan.lines
     .filter((l) => l.timing !== 'LATER')
     .slice(0, MAX_PLAN_LINES)
@@ -180,7 +191,7 @@ export function planPayload(plan: PrepPlan, extras: PlanExtras = {}): PrepPlanPa
       priority: l.priority,
       timing: l.timing,
       ...(l.supply && l.supply !== 'ENOUGH' ? { supply: l.supply } : {}),
-      ...(l.action ? { action: clipText(l.action.label, 90) } : {}),
+      ...(l.action ? { action: clipText(l.action.kind === 'BUY' && cover ? `${l.action.label}; ${cover}` : l.action.label, 120) } : {}),
       ...(l.marketPrice ? { price: clipText(l.marketPrice.text, 120) } : {}),
       ...(l.unnote ? { unnote: l.unnote } : {}),
     }));

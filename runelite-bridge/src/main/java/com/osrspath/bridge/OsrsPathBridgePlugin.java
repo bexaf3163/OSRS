@@ -232,6 +232,8 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	ItemCounts carried = ItemCounts.EMPTY;
 	ItemCounts noted = ItemCounts.EMPTY;
 	ItemCounts bank;
+	/** What waits in Grand Exchange offers (unsold or bought items, coins made or reserved); collecting puts it in the bank. */
+	ItemCounts exchange = ItemCounts.EMPTY;
 	/** The bank was loaded from a previous session (from the profile settings), not read from the game; until the bank is opened it is "last known". */
 	boolean bankFromSave;
 	long bankSavedAt;

@@ -251,12 +251,12 @@ final class PluginHints
 		g.put("inventorySlots", bag == null ? null : slotsUsed);
 		// Weight of the bag and worn items as in the game (client.getWeight): how fast running drains depends on it.
 		g.put("weight", bag == null ? null : plugin.client.getWeight());
-		g.put("bankCoins", plugin.bank == null ? null : plugin.bank.count(ItemID.COINS, "Coins"));
+		g.put("bankCoins", plugin.bank == null ? null : ItemCounts.sum(plugin.bank, plugin.exchange).count(ItemID.COINS, "Coins"));
 		// A value of items by Grand Exchange prices (without coins): in the bag and worn, and in the bank if it was opened.
 		// This is not money but what you would get by selling: the app shows it separately from coins, with "~".
 		IntUnaryOperator price = this::itemPrice;
 		g.put("carriedValue", plugin.carried.value(price, ItemID.COINS) + plugin.noted.value(price, ItemID.COINS));
-		g.put("bankValue", plugin.bank == null ? null : plugin.bank.value(price, ItemID.COINS));
+		g.put("bankValue", plugin.bank == null ? null : ItemCounts.sum(plugin.bank, plugin.exchange).value(price, ItemID.COINS));
 		return g;
 	}
 

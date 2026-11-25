@@ -257,4 +257,20 @@ public class NavigationTest
 		shop.setItemName("Gold bar");
 		assertEquals("Buy Gold bar", PluginNavigation.heading(shop));
 	}
+
+	@Test
+	public void grandExchangeOffersHoldTheirItemsAndCoins()
+	{
+		String necklace = ActiveTarget.nameKey("Diamond necklace");
+		String bar = ActiveTarget.nameKey("Gold bar");
+		PluginPlayer.ExchangeSlot[] slots = new PluginPlayer.ExchangeSlot[8];
+		// 260 necklaces offered at 1,911 each, 100 sold so far.
+		slots[0] = new PluginPlayer.ExchangeSlot(false, 1662, necklace, 100, 260, 1911, 191_100);
+		// 50 gold bars wanted at 150 each, 20 bought for 2,900 coins.
+		slots[3] = new PluginPlayer.ExchangeSlot(true, 2357, bar, 20, 50, 150, 2_900);
+		ItemCounts held = PluginPlayer.exchangeHoldings(slots);
+		assertEquals(160, held.count(1662, necklace));
+		assertEquals(20, held.count(2357, bar));
+		assertEquals(191_100 + 50 * 150 - 2_900, held.count(995, ActiveTarget.nameKey("Coins")));
+	}
 }

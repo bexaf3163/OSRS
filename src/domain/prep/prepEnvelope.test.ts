@@ -10,6 +10,7 @@ import type { OwnedItem, OwnedState } from '../items/checklist';
 import { nameKey } from '../items/itemKey';
 import type { Recovery } from '../travel/recovery';
 import { buildEnvelope, envelopeKey, MAX_PLAN_LINES, nextSeq, planPayload, EMPTY_PARTS, SNAPSHOT_VERSION, type SnapshotParts } from './prepEnvelope';
+import { coinsCover } from './prepEnvelope';
 import { clipText } from '../text/format';
 import { postPrepPlan, snapshotAccepted, supportsSnapshot, APP_PROTOCOL, BRIDGE_PATHS, missingWithPlugin } from '../../services/runeliteBridge';
 import { toInGameTarget } from '../guide/inGameTarget';
@@ -173,5 +174,15 @@ describe('the state snapshot for the game (protocol 6)', () => {
     if (process.env.UPDATE_FIXTURES === '1') writeFileSync(FILE, now);
     const saved = existsSync(FILE) ? readFileSync(FILE, 'utf8') : '';
     expect(saved === now, 'runelite-bridge/src/test/resources/prep-snapshots.json is out of date — npm run fixtures').toBe(true);
+  });
+});
+
+describe('what your coins buy at the exchange', () => {
+  const line = (name: string, price: number) => ({ name, count: 13, timing: 'NOW', action: { kind: 'BUY', label: 'Buy: Grand Exchange', price } }) as never;
+  it('splits the coins in the step\'s proportions', () => {
+    expect(coinsCover({ lines: [line('Gold bar', 150), line('Diamond', 1_804)], coins: { need: 0, have: 486_000, missing: 0 } })).toBe('your 486,000 coins buy 248 Gold bar + 248 Diamond');
+  });
+  it('says nothing when the coins do not cover one batch', () => {
+    expect(coinsCover({ lines: [line('Diamond', 1_804)], coins: { need: 0, have: 7_000, missing: 0 } })).toBeUndefined();
   });
 });
