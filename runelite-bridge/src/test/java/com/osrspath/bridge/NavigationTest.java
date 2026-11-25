@@ -231,4 +231,17 @@ public class NavigationTest
 		assertFalse(Navigation.isInstanced(3213, 3428));
 		assertFalse("dungeons north of the surface are not instances", Navigation.isInstanced(3104, 9571));
 	}
+
+	@Test
+	public void aPurchaseArrivingAsBanknotesIsObtained()
+	{
+		NavTarget t = new NavTarget();
+		t.setLabel("Grand Exchange: buy Gold bar");
+		t.setItemName("Gold bar");
+		ItemCounts bag = new ItemCounts();
+		ItemCounts notes = new ItemCounts();
+		assertFalse(PluginNavigation.obtained(t, bag, notes));
+		notes.add(2357, ActiveTarget.nameKey("Gold bar"), 250);
+		assertTrue("250 noted gold bars from the exchange end the purchase", PluginNavigation.obtained(t, bag, notes));
+	}
 }

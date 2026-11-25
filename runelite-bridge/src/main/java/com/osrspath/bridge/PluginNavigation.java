@@ -111,8 +111,13 @@ final class PluginNavigation
 
 	boolean hasNavItem()
 	{
-		NavTarget t = plugin.navTarget;
-		return t != null && t.isPurchase() && plugin.carried.count(t.getItemId(), t.getItemName()) > 0;
+		return obtained(plugin.navTarget, plugin.carried, plugin.noted);
+	}
+
+	/** A purchase is in hand once the bag holds the item or its banknotes, which is how the Grand Exchange hands it out. */
+	static boolean obtained(NavTarget t, ItemCounts carried, ItemCounts noted)
+	{
+		return t != null && t.isPurchase() && ItemCounts.sum(carried, noted).count(t.getItemId(), t.getItemName()) > 0;
 	}
 
 	/** Arrived at the place (for a target without an item): the same tile of the plane, no farther than three tiles. */
