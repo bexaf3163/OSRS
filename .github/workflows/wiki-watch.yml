@@ -1,0 +1,30 @@
+# Weekly Wiki watch: lists new quests and changed cited Wiki pages (scripts/check/wiki-watch.ts) in one open issue labelled wiki-watch.
+name: Wiki watch
+
+on:
+  schedule:
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: node scripts/check/wiki-watch.ts --report wiki-watch.md
+      - name: Open or update the issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if ! grep -q '^- ' wiki-watch.md; then echo "Nothing changed."; exit 0; fi
+          gh label create wiki-watch --force --description "Wiki changes to review"
+          n=$(gh issue list --label wiki-watch --state open --json number --jq '.[0].number // empty')
+          if [ -n "$n" ]; then gh issue edit "$n" --body-file wiki-watch.md; else gh issue create --title "Wiki changes to review" --label wiki-watch --body-file wiki-watch.md; fi

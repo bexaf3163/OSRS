@@ -7,10 +7,10 @@
     "gear.json": "npm run build-gear",
     "itemFacts.json": "npm run build-item-facts",
     "majorLocations.json": "npm run build-locations",
-        "portals.json": "npm run build-portals",
+    "portals.json": "npm run build-portals",
     "processing.json": "npm run build-processing",
-    "questMachines.json": "python tools/qh-machines/qhm/build_machines.py",
     "questFacts.json": "npm run build-quest-facts",
+    "questMachines.json": "python tools/qh-machines/qhm/build_machines.py",
     "rangedGear.json": "npm run build-ranged-gear",
     "skilling.json": "npm run build-skilling",
     "slayer.json": "npm run build-slayer",
@@ -19,6 +19,7 @@
     "trainers.json": "npm run build-trainers",
     "transportNet.json": "npm run build-transport-net",
     "weights.json": "npm run build-weights",
+    "wikiRevisions.json": "npm run wiki-watch",
     "worldRouting.json": "npm run build-world-routing"
   }
 }

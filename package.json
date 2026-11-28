@@ -54,7 +54,8 @@
     "build-skilling": "node scripts/data/build-skilling.ts",
     "build-processing": "node scripts/data/build-processing.ts",
     "build-slayer": "node scripts/data/build-slayer.ts",
-    "build-item-facts": "node scripts/data/build-item-facts.ts"
+    "build-item-facts": "node scripts/data/build-item-facts.ts",
+    "wiki-watch": "node scripts/check/wiki-watch.ts"
   },
   "devDependencies": {
     "@types/leaflet": "^1.9.22",
