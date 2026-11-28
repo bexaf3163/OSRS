@@ -240,9 +240,23 @@ public class NavigationTest
 		t.setItemName("Gold bar");
 		ItemCounts bag = new ItemCounts();
 		ItemCounts notes = new ItemCounts();
-		assertFalse(PluginNavigation.obtained(t, bag, notes));
+		assertFalse(PluginNavigation.obtained(t, bag, notes, 0));
 		notes.add(2357, ActiveTarget.nameKey("Gold bar"), 250);
-		assertTrue("250 noted gold bars from the exchange end the purchase", PluginNavigation.obtained(t, bag, notes));
+		assertTrue("250 noted gold bars from the exchange end the purchase", PluginNavigation.obtained(t, bag, notes, 0));
+	}
+
+	@Test
+	public void oneInTheBagDoesNotEndATripToBuyMore()
+	{
+		NavTarget t = new NavTarget();
+		t.setLabel("Gerrant's Fishy Business: buy Feather");
+		t.setItemName("Feather");
+		ItemCounts bag = new ItemCounts();
+		bag.add(314, ActiveTarget.nameKey("Feather"), 1);
+		int before = PluginNavigation.bagCount(t, bag, new ItemCounts());
+		assertFalse("the feather already held is not the purchase", PluginNavigation.obtained(t, bag, new ItemCounts(), before));
+		bag.add(314, ActiveTarget.nameKey("Feather"), 300);
+		assertTrue(PluginNavigation.obtained(t, bag, new ItemCounts(), before));
 	}
 
 	@Test

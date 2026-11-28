@@ -33,4 +33,10 @@ final class MoveDetector
 	{
 		return distance(x1, y1, x2, y2) >= JUMP;
 	}
+
+	/** A jump no known way explains: a teleport or a respawn. A cave entrance far from its inside (the Stronghold of Security) is a walk. */
+	static boolean teleported(int x1, int y1, int x2, int y2)
+	{
+		return isJump(x1, y1, x2, y2) && !Portals.through(x1, y1, x2, y2);
+	}
 }

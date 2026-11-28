@@ -1,7 +1,10 @@
 package com.osrspath.bridge;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import net.runelite.api.Client;
@@ -201,7 +204,7 @@ final class QhLiveFacts implements QhMachine.Facts
 	@Override
 	public Boolean object(int[] ids, int[] zone)
 	{
-		return scan(zone, t -> hasObject(t, ids));
+		return scanOnce("obj", ids, zone, t -> hasObject(t, ids));
 	}
 
 	@Override
@@ -225,7 +228,27 @@ final class QhLiveFacts implements QhMachine.Facts
 	@Override
 	public Boolean ground(int[] ids, int[] zone)
 	{
-		return scan(zone, t -> hasItem(t, ids));
+		return scanOnce("ground", ids, zone, t -> hasItem(t, ids));
+	}
+
+	/** A scene scan reads every tile, and one tick runs the machine for its tick and for each event: the answer is kept for the tick. */
+	private int scanTick = -1;
+	private final Map<String, Boolean> scanned = new HashMap<>();
+
+	private Boolean scanOnce(String kind, int[] ids, int[] zone, Predicate<Tile> has)
+	{
+		int tick = client.getTickCount();
+		if (tick != scanTick)
+		{
+			scanTick = tick;
+			scanned.clear();
+		}
+		String key = kind + Arrays.toString(ids) + Arrays.toString(zone);
+		if (!scanned.containsKey(key))
+		{
+			scanned.put(key, scan(zone, has));
+		}
+		return scanned.get(key);
 	}
 
 	private Boolean scan(int[] zone, Predicate<Tile> has)

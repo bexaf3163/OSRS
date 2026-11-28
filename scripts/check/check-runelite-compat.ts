@@ -1,6 +1,6 @@
 // Checks that the built plugin is compatible with the RuneLite INSTALLED on the player's machine: all its references to net.runelite.*
 // exist in the client jar. Needed: JDK 17 (javap, javac), a built plugin (./gradlew build) and RuneLite with the folder
-// ~/.runelite/repository2 (it appears after the first client launch). It does not run on CI.
+// ~/.runelite/repository2 (it appears after the first client launch). CI fills that folder from RuneLite's bootstrap.json and runs it too.
 // Run: npm run check-runelite [version, for example 1.13.1] — without a version the newest of the installed ones is taken.
 
 import { spawnSync } from 'node:child_process';

@@ -77,6 +77,27 @@ final class Portals
 		return l;
 	}
 
+	/** How near a step's two tiles must be to a way's two ends to be a walk through it. */
+	static final int THROUGH_NEAR = 6;
+
+	/** Whether a long step went through a known way (a cave entrance, a ladder, a hole) in either direction, not by a teleport. */
+	static boolean through(int x1, int y1, int x2, int y2)
+	{
+		for (Portal p : all())
+		{
+			if ((near(p.getX(), p.getY(), x1, y1) && near(p.getToX(), p.getToY(), x2, y2)) || (near(p.getToX(), p.getToY(), x1, y1) && near(p.getX(), p.getY(), x2, y2)))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private static boolean near(int ax, int ay, int bx, int by)
+	{
+		return Math.abs(ax - bx) <= THROUGH_NEAR && Math.abs(ay - by) <= THROUGH_NEAR;
+	}
+
 	/** Staircases and ladders within a layer (another floor). */
 	static List<Portal> floors()
 	{

@@ -95,7 +95,8 @@ export function unsafe(foe: CombatFoe, spot: { specialMaxHit?: number } | undefi
 
 /** "Minotaur (level 12)"; one version — the name alone. */
 export function foeLabel(f: CombatFoe): string {
-  return foeVariants(f.name).length > 1 ? `${f.name} (level ${f.combat})` : f.name;
+  // Every version counts, members ones too: a Members foe with two levels still names its level.
+  return COMBAT_FOES.filter((x) => x.name === f.name).length > 1 ? `${f.name} (level ${f.combat})` : f.name;
 }
 
 const TICK = 0.6;

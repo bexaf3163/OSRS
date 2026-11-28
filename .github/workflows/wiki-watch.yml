@@ -24,7 +24,12 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          if ! grep -q '^- ' wiki-watch.md; then echo "Nothing changed."; exit 0; fi
           gh label create wiki-watch --force --description "Wiki changes to review"
           n=$(gh issue list --label wiki-watch --state open --json number --jq '.[0].number // empty')
+          # Everything reviewed and accepted: the open issue is done.
+          if ! grep -q '^- ' wiki-watch.md; then
+            echo "Nothing changed."
+            if [ -n "$n" ]; then gh issue close "$n" --comment "Nothing left to review: the baseline covers every change."; fi
+            exit 0
+          fi
           if [ -n "$n" ]; then gh issue edit "$n" --body-file wiki-watch.md; else gh issue create --title "Wiki changes to review" --label wiki-watch --body-file wiki-watch.md; fi

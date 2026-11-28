@@ -32,7 +32,7 @@ import net.runelite.client.ui.overlay.components.TitleComponent;
 import org.junit.Test;
 
 /**
- * The plugin plates drawn with the real fonts: no line sticks out of its frame. The one in-game guide (2.74.0) uses its own face (Sora), the bank and
+ * The plugin plates drawn with the real fonts: no line sticks out of its frame. The one in-game guide uses its own Ledger faces (Cinzel and EB Garamond), the bank and
  * exchange cards the RuneLite fonts the player picks.
  *
  * A pixel check: the panel is drawn on a transparent picture, and everything opaque outside its rectangle is

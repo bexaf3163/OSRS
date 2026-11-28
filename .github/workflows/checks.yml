@@ -77,8 +77,21 @@ jobs:
           distribution: temurin
           java-version: 17
           cache: gradle
-      # The plugin is compiled against RuneLite 1.12.39; the tests compare the route quest names with the client API.
+      # The plugin is compiled against the RuneLite pinned in build.gradle; the tests compare the route quest names with the client API.
       - run: chmod +x gradlew && ./gradlew --no-daemon test
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      # Every RuneLite call of the built plugin against the newest client players run: a changed signature fails here,
+      # not in the game (2.188.3 and 2.188.4 shipped one each).
+      - name: Check against the newest RuneLite
+        run: |
+          mkdir -p ~/.runelite/repository2
+          curl -fsSL https://static.runelite.net/bootstrap.json -o "$RUNNER_TEMP/bootstrap.json"
+          node -e "for (const a of require(process.argv[1]).artifacts) console.log(a.name + ' ' + a.path)" "$RUNNER_TEMP/bootstrap.json" \
+            | grep -E '^(client|runelite-api|http-api|guava|guice|javax|gson|okhttp|okio|slf4j-api|jna|lwjgl|commons-lang3|jopt-simple)' \
+            | while read -r name url; do curl -fsSL "$url" -o ~/.runelite/repository2/"$name"; done
+          cd .. && node scripts/check/check-runelite-compat.ts
 
   portable:
     runs-on: windows-latest

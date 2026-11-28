@@ -8,9 +8,13 @@ import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 const root = new URL('../../', import.meta.url);
 const API = 'https://oldschool.runescape.wiki/api.php';
 const WIKI = 'https://oldschool.runescape.wiki/w/';
-const UA = 'osrs-route-money-builder';
+// The Wiki asks automated clients to name a contact: the project's public page.
+const UA = 'osrs-route-money-builder (https://github.com/bexaf3163/OSRS)';
 const BASELINE = new URL('src/data/generated/wikiRevisions.json', root);
-const CATEGORIES = ['Category:Quests', 'Category:Miniquests'];
+// A quest is a page with a quest or miniquest infobox; the quest categories also hold guides and lists ("Quest points").
+const INFOBOXES = ['Template:Infobox Quest', 'Template:Infobox Miniquest'];
+// GitHub refuses an issue body above 65,536 characters.
+const MAX_REPORT = 60_000;
 const args = process.argv.slice(2);
 
 interface Baseline { checked: string; revisions: Record<string, number>; quests: string[] }
@@ -20,12 +24,14 @@ const files = execFileSync('git', ['ls-files', 'src/data/authored/*.json', 'src/
   .split('\n').filter((f) => f && !f.endsWith('wikiRevisions.json'));
 // A title keeps its own brackets ("Alan (Scrambled!)"); a bracket that only closes the surrounding text is dropped.
 const balanced = (t: string) => { while (t.endsWith(')') && t.split(')').length > t.split('(').length) t = t.slice(0, -1); return t; };
+// A full stop that ends a sentence is dropped; a title with dots of its own keeps its last one ("Another Slice of H.A.M.").
+const sentenceEnd = (t: string) => { t = t.replace(/[,;:]+$/, ''); return t.endsWith('.') && !t.slice(0, -1).includes('.') ? t.slice(0, -1) : t; };
 const titles = [...new Set(files.flatMap((f) => [...readFileSync(new URL(f, root), 'utf8').matchAll(/https:\/\/oldschool\.runescape\.wiki\/w\/([^"#?\s\\]+)/g)]
-  .map((m) => balanced(decodeURIComponent(m[1]).replace(/_/g, ' ').replace(/[.,;:]+$/, '')))))]
+  .map((m) => balanced(sentenceEnd(decodeURIComponent(m[1]).replace(/_/g, ' '))))))]
   .filter((t) => !/^(File|Special|Category):/.test(t)).sort();
 
 async function api(params: Record<string, string>): Promise<any> {
-  const res = await fetch(`${API}?${new URLSearchParams({ format: 'json', formatversion: '2', ...params })}`, { headers: { 'User-Agent': UA } });
+  const res = await fetch(`${API}?${new URLSearchParams({ format: 'json', formatversion: '2', ...params })}`, { headers: { 'User-Agent': UA }, signal: AbortSignal.timeout(30_000) });
   if (!res.ok) throw new Error(`Wiki API ${res.status}`);
   await new Promise((r) => setTimeout(r, 300));
   return res.json();
@@ -53,18 +59,19 @@ async function revisionsOf(list: string[]): Promise<{ revisions: Record<string, 
 
 async function questsOnWiki(): Promise<string[]> {
   const out: string[] = [];
-  for (const cmtitle of CATEGORIES) {
+  for (const eititle of INFOBOXES) {
     let cont: string | undefined;
     do {
-      const data = await api({ action: 'query', list: 'categorymembers', cmtitle, cmnamespace: '0', cmlimit: '500', ...(cont ? { cmcontinue: cont } : {}) });
-      out.push(...data.query.categorymembers.map((m: { title: string }) => m.title).filter((t: string) => !t.includes('/')));
-      cont = data.continue?.cmcontinue;
+      const data = await api({ action: 'query', list: 'embeddedin', eititle, einamespace: '0', eilimit: '500', ...(cont ? { eicontinue: cont } : {}) });
+      out.push(...data.query.embeddedin.map((m: { title: string }) => m.title).filter((t: string) => !t.includes('/')));
+      cont = data.continue?.eicontinue;
     } while (cont);
   }
   return [...new Set(out)].sort();
 }
 
-const link = (t: string) => `[${t}](${WIKI}${encodeURI(t.replace(/ /g, '_'))})`;
+// Every character a Markdown link or a URL could misread is encoded: brackets, ?, # and &.
+const link = (t: string) => `[${t.replace(/[[\]]/g, '\\$&')}](${WIKI}${encodeURIComponent(t.replace(/ /g, '_')).replace(/%2F/g, '/').replace(/\(/g, '%28').replace(/\)/g, '%29')})`;
 const baseline: Baseline | null = existsSync(BASELINE) ? JSON.parse(readFileSync(BASELINE, 'utf8')) : null;
 const { revisions, missing } = await revisionsOf(titles);
 const quests = await questsOnWiki();
@@ -84,9 +91,11 @@ const sections: [string, string[]][] = [
   ['Cited pages that no longer exist', missing.map(link)],
   ['Newly cited pages, not yet reviewed', unseen.map(link)],
 ];
-const report = [`# Wiki watch, ${new Date().toISOString().slice(0, 10)}`, '',
+const full = [`# Wiki watch, ${new Date().toISOString().slice(0, 10)}`, '',
   `${titles.length} cited pages and ${quests.length} quests checked against the review of ${known.checked}. After reviewing, run \`npm run wiki-watch -- --accept\` and commit the baseline.`,
   ...sections.filter(([, rows]) => rows.length).flatMap(([title, rows]) => ['', `## ${title} (${rows.length})`, '', ...rows.map((r) => `- ${r}`)])].join('\n') + '\n';
+const report = full.length <= MAX_REPORT ? full
+  : full.slice(0, full.lastIndexOf('\n', MAX_REPORT)) + '\n\nThe list is cut here to fit an issue: run `npm run wiki-watch` for all of it.\n';
 const at = args.indexOf('--report');
 if (at >= 0 && args[at + 1]) writeFileSync(args[at + 1], report);
 console.log(sections.map(([title, rows]) => `${title}: ${rows.length}`).join('\n'));

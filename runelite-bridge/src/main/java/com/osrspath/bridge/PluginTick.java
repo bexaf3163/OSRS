@@ -147,7 +147,7 @@ final class PluginTick
 				plugin.lastPosition = pos;
 				// A jump of 20+ tiles in a tick is a teleport or respawn: the app turns on recovery mode.
 				if (before != null && plugin.server != null && plugin.config.shareStats()
-					&& MoveDetector.isJump(before.getX(), before.getY(), pos.getX(), pos.getY()))
+					&& MoveDetector.teleported(before.getX(), before.getY(), pos.getX(), pos.getY()))
 				{
 					plugin.debug.tel("moved", "what", "TELEPORT", "from", new int[] {before.getX(), before.getY(), before.getPlane()}, "to", new int[] {pos.getX(), pos.getY(), pos.getPlane()});
 					plugin.server.moved("TELEPORT", new int[] {before.getX(), before.getY(), before.getPlane()}, new int[] {pos.getX(), pos.getY(), pos.getPlane()});
@@ -164,7 +164,7 @@ final class PluginTick
 					lastLayer = layerNow;
 					plugin.navigation.updateNavigation();
 				}
-				boolean jumped = before != null && MoveDetector.isJump(before.getX(), before.getY(), pos.getX(), pos.getY());
+				boolean jumped = before != null && MoveDetector.teleported(before.getX(), before.getY(), pos.getX(), pos.getY());
 				if (PluginNavigation.transportStopOutdated(plugin.snapshot.navViaTransport, jumped))
 				{
 					plugin.navigation.finishNav("teleported");

@@ -79,9 +79,8 @@ export function methodRate(m: TrainingMethod, skill: string, state: PlayerState,
 // Planning copies a state per level (atLevel) but shares its items, gear and quests, so each part's text is kept per object, and the
 // whole key becomes a short number: method caches then compare a few characters instead of the bank's contents (route gate profile).
 // shortcut: a state part must not be changed in place after it was keyed; replace with explicit versions if the store ever mutates parts.
-// Ids only grow, so a full map can be emptied without two texts ever sharing an id: a long session's memory stays flat.
-const MEMO_CAP = 5000;
-let nextId = 0;
+// Unbounded on purpose: emptying the maps gives equal texts new ids and every method cache misses (2.189.0 tried a
+// 5,000 cap and the Members route gate's median decision went from 2.1 s to 10.4 s).
 const partIds = new WeakMap<object, string>();
 const textIds = new Map<string, string>();
 const part = <T extends object>(o: T, text: (o: T) => string): string => {
@@ -89,10 +88,7 @@ const part = <T extends object>(o: T, text: (o: T) => string): string => {
   if (id === undefined) {
     const t = text(o);
     id = textIds.get(t);
-    if (id === undefined) {
-      if (textIds.size >= MEMO_CAP) textIds.clear();
-      textIds.set(t, id = `p${nextId++}`);
-    }
+    if (id === undefined) textIds.set(t, id = `p${textIds.size}`);
     partIds.set(o, id);
   }
   return id;
@@ -113,10 +109,7 @@ export function rateKeyOf(s: PlayerState): string {
   const manual = s.manual ? part(s.manual, m => JSON.stringify(Object.entries(m).sort(([a], [b]) => a.localeCompare(b)))) : '[]';
   const full = [s.mode, s.equipmentKnown ? 1 : 0, s.bankSeen ? 1 : 0, lv, eq, items, cash.bag ?? '?', cash.bank ?? '?', quests, counts, manual].join('|');
   let id = stateIds.get(full);
-  if (id === undefined) {
-    if (stateIds.size >= MEMO_CAP) stateIds.clear();
-    stateIds.set(full, id = `s${nextId++}`);
-  }
+  if (id === undefined) stateIds.set(full, id = `s${stateIds.size}`);
   stateKeys.set(s, id);
   return id;
 }

@@ -44,6 +44,19 @@ describe('debounced physical save receipts', () => {
     expect(backup).toHaveBeenCalledTimes(1);
     expect(write).toHaveBeenLastCalledWith('progress.json', 'third');
   });
+  it('edits that never pause still reach the disk after maxWait, and a flush with nothing written copies nothing', async () => {
+    vi.useFakeTimers();
+    const write = vi.fn(() => ({ ok: true, error: null }));
+    const afterFlush = vi.fn();
+    const writer = createProgressWriter({ write, backup: vi.fn(), afterFlush, delay: 400, maxWait: 2000 } as never);
+    for (let i = 0; i < 10; i++) { writer.queue('progress.json', `edit ${i}`); await vi.advanceTimersByTimeAsync(300); }
+    expect(write).toHaveBeenCalled();
+    writer.flush();
+    const copies = afterFlush.mock.calls.length;
+    writer.flush();
+    expect(afterFlush.mock.calls.length).toBe(copies);
+  });
+
   it('keeps results separate for profiles and flushes at close/load without waiting for the timer', async () => {
     vi.useFakeTimers();
     const writer = createProgressWriter({ write: name => ({ ok: name !== 'progress.json', error: name === 'progress.json' ? 'ENOSPC' : null }), backup: vi.fn(), afterFlush: vi.fn() });

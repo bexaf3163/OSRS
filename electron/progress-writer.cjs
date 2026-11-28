@@ -26,7 +26,8 @@ function createProgressWriter({ write, backup, afterFlush, beforeWrite = () => n
       acknowledgements.delete(name);
     }
     pending.clear();
-    afterFlush();
+    // A read flushes first too; with nothing written there is nothing to copy.
+    if (results.size) afterFlush();
     return results;
   }
   // Edits that never pause still reach the disk: after maxWait the timer is no longer pushed back.

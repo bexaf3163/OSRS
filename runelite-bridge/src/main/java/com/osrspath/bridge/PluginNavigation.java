@@ -76,12 +76,6 @@ final class PluginNavigation
 			// The app learns the target even if it was chosen in the game (the "What you need" list, the panel), and shows the same one.
 			plugin.server.navSet(t);
 		}
-		if (t.isPurchase() && hasNavItem())
-		{
-			// The item is already there: nowhere to lead.
-			finishNav("obtained");
-			return;
-		}
 		updateNavigation();
 		updateHud();
 	}
@@ -109,9 +103,24 @@ final class PluginNavigation
 		updateHud();
 	}
 
+	/** The bag's count of the arrow's item when the arrow started: 1 feather in the bag does not end a trip to buy 300. */
+	private NavTarget countedFor;
+	private int countAtStart;
+
 	boolean hasNavItem()
 	{
-		return obtained(plugin.navTarget, plugin.carried, plugin.noted);
+		NavTarget t = plugin.navTarget;
+		if (t != countedFor)
+		{
+			countedFor = t;
+			countAtStart = t == null || !t.isPurchase() ? 0 : bagCount(t, plugin.carried, plugin.noted);
+		}
+		return obtained(t, plugin.carried, plugin.noted, countAtStart);
+	}
+
+	static int bagCount(NavTarget t, ItemCounts carried, ItemCounts noted)
+	{
+		return ItemCounts.sum(carried, noted).count(t.getItemId(), t.getItemName());
 	}
 
 	/** A temporary target's heading: a bank trip the app names ("Edgeville Bank: take Gold bar") says take, an item to get says buy, a place says go to. */
@@ -125,10 +134,10 @@ final class PluginNavigation
 		return FundingHint.isArrow(label) ? FundingHint.arrowText(label) : "Go to: " + label;
 	}
 
-	/** A purchase is in hand once the bag holds the item or its banknotes, which is how the Grand Exchange hands it out. */
-	static boolean obtained(NavTarget t, ItemCounts carried, ItemCounts noted)
+	/** A purchase is in hand once the bag holds more of the item or its banknotes (how the Grand Exchange hands it out) than before the arrow. */
+	static boolean obtained(NavTarget t, ItemCounts carried, ItemCounts noted, int before)
 	{
-		return t != null && t.isPurchase() && ItemCounts.sum(carried, noted).count(t.getItemId(), t.getItemName()) > 0;
+		return t != null && t.isPurchase() && bagCount(t, carried, noted) > before;
 	}
 
 	/** Arrived at the place (for a target without an item): the same tile of the plane, no farther than three tiles. */

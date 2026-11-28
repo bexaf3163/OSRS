@@ -38,6 +38,14 @@ public class MoveDetectorTest
 	}
 
 	@Test
+	public void aCaveEntranceFarFromItsInside_isNotATeleport()
+	{
+		// The Stronghold of Security entrance at Barbarian Village leads to y 5243, not the surface y + 6400.
+		assertFalse(MoveDetector.teleported(3081, 3421, 1859, 5243));
+		assertTrue(MoveDetector.teleported(3213, 3428, 3222, 3218));
+	}
+
+	@Test
 	public void undergroundY_isBroughtToSurface()
 	{
 		assertEquals(3150, MoveDetector.surfaceY(9550));

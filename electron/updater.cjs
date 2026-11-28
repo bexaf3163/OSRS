@@ -295,7 +295,12 @@ function createUpdater({ version, env, userData, onState, quit, fetchRelease: fe
   /** Start the new version after exiting this one and close the app. false — it did not work, nothing is closed. */
   async function install() {
     const file = target();
-    if (busy || state.state !== 'ready' || !canInstall || !file || !safeForCmd(file)) return false;
+    if (busy || state.state !== 'ready' || !canInstall || !file) return false;
+    // Said out loud, not a button that does nothing: the restart script cannot run from such a folder.
+    if (!safeForCmd(file)) {
+      set({ state: 'error', error: 'The app folder path is too long or has one of the characters & % ^ < > | or a quote mark. Move the app to a simpler folder, or download the new version from the releases page.' });
+      return false;
+    }
     busy = true;
     try {
       if (!await matchesRelease(file, rel)) throw new Error('The cached update checksum did not match. Please download the update again.');
