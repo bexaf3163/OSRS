@@ -461,7 +461,15 @@ final class PluginPlayer
 		}
 		boolean buy = s == GrandExchangeOfferState.BUYING || s == GrandExchangeOfferState.BOUGHT || s == GrandExchangeOfferState.CANCELLED_BUY;
 		boolean sell = s == GrandExchangeOfferState.SELLING || s == GrandExchangeOfferState.SOLD || s == GrandExchangeOfferState.CANCELLED_SELL;
-		exchangeSlots[slot] = buy || sell ? new ExchangeSlot(buy, o.getItemId(), itemName(o.getItemId()), o.getQuantitySold(), o.getTotalQuantity(), o.getPrice(), o.getSpent()) : null;
+		try
+		{
+			exchangeSlots[slot] = buy || sell ? new ExchangeSlot(buy, o.getItemId(), itemName(o.getItemId()), o.getQuantitySold(), o.getTotalQuantity(), o.getSpent()) : null;
+		}
+		catch (LinkageError | RuntimeException err)
+		{
+			// A client whose offer API differs (getPrice was missing in 2.188.3 and stalled the login) only loses this count.
+			exchangeSlots[slot] = null;
+		}
 		plugin.exchange = exchangeHoldings(exchangeSlots);
 		plugin.ownedDirty = true;
 		plugin.gearDirty = true;
@@ -476,22 +484,20 @@ final class PluginPlayer
 		final String name;
 		final int done;
 		final int total;
-		final int price;
 		final int spent;
 
-		ExchangeSlot(boolean buy, int itemId, String name, int done, int total, int price, int spent)
+		ExchangeSlot(boolean buy, int itemId, String name, int done, int total, int spent)
 		{
 			this.buy = buy;
 			this.itemId = itemId;
 			this.name = name;
 			this.done = done;
 			this.total = total;
-			this.price = price;
 			this.spent = spent;
 		}
 	}
 
-	/** What the offers hold for the player: a sale keeps its unsold items and the coins it made, a purchase its bought items and the coins still reserved. */
+	/** What the offers hold for the player: a sale keeps its unsold items and the coins it made, a purchase its bought items. shortcut: a purchase's reserved coins are left out, because the offer's price is not readable on every client; count them once it is. */
 	static ItemCounts exchangeHoldings(ExchangeSlot[] slots)
 	{
 		ItemCounts out = new ItemCounts();
@@ -501,7 +507,8 @@ final class PluginPlayer
 			if (s == null)
 				continue;
 			out.add(s.itemId, s.name, s.buy ? s.done : s.total - s.done);
-			out.add(ItemID.COINS, coins, (int) Math.min(Integer.MAX_VALUE, s.buy ? (long) s.total * s.price - s.spent : s.spent));
+			if (!s.buy)
+				out.add(ItemID.COINS, coins, s.spent);
 		}
 		return out;
 	}
