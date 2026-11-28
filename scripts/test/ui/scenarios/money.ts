@@ -171,7 +171,7 @@ async function moneyScenarios(browser: Browser) {
     // Start: the goal, then the coin card's plan everywhere.
     await page.locator('.money-reco').getByRole('button', { name: 'Start…' }).click();
     const goal = page.locator('.money-reco .money-goal');
-    expect(await goal.count() === 1 && /more coins/.test(await goal.innerText()) && !/S5-01 is short/.test(await goal.innerText()), `money (${width} px): Start offers a savings goal without a fake step shortfall`);
+    expect(await goal.count() === 1 && /more coins/.test(await goal.innerText()) && !/is short/.test(await goal.innerText()), `money (${width} px): Start offers a savings goal without a fake step shortfall`);
     await goal.locator('.money-goal-option', { hasText: 'more coins' }).locator('input[type=radio]').check();
     await goal.locator('.money-amount').fill('2,000');
     await goal.getByRole('button', { name: 'Start' }).click();
@@ -245,7 +245,7 @@ async function moneyScenarios(browser: Browser) {
     const best = (await page.locator('.money-reco-head strong').innerText()).trim();
     expect(card === best, `money: the coin card and the Money section recommend the same method (${card} / ${best})`);
     await page.locator('.money-reco').getByRole('button', { name: 'Start…' }).click();
-    expect(/Cover the [\d,]+ gp S2-10 is short/.test(await page.locator('.money-reco .money-goal').innerText()), 'money: the zero-coin account still gets its real step-shortfall goal');
+    expect(/Cover the [\d,]+ gp "Prince Ali Rescue" is short/.test(await page.locator('.money-reco .money-goal').innerText()), 'money: the zero-coin account still gets its real step-shortfall goal');
     expect(errors.length === 0, `money (card link): no console errors ${errors.join('; ')}`);
     await page.context().close();
   }

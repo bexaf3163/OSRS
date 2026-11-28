@@ -8,6 +8,7 @@
 //  - A method with no estimate shows "Estimate unavailable": never a zero cost or a high profit by omission.
 //  - By default the list holds what the player can do; locked ones (membership, levels, quests, capital) are behind a filter, with what is missing.
 
+import { stepTitle } from '../../../data';
 import type { FundingAssessment } from './assess';
 import { evaluate, type EvalContext, type MethodEvaluation, type Range3 } from './evaluate';
 import { METHODS } from './methods';
@@ -208,6 +209,6 @@ export type MoneyGoal =
 /** The words of a goal for the plan and the screens. "Additional" coins: what is in the bank already does not count, unsold loot is not coins. */
 export function goalText(g: MoneyGoal): string {
   if (g.kind === 'amount') return `Earn ${g.coins.toLocaleString('en-US')} more coins`;
-  if (g.kind === 'shortfall') return `Cover the ${g.coins.toLocaleString('en-US')} gp ${g.stepId} is short`;
+  if (g.kind === 'shortfall') return `Cover the ${g.coins.toLocaleString('en-US')} gp "${stepTitle(g.stepId)}" is short`;
   return 'An open session: stop when you like';
 }

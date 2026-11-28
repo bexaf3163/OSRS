@@ -4,6 +4,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useBridge } from '../../state/bridge';
+import { gateAllows } from '../../domain/persistence/profiles';
 import { useStore } from '../../state/store';
 import { isClosed } from '../../domain/quests/next-step';
 import { useDecision, useDecisionWindow } from '../../state/decision';
@@ -28,11 +29,12 @@ const DETOUR_POLL_MS = 15_000;
 const FRESH_MOVE_MS = 4_000;
 
 export function PrepSync() {
-  const { state, plugin, setPrepPart } = useBridge();
+  const { state, plugin, setPrepPart, gate } = useBridge();
   const { progress } = useStore();
   // The same step every screen shows (tracked training, else the game step the Decision follows, else the Decision's).
   const { step } = useActiveActivity();
-  const live = state === 'online' && supportsSnapshot(plugin?.protocol ?? null);
+  // Another character in the game than the open profile gets no plan: its place and spellbook would mix with this profile's bag.
+  const live = state === 'online' && supportsSnapshot(plugin?.protocol ?? null) && gateAllows(gate);
   const open = Boolean(step) && !isClosed(progress, step!.id);
 
   // There is no step in the game, the step is closed or the plugin is old — there is no plan in the snapshot.

@@ -20,6 +20,9 @@ import { IconClose, IconExternal } from '../../ui/Icons';
 
 export type MapStatus = 'loading' | 'error' | 'fallback';
 
+// A label as text: Leaflet puts a string tooltip in as HTML, and labels come from the Wiki and the game.
+const textTip = (text: string) => Object.assign(document.createElement('span'), { textContent: text });
+
 interface Props {
   title: string;
   /** The step points; for a single place from the dossier — target. */
@@ -163,7 +166,7 @@ export default function WorldMapModal({
     for (const mk of markers.current) mk.remove();
     markers.current = points.map((p, i) => {
       const mk = L.marker(center(p), { icon: pinIcon(i === active), keyboard: false, zIndexOffset: i === active ? 1000 : 0, title: p.label })
-        .bindTooltip(p.label, { direction: 'top', offset: [0, -12], permanent: i === active, className: 'map-tip' })
+        .bindTooltip(textTip(p.label), { direction: 'top', offset: [0, -12], permanent: i === active, className: 'map-tip' })
         .on('click', () => onActive(i));
       if (p.plane === plane) mk.addTo(m);
       return mk;
@@ -178,7 +181,7 @@ export default function WorldMapModal({
     if (!m || !arrow || target) return;
     const tip = `${arrowLive ? 'The in-game arrow leads here' : 'The arrow will lead here'}: ${arrow.label}`;
     const mk = L.marker(center(arrow), { icon: arrowIcon, keyboard: false, zIndexOffset: 2000, title: tip })
-      .bindTooltip(tip, { direction: 'bottom', offset: [0, 14], permanent: arrowApart, className: 'map-tip map-tip-arrow' });
+      .bindTooltip(textTip(tip), { direction: 'bottom', offset: [0, 14], permanent: arrowApart, className: 'map-tip map-tip-arrow' });
     if (arrow.plane === plane) mk.addTo(m);
     arrowMarker.current = mk;
     return () => { mk.remove(); };
@@ -254,7 +257,7 @@ export default function WorldMapModal({
               {[0, 1, 2, 3].map((f) => (
                 <button key={f} type="button" role="radio" aria-checked={plane === f} className={`map-floor ${plane === f ? 'is-active' : ''}`}
                   onClick={() => setPlane(f)} title={floorLabel(f)}>
-                  {f + 1}
+                  {f === 0 ? 'G' : f}
                 </button>
               ))}
             </div>

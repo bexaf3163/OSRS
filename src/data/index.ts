@@ -47,6 +47,8 @@ export const reference = referenceJson as ReferenceData;
 export const items = itemsJson as WikiItemDetail[];
 
 export const stepById = new Map(allSteps.map((s) => [s.id, s]));
+/** What the player reads for a step: its title, never the internal id (S5-06) unless the step is unknown. */
+export const stepTitle = (id: string) => stepById.get(id)?.title ?? id;
 /** Skill sections by code: WC, ME… and the members skills AG, SL… */
 export const skillById = new Map([...skills, ...membersSkills].map((s) => [s.id, s]));
 export const itemById = new Map(items.map((i) => [i.id, i]));

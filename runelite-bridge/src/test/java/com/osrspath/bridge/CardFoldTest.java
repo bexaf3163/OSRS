@@ -23,8 +23,8 @@ public class CardFoldTest
 	@Test
 	public void theTitleSaysWhatAClickDoes()
 	{
-		assertTrue(InventoryCheckOverlay.title("S0-20", false).endsWith("[-]"));
-		assertTrue(InventoryCheckOverlay.title("S0-20", true).endsWith("[+]"));
+		assertTrue(InventoryCheckOverlay.title(false).endsWith("[-]"));
+		assertTrue(InventoryCheckOverlay.title(true).endsWith("[+]"));
 	}
 
 	@Test

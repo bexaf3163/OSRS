@@ -161,7 +161,7 @@ export function CockpitWorkspace({ step, suggested, onDone, nextId, prev, next, 
             role="tab"
             id={`step-view-${v.id}`}
             aria-selected={view === v.id}
-            aria-controls="step-view-panel"
+            aria-controls={v.id === 'wiki' ? 'step-view-wiki-panel' : 'step-view-panel'}
             aria-keyshortcuts={v.key}
             title={v.key ? `${v.title} (${v.key})` : v.title}
             className={`la-rbn ${view === v.id ? 'la-on' : ''}`}
@@ -216,7 +216,7 @@ export function CockpitWorkspace({ step, suggested, onDone, nextId, prev, next, 
           </CurrentAction>
         </div>
         <StepBody step={step} onDone={onDone} nextId={nextId} tab="safety" />
-        <div className="la-view" id="step-view-panel" role="tabpanel" aria-labelledby={`step-view-${view}`}>
+        <div className="la-view" id="step-view-panel" role="tabpanel" aria-labelledby={`step-view-${view}`} hidden={view === 'wiki'}>
           {view === 'steps' && <StepBody step={step} onDone={onDone} nextId={nextId} tab="steps" onPrep={openPrep} safetyShown noAside noManual />}
           {view === 'prep' && (
             <>
@@ -244,7 +244,7 @@ export function CockpitWorkspace({ step, suggested, onDone, nextId, prev, next, 
           )}
         </div>
         {/* The dossier's place stays mounted, so a step's item or NPC can be pinned from the drawer at any time. */}
-        <div id="step-view-wiki-panel" hidden={view !== 'wiki'}>
+        <div id="step-view-wiki-panel" role="tabpanel" aria-labelledby="step-view-wiki" hidden={view !== 'wiki'}>
           {!pinned && (
             <div className="dock-empty">
               <p className="dock-empty-title">OSRS Wiki dossier</p>

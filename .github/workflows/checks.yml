@@ -120,7 +120,7 @@ jobs:
 
   audit-preview:
     if: (github.event_name == 'pull_request' && (startsWith(github.head_ref, 'codex/audit-block-') || github.head_ref == 'codex/audit-test-build' || github.head_ref == 'codex/audit-test-build-2' || github.head_ref == 'codex/audit-test-build-3' || github.head_ref == 'codex/audit-test-build-4' || github.head_ref == 'codex/audit-test-build-5') && github.event.pull_request.head.repo.full_name == github.repository)
-    needs: [checks, runelite-bridge, portable]
+    needs: [checks, route-gate, runelite-bridge, portable]
     runs-on: windows-latest
     timeout-minutes: 10
     permissions:
@@ -148,7 +148,7 @@ jobs:
           $candidate = Join-Path audit-candidate $name
           Move-Item -LiteralPath $files[0].FullName -Destination $candidate
           $hash = (Get-FileHash -LiteralPath $candidate -Algorithm SHA256).Hash.ToLowerInvariant()
-          "$hash  $name" | Set-Content -LiteralPath audit-candidate/SHA256SUMS.txt -Encoding utf8
+          "$hash  $name`n" | Set-Content -LiteralPath audit-candidate/SHA256SUMS.txt -Encoding utf8 -NoNewline
           $handoff = Join-Path audit-candidate 'PROJECT_HANDOFF.md'
           Copy-Item -LiteralPath PROJECT_HANDOFF.md -Destination $handoff
           & gh release create $tag $candidate audit-candidate/SHA256SUMS.txt $handoff --prerelease --latest=false --target $env:SOURCE_SHA --title "OSRS Path audit test $short" --notes "Isolated CI review build. Read PROJECT_HANDOFF.md for current project context. Normal Portable releases are published separately."
@@ -194,7 +194,8 @@ jobs:
           $files = @(Get-ChildItem -LiteralPath release -Filter '*.exe')
           if ($files.Count -ne 1) { throw 'Expected one verified portable EXE.' }
           $hash = (Get-FileHash -LiteralPath $files[0].FullName -Algorithm SHA256).Hash.ToLowerInvariant()
-          "$hash  $($files[0].Name)" | Set-Content -LiteralPath release/SHA256SUMS.txt -Encoding utf8
+          # A Unix line end: sha256sum -c on Linux reads a Windows one as part of the name.
+          "$hash  $($files[0].Name)`n" | Set-Content -LiteralPath release/SHA256SUMS.txt -Encoding utf8 -NoNewline
           $handoff = Get-Content -LiteralPath PROJECT_HANDOFF.md -Raw
           $version = (Get-Content -LiteralPath package.json -Raw | ConvertFrom-Json).version
           $receipt = @(

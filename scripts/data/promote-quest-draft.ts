@@ -10,7 +10,7 @@ import { checkDraft, plain, replayStages, type QhFacts, type QuestDraft } from '
 import { deriveQuests } from '../../src/data/quests.ts';
 
 const [slug, id] = process.argv.slice(2);
-if (!slug || !/^S\d+-\d\d$/.test(id ?? '')) throw new Error('usage: npm run quest-promote -- <DraftName> <S7-06>');
+if (!slug || !/^S\d+-\d{2,3}$/.test(id ?? '')) throw new Error('usage: npm run quest-promote -- <DraftName> <S7-06>');
 const root = fileURLToPath(new URL('../..', import.meta.url));
 const read = (path: string) => readFileSync(`${root}${path}`, 'utf8');
 const draft = JSON.parse(read(`src/data/drafts/${slug}.json`)) as QuestDraft;
@@ -79,7 +79,9 @@ writeFileSync(`${root}src/data/authored/questStages.json`, text);
 const questsPy = read('tools/qh-machines/qhm/quests.py');
 const row = `'${id}': ('${qh.cls}', '${qh.var[0]}', ${qh.var[1]}),`;
 // QUESTS holds several rows per line; the new row follows the one with the nearest lower step id.
-const before = [...questsPy.matchAll(/'(S\d+-\d\d)': \('\w+', '\w+', \d+\),/g)].filter((m) => m[1] < id).at(-1);
+// Compared as numbers: S9-100 comes after S9-99.
+const order = (s: string) => s.slice(1).split('-').reduce((n, part) => n * 1000 + Number(part), 0);
+const before = [...questsPy.matchAll(/'(S\d+-\d{2,3})': \('\w+', '\w+', \d+\),/g)].filter((m) => order(m[1]) < order(id)).at(-1);
 if (!before || questsPy.includes(`'${id}':`)) throw new Error('quests.py: no QUESTS row to follow, or the id is there');
 const cut = before.index + before[0].length;
 writeFileSync(`${root}tools/qh-machines/qhm/quests.py`, `${questsPy.slice(0, cut)} ${row}${questsPy.slice(cut)}`);

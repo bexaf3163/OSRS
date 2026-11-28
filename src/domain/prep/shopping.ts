@@ -12,7 +12,7 @@ import { isReusable } from '../items/reusable';
 
 const COINS_ID = 995;
 /** "From step S2-11", "The ones saved from S1-04!", "The spare one from step S1-03". */
-const CARRY_OVER = /(?:^|[\s(])from\s+(?:step\s+)?(S\d-\d{2})/i;
+const CARRY_OVER = /(?:^|[\s(])from\s+(?:step\s+)?(S\d{1,2}-\d{2,3})/i;
 
 export function carryOverFrom(item: StepItemRequirement): string | null {
   return item.howToGet.match(CARRY_OVER)?.[1] ?? null;

@@ -24,11 +24,17 @@ final class ItemCounts
 		{
 			return;
 		}
-		byId.merge(id, quantity, Integer::sum);
+		byId.merge(id, quantity, ItemCounts::add);
 		if (name != null && !name.isEmpty())
 		{
-			byName.merge(name, quantity, Integer::sum);
+			byName.merge(name, quantity, ItemCounts::add);
 		}
+	}
+
+	/** Two stacks together, at most the game's largest stack: a billion coins in the bank and another in the bag do not turn negative. */
+	static int add(int a, int b)
+	{
+		return (int) Math.min((long) a + b, Integer.MAX_VALUE);
 	}
 
 	/** How many items with this ID. */
@@ -53,22 +59,22 @@ final class ItemCounts
 			{
 				continue;
 			}
-			p.byId.forEach((k, v) -> out.byId.merge(k, v, Integer::sum));
-			p.byName.forEach((k, v) -> out.byName.merge(k, v, Integer::sum));
+			p.byId.forEach((k, v) -> out.byId.merge(k, v, ItemCounts::add));
+			p.byName.forEach((k, v) -> out.byName.merge(k, v, ItemCounts::add));
 		}
 		return out;
 	}
 
 	/** Tool tiers in ascending order: an Iron pickaxe will do instead of a Bronze pickaxe. */
-	private static final String[] TIERS = {"bronze", "iron", "steel", "black", "mithril", "adamant", "rune", "dragon"};
+	private static final String[] TIERS = {"bronze", "iron", "steel", "black", "mithril", "adamant", "rune", "gilded", "dragon", "infernal", "3rd age", "crystal"};
 	/** The level each tier needs to be used for its skill (OSRS Wiki, "Pickaxe" and "Axe"); the same table as toolTiers.ts in the app. */
-	private static final int[] TIER_LEVEL = {1, 1, 6, 11, 21, 31, 41, 61};
+	private static final int[] TIER_LEVEL = {1, 1, 6, 11, 21, 31, 41, 41, 61, 61, 61, 71};
 	/** The player's real Mining and Woodcutting levels; 0 while unknown, and then every tier counts (unknown is not missing). */
 	private static volatile int miningLevel;
 	private static volatile int woodcuttingLevel;
 	private static volatile int hitpointsLevel;
 	/** Tiers that are members items (the same set as toolTiers.ts): on a free-to-play world they do not do the job at any level. */
-	private static final java.util.Set<String> MEMBERS_TIERS = java.util.Set.of("dragon");
+	private static final java.util.Set<String> MEMBERS_TIERS = java.util.Set.of("gilded", "dragon", "infernal", "3rd age", "crystal");
 	/** False on a free-to-play world, null while no world is known (then every tier counts: unknown is not missing). */
 	private static volatile Boolean membersWorld;
 

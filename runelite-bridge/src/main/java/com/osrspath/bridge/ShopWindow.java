@@ -5,8 +5,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import lombok.Value;
 
 /**
@@ -59,7 +57,6 @@ final class ShopWindow
 	}
 
 	static final int MAX_ROWS = 12;
-	private static final Pattern STEP = Pattern.compile("^\\[([^\\]]+)]");
 
 	private ShopWindow()
 	{
@@ -143,13 +140,12 @@ final class ShopWindow
 			return null;
 		}
 		List<Row> rows = new ArrayList<>();
-		String id = stepId(v);
 		int todo;
 		String title;
 		if (place == Place.BANK)
 		{
 			todo = take.size() + missing.size();
-			title = "Bank · what to take" + (id.isEmpty() ? "" : " · " + id);
+			title = "Bank · what to take";
 			if (plan != null && plan.hasReadiness())
 			{
 				// The app's verdict first: at the bank is where it is acted on ("Bank: withdraw 13 Salmon — you already own it.").
@@ -185,7 +181,7 @@ final class ShopWindow
 		else
 		{
 			todo = missing.size() + travel.size();
-			title = (place == Place.EXCHANGE ? "Exchange · what to buy" : "Shop · what to buy") + (id.isEmpty() ? "" : " · " + id);
+			title = place == Place.EXCHANGE ? "Exchange · what to buy" : "Shop · what to buy";
 			add(rows, missing, "Buy: ", Mark.TODO);
 			// The supplies of the way (cards for the Chronicle, runes for a teleport): the app suggests them, the player buys.
 			add(rows, travel, "For the road: ", Mark.TODO);
@@ -292,11 +288,5 @@ final class ShopWindow
 			sb.append(String.valueOf((char) 10)).append(row.getText());
 		}
 		return sb.toString();
-	}
-
-	static String stepId(StepGuide.View v)
-	{
-		Matcher m = v.getTitle() == null ? null : STEP.matcher(v.getTitle());
-		return m != null && m.find() ? m.group(1) : "";
 	}
 }

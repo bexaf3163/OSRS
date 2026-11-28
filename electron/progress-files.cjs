@@ -6,6 +6,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { randomUUID } = require('node:crypto');
 const { validSavedText } = require('./saved-data.mjs');
+const { atomicWrite } = require('./atomic-write.cjs');
 
 const BROKEN_KEEP = 3;
 
@@ -107,7 +108,9 @@ function backupProgress(dir, name = 'progress.json') {
   try { previous = fs.readFileSync(out, 'utf8'); }
   catch (error) { if (error.code !== 'ENOENT') throw error; }
   if (previous !== null && !validSavedText(name, previous)) return 'kept';
-  fs.copyFileSync(target, out);
+  // Through a temporary file, as the saves themselves: a crash mid-copy cannot leave a cut backup.
+  const written = atomicWrite(out, text);
+  if (!written.ok) throw Object.assign(new Error(`Backup not written: ${written.error}`), { code: written.error });
   return 'copied';
 }
 

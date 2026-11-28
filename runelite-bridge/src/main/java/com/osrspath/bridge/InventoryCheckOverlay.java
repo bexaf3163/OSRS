@@ -72,11 +72,11 @@ class InventoryCheckOverlay extends OverlayPanel
 		int width = Hud.panelWidth(this, standardWidth(large));
 		boolean folded = CardFold.folded(config.foldedCards(), CardFold.CHECK);
 		FontMetrics fm = g.getFontMetrics(font);
-		header = OverlayText.PAD_TOP + OverlayText.wrap(title(target.getStepId(), folded), fm, OverlayText.inner(width)).size() * fm.getHeight();
+		header = OverlayText.PAD_TOP + OverlayText.wrap(title(folded), fm, OverlayText.inner(width)).size() * fm.getHeight();
 		Object key = Arrays.asList(r, target.getStepId(), config.hudOpacity(), font, width, folded);
 		if (!Objects.equals(key, builtFor))
 		{
-			build(panelComponent, r, target.getStepId(), fm, width, config.hudOpacity(), folded);
+			build(panelComponent, r, fm, width, config.hudOpacity(), folded);
 			builtFor = key;
 		}
 		OverlayCard.paint(g, last.width, last.height, accent(r), Math.max(config.hudOpacity(), 85));
@@ -113,15 +113,15 @@ class InventoryCheckOverlay extends OverlayPanel
 	}
 
 	/** The panel contents. Static: a test draws it with the real fonts without a client. */
-	static void build(PanelComponent panel, Checklist.Result r, String stepId, FontMetrics fm, int width, int opacity)
+	static void build(PanelComponent panel, Checklist.Result r, FontMetrics fm, int width, int opacity)
 	{
-		build(panel, r, stepId, fm, width, opacity, false);
+		build(panel, r, fm, width, opacity, false);
 	}
 
 	/** The title a click folds or opens (CardFold). */
-	static String title(String stepId, boolean folded)
+	static String title(boolean folded)
 	{
-		return "Departure check · " + stepId + CardFold.mark(folded);
+		return "Departure check" + CardFold.mark(folded);
 	}
 
 	/** Where a click folds or opens the card; null before it is drawn. */
@@ -131,14 +131,14 @@ class InventoryCheckOverlay extends OverlayPanel
 		return b == null || b.isEmpty() ? null : new java.awt.Rectangle(b.x, b.y, b.width, header);
 	}
 
-	static void build(PanelComponent panel, Checklist.Result r, String stepId, FontMetrics fm, int width, int opacity, boolean folded)
+	static void build(PanelComponent panel, Checklist.Result r, FontMetrics fm, int width, int opacity, boolean folded)
 	{
 		int inner = OverlayText.inner(width);
 		List<LayoutableRenderableEntity> c = panel.getChildren();
 		c.clear();
 		panel.setPreferredSize(new Dimension(width, 0));
 		OverlayText.frame(panel, fm);
-		OverlayText.title(c, title(stepId, folded), Hud.TITLE, fm, inner);
+		OverlayText.title(c, title(folded), Hud.TITLE, fm, inner);
 		if (folded)
 		{
 			return;
@@ -164,6 +164,12 @@ class InventoryCheckOverlay extends OverlayPanel
 		else if (r.getRows().stream().anyMatch(x -> x.getState() == Checklist.State.NOT_FOUND_IN_BANK))
 		{
 			footer = "Missing in the bank too - see 'where to get it' in the app";
+			color = Hud.WARN;
+		}
+		else if (r.getRows().stream().allMatch(x -> x.getState() == Checklist.State.IN_BAG_READY || x.getState() == Checklist.State.NOT_EQUIPPED))
+		{
+			// Everything is in the bag already: only wearing is left, nothing to take.
+			footer = "Wear the highlighted items from your bag";
 			color = Hud.WARN;
 		}
 		else

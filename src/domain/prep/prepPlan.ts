@@ -197,7 +197,8 @@ export const BAG_SLOTS = 28;
 /** From how many pieces an item counts as a consumable (food, runes, arrows): for it "enough / low" applies. */
 export const SUPPLY_FROM = 5;
 
-const STACKS = /(^coins$|\brunes?\b|\barrows?\b|\bbolts?\b|\bdarts?\b|\bjavelins?\b|\bfeathers?\b|\bbait\b|\bseeds?\b|\bnails?\b|\bthrowing)/i;
+// A rune is "Air rune", never "Rune essence" or "Rune scimitar"; a bolt is not "Bolt of cloth"; teleport tablets stack.
+const STACKS = /(^coins$|\w runes?$|\barrows?\b|\bbolts?\b(?! of)|\bdarts?\b|\bjavelins?\b|\bfeathers?\b|\bbait\b|\bseeds?\b|\bnails?\b|\bthrowing|^thread$|^swamp tar$|^tokkul$|^cannonballs?$|^numulite$|^platinum token|\w teleport$)/i;
 /** A stack of items takes one slot; the rest one slot per piece. An estimate, hence "≈" in the answer. */
 export const stacks = (name: string) => STACKS.test(name);
 

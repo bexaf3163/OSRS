@@ -71,7 +71,7 @@ export function templates(text: string, name: string): Record<string, string>[] 
   return out;
 }
 
-/** A number as the wiki writes it: "1,300", "37.5". NaN when it is not one. */
+/** A number as the wiki writes it: "1,300", "37.5". An empty or missing field is 0 (the monster tables leave zero bonuses blank); other text is NaN. */
 export const num = (s: string | undefined): number => Number((s ?? '').replace(/,/g, '').trim());
 
 /** Ordinary Make-X timing, not the first manually selected item on a Wiki recipe. */

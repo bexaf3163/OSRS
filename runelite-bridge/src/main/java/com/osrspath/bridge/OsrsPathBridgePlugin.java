@@ -3,7 +3,6 @@ package com.osrspath.bridge;
 import com.google.gson.Gson;
 import com.google.inject.Provides;
 import java.io.IOException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -442,7 +441,8 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	private void startServer()
 	{
 		snapshot.snapshotOrder.reset();
-		BridgeServer s = new BridgeServer(config.port(), gson, this);
+		// One fixed port: the app, its launcher and its proxy all expect 38282.
+		BridgeServer s = new BridgeServer(BridgeServer.DEFAULT_PORT, gson, this);
 		try
 		{
 			s.start();
@@ -450,7 +450,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		}
 		catch (IOException e)
 		{
-			log.warn("OSRS Path Bridge: port {} is busy or unavailable - the bridge did not start", config.port(), e);
+			log.warn("OSRS Path Bridge: port {} is busy or unavailable - the bridge did not start", BridgeServer.DEFAULT_PORT, e);
 			server = null;
 		}
 	}
@@ -487,19 +487,6 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		if ("useShortestPath".equals(e.getKey()))
 		{
 			clientThread.invokeLater(navigation::updateNavigation);
-		}
-		if ("port".equals(e.getKey()))
-		{
-			stopServer();
-			startServer();
-			// The new bridge knows nothing, so tell it the current temporary target, otherwise the app will reset it.
-			clientThread.invokeLater(() ->
-			{
-				if (server != null && navTarget != null)
-				{
-					server.navSet(navTarget);
-				}
-			});
 		}
 		if ("hintArrow".equals(e.getKey()) || "worldMapMarker".equals(e.getKey()))
 		{

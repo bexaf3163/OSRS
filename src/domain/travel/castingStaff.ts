@@ -24,7 +24,7 @@ export function selectCastingStaff(inp: StaffInput, castRunes: readonly string[]
   const candidates: { staff: RuneStaff; worn: boolean; covers: number }[] = [];
   for (const [items, worn] of [[inp.worn, true], [inp.carried, false]] as const) for (const item of items ?? []) {
     const staff = BY_NAME.get(nameKey(item.name));
-    if (!staff || (item.count ?? 1) < 1 || (staff.members && inp.members !== true)) continue;
+    if (!staff || item.noted || (item.count ?? 1) < 1 ||(staff.members && inp.members !== true)) continue;
     if (!worn) {
       const piece = gearPieceByName(staff.item);
       if (!piece || piece.reqUnverified || !canWear(piece, inp.levels ?? {})) continue;

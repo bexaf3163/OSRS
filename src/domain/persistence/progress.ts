@@ -162,7 +162,7 @@ export function normalizeProgress(raw: unknown, known: Known): Normalized | null
     if (isObject(raw.tasksDone)) {
       const ticks: Record<string, true> = {};
       for (const [key, v] of Object.entries(raw.tasksDone)) {
-        const m = /^(S\d-\d{2}):[a-z0-9-]{1,40}$/.exec(key);
+        const m = /^(S\d{1,2}-\d{2,3}):[a-z0-9-]{1,40}$/.exec(key);
         if (!m || v !== true) continue;
         const id = fromV2 ? V3_FROM_V2[m[1]] ?? m[1] : m[1];
         if (known.stepIds.has(id)) ticks[`${id}${key.slice(m[1].length)}`] = true;

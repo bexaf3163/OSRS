@@ -24,7 +24,7 @@ import net.runelite.api.NPC;
 import net.runelite.api.Quest;
 import net.runelite.api.QuestState;
 import net.runelite.api.Skill;
-import net.runelite.api.SoundEffectID;
+import net.runelite.api.gameval.SoundEffectID;
 import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.GrandExchangeOfferChanged;
 import net.runelite.api.events.ItemContainerChanged;
@@ -450,10 +450,12 @@ final class PluginPlayer
 		}
 		GrandExchangeOffer o = e.getOffer();
 		GrandExchangeOfferState s = o == null ? GrandExchangeOfferState.EMPTY : o.getState();
-		if (s == GrandExchangeOfferState.BUYING || s == GrandExchangeOfferState.BOUGHT)
+		// A cancelled buy that bought some still holds them until they are collected.
+		boolean collect = s == GrandExchangeOfferState.CANCELLED_BUY && o.getQuantitySold() > 0;
+		if (s == GrandExchangeOfferState.BUYING || s == GrandExchangeOfferState.BOUGHT || collect)
 		{
 			offerItems[slot] = o.getItemId();
-			offerSlots[slot] = new ShoppingPlan.Offer(s == GrandExchangeOfferState.BOUGHT, o.getQuantitySold(), o.getTotalQuantity());
+			offerSlots[slot] = new ShoppingPlan.Offer(s != GrandExchangeOfferState.BUYING, o.getQuantitySold(), collect ? o.getQuantitySold() : o.getTotalQuantity());
 		}
 		else
 		{
@@ -463,7 +465,7 @@ final class PluginPlayer
 		boolean sell = s == GrandExchangeOfferState.SELLING || s == GrandExchangeOfferState.SOLD || s == GrandExchangeOfferState.CANCELLED_SELL;
 		try
 		{
-			exchangeSlots[slot] = buy || sell ? new ExchangeSlot(buy, o.getItemId(), itemName(o.getItemId()), o.getQuantitySold(), o.getTotalQuantity(), o.getSpent()) : null;
+			exchangeSlots[slot] = buy || sell ? new ExchangeSlot(buy, o.getItemId(), itemName(o.getItemId()), o.getQuantitySold(), o.getTotalQuantity(), (int) Math.min(o.getSpent(), Integer.MAX_VALUE)) : null;
 		}
 		catch (LinkageError | RuntimeException err)
 		{
@@ -513,10 +515,18 @@ final class PluginPlayer
 		return out;
 	}
 
-	/** For auto-tick: how much of the item the player has: bag, worn, notes and the bank if it was opened. */
+	/** For auto-tick: how much of the item the player has: bag, worn, notes, the bank if it was opened and the exchange slots. */
 	int ownedCount(TargetNeeds.ItemNeed need)
 	{
-		return ItemCounts.sum(plugin.carried, plugin.noted, plugin.bank).count(need);
+		return ItemCounts.sum(plugin.carried, plugin.noted, plugin.bank, plugin.exchange).count(need);
+	}
+
+	/** Another character's offers are not this one's: the next login reports every slot again. */
+	void clearExchange()
+	{
+		Arrays.fill(offerSlots, null);
+		Arrays.fill(exchangeSlots, null);
+		plugin.exchange = ItemCounts.EMPTY;
 	}
 
 	/** How many of the items the app asks about: the departure check, the variant conditions and the shopping list. */
@@ -692,7 +702,7 @@ final class PluginPlayer
 	{
 		if (plugin.config.completionSound())
 		{
-			plugin.client.playSoundEffect(SoundEffectID.UI_BOOP);
+			plugin.client.playSoundEffect(SoundEffectID.INTERFACE_SELECT1);
 		}
 		plugin.client.addChatMessage(ChatMessageType.GAMEMESSAGE, "", "OSRS Path: step " + stepId + " complete", null);
 		recomputeChecklist();

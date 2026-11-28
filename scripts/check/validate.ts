@@ -134,7 +134,7 @@ export function validate(d: GuideData | null, route: Route): Report {
   lines.push('The V2 route');
   ok(`Steps ${steps.length}: F2P ${f2p.length} (${f2p[0]?.id}…${f2p[f2p.length - 1]?.id}), Members ${members.length}`);
   check(idSet.size === ids.length, 'Step codes are not repeated', 'There are repeated step codes');
-  const badIds = steps.filter((s) => !/^S\d-\d{2}$/.test(s.id) || Number(s.id[1]) !== s.stage).map((s) => s.id);
+  const badIds = steps.filter((s) => !/^S\d{1,2}-\d{2,3}$/.test(s.id) || Number(s.id.slice(1, s.id.indexOf('-'))) !== s.stage).map((s) => s.id);
   check(!badIds.length, 'Every step code matches its stage (S<stage>-<number>)', `The code does not match the stage: ${badIds.join(', ')}`);
   // A retired step keeps its number, so it leaves a gap: the active steps are never renumbered (saves and notes refer to them).
   const retired = new Set(RETIRED_STEPS);
@@ -429,7 +429,7 @@ export function validate(d: GuideData | null, route: Route): Report {
   for (const s of steps) {
     for (const [where, t] of [['Title', s.title] as [string, string], ...userTexts(s)]) {
       const ch = firstLetter(t);
-      if (ch && ch !== ch.toUpperCase() && !/^[a-z]/.test(t)) lower.push(`${s.id} "${where}"`);
+      if (ch && ch !== ch.toUpperCase()) lower.push(`${s.id} "${where}"`);
       for (const [re, hint] of TYPOS) if (re.test(t)) typos.push(`${s.id} "${where}": ${hint}`);
       if (!balanced(t)) unbalanced.push(`${s.id} "${where}"`);
     }

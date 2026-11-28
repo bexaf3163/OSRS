@@ -78,8 +78,17 @@ final class PacingTracker
 		return pacing;
 	}
 
+	/** XP of level 2: below it a reading of 0 was a real level-1 skill, not RuneLite's 0 right after login. */
+	static final int LEVEL_TWO_XP = 83;
+
+	/** Whether the XP grew. From 0 only while still at level 1: a fresh account's first kill counts, the login jump to the whole XP does not. */
+	static boolean gained(int before, int now)
+	{
+		return now > before && (before > 0 || before == 0 && now < LEVEL_TWO_XP);
+	}
+
 	/**
-	 * A new XP value for a skill. true means something changed. The first non-zero value is the reference point, not a gain:
+	 * A new XP value for a skill. true means something changed. A first value above level 1 is the reference point, not a gain:
 	 * right after login RuneLite still returns 0, and all the accumulated XP would otherwise be counted as one gain,
 	 * the pace would shoot up and the time would show "~0 min" until the spike left the last five.
 	 */
@@ -89,7 +98,7 @@ final class PacingTracker
 		{
 			return false;
 		}
-		if (xp > 0 && currentXp > xp)
+		if (gained(xp, currentXp))
 		{
 			long[] last = gains.peekLast();
 			if (last != null && nowMs - last[0] > PAUSE_MS)

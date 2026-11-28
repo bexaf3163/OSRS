@@ -77,7 +77,7 @@ class GrandExchangeHelperOverlay extends OverlayPanel
 		Object key = Arrays.asList(rows, extras, step == null ? null : step.getTitle(), config.hudOpacity(), font, width, folded);
 		if (!Objects.equals(key, builtFor))
 		{
-			build(panelComponent, rows, extras, step == null ? null : ShopWindow.stepId(plugin.getGuideView()), fm, width, config.hudOpacity(), folded);
+			build(panelComponent, rows, extras, fm, width, config.hudOpacity(), folded);
 			builtFor = key;
 		}
 		OverlayCard.paint(g, last.width, last.height, accent(rows), Math.max(config.hudOpacity(), 85));
@@ -109,13 +109,13 @@ class GrandExchangeHelperOverlay extends OverlayPanel
 	/** The panel contents. Static: a test draws it with the real fonts without a client. */
 	static void build(PanelComponent panel, List<ShoppingPlan.Row> rows, FontMetrics fm, int width, int opacity)
 	{
-		build(panel, rows, java.util.Collections.emptyList(), null, fm, width, opacity);
+		build(panel, rows, java.util.Collections.emptyList(), fm, width, opacity);
 	}
 
-	/** As above, with the step's purchases the list does not hold ({@link ExchangeView#extras}): they follow the rows as "Also for S3-08". */
-	static void build(PanelComponent panel, List<ShoppingPlan.Row> rows, List<String> extras, String stepId, FontMetrics fm, int width, int opacity)
+	/** As above, with the step's purchases the list does not hold ({@link ExchangeView#extras}): they follow the rows as "Also for the step". */
+	static void build(PanelComponent panel, List<ShoppingPlan.Row> rows, List<String> extras, FontMetrics fm, int width, int opacity)
 	{
-		build(panel, rows, extras, stepId, fm, width, opacity, false);
+		build(panel, rows, extras, fm, width, opacity, false);
 	}
 
 	/** The title a click folds or opens (CardFold). */
@@ -132,7 +132,7 @@ class GrandExchangeHelperOverlay extends OverlayPanel
 		return b == null || b.isEmpty() ? null : new java.awt.Rectangle(b.x, b.y, b.width, header);
 	}
 
-	static void build(PanelComponent panel, List<ShoppingPlan.Row> rows, List<String> extras, String stepId, FontMetrics fm, int width, int opacity, boolean folded)
+	static void build(PanelComponent panel, List<ShoppingPlan.Row> rows, List<String> extras, FontMetrics fm, int width, int opacity, boolean folded)
 	{
 		int inner = OverlayText.inner(width);
 		List<LayoutableRenderableEntity> c = panel.getChildren();
@@ -163,7 +163,7 @@ class GrandExchangeHelperOverlay extends OverlayPanel
 		}
 		if (!extras.isEmpty())
 		{
-			OverlayText.line(c, "Also for " + (stepId == null || stepId.isEmpty() ? "the step" : stepId) + ":", Hud.TITLE, fm, inner);
+			OverlayText.line(c, "Also for the step:", Hud.TITLE, fm, inner);
 			for (String x : extras)
 			{
 				OverlayText.line(c, "• " + x, Hud.TEXT, fm, inner);

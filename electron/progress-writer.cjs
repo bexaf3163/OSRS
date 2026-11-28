@@ -1,6 +1,6 @@
 // Coalesce edits per profile, but acknowledge only the physical write of the newest edit.
 // Older callers in the same batch are superseded by that edit, never written over it.
-function createProgressWriter({ write, backup, afterFlush, beforeWrite = () => null, delay = 400 }) {
+function createProgressWriter({ write, backup, afterFlush, beforeWrite = () => null, delay = 400, maxWait = 2000 }) {
   const pending = new Map();
   const acknowledgements = new Map();
   const backedUp = new Set();
@@ -29,8 +29,12 @@ function createProgressWriter({ write, backup, afterFlush, beforeWrite = () => n
     afterFlush();
     return results;
   }
+  // Edits that never pause still reach the disk: after maxWait the timer is no longer pushed back.
+  let since = 0;
   function queue(name, json) {
     pending.set(name, json);
+    if (!timer) since = Date.now();
+    else if (Date.now() - since >= maxWait) return;
     clearTimeout(timer);
     timer = setTimeout(flush, delay);
   }

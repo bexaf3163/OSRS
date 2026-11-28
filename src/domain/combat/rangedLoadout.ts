@@ -79,7 +79,7 @@ function computeRangedNeeds(state: PlayerState, prices?: PriceView | null): Meth
   const arrowReserve = price('Bronze arrow');
   const foodReserve = price('Salmon');
   const armourReserve = armourSlots.filter(slot => !['neck', 'cape'].includes(slot)).reduce<number | null>((total, slot) => {
-    const allowed = (STYLE_GEAR.ranged[slot] ?? []).filter(o => usableStyleOption(o, s => levelOf(state, s), q => questOf(state, q) === 'DONE'));
+    const allowed = (STYLE_GEAR.ranged[slot] ?? []).filter(o => usableStyleOption(o, s => levelOf(state, s), q => questOf(state, q) === 'DONE', state.mode));
     if (allowed.some(o => o.names.some(owned))) return total;
     const name = starter(allowed);
     const cost = name ? price(name) : 0;
@@ -136,7 +136,7 @@ function computeRangedNeeds(state: PlayerState, prices?: PriceView | null): Meth
   // Armour through the one kit rule of every style: Ranged attack first, then total defence (studded beats hardleather at +8).
   const armour: MethodNeed[] = pickKit({
     slots: armourSlots.map(slot => {
-      const allowed = (STYLE_GEAR.ranged[slot] ?? []).filter(o => usableStyleOption(o, s => levelOf(state, s), q => questOf(state, q) === 'DONE'));
+      const allowed = (STYLE_GEAR.ranged[slot] ?? []).filter(o => usableStyleOption(o, s => levelOf(state, s), q => questOf(state, q) === 'DONE', state.mode));
       return { slot, names: allowed.flatMap(o => o.names), wearOnly: ['feet', 'cape'].includes(slot), starter: ['neck', 'cape'].includes(slot) ? null : starter(allowed) };
     }),
     rank: name => { const g = stats.find(x => x.name === name); return [g?.rangedAttack ?? 0, g?.defence ?? 0]; },

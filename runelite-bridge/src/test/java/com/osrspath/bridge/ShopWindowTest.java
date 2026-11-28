@@ -67,7 +67,7 @@ public class ShopWindowTest
 	public void inTheBank_take_notInTheBank_alreadyInTheBag()
 	{
 		ShopWindow.Result r = ShopWindow.build(ShopWindow.Place.BANK, vampyre());
-		assertEquals("Bank · what to take · S2-08", r.getTitle());
+		assertEquals("Bank · what to take", r.getTitle());
 		List<String> t = texts(r);
 		assertEquals("Take: Beer ×3", t.get(0));
 		assertEquals("Not in the bank: Hammer — Lumbridge General Store", t.get(1));
@@ -80,7 +80,7 @@ public class ShopWindowTest
 	public void atTheExchange_buyWhatIsNowhere_whatLiesInTheBankIsNotBought()
 	{
 		ShopWindow.Result r = ShopWindow.build(ShopWindow.Place.EXCHANGE, vampyre());
-		assertEquals("Exchange · what to buy · S2-08", r.getTitle());
+		assertEquals("Exchange · what to buy", r.getTitle());
 		List<String> t = texts(r);
 		assertEquals("Buy: Hammer — Lumbridge General Store", t.get(0));
 		assertTrue(t.contains("In the bank (do not buy): Beer ×3"));
@@ -92,7 +92,7 @@ public class ShopWindowTest
 	public void atAMerchant_sameAsTheExchange_butWithItsOwnTitle()
 	{
 		ShopWindow.Result r = ShopWindow.build(ShopWindow.Place.SHOP, vampyre());
-		assertEquals("Shop · what to buy · S2-08", r.getTitle());
+		assertEquals("Shop · what to buy", r.getTitle());
 		assertEquals("Buy: Hammer — Lumbridge General Store", texts(r).get(0));
 	}
 

@@ -74,7 +74,15 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ## Cinzel and EB Garamond fonts
 
-The desktop's Ledger design bundles subsets of Cinzel and EB Garamond in `src/ledger/fonts` (WOFF2, latin and latin-ext), so the app works offline. Both are distributed under the SIL Open Font License 1.1, the same license as `public/fonts/OFL.txt`. Cinzel: Copyright 2020 The Cinzel Project Authors, source: https://github.com/NDISCOVER/Cinzel . EB Garamond: Copyright 2017 The EB Garamond Project Authors, source: https://github.com/octaviopardo/EBGaramond12 .
+The desktop's Ledger design bundles subsets of Cinzel and EB Garamond in `src/ledger/fonts` (WOFF2, latin and latin-ext), so the app works offline. The RuneLite plugin bundles the same two fonts as variable TTFs in `runelite-bridge/src/main/resources/com/osrspath/bridge/fonts`, with their OFL texts beside them. Both are distributed under the SIL Open Font License 1.1, the same license as `public/fonts/OFL.txt`. Cinzel: Copyright 2020 The Cinzel Project Authors, source: https://github.com/NDISCOVER/Cinzel . EB Garamond: Copyright 2017 The EB Garamond Project Authors, source: https://github.com/octaviopardo/EBGaramond12 .
+
+## Runtime libraries
+
+The desktop app's interface uses React and React DOM (MIT License, Copyright (c) Meta Platforms, Inc. and affiliates, https://github.com/facebook/react) and draws its world map with Leaflet (BSD 2-Clause License, Copyright (c) 2010-2023 Volodymyr Agafonkin, Copyright (c) 2010-2011 CloudMade, https://github.com/Leaflet/Leaflet). Their full license texts ship inside their npm packages in `node_modules`.
+
+## OSRS Wiki content and map tiles
+
+Facts, page text the app shows, prices and the world map tiles come from the Old School RuneScape Wiki (https://oldschool.runescape.wiki), whose content is available under CC BY-NC-SA 3.0. Every data entry keeps the link to the Wiki page it came from.
 
 ## RuneLite skill icons
 

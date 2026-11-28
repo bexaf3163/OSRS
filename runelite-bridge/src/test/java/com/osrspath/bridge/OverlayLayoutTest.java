@@ -673,7 +673,7 @@ public class OverlayLayoutTest
 				for (int i = 0; i < checks.size(); i++)
 				{
 					Checklist.Result r = checks.get(i);
-					int out = overflow((panel, fm, w) -> InventoryCheckOverlay.build(panel, r, SHOWN, fm, w, 70), font,
+					int out = overflow((panel, fm, w) -> InventoryCheckOverlay.build(panel, r, fm, w, 70), font,
 						InventoryCheckOverlay.standardWidth(large), i == 0 ? "bank-" + tag : null);
 					if (out > 0)
 					{
@@ -690,7 +690,7 @@ public class OverlayLayoutTest
 						bad.add("exchange " + tag + " #" + i + " - " + out + " points (" + LAST_WHERE.get() + ")");
 					}
 					// With the step purchases the list does not hold (one card at the exchange, ExchangeView): the same frame.
-					int extra = overflow((panel, fm, w) -> GrandExchangeHelperOverlay.build(panel, rows, Arrays.asList("Strength potion(4) x3 - Grand Exchange, about 160 gp each", "Staff of fire"), "S3-08", fm, w, 70), font,
+					int extra = overflow((panel, fm, w) -> GrandExchangeHelperOverlay.build(panel, rows, Arrays.asList("Strength potion(4) x3 - Grand Exchange, about 160 gp each", "Staff of fire"), fm, w, 70), font,
 						GrandExchangeHelperOverlay.standardWidth(large), i == 0 ? "ge-extras-" + tag : null);
 					if (extra > 0)
 					{

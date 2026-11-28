@@ -18,7 +18,7 @@ import net.runelite.api.events.GameTick;
 import net.runelite.api.events.HitsplatApplied;
 import net.runelite.api.gameval.InventoryID;
 import net.runelite.api.gameval.VarPlayerID;
-import net.runelite.api.vars.AccountType;
+import net.runelite.api.gameval.VarbitID;
 
 /** Auto-tick: a section of {@link OsrsPathBridgePlugin}, which owns the injected services and the state the sections share. */
 final class PluginTick
@@ -133,8 +133,9 @@ final class PluginTick
 				// Two integer reads: the app tells whether a new account's trade restrictions can still apply (10 quest points, total level 100).
 				plugin.server.setProgressTotals(plugin.client.getVarpValue(VarPlayerID.QP), plugin.client.getTotalLevel());
 				// A varbit read: Ironmen cannot sell on the Grand Exchange, so the cleanup advice must know.
-				AccountType kind = plugin.client.getAccountType();
-				plugin.server.setAccountType(kind == null ? null : kind.isIronman() || kind.isGroupIronman() ? "ironman" : "normal");
+				// 0 a normal account, 1 to 6 the Ironman and Group Ironman kinds; anything else is unknown.
+				int kind = plugin.client.getVarbitValue(VarbitID.IRONMAN);
+				plugin.server.setAccountType(kind == 0 ? "normal" : kind > 0 && kind <= 6 ? "ironman" : null);
 				updateCombatLog();
 			}
 			shareAccount(me);

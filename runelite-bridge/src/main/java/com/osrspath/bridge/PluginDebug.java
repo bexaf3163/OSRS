@@ -4,7 +4,6 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -238,7 +237,9 @@ final class PluginDebug
 		try
 		{
 			BufferedImage out = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_RGB);
-			out.getGraphics().drawImage(image, 0, 0, null);
+			java.awt.Graphics g = out.getGraphics();
+			g.drawImage(image, 0, 0, null);
+			g.dispose();
 			java.nio.file.Files.createDirectories(dir.toPath());
 			ImageIO.write(out, name.endsWith(".jpg") ? "jpg" : "png", new File(dir, name));
 			pruneShots(dir);

@@ -15,7 +15,7 @@ import net.runelite.api.ItemContainer;
 import net.runelite.api.NPC;
 import net.runelite.api.NPCComposition;
 import net.runelite.api.Player;
-import net.runelite.api.SoundEffectID;
+import net.runelite.api.gameval.SoundEffectID;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.gameval.InventoryID;
 import net.runelite.api.gameval.ItemID;
@@ -59,7 +59,7 @@ final class PluginHints
 		}
 		if (plugin.danger.isEntered() && plugin.config.dangerSound())
 		{
-			plugin.client.playSoundEffect(SoundEffectID.PRAYER_DEPLETE_TWINKLE);
+			plugin.client.playSoundEffect(SoundEffectID.PRAYER_DRAIN);
 		}
 	}
 
@@ -186,10 +186,11 @@ final class PluginHints
 		return m;
 	}
 
-	/** Worn items, bag and coins. null means not in the game or upgrade hints are turned off; a container that did not arrive has a null field. */
+	/** Worn items, bag and coins. null means not in the game; a container that did not arrive has a null field. */
 	Map<String, Object> gearReport()
 	{
-		if (!plugin.config.upgradeRouter() || plugin.client.getGameState() != GameState.LOGGED_IN)
+		// Sent with upgrade hints off too: the bag, coins and worn gear drive readiness, shopping and funding, not just upgrades.
+		if (plugin.client.getGameState() != GameState.LOGGED_IN)
 		{
 			return null;
 		}

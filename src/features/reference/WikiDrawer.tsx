@@ -132,12 +132,14 @@ const CLOSE_MS = 180;
 function WikiDrawer({ target, onClose, onPin }: { target: Target | null; onClose: () => void; onPin?: () => void }) {
   const dialog = useRef<HTMLDialogElement>(null);
   const [closing, setClosing] = useState(false);
+  const closeTimer = useRef<number | undefined>(undefined);
 
   useEffect(() => {
     const d = dialog.current;
     if (!d) return;
     if (target && !d.open) d.showModal();
-    if (target) setClosing(false);
+    // A new dossier opened during the closing animation stays open.
+    if (target) { window.clearTimeout(closeTimer.current); setClosing(false); }
   }, [target]);
 
   const close = useCallback(() => {
@@ -145,7 +147,7 @@ function WikiDrawer({ target, onClose, onPin }: { target: Target | null; onClose
     if (!d?.open) return;
     setClosing(true);
     const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    window.setTimeout(() => {
+    closeTimer.current = window.setTimeout(() => {
       d.close();
       setClosing(false);
       onClose();
@@ -261,10 +263,10 @@ function ItemView({ query, label }: { query: string | number; label?: string }) 
             <table className="table table-compact">
               <thead><tr><th scope="col">Shop</th><th scope="col">NPC</th><th scope="col">Town</th><th scope="col">Price</th><th scope="col">Stock</th></tr></thead>
               <tbody>
-                {item.buyLocations.map((b) => {
+                {item.buyLocations.map((b, i) => {
                   const shop: PlaceQuery = { kind: 'shop', location: b.location, shop: b.shopName, npc: b.owner };
                   return (
-                    <tr key={b.shopName}>
+                    <tr key={`${b.shopName}-${i}`}>
                       <th scope="row">
                         <PlaceButton query={shop} onShow={places.show}>{b.shopName}</PlaceButton>
                         {b.members && <span className="badge badge-members badge-sm">M</span>}
@@ -295,8 +297,8 @@ function ItemView({ query, label }: { query: string | number; label?: string }) 
         <section className="drawer-section">
           <h3>Monster drops</h3>
           <ul className="drop-list">
-            {item.dropSources.map((d) => (
-              <li key={d.monster}>
+            {item.dropSources.map((d, i) => (
+              <li key={`${d.monster}-${i}`}>
                 {/* "Scurrius#non-MVP": the wiki's drop table anchor reads as a note. */}
                 <span>{d.monster.replace(/#(.+)$/, ' ($1)')}</span>
                 <span className="muted">{d.combatLevel !== null ? `lvl ${d.combatLevel}` : ''}</span>

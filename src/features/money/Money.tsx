@@ -7,6 +7,7 @@
 
 import { useMemo, useState } from 'react';
 import { useStore } from '../../state/store';
+import { stepTitle } from '../../data';
 import { useActiveActivity } from '../../state/readinessContext';
 import { useBridge } from '../../state/bridge';
 import { useFunding, useMoneyScreen, type MoneyScreen } from '../../state/fundingContext';
@@ -61,8 +62,8 @@ const SORT_LABEL: Record<BrowseSort, string> = { recommended: 'Best for you', pr
 const CHECK_MARK: Record<RequirementCheck['status'], string> = { ok: '✓', missing: '✗', buy: '+', unknown: '?', info: 'ℹ' };
 
 /** Why this method is where it is in the list: the recommendation, slower than it, held back, or what is missing. */
-/** "cover the 392 gp S5-06 is short", "make 10,000 more coins": what the order is for. */
-const goalWords = (r: MoneyScreen['rankedFor']) => (r.stepId ? `cover the ${formatGp(r.coins)} gp ${r.stepId} is short` : `make ${formatGp(r.coins)} more coins`);
+/** "cover the 392 gp "Cook's Assistant" is short", "make 10,000 more coins": what the order is for. */
+const goalWords = (r: MoneyScreen['rankedFor']) => (r.stepId ? `cover the ${formatGp(r.coins)} gp "${stepTitle(r.stepId)}" is short` : `make ${formatGp(r.coins)} more coins`);
 
 function whyOf(e: MethodEvaluation, ranking: Ranking, rankedFor: MoneyScreen['rankedFor']): string {
   const goal = goalWords(rankedFor);

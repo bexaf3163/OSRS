@@ -42,7 +42,8 @@ final class PluginQuests
 		}
 		followStage();
 		NavTarget n = plugin.navTarget;
-		StepGuide.View v = StepGuide.view(plugin.target, ItemCounts.sum(plugin.carried, plugin.noted), plugin.bank,
+		// Banknotes are not the item: a noted one is missing from the bag, and the app's plan says to unnote it.
+		StepGuide.View v = StepGuide.view(plugin.target, plugin.carried, plugin.bank,
 			n == null ? null : n.getLabel(), n == null ? 0 : n.getX(), n == null ? 0 : n.getY(), n == null ? 0 : n.getPlane(), plugin.snapshot.gotItems,
 			stage == null ? null : stageValue(stage), stage != null && questDone(plugin.target), stageTracker.cursor(), worn);
 		if (v.getStage() != null)

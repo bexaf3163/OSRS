@@ -395,6 +395,7 @@ final class PluginHighlights
 			}
 			// This character's bank goes into the settings while the profile is still theirs: the next login will not start from "bank unknown".
 			plugin.player.saveBank(true);
+			plugin.player.clearExchange();
 			plugin.carried = ItemCounts.EMPTY;
 			plugin.noted = ItemCounts.EMPTY;
 			plugin.bank = null;

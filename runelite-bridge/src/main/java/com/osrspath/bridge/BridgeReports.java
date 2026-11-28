@@ -196,7 +196,8 @@ final class BridgeReports
 	public void setProgressTotals(Integer quests, Integer total)
 	{
 		questPoints = quests != null && quests >= 0 && quests <= 500 ? quests : null;
-		totalLevel = total != null && total >= 0 && total <= 2277 ? total : null;
+		// 24 skills at 99 since Sailing.
+		totalLevel = total != null && total >= 0 && total <= 2376 ? total : null;
 	}
 
 	/** "normal", "ironman" or null (unknown). Anything else is unknown: the app never guesses an account kind from a stray word. */
@@ -248,6 +249,11 @@ final class BridgeReports
 		bridge.questsDone = null;
 		questPoints = null;
 		totalLevel = null;
+		// The next character's account kind, spellbook, teleport marks and fights are read again.
+		accountType = null;
+		spellbook = -1;
+		teleportMarksRead = false;
+		combatLog = null;
 		bridge.player = value;
 		broadcast(statusEvent());
 	}

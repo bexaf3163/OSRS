@@ -30,7 +30,8 @@ import lombok.extern.slf4j.Slf4j;
  * lets you find the bug without replaying the game.
  *
  * Local only: nothing is sent anywhere. The size is limited ({@link #MAX_BYTES} per session, {@link #KEEP_FILES} files).
- * The log has no character name and nothing outside the plugin's game; screenshots are separate (Screenshots).
+ * The log stays on this computer and holds nothing outside the plugin's game; with chat logging on, game messages and dialogues can
+ * name the character. Screenshots are separate (Screenshots).
  */
 @Slf4j
 final class Telemetry

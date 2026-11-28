@@ -8,6 +8,7 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 import javax.swing.SwingUtilities;
 import net.runelite.api.Client;
+import net.runelite.api.gameval.InterfaceID;
 import net.runelite.client.input.MouseAdapter;
 
 /**
@@ -40,7 +41,9 @@ class CardMouse extends MouseAdapter
 	public MouseEvent mousePressed(MouseEvent e)
 	{
 		ours = false;
-		if (!SwingUtilities.isLeftMouseButton(e) || client.isMenuOpen())
+		// A spell or item on the cursor, or the world map over the card, keeps the click for the game, as on the guide.
+		if (!SwingUtilities.isLeftMouseButton(e) || client.isMenuOpen() || client.isWidgetSelected()
+			|| GuideMouse.mapCovers(client.getWidget(InterfaceID.Worldmap.WINDOW), e.getPoint()))
 		{
 			return e;
 		}

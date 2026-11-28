@@ -77,7 +77,7 @@ public final class BridgeServer
 	 */
 	static final int PROTOCOL = 8;
 	/** The plugin version, the same as the app it ships with in one exe. */
-	static final String PLUGIN_VERSION = "2.188.4";
+	static final String PLUGIN_VERSION = "2.189.0";
 	public static final String HEADER = "X-OSRS-Path";
 	static final int MAX_BODY = 64 * 1024;
 	/** The whole snapshot: the step with the quest stages, shopping and plan in one body. */
@@ -371,7 +371,8 @@ public final class BridgeServer
 				return;
 			}
 			// Origin is sent only by a browser. The desktop app calls from the main process, without it.
-			if (req.getFirst("Origin") != null)
+			// Sec-Fetch-Site too: a web page's image or script tag sends no Origin, and could otherwise push the app's event streams out.
+			if (req.getFirst("Origin") != null || req.getFirst("Sec-Fetch-Site") != null)
 			{
 				json(ex, 403, error("origin"));
 				return;

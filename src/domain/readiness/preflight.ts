@@ -168,7 +168,7 @@ export interface PreflightResult {
   ready: boolean;
   missing: number;
 }
-export function evaluatePreflight(items: PreflightItem[], owned: OwnedState, levels?: Partial<Record<string, number>> | null, equipment?: readonly WornItem[] | null): PreflightResult {
+export function evaluatePreflight(items: PreflightItem[], owned: OwnedState, levels?: Partial<Record<string, number>> | null, equipment?: readonly WornItem[] | null, members?: boolean): PreflightResult {
   const foods = allocateFoodStock({ owned, bankSeen: owned.bankSeen, equipment: {}, manual: {} },
     items.map((item, index) => ({ ...item, key: `departure:${index}`, anyOf: item.alt })), levels?.hitpoints);
   const materials = allocateMaterialStock({ owned, bankSeen: owned.bankSeen, equipment: {}, manual: {} },
@@ -179,7 +179,7 @@ export function evaluatePreflight(items: PreflightItem[], owned: OwnedState, lev
     const all = dose
       ? [1, 2, 3, 4].map((d) => ({ o: owned.items.get(nameKey(doseName(dose.base, d))), w: d }))
       : [...new Set([item.nameEn, ...(item.alt ?? [])].map(nameKey))]
-        .filter((n) => usableAt(n, (skill) => levels?.[skill] ?? null))
+        .filter((n) => usableAt(n, (skill) => levels?.[skill] ?? null, members))
         .map((n) => ({ o: owned.items.get(n), w: 1 }));
     const need = item.doses ?? item.count;
     const legacy = Boolean(toolFamilyOf(item.nameEn)) && all.some(({ o }) => o?.legacyToolCount);

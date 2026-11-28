@@ -190,7 +190,8 @@ export function relevantDefence(p: GearPiece | null, style: IncomingStyle | null
 export function incomingChance(att: FoeAttack, defenceLevel: number, defenceBonus: number): number | null {
   if (att.style === 'magic' || att.style === 'ranged') return null;
   const attRoll = (att.level + 9) * (att.bonus + 64);
-  const defRoll = (defenceLevel + 9) * (defenceBonus + 64);
+  // A player's defence adds 8 (a monster's adds 9), as in the combat estimate.
+  const defRoll = (defenceLevel + 8) * (defenceBonus + 64);
   return attRoll > defRoll ? 1 - (defRoll + 2) / (2 * (attRoll + 1)) : attRoll / (2 * (defRoll + 1));
 }
 

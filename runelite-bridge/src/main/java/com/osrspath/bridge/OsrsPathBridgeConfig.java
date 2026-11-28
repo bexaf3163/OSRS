@@ -24,17 +24,6 @@ public interface OsrsPathBridgeConfig extends Config
 	)
 	String companion = "companion";
 
-	@Range(min = 1024, max = 65535)
-	@ConfigItem(
-		keyName = "port",
-		name = "Port",
-		description = "Bridge port on 127.0.0.1. The OSRS Path app expects 38282. Applied after the plugin restarts.",
-		position = 1
-	)
-	default int port()
-	{
-		return BridgeServer.DEFAULT_PORT;
-	}
 
 	@ConfigItem(
 		keyName = "hintArrow",
@@ -300,7 +289,7 @@ public interface OsrsPathBridgeConfig extends Config
 	@ConfigItem(
 		keyName = "upgradeRouter",
 		name = "Upgrade hints",
-		description = "Send gear and coins to the app so it can suggest a better tool, weapon, amulet and armour. "
+		description = "Suggest a better tool, weapon, amulet and armour from the gear and coins the app knows. "
 			+ "On a combat step the advice is a line under 'More advice' in the guide, and the best item from the bag and bank is highlighted. "
 			+ "With the 'Navigate' button, the seller and the needed item in the shop are highlighted. Buys and equips nothing by itself",
 		section = helpers,

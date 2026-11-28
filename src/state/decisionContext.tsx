@@ -48,7 +48,7 @@ export function DecisionProvider({ children }: { children: ReactNode }) {
   const levelsKey = Object.entries(bridge.xp ?? {}).map(([skill, xp]) => `${skill}${levelForXp(xp ?? 0)}`).join() + JSON.stringify(progress.levels);
   // Planning is event driven: XP inside a level, walking and item pickups are applied together at most every 2 s, while a
   // new level, quest, bank read, character or mode replans at once. A RuneLite tick never runs the planner by itself.
-  const structure = `${state.player}|${state.mode}|${state.connected}|${levelsKey}|${state.quests.known ? state.quests.value.length : -1}|${state.owned?.bankSeen}|${state.owned?.bankSavedAt ?? ''}`;
+  const structure = `${state.player}|${state.mode}|${state.connected}|${levelsKey}|${state.quests.known ? state.quests.value.join(',') : -1}|${state.owned?.bankSeen}|${state.owned?.bankSavedAt ?? ''}`;
   const [heldState, heldXp, heldGear, heldStats] = useHeld([state, bridge.xp, bridge.gear, bridge.stats] as const, structure);
   // The snapshot changes only with the facts, so routes requested for it stay valid until the facts move on.
   const snapshot = useMemo(() => {
@@ -79,7 +79,8 @@ export function DecisionProvider({ children }: { children: ReactNode }) {
   const cash = liquidOf(heldState).amount;
   // The Money ranking and the gathering estimates are heavy, so they run only when the plan first asks for them, and are
   // redone only on a material change (step, levels, mode, restriction, a price fetch, thousands of coins).
-  const material = `${rateStep?.id ?? '-'}|${levelsKey}|${heldState.mode}|${trade.state}|${prices.at}|${cash === null ? '-' : Math.round(cash / 1000)}`;
+  // The bank arriving, a finished quest and a change of worn gear change the rates too.
+  const material = `${rateStep?.id ?? '-'}|${levelsKey}|${heldState.mode}|${trade.state}|${prices.at}|${cash === null ? '-' : Math.round(cash / 1000)}|${heldState.owned?.bankSeen}|${heldState.quests.known ? heldState.quests.value.length : -1}|${Object.values(heldState.equipment).join(',')}`;
   const { rate, levelled, gather } = useMemo(() => {
     let supply: SupplyBase | null | undefined;
     const base = () => (supply === undefined ? (supply = baseFor(rateStep, snapshotFor(rateStep?.id ?? null, position), prices)) : supply);

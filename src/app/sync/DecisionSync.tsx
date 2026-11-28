@@ -36,7 +36,8 @@ export function DecisionSync() {
     // Sent once per Decision step: a player who took the arrow down is not overridden by the same choice again.
     if (sent.current === executionKey) return;
     sent.current = executionKey;
-    void pointInGame(step).then(result => { if (result === 'empty') void clear(); });
+    // A send that did not reach the game is tried again on the next change, as in GearHintSync.
+    void pointInGame(step).then(result => { if (result === 'empty') void clear(); else if (result === 'offline') sent.current = null; });
   }, [inGame, activeStepId, progress, step, executionKey, decision, questStates, questInstruction, pointInGame, clear]);
   return null;
 }

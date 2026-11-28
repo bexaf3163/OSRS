@@ -3,7 +3,7 @@
 
 import { useState, type ReactNode } from 'react';
 import type { Field, Step, StepItemRequirement } from '../../../types';
-import { levelById } from '../../../data';
+import { levelById, stepTitle } from '../../../data';
 import { useStore } from '../../../state/store';
 import { useQuestPoints } from '../../../state/hooks/useQuestPoints';
 import { blockerParts, blockersOf, isClosed } from '../../../domain/quests/next-step';
@@ -43,7 +43,7 @@ import { Icon } from '../../../ledger';
 const WARN_LABELS = new Set(['Dangerous', 'Attention', 'Combat']);
 
 function amountText(a: string | number): string {
-  return typeof a === 'number' ? `×${a.toLocaleString('ru-RU')}` : /^\d/.test(a) ? `×${a}` : a;
+  return typeof a === 'number' ? `×${a.toLocaleString('en-US')}` : /^\d/.test(a) ? `×${a}` : a;
 }
 
 function ItemChip({ item }: { item: StepItemRequirement }) {
@@ -220,7 +220,7 @@ export function StepBody({ step, onDone, nextId, tab, onPrep, safetyShown = fals
           {step.requires.map((r, i) => (
             <span key={r}>
               {i > 0 && ', '}
-              <a href={hrefTo.step(r)} className={`step-ref ${!dependencyBlockers?.steps.includes(r) ? 'is-met' : ''}`}>{r}</a>
+              <a href={hrefTo.step(r)} className={`step-ref ${!dependencyBlockers?.steps.includes(r) ? 'is-met' : ''}`}>{stepTitle(r)}</a>
               {!dependencyBlockers?.steps.includes(r) && <span className="visually-hidden"> (met)</span>}
             </span>
           ))}

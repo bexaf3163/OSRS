@@ -343,7 +343,7 @@ export async function checkStatus(t: BridgeTransport = defaultTransport()): Prom
     chronicleCharges: inGame && typeof d?.chronicleCharges === 'number' && Number.isInteger(d.chronicleCharges) && d.chronicleCharges >= 0 && d.chronicleCharges <= 1000
       ? d.chronicleCharges : null,
     questPoints: inGame && typeof d?.questPoints === 'number' && Number.isInteger(d.questPoints) && d.questPoints >= 0 && d.questPoints <= 500 ? d.questPoints : null,
-    totalLevel: inGame && typeof d?.totalLevel === 'number' && Number.isInteger(d.totalLevel) && d.totalLevel >= 0 && d.totalLevel <= 2277 ? d.totalLevel : null,
+    totalLevel: inGame && typeof d?.totalLevel === 'number' && Number.isInteger(d.totalLevel) && d.totalLevel >= 0 && d.totalLevel <= 2376 ? d.totalLevel : null,
     combatLog: inGame ? parseCombatLog(d?.combatLog) : null,
     accountType: inGame && (d?.accountType === 'normal' || d?.accountType === 'ironman') ? d.accountType : null,
   };

@@ -2,7 +2,7 @@
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import type { GameMode, Progress, Step, StepStatus, TrainingGoal } from '../types';
-import { BASE_QP, known, maxQpFor, stepsFor } from '../data';
+import { BASE_QP, known, maxQpFor, stepsFor, stepTitle } from '../data';
 import {
   emptyProgress, gameModeOf, STORAGE_KEY,
   withGameMode, withLevel, withLevels, withNote, withStep, withUpgradeDismissed, withOwnedManual, withSellRestrictions, withTaskDone, withTrainingGoal,
@@ -135,7 +135,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const setStep = useCallback((id: string, status: StepStatus | null, message?: string) => {
     const before = current.current;
     setProgress(withStep(before, id, status));
-    show(message ?? (status === 'done' ? `Marked ${id}` : status === 'skipped' ? `Skipped ${id}` : `Unmarked ${id}`), before);
+    const name = stepTitle(id);
+    show(message ?? (status === 'done' ? `Marked ${name}` : status === 'skipped' ? `Skipped ${name}` : `Unmarked ${name}`), before);
   }, [show]);
 
   const setLevel = useCallback((id: string, level: number) => {

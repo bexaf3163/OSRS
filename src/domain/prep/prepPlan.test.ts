@@ -217,6 +217,8 @@ describe('the preparation plan: readiness, slots, upgrades', () => {
     expect(stacks('Bronze arrow')).toBe(true);
     expect(stacks('Coins')).toBe(true);
     expect(stacks('Lobster')).toBe(false);
+    for (const name of ['Rune essence', 'Rune scimitar', 'Rune bar', 'Bolt of cloth']) expect(stacks(name)).toBe(false);
+    for (const name of ['Thread', 'Cannonball', 'Varrock teleport']) expect(stacks(name)).toBe(true);
     const list = [mk('T1', [item('Lobster', 20), item('Law rune', 30), item('Rope', 1)])];
     const base = owned({ Lobster: { carried: 0, bank: 40 }, 'Law rune': { carried: 0, bank: 30 }, Rope: { carried: 0, bank: 2 } }, true);
     const tight = plan(state(base, { slots: 10 }), { list, id: 'T1' });

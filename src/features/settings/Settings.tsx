@@ -56,6 +56,8 @@ export function SettingsPage() {
     setImportError('');
     setPending(null);
     if (!f) return;
+    // A progress file is kilobytes: a huge file would freeze the app before the check could refuse it.
+    if (f.size > 20_000_000) { setImportError('This file is too large to be a progress file.'); return; }
     const result = importProgress(await f.text(), known);
     if (result.ok) setPending(result);
     else setImportError(result.error);

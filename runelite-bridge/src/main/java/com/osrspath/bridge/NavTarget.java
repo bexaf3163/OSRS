@@ -91,7 +91,7 @@ public class NavTarget
 		{
 			return "invalid item ID";
 		}
-		if (stepId != null && !stepId.matches("S\\d-\\d{2}"))
+		if (stepId != null && !stepId.matches("S\\d{1,2}-\\d{2,3}"))
 		{
 			return "stepId must look like S1-03";
 		}

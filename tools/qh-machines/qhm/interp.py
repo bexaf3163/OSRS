@@ -473,6 +473,8 @@ class Interp:
             op = 'or'
         elif logic is not None and logic.name == 'NOR':
             op = 'nor'
+        elif logic is not None and logic.name == 'NAND':
+            op = 'nand'
         return req(op, a=reqs)
 
     def make_conditions(self, args):

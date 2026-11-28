@@ -75,7 +75,7 @@ final class PacingSet
 		{
 			return false;
 		}
-		if (before > 0 && xp > before)
+		if (PacingTracker.gained(before, xp))
 		{
 			lastGainAt = nowMs;
 			if (skill.equals(active))

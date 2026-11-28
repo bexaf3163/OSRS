@@ -17,7 +17,7 @@ public class RuneLiteCompat
 	public static void main(String[] a) throws Exception
 	{
 		List<URL> urls = new ArrayList<>();
-		for (String j : a[1].split(";"))
+		for (String j : a[1].split(java.io.File.pathSeparator))
 		{
 			urls.add(new File(j).toURI().toURL());
 		}
@@ -42,7 +42,7 @@ public class RuneLiteCompat
 			try
 			{
 				Class<?> c = Class.forName(owner, false, cl);
-				boolean ok = kind.equals("Field") ? hasField(c, name) : hasMethod(c, name, desc);
+				boolean ok = kind.equals("Field") ? hasField(c, name, desc) : hasMethod(c, name, desc);
 				if (!ok)
 				{
 					bad++;
@@ -58,20 +58,21 @@ public class RuneLiteCompat
 		System.out.println("References checked: " + n + ", mismatches: " + bad);
 	}
 
-	static boolean hasField(Class<?> c, String name)
+	// The type counts too: a field that became long fails at run time with NoSuchFieldError.
+	static boolean hasField(Class<?> c, String name, String desc)
 	{
 		for (Class<?> k = c; k != null; k = k.getSuperclass())
 		{
 			for (Field f : k.getDeclaredFields())
 			{
-				if (f.getName().equals(name))
+				if (f.getName().equals(name) && d(f.getType()).equals(desc))
 				{
 					return true;
 				}
 			}
 			for (Class<?> i : k.getInterfaces())
 			{
-				if (hasField(i, name))
+				if (hasField(i, name, desc))
 				{
 					return true;
 				}

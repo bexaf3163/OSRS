@@ -66,14 +66,17 @@ final class ExchangeView
 		}
 		for (ShopWindow.Row row : step.getRows())
 		{
-			if (row.getMark() != ShopWindow.Mark.TODO || !row.getText().startsWith("Buy: "))
+			// The road's supplies (teleports, runes for the way) are bought here too, and keep their "For the road" mark.
+			String text = row.getText();
+			boolean road = text.startsWith("For the road: ");
+			if (row.getMark() != ShopWindow.Mark.TODO || !(road || text.startsWith("Buy: ")))
 			{
 				continue;
 			}
-			String label = row.getText().substring("Buy: ".length());
+			String label = text.substring(road ? "For the road: ".length() : "Buy: ".length());
 			if (!listed.contains(ActiveTarget.nameKey(itemName(label))))
 			{
-				out.add(label);
+				out.add(road ? text : label);
 			}
 		}
 		return out;

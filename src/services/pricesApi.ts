@@ -74,8 +74,10 @@ class RateLimited extends Error {
 
 function retryAfterMs(res: FetchResult): number | null {
   const raw = res.headers?.get('retry-after');
+  // Seconds, or an HTTP date (both are allowed by the standard).
   const s = raw ? Number(raw) : NaN;
-  return Number.isFinite(s) && s > 0 ? Math.min(s * 1000, BACKOFF_MAX_MS) : null;
+  const ms = Number.isFinite(s) ? s * 1000 : raw ? Date.parse(raw) - Date.now() : NaN;
+  return Number.isFinite(ms) && ms > 0 ? Math.min(ms, BACKOFF_MAX_MS) : null;
 }
 
 interface FeedResult<T> { data: T; at: number; stale: boolean; error?: string }

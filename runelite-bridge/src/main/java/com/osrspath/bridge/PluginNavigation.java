@@ -430,19 +430,6 @@ final class PluginNavigation
 		return shortestPath != null && plugin.pluginManager.isPluginActive(shortestPath);
 	}
 
-	/**
-	 * What to show in the game now: the path, the step, the bank or the exchange ({@link SmartView}). The bank and exchange windows are read here,
-	 * in the frame, so the overlays do not disagree with each other.
-	 */
-	SmartView.Context overlayContext()
-	{
-		Hud.State h = plugin.hud;
-		return SmartView.of(
-			InventoryCheckOverlay.visible(plugin.client.getWidget(InterfaceID.Bankmain.ITEMS_CONTAINER)),
-			InventoryCheckOverlay.visible(plugin.client.getWidget(InterfaceID.GeOffers.UNIVERSE)),
-			h == null ? -1 : h.getTiles());
-	}
-
 	void updateHud()
 	{
 		plugin.quests.refreshGuide();

@@ -60,7 +60,7 @@ export function StepMap({ step, shownTarget, mapRequest = false, onMapOpened }: 
       {points.length > 1 && (
         <div className="spot-switch" role="radiogroup" aria-label="Points on the map">
           {points.map((p, i) => (
-            <button key={`${p.x},${p.y},${p.plane}`} type="button" role="radio" aria-checked={i === active}
+            <button key={`${p.x},${p.y},${p.plane},${i}`} type="button" role="radio" aria-checked={i === active}
               className={`spot-chip ${i === active ? 'is-active' : ''}`} onClick={() => setChosen(spotKey(p))}>
               <Icon name={p.now ? 'compass' : 'target'} size={12} strokeWidth={1.8} /> {p.now ? 'Now: ' : ''}{p.label}
             </button>

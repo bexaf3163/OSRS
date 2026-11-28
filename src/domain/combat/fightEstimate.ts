@@ -79,11 +79,12 @@ export interface FightInput {
 /** Its chance to hit the player: melee against the worn armour's bonus of its type; magic against the player's magic defence. */
 function foeChance(foe: CombatFoe, inp: FightInput, style: TrainStyle, weapon: GearPiece | null): number {
   const gear = [weapon, inp.neck, ...inp.armour];
-  const effDef = inp.levels.defence + (style === 'defensive' ? 3 : 0) + 8;
+  const stance = style === 'defensive' ? 3 : 0;
+  const effDef = inp.levels.defence + stance + 8;
   if (foe.attackStyle === 'magic') {
-    // OSRS: the defender's magic level counts 70%, its defence 30%. Its own magic attack bonus is not in the table: counted as 0.
+    // OSRS (the Wiki DPS calculator): magic level 70%, defence level 30%, then the stance and +8. Its own magic attack bonus is not in the table: counted as 0.
     const magic = inp.levels.magic ?? 1;
-    const eff = Math.floor(magic * 0.7) + Math.floor(effDef * 0.3);
+    const eff = Math.floor(magic * 0.7) + Math.floor(inp.levels.defence * 0.3) + stance + 8;
     const bonus = gear.reduce((s, p) => s + (p?.defence.magic ?? 0), 0);
     return hitChance((foe.magicLevel + 9) * 64, eff * (bonus + 64));
   }
@@ -319,8 +320,9 @@ export function estimateStepFights(
   if (Object.values(lv).some((v) => v === null)) return [];
   const eq = equippedBySlot(gear, gearData);
   const ranged = need('ranged'), ammo = gear.equipment.find((p) => p.slot === 'ammo')?.name;
-  // An unknown weapon has no estimate; a bow shoots with the worn arrows at the Ranged level, both read from the game.
-  if (eq.weapon && (!eq.weapon.piece || (shootsOnly(eq.weapon.piece) && (ranged === null || !ammo)))) return [];
+  // An unknown weapon has no estimate (unless every fight is bare-handed, where it is banked); a bow shoots with the worn arrows at the Ranged level, both read from the game.
+  const allBare = foes.every((f) => FIGHT_MECHANICS[f.name]?.bare);
+  if (!allBare && eq.weapon && (!eq.weapon.piece || (shootsOnly(eq.weapon.piece) && (ranged === null || !ammo)))) return [];
   const armour = (['head', 'body', 'legs', 'shield'] as const).map((s) => eq[s]?.piece).filter((p): p is GearPiece => Boolean(p));
   const unknownPieces = SLOTS.filter((s) => s !== 'weapon' && eq[s] && !eq[s]!.piece).length;
   const stepFood = foodOfStep(step);

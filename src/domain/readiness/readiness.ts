@@ -332,7 +332,7 @@ export interface ChainLink {
 }
 
 /** The route step a link action opens (for example S2-03); null means the link is not to a step. */
-const stepOfHref = (a?: ReadinessAction): string | null => (a?.kind === 'link' ? /^#\/step\/(S\d-\d{2})$/.exec(a.href)?.[1] ?? null : null);
+const stepOfHref = (a?: ReadinessAction): string | null => (a?.kind === 'link' ? /^#\/step\/(S\d{1,2}-\d{2,3})$/.exec(a.href)?.[1] ?? null : null);
 
 /**
  * "Fix everything": a chain of steps to readiness. We go along what hinders (steps and quests not done), no deeper than

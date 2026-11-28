@@ -181,7 +181,7 @@ final class Checklist
 			{
 				state = State.NOT_EQUIPPED;
 			}
-			else if (bank == null || onHand + inBank >= need)
+			else if (bank == null || (long) onHand + inBank >= need)
 			{
 				state = State.MISSING_FROM_BAG;
 			}

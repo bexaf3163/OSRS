@@ -13,6 +13,8 @@ export function equipmentLine(advice: Pick<TrainingAdvice, 'best' | 'upgrade' | 
   prices?: PriceView | null): string | null {
   const { best, upgrade } = advice;
   if (!best) return null;
+  // A coin-saving upgrade can cost time (hours below 0): say the coins, as the router does.
+  if (upgrade?.coinsSaved !== undefined) return `Buy ${an(upgrade.tool)} (≈ ${upgrade.price.toLocaleString('en-US')} gp): it saves ≈ ${Math.round(upgrade.coinsSaved).toLocaleString('en-US')} gp after its price.`;
   if (upgrade) return `Buy ${an(upgrade.tool)} (≈ ${upgrade.price.toLocaleString('en-US')} gp): it saves about ${hoursText(upgrade.hours)}${
     toolUse(upgrade.tool) ? ' before the next tier, the trip to buy it included' : ' on this method'}.`;
   const tool = best.method.selectedTool, use = tool ? toolUse(tool) : null;

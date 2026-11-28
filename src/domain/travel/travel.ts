@@ -237,7 +237,7 @@ export interface TravelInput {
 }
 
 const count = (items: readonly GearItem[], names: readonly string[]): number =>
-  items.filter((i) => names.includes(i.name)).reduce((s, i) => s + (i.count ?? 1), 0);
+  items.filter((i) => !i.noted && names.includes(i.name)).reduce((s, i) => s + (i.count ?? 1), 0);
 
 /** Every staff that stands in for a rune of a teleport (the wiki's elemental, battle, mystic and combination staves). */
 export const STAFF_NAMES: readonly string[] = TRANSPORT.staves.list.map((s) => s.item);

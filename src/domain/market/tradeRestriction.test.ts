@@ -96,6 +96,6 @@ describe('the plugin status carries the totals', () => {
     const none = await status({});
     expect([none.questPoints, none.totalLevel]).toEqual([null, null]);
     for (const bad of [-1, 501, 2.5, '7']) expect((await status({ questPoints: bad })).questPoints).toBeNull();
-    for (const bad of [-1, 2278, 99.9, '63']) expect((await status({ totalLevel: bad })).totalLevel).toBeNull();
+    for (const bad of [-1, 2377, 99.9, '63']) expect((await status({ totalLevel: bad })).totalLevel).toBeNull();
   });
 });

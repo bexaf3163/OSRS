@@ -288,26 +288,32 @@ final class QhLiveFacts implements QhMachine.Facts
 
 	private static boolean hasObject(Tile t, int[] ids)
 	{
-		List<TileObject> found = new ArrayList<>();
-		for (TileObject o : t.getGameObjects())
+		// No list per tile: the scan walks every tile of the scene.
+		TileObject[] objects = t.getGameObjects();
+		if (objects != null)
 		{
-			found.add(o);
-		}
-		found.add(t.getDecorativeObject());
-		found.add(t.getGroundObject());
-		found.add(t.getWallObject());
-		for (TileObject o : found)
-		{
-			if (o == null)
+			for (TileObject o : objects)
 			{
-				continue;
-			}
-			for (int id : ids)
-			{
-				if (o.getId() == id)
+				if (isOne(o, ids))
 				{
 					return true;
 				}
+			}
+		}
+		return isOne(t.getDecorativeObject(), ids) || isOne(t.getGroundObject(), ids) || isOne(t.getWallObject(), ids);
+	}
+
+	private static boolean isOne(TileObject o, int[] ids)
+	{
+		if (o == null)
+		{
+			return false;
+		}
+		for (int id : ids)
+		{
+			if (o.getId() == id)
+			{
+				return true;
 			}
 		}
 		return false;
@@ -336,6 +342,11 @@ final class QhLiveFacts implements QhMachine.Facts
 		}
 		catch (IllegalArgumentException ex)
 		{
+			return null;
+		}
+		catch (AssertionError busy)
+		{
+			// The quest state runs a client script, and scripts are not reentrant: unknown until the next read.
 			return null;
 		}
 	}

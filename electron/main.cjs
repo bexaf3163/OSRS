@@ -39,7 +39,9 @@ if (portableDir) {
     freshData = true;
     try {
       fs.mkdirSync(dataDir, { recursive: true });
-      for (const name of ['Local Storage', 'progress.json', 'window.json', 'ui.json']) {
+      // Every profile goes along: the profile list and each profile's progress-<id>.json.
+      const profiles = fs.existsSync(installedData) ? fs.readdirSync(installedData).filter((n) => /^progress-[a-z0-9-]+\.json$/.test(n)) : [];
+      for (const name of ['Local Storage', 'progress.json', 'profiles.json', 'window.json', 'ui.json', ...profiles]) {
         const from = path.join(installedData, name);
         if (fs.existsSync(from)) fs.cpSync(from, path.join(dataDir, name), { recursive: true });
       }
